@@ -7,42 +7,26 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.github.czyzby.autumn.annotation.Inject;
-import com.github.czyzby.autumn.mvc.component.ui.controller.ViewRenderer;
-import com.github.czyzby.autumn.mvc.component.ui.controller.ViewResizer;
-import com.github.czyzby.autumn.mvc.component.ui.controller.impl.StandardViewShower;
-import com.github.czyzby.autumn.mvc.stereotype.View;
+
 import com.github.FishMiner.service.Box2DService;
+import com.github.FishMiner.view.GameView;
 
-/** Renders Box2D world. */
-@View(id = "game", value = "ui/templates/game.lml", themes = "music/theme.ogg")
-public class GameController extends StandardViewShower implements ViewResizer, ViewRenderer {
-    @Inject private Box2DService box2d;
-    private final Box2DDebugRenderer renderer = new Box2DDebugRenderer();
+/** Creates Box2D world. */
+    public class GameController {
 
-    @Override
-    public void show(final Stage stage, final Action action) {
-        box2d.create();
-        super.show(stage, Actions.sequence(action, Actions.run(new Runnable() {
-            @Override
-            public void run() { // Listening to user input events:
-                final InputMultiplexer inputMultiplexer = new InputMultiplexer(stage);
-                box2d.initiateControls(inputMultiplexer);
-                Gdx.input.setInputProcessor(inputMultiplexer);
-            }
-        })));
-    }
+        @Inject
+        private final GameView gameView;
 
-    @Override
-    public void resize(final Stage stage, final int width, final int height) {
-        box2d.resize(width, height);
-        stage.getViewport().update(width, height, true);
-    }
+        @Inject
+        private final Box2DService box2dService;
 
-    @Override
-    public void render(final Stage stage, final float delta) {
-        box2d.update(delta);
-        renderer.render(box2d.getWorld(), box2d.getViewport().getCamera().combined);
-        stage.act(delta);
-        stage.draw();
-    }
+        public GameController(GameView gameView, Box2DService box2dService) {
+            this.gameView = gameView;
+            this.box2dService = box2dService;
+        }
+
+        public void startGame() {
+            // Perform any pre-game initialization or logic here.
+            // The view handles rendering and input setup.
+        }
 }

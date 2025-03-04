@@ -7,9 +7,9 @@ import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.config.AutumnActionPriority;
 import com.github.czyzby.kiwi.util.gdx.collection.GdxArrays;
-import com.github.FishMiner.configuration.Configuration;
-import com.github.FishMiner.configuration.preferences.ControlsData;
-import com.github.FishMiner.configuration.preferences.ControlsPreference;
+import com.github.FishMiner.model.configuration.Configuration;
+import com.github.FishMiner.model.configuration.preferences.ControlsData;
+import com.github.FishMiner.model.configuration.preferences.ControlsPreference;
 import com.github.FishMiner.service.controls.Control;
 
 /** Manages players' controls. */

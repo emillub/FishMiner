@@ -1,4 +1,4 @@
-package com.github.FishMiner.configuration;
+package com.github.FishMiner.model.configuration;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;

@@ -13,7 +13,7 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.github.czyzby.lml.util.LmlUtilities;
-import com.github.FishMiner.configuration.Configuration;
+import com.github.FishMiner.model.configuration.Configuration;
 import com.github.FishMiner.service.ControlsService;
 import com.github.FishMiner.service.controls.Control;
 

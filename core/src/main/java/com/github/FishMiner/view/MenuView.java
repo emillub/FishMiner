@@ -1,6 +1,7 @@
-package com.github.FishMiner.controller;
+package com.github.FishMiner.view;
 
 import com.badlogic.gdx.utils.Array;
+import com.github.FishMiner.view.GameView;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.View;
@@ -14,14 +15,14 @@ import com.github.FishMiner.service.controls.Control;
  *
  * This is application's main view, displaying a menu with several options. */
 @View(id = "menu", value = "ui/templates/menu.lml", themes = "music/theme.ogg")
-public class MenuController implements ActionContainer {
+public class MenuView implements ActionContainer {
     @Inject private InterfaceService interfaceService;
     @Inject private ControlsService controlsService;
 
     @LmlAction("startGame")
     public void startPlaying() {
         if (isAnyPlayerActive()) {
-            interfaceService.show(GameController.class);
+            interfaceService.show(GameView.class);
         } else {
             interfaceService.showDialog(NotEnoughPlayersErrorController.class);
         }

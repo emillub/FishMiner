@@ -3,7 +3,7 @@ package com.github.FishMiner.service.controls.impl;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.controllers.*;
 import com.badlogic.gdx.math.MathUtils;
-import com.github.FishMiner.configuration.preferences.ControlsData;
+import com.github.FishMiner.model.configuration.preferences.ControlsData;
 import com.github.FishMiner.service.controls.AbstractButtonControl;
 import com.github.FishMiner.service.controls.ControlType;
 

@@ -2,7 +2,7 @@ package com.github.FishMiner.service.controls;
 
 import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.github.FishMiner.configuration.preferences.ControlsData;
+import com.github.FishMiner.model.configuration.preferences.ControlsData;
 
 /** Abstract base for controls that use buttons, like keyboard keys or game pads buttons. */
 public abstract class AbstractButtonControl extends AbstractControl {

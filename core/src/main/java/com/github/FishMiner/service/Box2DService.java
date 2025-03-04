@@ -17,8 +17,8 @@ import com.github.czyzby.autumn.annotation.Destroy;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.kiwi.util.gdx.collection.GdxArrays;
 import com.github.FishMiner.FishMinerGame;
-import com.github.FishMiner.configuration.Configuration;
-import com.github.FishMiner.entity.Player;
+import com.github.FishMiner.model.configuration.Configuration;
+import com.github.FishMiner.model.entity.Player;
 import com.github.FishMiner.service.controls.Control;
 
 /** Manages 2D physics engine. */

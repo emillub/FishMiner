@@ -6,7 +6,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.github.FishMiner.configuration.preferences.ControlsData;
+import com.github.FishMiner.model.configuration.preferences.ControlsData;
 import com.github.FishMiner.service.controls.AbstractControl;
 import com.github.FishMiner.service.controls.ControlType;
 

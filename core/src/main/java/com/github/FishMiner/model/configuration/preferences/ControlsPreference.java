@@ -1,4 +1,4 @@
-package com.github.FishMiner.configuration.preferences;
+package com.github.FishMiner.model.configuration.preferences;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
@@ -8,7 +8,7 @@ import com.github.czyzby.autumn.mvc.component.preferences.dto.AbstractPreference
 import com.github.czyzby.autumn.mvc.stereotype.preference.Property;
 import com.github.czyzby.kiwi.util.gdx.GdxUtilities;
 import com.github.czyzby.kiwi.util.gdx.collection.GdxArrays;
-import com.github.FishMiner.configuration.Configuration;
+import com.github.FishMiner.model.configuration.Configuration;
 import com.github.FishMiner.service.controls.ControlType;
 import com.github.FishMiner.service.controls.impl.KeyboardControl;
 import com.github.FishMiner.service.controls.impl.TouchControl;

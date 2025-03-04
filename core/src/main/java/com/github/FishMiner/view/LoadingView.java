@@ -1,4 +1,4 @@
-package com.github.FishMiner.controller;
+package com.github.FishMiner.view;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -13,7 +13,7 @@ import com.kotcrab.vis.ui.widget.VisProgressBar;
  * This is the first application's view, shown right after the application starts. It will hide after all assests are
  * loaded. */
 @View(value = "ui/templates/loading.lml", first = true)
-public class LoadingController implements ViewRenderer {
+public class LoadingView implements ViewRenderer {
     /** Will be injected automatically. Manages assets. Used to display loading progress. */
     @Inject private AssetService assetService;
     /** This is a widget injected from the loading.lml template. "loadingBar" is its ID. */

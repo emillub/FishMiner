@@ -4,7 +4,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Array;
 import com.github.czyzby.kiwi.util.gdx.collection.GdxArrays;
-import com.github.FishMiner.configuration.preferences.ControlsData;
+import com.github.FishMiner.model.configuration.preferences.ControlsData;
 import com.github.FishMiner.service.controls.impl.GamePadControl;
 import com.github.FishMiner.service.controls.impl.InactiveControl;
 import com.github.FishMiner.service.controls.impl.KeyboardControl;

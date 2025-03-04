@@ -1,4 +1,4 @@
-package com.github.FishMiner.configuration.preferences;
+package com.github.FishMiner.model.configuration.preferences;
 
 import com.github.FishMiner.service.controls.ControlType;
 
