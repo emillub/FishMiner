@@ -7,7 +7,6 @@ gradle-app.setting
 /core/build/
 /lwjgl2/build/
 /lwjgl3/build/
-/html/build/
 /teavm/build/
 /ios/build/
 /ios-moe/build/
