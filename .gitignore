@@ -154,6 +154,7 @@ Thumbs.db
 *#*#
 /.kotlin/
 /assets/assets.txt
+/.vscode/
 
 ## Special cases:
 
