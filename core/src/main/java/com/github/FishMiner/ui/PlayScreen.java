@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -86,9 +87,19 @@ public class PlayScreen extends AbstractScreen {
 
         // Create and add entities
         IGameEntityFactory entityFactory = new BasicGameEntityFactory(); // Abstract factory pattern
-        Entity fish = entityFactory.createFish();
+        Entity fish1 = entityFactory.createFish();
+        Entity fish2 = entityFactory.createFish();
+        Entity fish3 = entityFactory.createFish();
+        Entity fish4 = entityFactory.createFish();
+        Entity fish5 = entityFactory.createFish();
+
+
         Entity hook = entityFactory.createHook();
-        engine.addEntity(fish);
+        engine.addEntity(fish1);
+        engine.addEntity(fish2);
+        engine.addEntity(fish3);
+        engine.addEntity(fish4);
+        engine.addEntity(fish5);
         engine.addEntity(hook);
 
 

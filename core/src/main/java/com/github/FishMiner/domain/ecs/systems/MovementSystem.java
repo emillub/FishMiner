@@ -25,7 +25,8 @@ public class MovementSystem extends IteratingSystem {
         BoundsComponent bounds = entity.getComponent(BoundsComponent.class);
 
         if (position != null && velocity != null) {
-            position.position.add(velocity.velocity.cpy().scl(deltaTime));
+            position.position.x += velocity.velocity.x * deltaTime;
+            position.position.y += velocity.velocity.y * deltaTime;
 
             if (bounds == null) {
                 System.out.println("Warning: BoundsComponent is missing for " + entity);
