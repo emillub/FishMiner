@@ -12,6 +12,7 @@ import com.github.FishMiner.domain.ecs.components.PositionComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 import com.github.FishMiner.domain.events.impl.FishHitEvent;
+import com.github.FishMiner.domain.events.impl.HookReelingEvent;
 import com.github.FishMiner.domain.states.EntityState;
 import com.github.FishMiner.domain.events.EventBus;
 
@@ -79,9 +80,12 @@ public class CollisionSystem extends IteratingSystem {
     private void handleCollision(Entity fish) {
         if (caughtFish.add(fish)) {
             System.out.println("🎣 Fish caught! Fish: " + fish);
-            //fish.getComponent(StateComponent.class).changeState(FishStates.HOOKED);
+
+            // Post an event for the fish
             EventBus.getInstance().post(new FishHitEvent(fish));
-            hook.getComponent(StateComponent.class).changeState(EntityState.HookStates.REELING);
+
+            // Post an event for the hook
+            EventBus.getInstance().post(new HookReelingEvent(hook));
         }
     }
 }
