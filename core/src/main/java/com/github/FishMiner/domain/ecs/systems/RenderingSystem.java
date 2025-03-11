@@ -10,6 +10,7 @@ import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.PositionComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
+import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 
 
 public class RenderingSystem extends IteratingSystem {
@@ -18,6 +19,8 @@ public class RenderingSystem extends IteratingSystem {
     private ComponentMapper<AnimationComponent> am = ComponentMapper.getFor(AnimationComponent.class);
     private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
     private ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
+    private final ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
+
 
     public RenderingSystem(SpriteBatch batch) {
         super(Family.all(PositionComponent.class).get());
@@ -37,16 +40,32 @@ public class RenderingSystem extends IteratingSystem {
         AnimationComponent anim = am.get(entity);
         TextureComponent tex = tm.get(entity);
         RotationComponent rot = rm.get(entity);
+        VelocityComponent vel = vm.get(entity);
+
 
         float rotation = (rot != null) ? rot.angle : 0f;
 
+        float scaleX = 1f;
+        if (vel != null && vel.velocity.x > 0) {
+            scaleX = -1f;
+        }
+
         if (pos != null && anim != null && anim.currentAnimation != null) {
             TextureRegion frame = anim.currentAnimation.getKeyFrame(anim.timer, true);
-            batch.draw(frame,
-                pos.position.x, pos.position.y,
-                frame.getRegionWidth() / 2f, frame.getRegionHeight() / 2f,
-                frame.getRegionWidth(), frame.getRegionHeight(),
-                1f, 1f,
+
+            float originX = frame.getRegionWidth() / 2f;
+            float originY = frame.getRegionHeight() / 2f;
+
+            batch.draw(
+                frame,
+                pos.position.x + originX,
+                pos.position.y + originY,
+                originX,
+                originY,
+                frame.getRegionWidth(),
+                frame.getRegionHeight(),
+                scaleX,
+                1f,
                 rotation
             );
         } else if (tex != null) {
