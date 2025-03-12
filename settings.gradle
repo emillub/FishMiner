@@ -11,7 +11,3 @@ pluginManagement {
 // You can remove Strings from the list and reload the Gradle project
 // if you want to temporarily disable a subproject.
 include 'lwjgl3', 'android', 'core'
-
-
-
-
