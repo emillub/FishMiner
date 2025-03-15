@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.Configuration;
+import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
@@ -17,12 +18,15 @@ import com.github.FishMiner.domain.ecs.systems.MovementSystem;
 import com.github.FishMiner.domain.ecs.systems.RenderingSystem;
 import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 import com.github.FishMiner.domain.ecs.systems.SpawningSystem;
-import com.github.FishMiner.domain.events.EventBus;
+import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FishHitEvent;
 import com.github.FishMiner.domain.events.impl.HookReelingEvent;
 import com.github.FishMiner.domain.listeners.FishStateListener;
 import com.github.FishMiner.domain.listeners.HookStateListener;
 import com.github.FishMiner.ui.controller.InputController;
+
+import java.util.List;
+import java.util.Stack;
 
 /**
  * PlayScreen handles gameplay, including ECS initialization, rendering, and input.
@@ -60,8 +64,8 @@ public class PlayScreen extends AbstractScreen {
 //        stage.addActor(controlWindow);
 
         // Set up event listeners
-        EventBus.getInstance().register(FishHitEvent.class, new FishStateListener());
-        EventBus.getInstance().register(HookReelingEvent.class, new HookStateListener());
+        GameEventBus.getInstance().register(FishHitEvent.class, new FishStateListener());
+        GameEventBus.getInstance().register(HookReelingEvent.class, new HookStateListener());
 
         // Initialize the ECS engine, input controller, and sprite batch
         engine = new Engine();
@@ -81,19 +85,22 @@ public class PlayScreen extends AbstractScreen {
 
         // Create and add entities
         IGameEntityFactory entityFactory = new BasicGameEntityFactory(); // Abstract factory pattern
-        // Adding more fish periodically
-        SpawningSystem spawningSystem = new SpawningSystem(entityFactory);
-        engine.addSystem(spawningSystem);
 
-        Entity fish1 = entityFactory.createFish();
-        Entity fish2 = entityFactory.createFish();
-        Entity fish3 = entityFactory.createFish();
-
+        // add the hook
         Entity hook = entityFactory.createHook();
-        engine.addEntity(fish1);
-        engine.addEntity(fish2);
-        engine.addEntity(fish3);
-        engine.addEntity(hook);
+
+        // create stacks of each fish types and add them to the fish stack for this level
+        Stack<Entity> clownFish = entityFactory.createFish(FishTypes.CLOWN_FISH, 20);
+        Stack<Entity> fishForLevel = new Stack<>();
+
+        while (!clownFish.isEmpty()) {
+            fishForLevel.add(clownFish.pop());
+            //fishForLevel.add(sharks.pop());
+        }
+
+        // Adding more fish periodically
+        SpawningSystem spawningSystem = new SpawningSystem(entityFactory, fishForLevel);
+        engine.addSystem(spawningSystem);
 
 
         // Set up input processing with an InputMultiplexer
