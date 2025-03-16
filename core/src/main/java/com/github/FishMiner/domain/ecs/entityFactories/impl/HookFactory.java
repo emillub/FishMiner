@@ -9,7 +9,7 @@ import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.states.HookStates;
+//import com.github.FishMiner.domain.states.HookStates;
 
 public class HookFactory {
 
@@ -27,7 +27,7 @@ public class HookFactory {
             hook.add(new RotationComponent(0f));
 
             // Texture and Animation
-            TextureComponent textureComponent = new TextureComponent("hook.png");
+            TextureComponent textureComponent = new TextureComponent("hook_1cols_1rows.png", 1, 1);
             hook.add(textureComponent);
 
             // Velocity
@@ -37,7 +37,7 @@ public class HookFactory {
             hook.add(new BoundsComponent(initialPosition, textureComponent.getRegion().getRegionWidth(), textureComponent.getRegion().getRegionHeight()));
 
             // Add a StateComponent with a default state (SWINGING)
-            hook.add(new StateComponent<>(HookStates.SWINGING));
+            //hook.add(new StateComponent<>(HookStates.SWINGING));
 
             return hook;
         }

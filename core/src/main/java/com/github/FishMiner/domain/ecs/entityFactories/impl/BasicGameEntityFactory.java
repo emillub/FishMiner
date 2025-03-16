@@ -2,23 +2,27 @@ package com.github.FishMiner.domain.ecs.entityFactories.impl;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.*;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 
-import java.util.Stack;
+import java.util.LinkedList;
+
 
 public class BasicGameEntityFactory implements IGameEntityFactory {
     Configuration config = Configuration.getInstance();
 
     @Override
-    public Stack<Entity> createFish(FishTypes fishType, int amount) {
-        Stack<Entity> fishList = new Stack<Entity>();
+    public LinkedList<Entity> createFish(FishTypes fishType, int amount) {
+        LinkedList<Entity> fishList = new LinkedList<>();
 
         for (int i = 0; i < amount; i++) {
             Entity fish = FishFactory.createEntity(
                 fishType.getTexturePath(),
+                fishType.getFrameCols(),
+                fishType.getFrameRows(),
                 fishType.getDepthLevel(),
                 fishType.getSpeed(),
                 fishType.getWeight()
@@ -40,7 +44,7 @@ public class BasicGameEntityFactory implements IGameEntityFactory {
         // rotation
         sinker.add(new RotationComponent(0f));
         // Texture and Animation
-        TextureComponent textureComponent = new TextureComponent("hook.png");
+        TextureComponent textureComponent = new TextureComponent("sinker_1cols_1rows.png", 1, 1);
         sinker.add(textureComponent);
         sinker.add(new WeightComponent(20));
         return sinker;

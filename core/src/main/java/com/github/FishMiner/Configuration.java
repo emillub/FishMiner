@@ -13,8 +13,8 @@ public class Configuration {
     private static int SCREEN_HEIGHT = Gdx.graphics.getHeight();
     public static final float OCEAN_HEIGHT_PERCENTAGE = 0.75f;
     public static final int OCEAN_DEPTH_LEVELS = 4;
-    private static final float RESOLUTION_X = 640f;
-    private static final float RESOLUTION_Y = 480f;
+    private static final float RESOLUTION_X = 900f;
+    private static final float RESOLUTION_Y = 1600f;
     private static float scaleX;
     private static float scaleY;
 
@@ -43,6 +43,14 @@ public class Configuration {
         return new Vector2(x * scaleX, y * scaleY);
     }
 
+    public float getScalePosX() {
+        return scaleX;
+    }
+
+    public float getScalePosY() {
+        return scaleY;
+    }
+
     public void updateConfiguration() {
         SCREEN_WIDTH = Gdx.graphics.getWidth();
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
@@ -68,7 +76,7 @@ public class Configuration {
     }
 
     public float getBaseSpeed() {
-        float baseSpeed = 100f;
+        float baseSpeed = 1f;
         return baseSpeed * scaleX;
     }
 

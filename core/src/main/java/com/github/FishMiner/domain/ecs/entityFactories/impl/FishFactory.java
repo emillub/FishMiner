@@ -19,17 +19,22 @@ import com.github.FishMiner.domain.states.FishableObjectStates;
 
 public class FishFactory {
 
-    protected static Entity createEntity(String texturePath, int depthLevel, float speed, int weight) {
+    protected static Entity createEntity(String texturePath, int frameCols, int frameRows,  int depthLevel, float speed, int weight) {
         Entity fish = new Entity();
 
         // Fish value is determined by depth level, the weight and speed of the fish
         int value = (int) ((float) depthLevel * weight * Math.abs(speed));
         fish.add(new FishComponent(1f, value));
 
+        // Texture and Animation
+        TextureComponent textureComponent = new TextureComponent(texturePath, frameCols, frameRows);
+        fish.add(textureComponent);
+
+
         // Position
         boolean movesRight = MathUtils.randomBoolean();
         Vector2 initialPosition = new Vector2(
-            FishUtils.getFishStartPosX(movesRight),
+            FishUtils.getFishStartPosX(movesRight, textureComponent.getFrameWidth()),
             FishUtils.getRandomDepthFor(depthLevel)
         );
         PositionComponent fishPos = new PositionComponent(initialPosition);
@@ -38,10 +43,6 @@ public class FishFactory {
         // Velocity
         float adjustedVelocity = FishUtils.getFishDirectionX(movesRight, speed);
         fish.add(new VelocityComponent(new Vector2(adjustedVelocity,0)));
-
-        // Texture and Animation
-        TextureComponent textureComponent = new TextureComponent(texturePath);
-        fish.add(textureComponent);
 
         // Bounds for collision detection
         fish.add(new BoundsComponent(fishPos.position, textureComponent.getRegion().getRegionWidth(), textureComponent.getRegion().getRegionHeight()));
@@ -66,6 +67,9 @@ public class FishFactory {
 
         return fish;
     }
+    
+
+
 
 
 

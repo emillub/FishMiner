@@ -11,13 +11,14 @@ import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
+import com.github.FishMiner.domain.ecs.entityFactories.impl.LevelFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
 import com.github.FishMiner.domain.ecs.systems.CollisionSystem;
 import com.github.FishMiner.domain.ecs.systems.HookSystem;
 import com.github.FishMiner.domain.ecs.systems.MovementSystem;
 import com.github.FishMiner.domain.ecs.systems.RenderingSystem;
 import com.github.FishMiner.domain.ecs.systems.RotationSystem;
-import com.github.FishMiner.domain.ecs.systems.SpawningSystem;
+import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FishHitEvent;
 import com.github.FishMiner.domain.events.impl.HookReelingEvent;
@@ -25,8 +26,8 @@ import com.github.FishMiner.domain.listeners.FishStateListener;
 import com.github.FishMiner.domain.listeners.HookStateListener;
 import com.github.FishMiner.ui.controller.InputController;
 
-import java.util.List;
-import java.util.Stack;
+import java.util.LinkedList;
+
 
 /**
  * PlayScreen handles gameplay, including ECS initialization, rendering, and input.
@@ -63,45 +64,46 @@ public class PlayScreen extends AbstractScreen {
 //        controlWindow.setPosition(0, stage.getHeight() - controlWindow.getHeight());
 //        stage.addActor(controlWindow);
 
-        // Set up event listeners
-        GameEventBus.getInstance().register(FishHitEvent.class, new FishStateListener());
-        GameEventBus.getInstance().register(HookReelingEvent.class, new HookStateListener());
-
         // Initialize the ECS engine, input controller, and sprite batch
-        engine = new Engine();
+        engine = Configuration.getInstance().getEngine();
         controller = new InputController(engine);
         batch = new SpriteBatch();
 
         // Add ECS systems
+        System.out.println("adding systems");
         RotationSystem rotationSystem = new RotationSystem();
-        rotationSystem.setHookPosition(200, Configuration.getInstance().getOceanHeight());
-        engine.addSystem(new CollisionSystem());
+        rotationSystem.setHookPosition(
+            (int) (Configuration.getInstance().getScreenWidth() / 2),
+            Configuration.getInstance().getOceanHeight()
+        );
         engine.addSystem(rotationSystem);
+        engine.addSystem(new CollisionSystem());
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RenderingSystem(batch));
         engine.addSystem(new HookSystem());
-        // Uncomment if needed: engine.addSystem(new HookInputSystem());
-
+        engine.addSystem(new SpawningQueueSystem());
+        //engine.addSystem(new HookInputSystem());
+        System.out.println("added systems");
         // Create and add entities
         IGameEntityFactory entityFactory = new BasicGameEntityFactory(); // Abstract factory pattern
 
         // add the hook
-        Entity hook = entityFactory.createHook();
+        //Entity hook = entityFactory.createHook();
+        //add this after debugging hook: engine.addEntity(hook);
 
-        // create stacks of each fish types and add them to the fish stack for this level
-        Stack<Entity> clownFish = entityFactory.createFish(FishTypes.CLOWN_FISH, 20);
-        Stack<Entity> fishForLevel = new Stack<>();
 
-        while (!clownFish.isEmpty()) {
-            fishForLevel.add(clownFish.pop());
-            //fishForLevel.add(sharks.pop());
-        }
+        // create fish for this level
+        LinkedList<Entity> fishForLevel = prepareFishForLevel(entityFactory);
+        Entity levelEntity = LevelFactory.createEntity(fishForLevel, 6f);
+        engine.addEntity(levelEntity);
 
-        // Adding more fish periodically
-        SpawningSystem spawningSystem = new SpawningSystem(entityFactory, fishForLevel);
-        engine.addSystem(spawningSystem);
 
+        System.out.println("adding listeners");
+        // Set up event listeners
+        GameEventBus.getInstance().register(FishHitEvent.class, new FishStateListener());
+        GameEventBus.getInstance().register(HookReelingEvent.class, new HookStateListener());
+        System.out.println("added listeners");
 
         // Set up input processing with an InputMultiplexer
         InputMultiplexer multiplexer = new InputMultiplexer(controller, stage);
@@ -110,7 +112,7 @@ public class PlayScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0f, 0f, 0f, 1f);
+        ScreenUtils.clear(0f, 0.1f, 0.7f, 0.7f);
         stage.act(delta);
         engine.update(delta);
         stage.draw();
@@ -121,4 +123,26 @@ public class PlayScreen extends AbstractScreen {
         super.dispose();
         batch.dispose();
     }
+
+    /**
+     * Generates an interleaved list of different fish types for the current level.
+     *
+     * @param entityFactory The entity factory used to create fish entities.
+     * @return An interleaved {@link LinkedList<Entity>} containing different fish types.
+     */
+    private LinkedList<Entity> prepareFishForLevel(IGameEntityFactory entityFactory) {
+        LinkedList<Entity> clownFish = entityFactory.createFish(FishTypes.CLOWN_FISH, 10);
+        LinkedList<Entity> sharks = entityFactory.createFish(FishTypes.SHARK, 3);
+
+        LinkedList<Entity> fishForLevel = new LinkedList<>();
+
+        int maxSize = Math.max(clownFish.size(), sharks.size());
+        for (int i = 0; i < maxSize; i++) {
+            if (i < clownFish.size()) fishForLevel.add(clownFish.get(i));
+            if (i < sharks.size()) fishForLevel.add(sharks.get(i));
+        }
+
+        return fishForLevel;
+    }
+
 }

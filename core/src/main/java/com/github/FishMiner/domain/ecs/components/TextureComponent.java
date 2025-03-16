@@ -18,38 +18,16 @@ public class TextureComponent implements Component {
      * Handles textures and frame-based animations by extracting rows and columns from the texture filename.
      * Example filename format: "fish_3cols_9rows.png" (3 columns, 9 rows).
      */
-    public TextureComponent(String texturePath) {
+    public TextureComponent(String texturePath, int frame_cols, int frame_rows) {
         try {
             Texture texture = new Texture(texturePath);
             this.region = new TextureRegion(texture);
-        } catch (GdxRuntimeException e) { // Corrected exception type
+            setAndValidateFrameCols(frame_cols);
+            setAndValidateFrameRows(frame_rows);
+        } catch (GdxRuntimeException e) {
             throw new RuntimeException("Error loading texture: " + texturePath, e);
         }
 
-        try {
-            frameColsRowsExtractor(texturePath);
-        } catch (NumberFormatException e) {
-            System.err.println("Rows and Cols defaulted to 1: frameColsRowsExtractor failed for path: " + texturePath);
-        }
-    }
-
-    /**
-     * Extracts the number of columns and rows from the texture filename.
-     * Expected format: "_Xcols_Yrows" (e.g., "fish_3cols_9rows.png").
-     *
-     * @param texturePath The path of the texture file.
-     */
-    private void frameColsRowsExtractor(String texturePath) {
-        Pattern pattern = Pattern.compile("_(\\d+)cols_(\\d+)rows");
-        Matcher matcher = pattern.matcher(texturePath);
-        if (matcher.find()) {
-            int cols = Integer.parseInt(matcher.group(1));
-            int rows = Integer.parseInt(matcher.group(2));
-            setAndValidateFrameCols(cols);
-            setAndValidateFrameRows(rows);
-        } else {
-            throw new NumberFormatException("Invalid texturePath: " + texturePath + ". Format must be 'fishtype_3cols_9rows'.");
-        }
     }
 
     /**
@@ -97,7 +75,7 @@ public class TextureComponent implements Component {
             ValidateUtil.validatePositiveInt(cols);
             this.FRAME_COLS = cols;
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Cannot set Texture rows: " + e);
+            throw new RuntimeException("Cannot set texture cols: cannot be less than 0: " + e);
         }
     }
 
@@ -111,7 +89,7 @@ public class TextureComponent implements Component {
             ValidateUtil.validatePositiveInt(rows);
             this.FRAME_ROWS = rows;
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Cannot set Texture rows: " + e);
+            throw new RuntimeException("Cannot set texture rows: cannot be less than 0: " + e);
         }
     }
 }
