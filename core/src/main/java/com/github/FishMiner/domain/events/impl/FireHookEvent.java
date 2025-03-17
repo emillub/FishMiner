@@ -5,11 +5,13 @@ import com.github.FishMiner.domain.events.IGameEvent;
 
 
 public class FireHookEvent implements IGameEvent {
+
     private final Entity hook;
 
     public FireHookEvent(Entity hook) {
         this.hook = hook;
     }
+
 
     @Override
     public Entity getEventEntity() {

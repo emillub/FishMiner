@@ -12,9 +12,9 @@ import com.github.FishMiner.domain.ecs.components.PositionComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 import com.github.FishMiner.domain.events.impl.FishHitEvent;
-import com.github.FishMiner.domain.events.impl.HookReelingEvent;
-import com.github.FishMiner.domain.states.EntityState;
-import com.github.FishMiner.domain.events.EventBus;
+import com.github.FishMiner.domain.events.GameEventBus;
+import com.github.FishMiner.domain.states.FishableObjectStates;
+import com.github.FishMiner.domain.states.HookStates;
 
 
 import java.util.HashSet;
@@ -60,11 +60,12 @@ public class CollisionSystem extends IteratingSystem {
             return;
         }
 
-        StateComponent<EntityState.FishStates> fishState = fish.getComponent(StateComponent.class);
-        StateComponent<EntityState.HookStates> hookState = hook.getComponent(StateComponent.class);
+        StateComponent fishState = fish.getComponent(StateComponent.class);
+        StateComponent hookState = hook.getComponent(StateComponent.class);
 
-        ValidateUtil.validateNotNull();
-        if (hookState.state != EntityState.HookStates.FIRE || fishState.state != EntityState.FishStates.FISHABLE) {
+        ValidateUtil.validateNotNull(fishState, hookState);
+        // exit if hook is not in Fire state or the thing that is hit is not fishable
+        if (hookState.state != HookStates.FIRE || fishState.state == FishableObjectStates.FISHABLE) {
             return;
         }
 
@@ -75,17 +76,15 @@ public class CollisionSystem extends IteratingSystem {
             handleCollision(fish);
         }
     }
-
-    @SuppressWarnings("unchecked")
     private void handleCollision(Entity fish) {
         if (caughtFish.add(fish)) {
             System.out.println("🎣 Fish caught! Fish: " + fish);
 
             // Post an event for the fish
-            EventBus.getInstance().post(new FishHitEvent(fish));
+            GameEventBus.getInstance().post(new FishHitEvent(fish));
 
             // Post an event for the hook
-            EventBus.getInstance().post(new HookReelingEvent(hook));
+            //EventBus.getInstance().post(new HookReelingEvent(hook));
         }
     }
 }
