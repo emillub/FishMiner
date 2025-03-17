@@ -1,10 +1,8 @@
 package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
-import com.github.FishMiner.domain.states.IState;
 
-
-public class StateComponent<T extends IState> implements Component {
+public class StateComponent<T extends Enum<T>> implements Component {
     public T state;
 
     public StateComponent(T initialState) {
@@ -12,10 +10,6 @@ public class StateComponent<T extends IState> implements Component {
     }
 
     public void changeState(T newState) {
-        if (state != null) {
-            state.onExit();
-        }
-        state = newState;
-        state.onEnter();
+        this.state = newState;
     }
 }

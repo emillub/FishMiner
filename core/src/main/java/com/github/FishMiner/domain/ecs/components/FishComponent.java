@@ -1,15 +1,20 @@
 package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
+import com.github.FishMiner.Configuration;
+import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 
 public class FishComponent implements Component {
-    public float size;
-    public int value;
+    public float scale;
+    private final int value;
 
-    public FishComponent(float size, int value) {
-        if (size <= 0) {
-            this.size = size;
-        }
+    public FishComponent(float scale, int value) {
+        ValidateUtil.validatePositiveNumbers(scale, (float) value);
+        this.scale = scale;
         this.value = value;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

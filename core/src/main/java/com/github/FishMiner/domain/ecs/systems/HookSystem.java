@@ -11,7 +11,9 @@ import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
-import com.github.FishMiner.domain.states.EntityState;
+import com.github.FishMiner.domain.states.FishableObjectStates;
+import com.github.FishMiner.domain.states.HookStates;
+import com.github.FishMiner.domain.states.IState;
 
 
 /**
@@ -44,12 +46,13 @@ public class HookSystem extends IteratingSystem {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void processEntity(Entity entity, float deltaTime) {
         HookComponent hook = hm.get(entity);
         PositionComponent hookPos = pm.get(entity);
         RotationComponent hookRot = rm.get(entity);
         VelocityComponent hookVel = vm.get(entity);
-        StateComponent<EntityState.HookStates> hookState = sm.get(entity);
+        StateComponent hookState = sm.get(entity);
 
 
         ValidateUtil.validateNotNull(
@@ -58,14 +61,14 @@ public class HookSystem extends IteratingSystem {
             hookVel, "Hook Velocity cannot be null"
         );
 
-        if (hookState.state == EntityState.HookStates.SWINGING) {
+        if (hookState.state == HookStates.SWINGING) {
             // Update the swing angle using a sine oscillation.
             hook.swingAngle = hook.swingAmplitude * MathUtils.sin(time);
             // Update the hook's rotation (convert from radians to degrees).
             hookRot.angle = hook.swingAngle * MathUtils.radiansToDegrees;
         }
 
-        if (hookState.state == EntityState.HookStates.FIRE) {
+        if (hookState.state == HookStates.FIRE) {
             // Set the velocity to move in the direction of the hook's rotation.
             // For example, using a unit vector in that direction.
             hookVel.velocity.set(1, 0).setAngleDeg(hookRot.angle);
@@ -73,10 +76,20 @@ public class HookSystem extends IteratingSystem {
             // hookVel.velocity.scl(hookVel.speed);
         }
 
-        if (hookState.state == EntityState.HookStates.REELING) {
+        if (hookState.state == HookStates.REELING) {
             // Set the velocity to be reversed so the hook returns to its initial position.
             hookVel.velocity.set(1, 0).setAngleDeg(hookRot.angle).scl(-1);
             // Optionally, multiply by a speed factor if needed.
+        }
+
+        if (hookState.state == HookStates.RETURNED) {
+            if (hook.hasAttachedEntity()) {
+                StateComponent<FishableObjectStates> attachedState = hook.attachedFishableEntity.getComponent(StateComponent.class);
+                attachedState.changeState(FishableObjectStates.CAPTURED);
+            }
+            else {
+                hookState.changeState(HookStates.SWINGING);
+            }
         }
     }
 }

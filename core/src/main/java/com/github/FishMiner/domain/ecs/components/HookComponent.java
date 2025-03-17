@@ -9,13 +9,9 @@ public class HookComponent implements Component {
     public float swingAngle;
     public float swingAmplitude;
 
-    public Entity attachedFish;
+    public Entity attachedFishableEntity;
 
     public Vector2 offset;
-
-    //public enum HookState { SWINGING, FIRED , REELING }
-    //public HookState state = HookState.SWINGING;
-
 
     public HookComponent(float swingAngle, float swingAmplitude) {
         this.swingAngle = swingAngle;
@@ -23,16 +19,15 @@ public class HookComponent implements Component {
         this.offset = new Vector2();
     }
 
-    public void attachFish(Entity fishableEntity) {
-        this.attachedFish = fishableEntity;
+    public void attachEntity(Entity fishableEntity) {
+        this.attachedFishableEntity = fishableEntity;
     }
 
-    public void detachFish() {
-        this.attachedFish = null;
+    public void detachEntity() {
+        this.attachedFishableEntity = null;
     }
 
-    public boolean isFishAttached() {
-        return attachedFish != null;
+    public boolean hasAttachedEntity() {
+        return attachedFishableEntity != null;
     }
-
 }
