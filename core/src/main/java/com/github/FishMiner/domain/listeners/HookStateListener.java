@@ -1,7 +1,6 @@
 package com.github.FishMiner.domain.listeners;
 
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.events.IGameEventListener;
 import com.github.FishMiner.domain.events.impl.HookReelingEvent;
 import com.badlogic.ashley.core.Entity;
 import com.github.FishMiner.domain.states.HookStates;
@@ -19,5 +18,10 @@ public class HookStateListener implements IGameEventListener<HookReelingEvent> {
             System.out.println("Hook state changed to REELING via HookStateListener");
         }
         // TODO: additional logic, e.g. play sound or update UI
+    }
+
+    @Override
+    public Class<HookReelingEvent> getEventType() {
+        return HookReelingEvent.class;
     }
 }

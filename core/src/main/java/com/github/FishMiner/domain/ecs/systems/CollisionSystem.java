@@ -11,6 +11,7 @@ import com.github.FishMiner.domain.ecs.components.FishComponent;
 import com.github.FishMiner.domain.ecs.components.PositionComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
+import com.github.FishMiner.domain.events.IGameEvent;
 import com.github.FishMiner.domain.events.impl.FishHitEvent;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.states.FishableObjectStates;
@@ -22,6 +23,7 @@ import java.util.Set;
 
 public class CollisionSystem extends IteratingSystem {
 
+    private final ComponentMapper<FishComponent> fm = ComponentMapper.getFor(FishComponent.class);
     private final ComponentMapper<BoundsComponent> bm = ComponentMapper.getFor(BoundsComponent.class);
 
     private Entity hook;
@@ -81,10 +83,8 @@ public class CollisionSystem extends IteratingSystem {
             System.out.println("🎣 Fish caught! Fish: " + fish);
 
             // Post an event for the fish
-            GameEventBus.getInstance().post(new FishHitEvent(fish));
-
-            // Post an event for the hook
-            //EventBus.getInstance().post(new HookReelingEvent(hook));
+            FishHitEvent fishHitEvent = new FishHitEvent(fish);
+            GameEventBus.getInstance().post(fishHitEvent);
         }
     }
 }

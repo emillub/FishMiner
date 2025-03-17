@@ -3,20 +3,30 @@ package com.github.FishMiner.domain.ecs.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.github.FishMiner.Configuration;
+import com.github.FishMiner.domain.ecs.util.FishUtils;
 
 
 public class HookComponent implements Component {
-    public float swingAngle;
-    public float swingAmplitude;
-
+    public float swingAngle = 0.5f;
+    public float swingAmplitude = 0.5f;
     public Entity attachedFishableEntity;
+    public Vector2 offset = new Vector2();
 
-    public Vector2 offset;
+    // temp reelLength. This actually belongs to the ReelComponent
+    public final float reelLength = FishUtils.getDepthIntervalFor(1)[1];
 
-    public HookComponent(float swingAngle, float swingAmplitude) {
-        this.swingAngle = swingAngle;
-        this.swingAmplitude = swingAmplitude;
-        this.offset = new Vector2();
+    public final int sinkerWeight = 2;
+
+    public final float swingOffset = 1;
+
+    public final Vector2 anchorPoint = new Vector2(
+        (float) (Configuration.getInstance().getScreenWidth() / 2),
+        (float) (Configuration.getInstance().getScreenHeight() - 200)
+    );
+
+    public HookComponent() {
+
     }
 
     public void attachEntity(Entity fishableEntity) {

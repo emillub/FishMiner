@@ -1,7 +1,6 @@
 package com.github.FishMiner.domain.listeners;
 
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.events.IGameEventListener;
 import com.github.FishMiner.domain.events.impl.FishHitEvent;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 
@@ -16,5 +15,10 @@ public class FishStateListener implements IGameEventListener<FishHitEvent> {
         }
         //fish.getComponent(StateComponent.class).changeState(EntityState.FishStates.HOOKED);
         // TODO: trigger additional logic, such as playing a sound or updating the score.
+    }
+
+    @Override
+    public Class<FishHitEvent> getEventType() {
+        return FishHitEvent.class;
     }
 }

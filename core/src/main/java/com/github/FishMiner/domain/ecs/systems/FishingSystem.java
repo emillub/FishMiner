@@ -13,12 +13,14 @@ import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
-//import com.github.FishMiner.domain.events.impl.SharkAttackingEvent;
+import com.github.FishMiner.domain.events.impl.FishHitEvent;
+import com.github.FishMiner.domain.listeners.IGameEventListener;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.HookStates;
 
-public class FishingSystem extends IteratingSystem {
+public class FishingSystem extends IteratingSystem implements IGameEventListener<FishHitEvent> {
 
+    private Entity fish;
     private ComponentMapper<HookComponent> hookMapper = ComponentMapper.getFor(HookComponent.class);
     private ComponentMapper<PositionComponent> posMapper = ComponentMapper.getFor(PositionComponent.class);
     private ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
@@ -75,5 +77,15 @@ public class FishingSystem extends IteratingSystem {
                 hookState.changeState(HookStates.SWINGING);
             }
         }
+    }
+
+    @Override
+    public void onEvent(FishHitEvent event) {
+        this.fish = event.getEventEntity();
+    }
+
+    @Override
+    public Class<FishHitEvent> getEventType() {
+        return null;
     }
 }

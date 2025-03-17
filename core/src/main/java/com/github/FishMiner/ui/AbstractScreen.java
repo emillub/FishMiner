@@ -17,7 +17,6 @@ public abstract class AbstractScreen implements Screen {
 
     protected Stage stage;
     protected Skin skin;
-    protected InputMultiplexer multiplexer;
 
     public AbstractScreen() {
         stage = new Stage(new FitViewport(
@@ -25,13 +24,11 @@ public abstract class AbstractScreen implements Screen {
             Configuration.getInstance().getScreenHeight()
         ));
         skin = Configuration.getInstance().getUiSkin();
-        multiplexer = new InputMultiplexer();
     }
 
     @Override
     public void show() {
-        // Set the multiplexer as the global input processor
-        Gdx.input.setInputProcessor(multiplexer);
+
     }
 
     @Override

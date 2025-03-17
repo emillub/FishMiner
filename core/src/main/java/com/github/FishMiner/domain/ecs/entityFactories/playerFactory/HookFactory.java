@@ -1,4 +1,4 @@
-package com.github.FishMiner.domain.ecs.entityFactories.impl;
+package com.github.FishMiner.domain.ecs.entityFactories.playerFactory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
@@ -9,14 +9,15 @@ import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
+import com.github.FishMiner.domain.states.HookStates;
 //import com.github.FishMiner.domain.states.HookStates;
 
 public class HookFactory {
 
-        protected static Entity createEntity(int x, int y) {
+        public static Entity createEntity(int x, int y) {
             Entity hook = new Entity();
 
-            hook.add(new HookComponent(0.5f, 0.5f));
+            hook.add(new HookComponent());
 
             // Position
             Vector2 initialPosition = new Vector2(x, y);
@@ -37,7 +38,7 @@ public class HookFactory {
             hook.add(new BoundsComponent(initialPosition, textureComponent.getRegion().getRegionWidth(), textureComponent.getRegion().getRegionHeight()));
 
             // Add a StateComponent with a default state (SWINGING)
-            //hook.add(new StateComponent<>(HookStates.SWINGING));
+            hook.add(new StateComponent<>(HookStates.SWINGING));
 
             return hook;
         }

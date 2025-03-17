@@ -4,11 +4,11 @@ import com.badlogic.ashley.core.Entity;
 import com.github.FishMiner.domain.events.IGameEvent;
 
 
-public class FireHookEvent implements IGameEvent {
+public class FireInputEvent implements IGameEvent {
 
     private final Entity hook;
 
-    public FireHookEvent(Entity hook) {
+    public FireInputEvent(Entity hook) {
         this.hook = hook;
     }
 
