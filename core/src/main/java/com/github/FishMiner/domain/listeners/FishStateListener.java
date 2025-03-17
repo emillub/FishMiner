@@ -1,18 +1,18 @@
 package com.github.FishMiner.domain.listeners;
 
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.events.IEventListener;
+import com.github.FishMiner.domain.events.IGameEventListener;
 import com.github.FishMiner.domain.events.impl.FishHitEvent;
-import com.github.FishMiner.domain.states.EntityState;
+import com.github.FishMiner.domain.states.FishableObjectStates;
 
-public class FishStateListener implements IEventListener<FishHitEvent> {
+public class FishStateListener implements IGameEventListener<FishHitEvent> {
 
     @Override
     @SuppressWarnings("unchecked")
     public void onEvent(FishHitEvent event) {
-        StateComponent<EntityState.FishStates> stateComponent = event.getEventEntity().getComponent(StateComponent.class);
+        StateComponent stateComponent = event.getEventEntity().getComponent(StateComponent.class);
         if (stateComponent != null) {
-            stateComponent.changeState(EntityState.FishStates.HOOKED);
+            stateComponent.changeState(FishableObjectStates.HOOKED);
         }
         //fish.getComponent(StateComponent.class).changeState(EntityState.FishStates.HOOKED);
         // TODO: trigger additional logic, such as playing a sound or updating the score.

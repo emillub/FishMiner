@@ -5,27 +5,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EventBus {
-    private static EventBus instance;
-    private Map<Class<? extends IGameEvent>, List<IEventListener<? extends IGameEvent>>> listeners;
+public class GameEventBus {
+    private static GameEventBus instance;
+    private Map<Class<? extends IGameEvent>, List<IGameEventListener<? extends IGameEvent>>> listeners;
 
-    private EventBus() {
+    private GameEventBus() {
         listeners = new HashMap<>();
     }
 
-    public static EventBus getInstance() {
+    public static GameEventBus getInstance() {
         if (instance == null) {
-            instance = new EventBus();
+            instance = new GameEventBus();
         }
         return instance;
     }
 
-    public <E extends IGameEvent> void register(Class<E> eventType, IEventListener<E> listener) {
+    public <E extends IGameEvent> void register(Class<E> eventType, IGameEventListener<E> listener) {
         listeners.computeIfAbsent(eventType, k -> new ArrayList<>()).add(listener);
     }
 
-    public <E extends IGameEvent> void unregister(Class<E> eventType, IEventListener<E> listener) {
-        List<IEventListener<? extends IGameEvent>> eventListeners = listeners.get(eventType);
+    public <E extends IGameEvent> void unregister(Class<E> eventType, IGameEventListener<E> listener) {
+        List<IGameEventListener<? extends IGameEvent>> eventListeners = listeners.get(eventType);
         if (eventListeners != null) {
             eventListeners.remove(listener);
         }
@@ -37,9 +37,9 @@ public class EventBus {
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void post(IGameEvent event) {
-        List<IEventListener<? extends IGameEvent>> eventListeners = listeners.get(event.getClass());
+        List<IGameEventListener<? extends IGameEvent>> eventListeners = listeners.get(event.getClass());
         if (eventListeners != null) {
-            for (IEventListener listener : eventListeners) {
+            for (IGameEventListener listener : eventListeners) {
                 listener.onEvent(event);
             }
         }

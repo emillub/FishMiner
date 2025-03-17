@@ -8,7 +8,7 @@ import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.states.IState;
 
-
+@SuppressWarnings("unchecked")
 public class AnimationSystem extends IteratingSystem {
 
     private ComponentMapper<AnimationComponent> am = ComponentMapper.getFor(AnimationComponent.class);
@@ -19,17 +19,16 @@ public class AnimationSystem extends IteratingSystem {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void processEntity(Entity entity, float deltaTime) {
         AnimationComponent animationComponent = am.get(entity);
-        StateComponent<?> stateComponent = sm.get(entity);
+        StateComponent<? extends IState> stateComponent = (StateComponent<? extends IState>) sm.get(entity);
 
         if (animationComponent != null && stateComponent != null && stateComponent.state instanceof IState) {
-            IState animationState = stateComponent.state;
+            // Get animation key from the current state
+            String animationKey = stateComponent.state.getAnimationKey();
 
             animationComponent.timer += deltaTime;
-
-            // Get animation key from the current state
-            String animationKey = animationState.getAnimationKey();
 
             // Change animation if different from current
             if (!animationComponent.currentAnimation.equals(animationComponent.animations.get(animationKey))) {

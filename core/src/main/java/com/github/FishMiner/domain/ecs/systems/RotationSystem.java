@@ -10,8 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.github.FishMiner.domain.ecs.components.PositionComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.states.EntityState;
-import com.github.FishMiner.domain.states.IState;
+import com.github.FishMiner.domain.states.FishableObjectStates;
 
 
 public class RotationSystem extends IteratingSystem {
@@ -31,10 +30,10 @@ public class RotationSystem extends IteratingSystem {
         PositionComponent entityPosition = pm.get(entity);
         RotationComponent entityRotation = rm.get(entity);
 
-        StateComponent<IState> entityState = sm.get(entity);
+        StateComponent entityState = sm.get(entity);
 
         if (entityPosition != null && entityRotation != null && entityState != null) {
-            if ((entityState.state instanceof EntityState.FishStates) && (entityState.state == EntityState.FishStates.HOOKED)) {
+            if (entityState.state == FishableObjectStates.HOOKED) {
                 float angle = getRotationAngle(hookPosition, entityPosition.position);
                 entityRotation.angle = angle;
             }
