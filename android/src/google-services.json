@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "385178045097",
+    "project_id": "fishminer-482a2",
+    "storage_bucket": "fishminer-482a2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385178045097:android:ee14e788f5147ed3a437b8",
+        "android_client_info": {
+          "package_name": "com.github.FishMiner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvXR0t2vP72YM3Dg0wRh9RMYXigUvkElY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
