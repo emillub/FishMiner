@@ -1,90 +1,71 @@
 package com.github.FishMiner.domain.ecs.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.FishComponent;
 import com.github.FishMiner.domain.ecs.components.PositionComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.ecs.util.ValidateUtil;
-import com.github.FishMiner.domain.events.IGameEvent;
+import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.events.impl.FishHitEvent;
 import com.github.FishMiner.domain.events.GameEventBus;
-import com.github.FishMiner.domain.states.FishableObjectStates;
-import com.github.FishMiner.domain.states.HookStates;
-
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class CollisionSystem extends IteratingSystem {
+import com.badlogic.ashley.core.EntitySystem;
+import com.github.FishMiner.domain.ecs.components.HookComponent;
 
-    private final ComponentMapper<FishComponent> fm = ComponentMapper.getFor(FishComponent.class);
-    private final ComponentMapper<BoundsComponent> bm = ComponentMapper.getFor(BoundsComponent.class);
 
-    private Entity hook;
+public class CollisionSystem extends EntitySystem {
+
+    // A set to track fish that have already triggered a hit event.
     private final Set<Entity> caughtFish = new HashSet<>();
 
-    public CollisionSystem() {
-        super(Family.all(BoundsComponent.class, FishComponent.class).get());
-    }
+    private final Family fishFamily = Family.all(
+        BoundsComponent.class,
+        FishComponent.class,
+        PositionComponent.class,
+        StateComponent.class,
+        VelocityComponent.class
+    ).get();
+
+    private final Family hookFamily = Family.all(
+        BoundsComponent.class,
+        HookComponent.class,
+        PositionComponent.class
+    ).get();
 
     @Override
-    public void addedToEngine(Engine engine) {
-        super.addedToEngine(engine);
-        assignHook(engine);
-    }
+    public void update(float deltaTime) {
+        Engine engine = getEngine();
+        ImmutableArray<Entity> fishEntities = engine.getEntitiesFor(fishFamily);
+        ImmutableArray<Entity> hookEntities = engine.getEntitiesFor(hookFamily);
 
-    private void assignHook(Engine engine) {
-        ImmutableArray<Entity> hookEntities = engine.getEntitiesFor(
-            Family.all(BoundsComponent.class, PositionComponent.class)
-                .exclude(FishComponent.class)
-                .get()
-        );
+        // Loop through every hook entity.
+        for (Entity hook : hookEntities) {
+            BoundsComponent hookBounds = hook.getComponent(BoundsComponent.class);
 
-        if (hookEntities.size() > 0) {
-            hook = hookEntities.first();
-        }
-    }
+            // For each hook, check every fish.
+            for (Entity fish : fishEntities) {
+                if (caughtFish.contains(fish)) {
+                    continue; // Skip fish that have already been processed.
+                }
+                BoundsComponent fishBounds = fish.getComponent(BoundsComponent.class);
 
-    @Override
-    protected void processEntity(Entity fish, float deltaTime) {
-        if (hook == null) {
-            assignHook(getEngine());
-            if (hook == null) return;
-        }
+                // If the hook's bounds overlap the fish's bounds…
+                if (hookBounds.bounds.overlaps(fishBounds.bounds)) {
+                    // Post a FishHitEvent for the fish.
+                    FishHitEvent event = new FishHitEvent(fish);
+                    //event.setSource(hook);
+                    GameEventBus.getInstance().post(event);
 
-        if (caughtFish.contains(fish)) {
-            return;
-        }
-
-        StateComponent fishState = fish.getComponent(StateComponent.class);
-        StateComponent hookState = hook.getComponent(StateComponent.class);
-
-        ValidateUtil.validateNotNull(fishState, hookState);
-        // exit if hook is not in Fire state or the thing that is hit is not fishable
-        if (hookState.state != HookStates.FIRE || fishState.state == FishableObjectStates.FISHABLE) {
-            return;
-        }
-
-        BoundsComponent fishBounds = bm.get(fish);
-        BoundsComponent hookBounds = bm.get(hook);
-
-        if (fishBounds.bounds.overlaps(hookBounds.bounds)) {
-            handleCollision(fish);
-        }
-    }
-    private void handleCollision(Entity fish) {
-        if (caughtFish.add(fish)) {
-            System.out.println("🎣 Fish caught! Fish: " + fish);
-
-            // Post an event for the fish
-            FishHitEvent fishHitEvent = new FishHitEvent(fish);
-            GameEventBus.getInstance().post(fishHitEvent);
+                    // Mark this fish as "caught" so we don't process it again.
+                    caughtFish.add(fish);
+                }
+            }
         }
     }
 }

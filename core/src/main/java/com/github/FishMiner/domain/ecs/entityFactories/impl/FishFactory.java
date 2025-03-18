@@ -45,7 +45,11 @@ public class FishFactory {
         fish.add(new VelocityComponent(new Vector2(adjustedVelocity,0)));
 
         // Bounds for collision detection
-        fish.add(new BoundsComponent(fishPos.position, textureComponent.getRegion().getRegionWidth(), textureComponent.getRegion().getRegionHeight()));
+        BoundsComponent bc = new BoundsComponent();
+        bc.bounds.setPosition(fishPos.position);
+        bc.bounds.setWidth(textureComponent.getRegion().getRegionWidth());
+        bc.bounds.setHeight(textureComponent.getFrameHeight());
+        fish.add(bc);
 
         // rotation
         fish.add(new RotationComponent(0f));
@@ -67,7 +71,7 @@ public class FishFactory {
 
         return fish;
     }
-    
+
 
 
 

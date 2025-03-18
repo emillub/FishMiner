@@ -63,7 +63,11 @@ public class PlayerFactory {
         hook.add(new VelocityComponent(new Vector2(0, 0)));
 
         // Bounds for collision detection
-        hook.add(new BoundsComponent(initialPosition, textureComponent.getRegion().getRegionWidth(), textureComponent.getRegion().getRegionHeight()));
+        BoundsComponent bound = new BoundsComponent();
+        bound.bounds.setPosition(initialPosition);
+        bound.bounds.setWidth(textureComponent.getRegion().getRegionWidth());
+        bound.bounds.setWidth(textureComponent.getRegion().getRegionHeight());
+        hook.add(bound);
 
         // Add a StateComponent with a default state (SWINGING)
         hook.add(new StateComponent<>(HookStates.SWINGING));

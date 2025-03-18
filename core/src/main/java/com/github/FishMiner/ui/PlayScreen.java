@@ -19,19 +19,16 @@ import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFacto
 import com.github.FishMiner.domain.ecs.entityFactories.impl.LevelFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
 import com.github.FishMiner.domain.ecs.systems.CollisionSystem;
+import com.github.FishMiner.domain.ecs.systems.FishSystem;
 import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
 import com.github.FishMiner.domain.ecs.systems.HookSystem;
 import com.github.FishMiner.domain.ecs.systems.MovementSystem;
+import com.github.FishMiner.domain.ecs.systems.PhysicalSystem;
 import com.github.FishMiner.domain.ecs.systems.RenderingSystem;
 import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
-import com.github.FishMiner.domain.events.impl.FishHitEvent;
-import com.github.FishMiner.domain.events.impl.HookReelingEvent;
-import com.github.FishMiner.domain.listeners.FireHookEventListener;
-import com.github.FishMiner.domain.listeners.FishStateListener;
-import com.github.FishMiner.domain.listeners.HookStateListener;
 import com.github.FishMiner.ui.controller.InputController;
 
 import java.util.LinkedList;
@@ -51,7 +48,7 @@ public class PlayScreen extends AbstractScreen {
         super.show();
 
         engine = Configuration.getInstance().getEngine();
-        controller = new InputController(engine);
+        //controller = new InputController(engine);
         batch = new SpriteBatch();
         // Create and add entities
         IGameEntityFactory entityFactory = new BasicGameEntityFactory(); // Abstract factory pattern
@@ -72,7 +69,8 @@ public class PlayScreen extends AbstractScreen {
         engine.addSystem(new RenderingSystem(batch));
         engine.addSystem(new HookSystem());
         engine.addSystem(new SpawningQueueSystem());
-
+        engine.addSystem(new PhysicalSystem());
+        engine.addSystem(new FishSystem());
 
         HookInputSystem hookInputSystem = new HookInputSystem();
         GameEventBus.getInstance().register(hookInputSystem);
@@ -86,8 +84,8 @@ public class PlayScreen extends AbstractScreen {
 
         System.out.println("adding listeners");
         // Set up event listeners
-        GameEventBus.getInstance().register(new FishStateListener());
-        GameEventBus.getInstance().register(new HookStateListener());
+        //GameEventBus.getInstance().register(new FishStateListener());
+        //GameEventBus.getInstance().register(new HookStateListener());
         System.out.println("added listeners");
 
         Gdx.input.setInputProcessor(stage);
@@ -101,6 +99,7 @@ public class PlayScreen extends AbstractScreen {
                     if (hooks.size() > 0) {
                         Entity hook = hooks.first();
                         // Post the event to the GameEventBus.
+                        //GameEventBus.getInstance().post(new FireInputEvent(hook));
                         GameEventBus.getInstance().post(new FireInputEvent(hook));
                         System.out.println("FireInputEvent posted.");
                     }

@@ -21,8 +21,8 @@ public class HookFactory {
 
             // Position
             Vector2 initialPosition = new Vector2(x, y);
-            PositionComponent positionComponent = new PositionComponent(initialPosition);
-            hook.add(positionComponent);
+            PositionComponent position = new PositionComponent(initialPosition);
+            hook.add(position);
 
             // rotation
             hook.add(new RotationComponent(0f));
@@ -35,10 +35,14 @@ public class HookFactory {
             hook.add(new VelocityComponent(new Vector2(0, 0)));
 
             // Bounds for collision detection
-            hook.add(new BoundsComponent(initialPosition, textureComponent.getRegion().getRegionWidth(), textureComponent.getRegion().getRegionHeight()));
+            BoundsComponent bounds = new BoundsComponent();
+            bounds.bounds.setPosition(position.position);
+            bounds.bounds.setWidth(textureComponent.getFrameWidth());
+            bounds.bounds.setHeight(textureComponent.getFrameHeight());
+            hook.add(bounds);
 
             // Add a StateComponent with a default state (SWINGING)
-            hook.add(new StateComponent<>(HookStates.SWINGING));
+            hook.add(new StateComponent<HookStates>(HookStates.SWINGING));
 
             return hook;
         }

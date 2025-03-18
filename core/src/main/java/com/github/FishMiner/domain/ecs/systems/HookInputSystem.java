@@ -14,7 +14,7 @@ import com.github.FishMiner.domain.states.HookStates;
 
 public class HookInputSystem extends EntitySystem implements IGameEventListener<FireInputEvent> {
 
-    private ComponentMapper<HookComponent> hookMapper = ComponentMapper.getFor(HookComponent.class);
+    private ComponentMapper<HookComponent> hm = ComponentMapper.getFor(HookComponent.class);
     private Entity hook;
 
     public HookInputSystem() {
@@ -33,8 +33,11 @@ public class HookInputSystem extends EntitySystem implements IGameEventListener<
     @Override
     public void onEvent(FireInputEvent event) {
         // Fire the hook only if its state is SWINGING
-        Entity hookEntity = event.getEventEntity();
-        StateComponent<HookStates> stateComponent = hookEntity.getComponent(StateComponent.class);
+        Entity hookEntity = event.getTarget();
+        if (hookEntity == null) {
+            throw new IllegalArgumentException("Hook entity cannot be null");
+        }
+        StateComponent<HookStates> stateComponent =  hookEntity.getComponent(StateComponent.class);
         if (stateComponent != null && stateComponent.state == HookStates.SWINGING) {
             stateComponent.changeState(HookStates.FIRE);
         }

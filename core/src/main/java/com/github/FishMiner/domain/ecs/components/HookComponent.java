@@ -20,6 +20,7 @@ public class HookComponent implements Component {
 
     public final float swingOffset = 1;
 
+
     public final Vector2 anchorPoint = new Vector2(
         (float) (Configuration.getInstance().getScreenWidth() / 2),
         (float) (Configuration.getInstance().getScreenHeight() - 200)
