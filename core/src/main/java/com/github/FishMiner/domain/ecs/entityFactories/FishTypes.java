@@ -4,7 +4,9 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 public enum FishTypes {
-    CLOWN_FISH("clownfish_9cols_3rows.png", 9, 3, new int[]{1}, 10, 60);
+    CLOWN_FISH("clownfish_9cols_3rows.png", 9, 3, new int[]{1}, 10, 60),
+    GREEN_FISH("green_fish.png", 9, 2, new int[]{2}, 6, 20);
+
     // SHARK("shark_9cols_3rows.png", 9, 3, new int[]{2, 3}, 30, 100);
     // Add more as needed: e.g. BARRACUDA(new int[]{3, 4})
 
