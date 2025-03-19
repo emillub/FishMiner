@@ -1,6 +1,7 @@
 package com.github.FishMiner;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -8,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class Configuration {
 
     private static Configuration instance;
-    private static Engine engine;
+    private static PooledEngine engine;
     private static int SCREEN_WIDTH = Gdx.graphics.getWidth();;
     private static int SCREEN_HEIGHT = Gdx.graphics.getHeight();
     public static final float OCEAN_HEIGHT_PERCENTAGE = 0.75f;
@@ -21,9 +22,8 @@ public class Configuration {
 
     private final Skin uiSkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
-
     private Configuration() {
-        engine = new Engine();
+        engine = new PooledEngine();
         scaleX = SCREEN_WIDTH / RESOLUTION_X;
         scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
     }
@@ -35,9 +35,7 @@ public class Configuration {
         return instance;
     }
 
-    public Engine getEngine() {
-        return engine;
-    }
+    public PooledEngine getEngine() { return engine; }
 
     public Vector2 getScaledPosition(float x, float y) {
         return new Vector2(x * scaleX, y * scaleY);
@@ -57,6 +55,7 @@ public class Configuration {
         scaleX = SCREEN_WIDTH / RESOLUTION_X;
         scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
     }
+
 
     public int getScreenWidth() {
         return SCREEN_WIDTH;

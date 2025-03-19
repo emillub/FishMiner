@@ -18,20 +18,12 @@ public class BasicGameEntityFactory implements IGameEntityFactory {
     @Override
     public LinkedList<Entity> createFish(FishTypes fishType, int amount) {
         LinkedList<Entity> fishList = new LinkedList<>();
-
         for (int i = 0; i < amount; i++) {
-            Entity fish = FishFactory.createEntity(
-                fishType.getTexturePath(),
-                fishType.getFrameCols(),
-                fishType.getFrameRows(),
-                fishType.getDepthLevel(),
-                fishType.getSpeed(),
-                fishType.getWeight()
-            );
-            fishList.add(fish);
+            fishList.add(FishFactory.createEntity(fishType));
         }
         return fishList;
     }
+
 
     @Override
     public Entity createHook() {
@@ -51,7 +43,6 @@ public class BasicGameEntityFactory implements IGameEntityFactory {
         return sinker;
     }
 
-    // Optional helper method if you need random positions
     private int getRandomHeightInRange(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
