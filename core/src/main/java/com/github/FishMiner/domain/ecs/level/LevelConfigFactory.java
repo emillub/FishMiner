@@ -20,8 +20,9 @@ public class LevelConfigFactory {
 
         // Spawn chances (weights must sum to <= 1.0f)
         Map<FishTypes, Float> spawnChances = new HashMap<>();
-        spawnChances.put(FishTypes.CLOWN_FISH, 0.5f); // Right now, only CLOWN_FISH
-        spawnChances.put(FishTypes.GREEN_FISH, 0.5f); // Right now, only CLOWN_FISH
+        spawnChances.put(FishTypes.CLOWN_FISH, 0.2f); // Right now, only CLOWN_FISH
+        spawnChances.put(FishTypes.GREEN_FISH, 0.3f); // Right now, only CLOWN_FISH
+        spawnChances.put(FishTypes.GRAY_ORANGE_FISH, 0.5f); // Right now, only CLOWN_FISH
 
         // Later, add: spawnChances.put(FishTypes.SHARK, 0.3f); etc.
 
