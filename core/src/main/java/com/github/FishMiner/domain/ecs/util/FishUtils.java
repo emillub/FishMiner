@@ -17,9 +17,12 @@ public class FishUtils {
      * @return The starting X position.
      */
     public static int getFishStartPosX(boolean movesRight, int fishWidth) {
-        int startPos = movesRight ? - fishWidth : Configuration.getInstance().getScreenWidth() + fishWidth;
-        float scaleX = 1 + Configuration.getInstance().getScalePosX();
-        return (int) (startPos * scaleX);
+        // A bit static dues to screen width or fish width problems
+        if (movesRight) {
+            return -fishWidth - 30;
+        } else {
+            return Configuration.getInstance().getScreenWidth() + fishWidth - 80;
+        }
     }
 
     /**
@@ -53,19 +56,25 @@ public class FishUtils {
     }
 
     /**
-     * This method transforms a depthLevel from FishTypes into a random int in the depthLevel range.
-     * @param depthLevel the number of zone different fish can swim in. Big and rare fish swim have a higher depthLevel.
-     * @return random Y-coordinate in depthLevel
+     * Returns a random Y-position inside the depth level band,
+     * ensuring the *entire fish sprite* (including height) fits within it.
+     *
+     * @param depthLevel The depth level (1 = top ocean band, etc.).
+     * @param fishHeight The pixel height of the fish sprite.
+     * @return A Y-position such that the entire fish is within the band.
      */
-    public static int getRandomDepthFor(int depthLevel) {
-        int spawnableOceanHeight = Configuration.getInstance().getOceanHeight() - 50;
+    public static float getRandomDepthFor(int depthLevel, float fishHeight) {
+        int oceanHeight = Configuration.getInstance().getOceanHeight();
         int depthLevels = Configuration.getInstance().getDepthLevels();
-        int segmentHeight = spawnableOceanHeight / depthLevels;
+        int segmentHeight = oceanHeight / depthLevels;
 
-        int minY = spawnableOceanHeight - (depthLevel * segmentHeight);
-        int maxY = spawnableOceanHeight - ((depthLevel - 1) * segmentHeight);
+        // 💡 Flip logic: Level 1 = top, Level N = bottom
+        float minY = oceanHeight - (depthLevel * segmentHeight);
+        float maxY = oceanHeight - ((depthLevel - 1) * segmentHeight) - fishHeight;
 
-        float scaleY = Configuration.getInstance().getScalePosY();
-        return (int) (((Math.random() * (maxY - minY)) + minY) * scaleY);
+        // Edge case safety
+        if (maxY < minY) maxY = minY;
+
+        return (float) (Math.random() * (maxY - minY) + minY);
     }
 }
