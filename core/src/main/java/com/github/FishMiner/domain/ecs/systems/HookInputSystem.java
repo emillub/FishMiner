@@ -7,23 +7,20 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.util.HookUtil;
-import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
 import com.github.FishMiner.domain.listeners.IGameEventListener;
 import com.github.FishMiner.domain.states.HookStates;
 
 public class HookInputSystem extends EntitySystem implements IGameEventListener<FireInputEvent> {
 
-    private ComponentMapper<HookComponent> hm = ComponentMapper.getFor(HookComponent.class);
+    private final ComponentMapper<HookComponent> hm = ComponentMapper.getFor(HookComponent.class);
     private Entity hook;
 
     public HookInputSystem() {
-        GameEventBus.getInstance().register(this);
     }
 
     @Override
     public void addedToEngine(Engine engine) {
-        // Get the hook entity from the engine (ensure HookUtil works correctly)
         hook = HookUtil.getHook(engine);
         if (hook == null) {
             throw new IllegalArgumentException("Hook cannot be null");

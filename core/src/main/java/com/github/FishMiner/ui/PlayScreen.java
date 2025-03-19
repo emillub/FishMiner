@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
@@ -27,6 +29,7 @@ import com.github.FishMiner.domain.ecs.systems.PhysicalSystem;
 import com.github.FishMiner.domain.ecs.systems.RenderingSystem;
 import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
+import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
 import com.github.FishMiner.ui.controller.InputController;
@@ -72,6 +75,11 @@ public class PlayScreen extends AbstractScreen {
         engine.addSystem(new PhysicalSystem());
         engine.addSystem(new FishSystem());
 
+        if (Configuration.getInstance().isDebugMode()) {
+            // toggle Debug Mode in Configuration
+            engine.addSystem(new DebugRenderingSystem());
+        }
+
         HookInputSystem hookInputSystem = new HookInputSystem();
         GameEventBus.getInstance().register(hookInputSystem);
         engine.addSystem(hookInputSystem);
@@ -95,7 +103,7 @@ public class PlayScreen extends AbstractScreen {
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.SPACE) {
                     // Retrieve the hook entity from the engine.
-                    ImmutableArray<Entity> hooks = engine.getEntitiesFor(Family.all(HookComponent.class).get());
+                    ImmutableArray<Entity> hooks = engine.getEntitiesFor(Family.all(HookComponent.class, PositionComponent.class, StateComponent.class).get());
                     if (hooks.size() > 0) {
                         Entity hook = hooks.first();
                         // Post the event to the GameEventBus.
