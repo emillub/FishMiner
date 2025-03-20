@@ -1,5 +1,6 @@
 package com.github.FishMiner.domain;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.github.FishMiner.Configuration;
@@ -24,16 +25,19 @@ public class World {
     private int targetScore = 0;
     private float timer = 60f;
 
-    public World(PooledEngine engine) {
+    public World(Engine engine) {
         this.engine = engine;
         this.config = Configuration.getInstance();
         this.factory = new BasicGameEntityFactory(engine);
     }
 
     public void createLevel(LevelConfig config) {
-        createHook();
-
         this.targetScore = config.getTargetScore(); // Set target score for current level
+
+        // TODO: this is from Jespers code, might not belong here any longer
+        LevelFactory levelFactory = new LevelFactory(engine);
+        Entity levelEntity = levelFactory.createEntity(new LinkedList<>(), config.getTargetScore());
+        engine.addEntity(levelEntity);
 
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
         if (spawningSystem != null) {

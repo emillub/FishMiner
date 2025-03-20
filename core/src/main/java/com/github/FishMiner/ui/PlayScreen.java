@@ -1,5 +1,6 @@
 package com.github.FishMiner.ui;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
@@ -16,6 +17,7 @@ import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
+import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
 import com.github.FishMiner.domain.level.LevelConfig;
@@ -44,9 +46,9 @@ import java.util.LinkedList;
  * It also provides a full-width control window with a Menu button to open an overlay.
  */
 public class PlayScreen extends AbstractScreen {
-    private PooledEngine engine;
+    private Engine engine;
     private SpriteBatch batch;
-    private InputController controller;
+    //private InputController controller;
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;
 
@@ -71,8 +73,6 @@ public class PlayScreen extends AbstractScreen {
 
         engine.addEntity(entityFactory.createHook());
 
-        entityFactory = new BasicGameEntityFactory(); // Abstract factory pattern
-        engine.addEntity(entityFactory.createHook());  // Add hook to the scene
 
         // Add ECS systems
         System.out.println("adding systems");
@@ -92,15 +92,40 @@ public class PlayScreen extends AbstractScreen {
         SpawningQueueSystem spawningSystem = new SpawningQueueSystem();
         engine.addSystem(spawningSystem);
 
-        System.out.println("Systems added");
+        System.out.println("added systems");
 
-        // Create world and configure level
         world = new World(engine);
         LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore()); // Pass previous score
         world.createLevel(config);
 
 
-        // Input system for interacting with the hook
+        FishSystem fishSystem =  new FishSystem();
+        engine.addSystem(fishSystem);
+        GameEventBus.getInstance().register(fishSystem);
+
+        HookInputSystem hookInputSystem = new HookInputSystem();
+        engine.addSystem(hookInputSystem);
+        GameEventBus.getInstance().register(hookInputSystem);
+
+
+
+        if (Configuration.getInstance().isDebugMode()) {
+            // toggle Debug Mode in Configuration
+            engine.addSystem(new DebugRenderingSystem());
+        }
+
+        LevelConfig config = LevelConfigFactory.generateLevel(levelNumber);
+        world.createLevel(config);
+
+
+        //LinkedList<Entity> fishForLevel = prepareFishForLevel(entityFactory);
+        //LevelFactory levelFactory = new LevelFactory(engine);
+        //Entity levelEntity = levelFactory.createEntity(fishForLevel, 6f);
+        //engine.addEntity(levelEntity);
+
+
+        //spawningSystem.configureFromLevel(config);
+
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
@@ -117,9 +142,8 @@ public class PlayScreen extends AbstractScreen {
                 return false;
             }
         });
-
-        Gdx.input.setInputProcessor(stage);
     }
+
 
     @Override
     public void render(float delta) {
@@ -171,8 +195,7 @@ public class PlayScreen extends AbstractScreen {
             0,
             Configuration.getInstance().getOceanHeight(),
             Configuration.getInstance().getScreenWidth(),
-            Configuration.getInstance().getScreenHeight() - Configuration.getInstance().getOceanHeight()
-        );
+            Configuration.getInstance().getScreenHeight() - Configuration.getInstance().getOceanHeight());
 
         // Draw depth levels as darker shades
         int levels = Configuration.getInstance().getDepthLevels();
@@ -189,8 +212,11 @@ public class PlayScreen extends AbstractScreen {
         }
 
         shapeRenderer.end();
-    }
 
+        // ECS updates/render
+        engine.update(delta);
+        stage.draw();
+    }
 
     @Override
     public void dispose() {
@@ -198,4 +224,23 @@ public class PlayScreen extends AbstractScreen {
         batch.dispose();
         font.dispose();
     }
+
+    /**
+     * Generates an interleaved list of different fish types for the current level.
+     *
+     * @param entityFactory The entity factory used to create fish entities.
+     * @return An interleaved {@link LinkedList<Entity>} containing different fish types.
+     */
+    //private LinkedList<Entity> prepareFishForLevel(IGameEntityFactory entityFactory) {
+    //    LinkedList<Entity> clownFish = entityFactory.createFish(FishTypes.CLOWN_FISH, 10);
+    //    LinkedList<Entity> greenFish = entityFactory.createFish(FishTypes.GREEN_FISH, 3);
+    //    LinkedList<Entity> fishForLevel = new LinkedList<>();
+    //    int maxSize = Math.max(clownFish.size(), greenFish.size());
+    //    for (int i = 0; i < maxSize; i++) {
+    //        if (i < clownFish.size()) fishForLevel.add(clownFish.get(i));
+    //        if (i < greenFish.size()) fishForLevel.add(greenFish.get(i));
+    //    }
+    //    return fishForLevel;
+    //}
+
 }

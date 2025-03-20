@@ -42,12 +42,13 @@ public class HookFactory {
             stateComponent.changeState(HookStates.SWINGING);
 
             textureComponent.setRegion("hook_1cols_1rows.png");
+            System.out.println(textureComponent.texturePath);
 
             // TODO: fix misplaced bounds
             boundsComponent.bounds.setX(transformComponent.pos.x);
             boundsComponent.bounds.setY(transformComponent.pos.y);
-            boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
-            boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
+            boundsComponent.bounds.setWidth(50);
+            boundsComponent.bounds.setHeight(50);
 
             hook.add(hookComponent);
             hook.add(transformComponent);
