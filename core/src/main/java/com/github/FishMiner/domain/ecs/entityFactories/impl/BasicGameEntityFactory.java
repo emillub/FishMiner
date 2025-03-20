@@ -7,6 +7,7 @@ import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.*;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
+import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.HookFactory;
 
 import java.util.LinkedList;
 
@@ -34,7 +35,7 @@ public class BasicGameEntityFactory implements IGameEntityFactory {
 
     @Override
     public Entity createHook() {
-        return HookFactory.createEntity(config.getScreenWidth() / 2,  (int) (config.getScreenHeight() * config.getOceanHeightPercentage()));
+        return HookFactory.createEntity( (int) config.getScreenWidth() / 2,  (int) (config.getScreenHeight() * config.getOceanHeightPercentage()));
     }
 
     @Override

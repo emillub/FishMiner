@@ -96,4 +96,8 @@ public class Configuration {
         return uiSkin;
     }
 
+    public boolean isDebugMode() {
+        return false;
+    }
+
 }

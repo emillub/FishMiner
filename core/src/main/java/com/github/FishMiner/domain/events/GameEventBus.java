@@ -1,5 +1,8 @@
 package com.github.FishMiner.domain.events;
 
+import com.github.FishMiner.domain.events.IGameEvent;
+import com.github.FishMiner.domain.listeners.IGameEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,21 +23,19 @@ public class GameEventBus {
         return instance;
     }
 
-    public <E extends IGameEvent> void register(Class<E> eventType, IGameEventListener<E> listener) {
+    public <E extends IGameEvent> void register(IGameEventListener<E> listener) {
+        Class<E> eventType = listener.getEventType();
         listeners.computeIfAbsent(eventType, k -> new ArrayList<>()).add(listener);
     }
 
-    public <E extends IGameEvent> void unregister(Class<E> eventType, IGameEventListener<E> listener) {
+    public <E extends IGameEvent> void unregister(IGameEventListener<E> listener) {
+        Class<E> eventType = listener.getEventType();
         List<IGameEventListener<? extends IGameEvent>> eventListeners = listeners.get(eventType);
         if (eventListeners != null) {
             eventListeners.remove(listener);
         }
     }
 
-    /**
-     * Safe unchecked cast since we register listeners with the correct type
-     * @param event any event class that implements the GameEvent interface
-     */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void post(IGameEvent event) {
         List<IGameEventListener<? extends IGameEvent>> eventListeners = listeners.get(event.getClass());

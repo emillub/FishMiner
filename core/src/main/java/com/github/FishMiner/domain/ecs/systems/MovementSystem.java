@@ -27,15 +27,6 @@ public class MovementSystem extends IteratingSystem {
         if (position != null && velocity != null) {
             position.position.x += velocity.velocity.x * deltaTime;
             position.position.y += velocity.velocity.y * deltaTime;
-
-            if (bounds == null) {
-                System.out.println("Warning: BoundsComponent is missing for " + entity);
-            } else {
-                bounds.bounds.setPosition(position.position.x, position.position.y);
-            }}
-        else{
-              System.out.println("Position or Velocity == null");
         }
-
     }
 }

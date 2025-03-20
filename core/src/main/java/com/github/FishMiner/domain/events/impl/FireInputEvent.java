@@ -4,9 +4,9 @@ import com.badlogic.ashley.core.Entity;
 import com.github.FishMiner.domain.ecs.EntityEvent;
 import com.github.FishMiner.domain.events.IGameEvent;
 
-public class FishCapturedEvent extends EntityEvent implements IGameEvent {
-    public FishCapturedEvent(Entity fish) {
-        super(fish);
-    }
 
+public class FireInputEvent extends EntityEvent implements IGameEvent {
+    public FireInputEvent(Entity hook) {
+        super(hook);
+    }
 }
