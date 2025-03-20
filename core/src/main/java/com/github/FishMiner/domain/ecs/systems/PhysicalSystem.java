@@ -5,25 +5,26 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 
 public class PhysicalSystem extends IteratingSystem {
-    private final ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
+    private final ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);
     private final ComponentMapper<BoundsComponent> bm = ComponentMapper.getFor(BoundsComponent.class);
 
     public PhysicalSystem() {
-        super(Family.all(PositionComponent.class, BoundsComponent.class).get());
+        super(Family.all(TransformComponent.class, BoundsComponent.class).get());
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        PositionComponent position = pm.get(entity);
+        TransformComponent position = pm.get(entity);
         BoundsComponent bounds = bm.get(entity);
 
         try {
             ValidateUtil.validateNotNull(position, bounds);
-            bounds.bounds.setPosition(position.position);
+            bounds.bounds.setX(position.pos.x);
+            bounds.bounds.setY(position.pos.y);
         } catch (IllegalStateException e) {
             throw new IllegalStateException("Physical Entity is missing component:" + e.getLocalizedMessage());
         }

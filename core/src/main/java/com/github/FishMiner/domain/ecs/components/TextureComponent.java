@@ -14,11 +14,12 @@ public class TextureComponent implements Component {
     private int FRAME_COLS = 1;
     private int FRAME_ROWS = 1;
 
+
     /**
      * Handles textures and frame-based animations by extracting rows and columns from the texture filename.
      * Example filename format: "fish_3cols_9rows.png" (3 columns, 9 rows).
      */
-    public TextureComponent(String texturePath, int frame_cols, int frame_rows) {
+    public void setRegion(String texturePath, int frame_cols, int frame_rows) {
         try {
             Texture texture = new Texture(texturePath);
             this.region = new TextureRegion(texture);
@@ -27,7 +28,15 @@ public class TextureComponent implements Component {
         } catch (GdxRuntimeException e) {
             throw new RuntimeException("Error loading texture: " + texturePath, e);
         }
+    }
 
+    /**
+     * Simplified method for textures that have no animation frames.
+     * Defaults cols and rows to 1.
+     * @param texturePath the path to the texture
+     */
+    public void setRegion(String texturePath) {
+        this.setRegion(texturePath, 1, 1);
     }
 
     /**

@@ -7,19 +7,15 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.impl.LevelFactory;
 import com.github.FishMiner.domain.ecs.level.LevelConfig;
 import com.github.FishMiner.domain.ecs.level.LevelConfigFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
@@ -39,7 +35,6 @@ import com.github.FishMiner.domain.events.impl.FireInputEvent;
 import com.github.FishMiner.ui.controller.InputController;
 
 import java.util.LinkedList;
-import java.util.Map;
 
 
 /**
@@ -64,7 +59,7 @@ public class PlayScreen extends AbstractScreen {
         shapeRenderer = new ShapeRenderer();
 
         // Create and add entities
-        IGameEntityFactory entityFactory = new BasicGameEntityFactory(); // Abstract factory pattern
+        IGameEntityFactory entityFactory = new BasicGameEntityFactory(engine);
 
         engine.addEntity(entityFactory.createHook());
 
@@ -136,7 +131,7 @@ public class PlayScreen extends AbstractScreen {
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.SPACE) {
                     // Retrieve the hook entity from the engine.
-                    ImmutableArray<Entity> hooks = engine.getEntitiesFor(Family.all(HookComponent.class, PositionComponent.class, StateComponent.class).get());
+                    ImmutableArray<Entity> hooks = engine.getEntitiesFor(Family.all(HookComponent.class, TransformComponent.class, StateComponent.class).get());
                     if (hooks.size() > 0) {
                         Entity hook = hooks.first();
                         // Post the event to the GameEventBus.

@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.FishComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.events.impl.FishHitEvent;
@@ -27,7 +27,7 @@ public class CollisionSystem extends EntitySystem {
     private final Family fishFamily = Family.all(
         BoundsComponent.class,
         FishComponent.class,
-        PositionComponent.class,
+        TransformComponent.class,
         StateComponent.class,
         VelocityComponent.class
     ).get();
@@ -35,7 +35,7 @@ public class CollisionSystem extends EntitySystem {
     private final Family hookFamily = Family.all(
         BoundsComponent.class,
         HookComponent.class,
-        PositionComponent.class
+        TransformComponent.class
     ).get();
 
     @Override

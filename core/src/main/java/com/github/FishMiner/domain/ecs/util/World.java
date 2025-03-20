@@ -30,7 +30,7 @@ public class World {
     public World(PooledEngine engine) {
         this.engine = engine;
         this.config = Configuration.getInstance();
-        this.factory = new BasicGameEntityFactory();
+        this.factory = new BasicGameEntityFactory(engine);
     }
 
     public void createLevel(LevelConfig config) {

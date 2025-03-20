@@ -1,8 +1,10 @@
 package com.github.FishMiner.domain.ecs.systems;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.gdx.math.MathUtils;
@@ -20,13 +22,14 @@ import java.util.Map;
  * SpawningSystem is responsible for spawning fish entities at a set interval.
  */
 public class SpawningQueueSystem extends EntitySystem {
-    private final IGameEntityFactory factory = new BasicGameEntityFactory();
 
+    private Engine engine;
     private float spawnTimer = 0f;
     private float spawnInterval = 6f;
     private Map<FishTypes, Float> spawnChances = new HashMap<>();
     private int totalFishToSpawn = 0;
     private int spawnedCount = 0;
+    private IGameEntityFactory factory;
 
     public void configureFromLevel(LevelConfig config) {
         this.spawnInterval = config.getSpawnInterval();
@@ -44,6 +47,11 @@ public class SpawningQueueSystem extends EntitySystem {
         }
     }
 
+    @Override
+    public void addedToEngine(Engine engine) {
+        this.engine = engine;
+        this.factory = new BasicGameEntityFactory(this.engine);
+    }
 
     @Override
     public void update(float deltaTime) {

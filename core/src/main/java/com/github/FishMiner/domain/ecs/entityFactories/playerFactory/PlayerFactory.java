@@ -7,7 +7,7 @@ import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
@@ -15,13 +15,13 @@ import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.states.HookStates;
 
 public class PlayerFactory {
+    private final Engine engine;
 
-
-    private PlayerFactory() {
-        // prevent init
+    public PlayerFactory(Engine engine) {
+        this.engine = engine;
     }
 
-    public  void addPlayerCharacter(Engine engine, int posX, int posY) {
+    public void addPlayerCharacter(Engine engine, int posX, int posY) {
         Configuration config = Configuration.getInstance();
         Entity player = createPlayer(
             config.getScreenWidth() / 2,
@@ -34,45 +34,68 @@ public class PlayerFactory {
         engine.addEntity(hook);
     }
 
-    private static Entity createPlayer(int posX, int posY) {
+    private Entity createPlayer(int posX, int posY) {
         Entity player = new Entity();
-        player.add(new TextureComponent("fisheman.png", 1, 1));
-        player.add(new PositionComponent(new Vector2(posX, posY)));
+
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
+        TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
+
+        transformComponent.pos.x = posX;
+        transformComponent.pos.y =  posY;
+
+        textureComponent.setRegion("fisherman.png");
+
+        player.add(transformComponent);
+        player.add(textureComponent);
 
         return player;
     }
 
+    /**
+     * Note that we attempt to not set the position (transformComp) here.
+     * Ideally, this should be done with the AttachmentComponent
+     * @param player The entity that holds the hook
+     * @return A hook Entity
+     */
     private Entity createHook(Entity player) {
         Entity hook = new Entity();
 
-        hook.add(new HookComponent());
+        HookComponent hookComponent = engine.createComponent(HookComponent.class);
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
+        RotationComponent rotationComponent = engine.createComponent(RotationComponent.class);
+        BoundsComponent boundsComponent = engine.createComponent(BoundsComponent.class);
+        TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
+        VelocityComponent velocityComponent = engine.createComponent(VelocityComponent.class);
+        StateComponent<HookStates> stateComponent = engine.createComponent(StateComponent.class);
+        AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
 
-        // Position
-        Vector2 initialPosition = new Vector2(0, 0);
-        PositionComponent positionComponent = new PositionComponent(initialPosition);
-        hook.add(positionComponent);
+        // TODO: remove rotation and handle this with transformComponent
+        hook.add(rotationComponent);
 
-        // rotation
-        hook.add(new RotationComponent(0f));
+        stateComponent.changeState(HookStates.SWINGING);
 
-        // Texture and Animation
-        TextureComponent textureComponent = new TextureComponent("hook_1cols_1rows.png", 1, 1);
-        hook.add(textureComponent);
+        velocityComponent.velocity = new Vector2(0, 0);
 
-        // Velocity
-        hook.add(new VelocityComponent(new Vector2(0, 0)));
+        textureComponent.setRegion("hook_1cols_1rows.png");
 
-        // Bounds for collision detection
-        BoundsComponent bound = new BoundsComponent();
-        bound.bounds.setPosition(initialPosition);
-        bound.bounds.setWidth(textureComponent.getRegion().getRegionWidth());
-        bound.bounds.setWidth(textureComponent.getRegion().getRegionHeight());
-        hook.add(bound);
+        // TODO: fix misplaced bounds
+        boundsComponent.bounds.setX(transformComponent.pos.x);
+        boundsComponent.bounds.setY(transformComponent.pos.y);
+        boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
+        boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
+
+        attachmentComponent.offset.y = 10;
+        attachmentComponent.setParentEntity(player);
 
         // Add a StateComponent with a default state (SWINGING)
-        hook.add(new StateComponent<>(HookStates.SWINGING));
+        hook.add(hookComponent);
+        hook.add(transformComponent);
+        hook.add(velocityComponent);
+        hook.add(boundsComponent);
+        hook.add(stateComponent);
+        hook.add(textureComponent);
+        hook.add(attachmentComponent);
 
-        hook.add(new AttachmentComponent(new Vector2(100, -50), player));
         return hook;
     }
 }

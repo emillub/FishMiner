@@ -7,7 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
@@ -15,7 +15,7 @@ import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 
 public class RenderingSystem extends IteratingSystem {
     private SpriteBatch batch;
-    private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
+    private ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<AnimationComponent> am = ComponentMapper.getFor(AnimationComponent.class);
     private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
     private ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
@@ -23,7 +23,7 @@ public class RenderingSystem extends IteratingSystem {
 
 
     public RenderingSystem(SpriteBatch batch) {
-        super(Family.all(PositionComponent.class).get());
+        super(Family.all(TransformComponent.class).get());
         this.batch = batch;
     }
 
@@ -36,7 +36,7 @@ public class RenderingSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        PositionComponent pos = pm.get(entity);
+        TransformComponent pos = pm.get(entity);
         AnimationComponent anim = am.get(entity);
         TextureComponent tex = tm.get(entity);
         RotationComponent rot = rm.get(entity);
@@ -58,8 +58,8 @@ public class RenderingSystem extends IteratingSystem {
 
             batch.draw(
                 frame,
-                pos.position.x + originX,
-                pos.position.y + originY,
+                pos.pos.x + originX,
+                pos.pos.y + originY,
                 originX,
                 originY,
                 frame.getRegionWidth(),
@@ -70,7 +70,7 @@ public class RenderingSystem extends IteratingSystem {
             );
         } else if (tex != null) {
             batch.draw(tex.getRegion(),
-                pos.position.x, pos.position.y,
+                pos.pos.x, pos.pos.y,
                 tex.getRegion().getRegionWidth() / 2f, tex.getRegion().getRegionHeight() / 2f,  // Origin
                 tex.getRegion().getRegionWidth(), tex.getRegion().getRegionHeight(),
                 1f, 1f,
