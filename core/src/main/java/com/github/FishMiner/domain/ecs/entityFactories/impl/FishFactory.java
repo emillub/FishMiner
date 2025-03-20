@@ -4,14 +4,12 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.FishComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
-import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
@@ -64,6 +62,9 @@ public class FishFactory {
         // spawns to the left or the right
         boolean movesRight = MathUtils.randomBoolean();
 
+        textureComponent.setRegion(texturePath, frameCols, frameRows);
+        System.out.println(textureComponent.texturePath);
+
         transformComponent.pos = new Vector3(
             FishUtils.getFishStartPosX(movesRight, textureComponent.getFrameWidth()),
             FishUtils.getRandomDepthFor(depthLevel, fishComponent.height),
@@ -72,12 +73,12 @@ public class FishFactory {
 
         velocityComponent.velocity.x  = FishUtils.getFishDirectionX(movesRight, speed);
 
+
         boundsComponent.bounds.setX(transformComponent.pos.x);
         boundsComponent.bounds.setY(transformComponent.pos.y);
         boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
         boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
 
-        textureComponent.setRegion(texturePath, frameCols, frameRows);
 
         attachmentComponent.offset.x = 10;
 

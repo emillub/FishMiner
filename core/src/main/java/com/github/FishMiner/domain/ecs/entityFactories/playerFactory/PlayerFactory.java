@@ -77,6 +77,8 @@ public class PlayerFactory {
         velocityComponent.velocity = new Vector2(0, 0);
 
         textureComponent.setRegion("hook_1cols_1rows.png");
+        System.out.println("hook_1cols_1rows.png set");
+        System.out.println(textureComponent.texturePath);
 
         // TODO: fix misplaced bounds
         boundsComponent.bounds.setX(transformComponent.pos.x);

@@ -1,7 +1,7 @@
 package com.github.FishMiner.ui;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
@@ -14,8 +14,10 @@ import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
+import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
+import com.github.FishMiner.domain.ecs.entityFactories.impl.LevelFactory;
 import com.github.FishMiner.domain.ecs.level.LevelConfig;
 import com.github.FishMiner.domain.ecs.level.LevelConfigFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
@@ -42,10 +44,9 @@ import java.util.LinkedList;
  * It also provides a full-width control window with a Menu button to open an overlay.
  */
 public class PlayScreen extends AbstractScreen {
-    private PooledEngine engine;
+    private Engine engine;
     private SpriteBatch batch;
-    private InputController controller;
-
+    //private InputController controller;
     private ShapeRenderer shapeRenderer;
 
 
@@ -117,14 +118,13 @@ public class PlayScreen extends AbstractScreen {
 
         // create fish for this level
 
-        //LinkedList<Entity> fishForLevel = prepareFishForLevel(entityFactory);
-        //Entity levelEntity = LevelFactory.createEntity(fishForLevel, 6f);
-        //engine.addEntity(levelEntity);
+        LinkedList<Entity> fishForLevel = prepareFishForLevel(entityFactory);
+        LevelFactory levelFactory = new LevelFactory(engine);
+        Entity levelEntity = levelFactory.createEntity(fishForLevel, 6f);
+        engine.addEntity(levelEntity);
 
 
-        spawningSystem.configureFromLevel(config);
-
-        Gdx.input.setInputProcessor(stage);
+        //spawningSystem.configureFromLevel(config);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -177,7 +177,6 @@ public class PlayScreen extends AbstractScreen {
         shapeRenderer.end();
 
         // ECS updates/render
-        stage.act(delta);
         engine.update(delta);
         stage.draw();
     }
@@ -194,19 +193,19 @@ public class PlayScreen extends AbstractScreen {
      * @param entityFactory The entity factory used to create fish entities.
      * @return An interleaved {@link LinkedList<Entity>} containing different fish types.
      */
-    //private LinkedList<Entity> prepareFishForLevel(IGameEntityFactory entityFactory) {
-    //    LinkedList<Entity> clownFish = entityFactory.createFish(FishTypes.CLOWN_FISH, 10);
-    //    LinkedList<Entity> sharks = entityFactory.createFish(FishTypes.SHARK, 3);
-//
-    //    LinkedList<Entity> fishForLevel = new LinkedList<>();
-//
-    //    int maxSize = Math.max(clownFish.size(), sharks.size());
-    //    for (int i = 0; i < maxSize; i++) {
-    //        if (i < clownFish.size()) fishForLevel.add(clownFish.get(i));
-    //        if (i < sharks.size()) fishForLevel.add(sharks.get(i));
-    //    }
-//
-    //    return fishForLevel;
-    //}
+    private LinkedList<Entity> prepareFishForLevel(IGameEntityFactory entityFactory) {
+        LinkedList<Entity> clownFish = entityFactory.createFish(FishTypes.CLOWN_FISH, 10);
+        LinkedList<Entity> greenFish = entityFactory.createFish(FishTypes.GREEN_FISH, 3);
+
+        LinkedList<Entity> fishForLevel = new LinkedList<>();
+
+        int maxSize = Math.max(clownFish.size(), greenFish.size());
+        for (int i = 0; i < maxSize; i++) {
+            if (i < clownFish.size()) fishForLevel.add(clownFish.get(i));
+            if (i < greenFish.size()) fishForLevel.add(greenFish.get(i));
+        }
+
+        return fishForLevel;
+    }
 
 }

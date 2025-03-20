@@ -1,5 +1,6 @@
 package com.github.FishMiner.domain.ecs.entityFactories.impl;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.github.FishMiner.domain.ecs.components.SpawnQueueComponent;
 
@@ -10,6 +11,13 @@ import java.util.List;
  */
 public class LevelFactory {
 
+    private final Engine engine;
+
+    public LevelFactory(Engine engine) {
+        this.engine = engine;
+    }
+
+
     /**
      * Creates a level entity containing a spawn queue of fish entities.
      *
@@ -17,18 +25,17 @@ public class LevelFactory {
      * @param spawnInterval The time interval between spawns.
      * @return An entity with a SpawnQueueComponent.
      */
-    public static Entity createEntity(List<Entity> fishForLevel, float spawnInterval) {
+    public Entity createEntity(List<Entity> fishForLevel, float spawnInterval) {
         Entity levelEntity = new Entity();
-        SpawnQueueComponent spawnQueue = new SpawnQueueComponent();
+        SpawnQueueComponent spawnQueueComponent = engine.createComponent(SpawnQueueComponent.class);
 
         for (Entity fish : fishForLevel) {
-            spawnQueue.addFish(fish);
+            spawnQueueComponent.addFish(fish);
         }
 
-        spawnQueue.setSpawnInterval(spawnInterval);
-        levelEntity.add(spawnQueue);
+        spawnQueueComponent.setSpawnInterval(spawnInterval);
+        levelEntity.add(spawnQueueComponent);
 
         return levelEntity;
     }
-
 }

@@ -3,17 +3,11 @@ package com.github.FishMiner.domain.ecs.systems;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.gdx.math.MathUtils;
-import com.github.FishMiner.domain.ecs.components.SpawnQueueComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
 import com.github.FishMiner.domain.ecs.level.LevelConfig;
-import com.github.FishMiner.domain.ecs.util.RandomInRangeUtil;
 
 import java.util.HashMap;
 import java.util.Map;

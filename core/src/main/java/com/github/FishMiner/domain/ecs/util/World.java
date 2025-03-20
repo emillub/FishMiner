@@ -1,9 +1,8 @@
 package com.github.FishMiner.domain.ecs.util;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.github.FishMiner.Configuration;
-import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.LevelFactory;
@@ -19,7 +18,7 @@ public class World {
     public static final int WORLD_STATE_NEXT_LEVEL = 1;
     public static final int WORLD_STATE_GAME_OVER = 2;
 
-    private final PooledEngine engine;
+    private final Engine engine;
     private final Configuration config;
     private final IGameEntityFactory factory;
     private final Random random = new Random();
@@ -27,7 +26,7 @@ public class World {
     private int state = WORLD_STATE_RUNNING;
     private float score = 0f;
 
-    public World(PooledEngine engine) {
+    public World(Engine engine) {
         this.engine = engine;
         this.config = Configuration.getInstance();
         this.factory = new BasicGameEntityFactory(engine);
@@ -35,11 +34,12 @@ public class World {
 
     public void createLevel(LevelConfig config) {
         // Add hook and background (static setup)
-        createHook();
+        //createHook();
         createBackground();
 
         // (Optional) Add a static "level entity" to track score/goal if LevelFactory still used
-        Entity levelEntity = LevelFactory.createEntity(new LinkedList<>(), config.getTargetScore());
+        LevelFactory levelFactory = new LevelFactory(engine);
+        Entity levelEntity = levelFactory.createEntity(new LinkedList<>(), config.getTargetScore());
         engine.addEntity(levelEntity);
 
         // Configure spawn system (still preferred here so World controls the entire level logic)
@@ -53,10 +53,10 @@ public class World {
         state = WORLD_STATE_RUNNING;
     }
 
-    private void createHook() {
-        Entity hook = factory.createHook();
-        engine.addEntity(hook);
-    }
+    //private void createHook() {
+    //    Entity hook = factory.createHook();
+    //    engine.addEntity(hook);
+    //}
 
     private void createBackground() {
         // Optional: Move this to a separate BackgroundFactory class later

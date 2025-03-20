@@ -2,16 +2,12 @@ package com.github.FishMiner.domain.ecs.entityFactories.impl;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.math.Vector2;
-
 import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.*;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.HookFactory;
-import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 
 import java.util.LinkedList;
 
@@ -41,7 +37,6 @@ public class BasicGameEntityFactory implements IGameEntityFactory {
         return fishList;
     }
 
-
     @Override
     public Entity createHook() {
         return hookFactory.createEntity( (int) config.getScreenWidth() / 2,  (int) (config.getScreenHeight() * config.getOceanHeightPercentage()));
@@ -55,7 +50,7 @@ public class BasicGameEntityFactory implements IGameEntityFactory {
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         WeightComponent weightComponent = engine.createComponent(WeightComponent.class);
 
-        textureComponent.setRegion("sinker_1cols_1rows.png", 1, 1);
+        textureComponent.setRegion("sinker_1cols_1rows.png");
         transformComponent.pos = new Vector3(100, 100, 1);
         weightComponent.weight = 10;
 
