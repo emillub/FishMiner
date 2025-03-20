@@ -28,8 +28,10 @@ public class FishSystem extends EntitySystem implements IGameEventListener<FishH
 
     private Entity hookEntity;
 
+    /**
+     * must be added to GameEventBus
+     */
     public FishSystem() {
-        GameEventBus.getInstance().register(this);
     }
 
     @Override

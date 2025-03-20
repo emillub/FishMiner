@@ -73,16 +73,19 @@ public class PlayScreen extends AbstractScreen {
         engine.addSystem(new HookSystem());
         engine.addSystem(new SpawningQueueSystem());
         engine.addSystem(new PhysicalSystem());
-        engine.addSystem(new FishSystem());
+
+        FishSystem fishSystem =  new FishSystem();
+        engine.addSystem(fishSystem);
+        GameEventBus.getInstance().register(fishSystem);
+
+        HookInputSystem hookInputSystem = new HookInputSystem();
+        engine.addSystem(hookInputSystem);
+        GameEventBus.getInstance().register(hookInputSystem);
 
         if (Configuration.getInstance().isDebugMode()) {
             // toggle Debug Mode in Configuration
             engine.addSystem(new DebugRenderingSystem());
         }
-
-        HookInputSystem hookInputSystem = new HookInputSystem();
-        GameEventBus.getInstance().register(hookInputSystem);
-        engine.addSystem(hookInputSystem);
 
         // create fish for this level
         LinkedList<Entity> fishForLevel = prepareFishForLevel(entityFactory);
