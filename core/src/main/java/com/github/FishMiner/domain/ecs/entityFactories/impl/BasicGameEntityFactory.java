@@ -14,8 +14,6 @@ import java.util.LinkedList;
 
 public class BasicGameEntityFactory implements IGameEntityFactory {
 
-
-
     private final Engine engine;
     private final FishFactory fishFactory;
     // HookFactory will be replaced with PlayerFactory soon
@@ -35,30 +33,5 @@ public class BasicGameEntityFactory implements IGameEntityFactory {
             fishList.add(fishFactory.createEntity(fishType));
         }
         return fishList;
-    }
-
-    @Override
-    public Entity createHook() {
-        return hookFactory.createEntity( (int) config.getScreenWidth() / 2,  (int) (config.getScreenHeight() * config.getOceanHeightPercentage()));
-    }
-
-    @Override
-    public Entity createSinker() {
-        Entity sinker = new Entity();
-        TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
-        AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
-        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
-        WeightComponent weightComponent = engine.createComponent(WeightComponent.class);
-
-        textureComponent.setRegion("sinker_1cols_1rows.png");
-        transformComponent.pos = new Vector3(100, 100, 1);
-        weightComponent.weight = 10;
-
-        sinker.add(textureComponent);
-        sinker.add(attachmentComponent);
-        sinker.add(transformComponent);
-        sinker.add(weightComponent);
-
-        return sinker;
     }
 }

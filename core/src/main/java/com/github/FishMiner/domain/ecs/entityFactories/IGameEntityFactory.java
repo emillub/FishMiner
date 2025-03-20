@@ -13,9 +13,6 @@ import java.util.List;
  */
 public interface IGameEntityFactory {
     LinkedList<Entity> createFish(FishTypes type, int amount);
-    Entity createHook();
-    Entity createSinker();
-    // Add more methods if needed
 }
 
 

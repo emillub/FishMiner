@@ -95,7 +95,7 @@ public class Configuration {
     }
 
     public boolean isDebugMode() {
-        return false;
+        return true;
     }
 
 }

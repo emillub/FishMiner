@@ -10,14 +10,13 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
-import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.impl.LevelFactory;
+import com.github.FishMiner.domain.ecs.entityFactories.IEntityFactory;
+import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.HookFactory;
 import com.github.FishMiner.domain.ecs.level.LevelConfig;
 import com.github.FishMiner.domain.ecs.level.LevelConfigFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
@@ -34,10 +33,6 @@ import com.github.FishMiner.domain.ecs.util.World;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
-import com.github.FishMiner.ui.controller.InputController;
-
-import java.util.LinkedList;
-
 
 /**
  * PlayScreen handles gameplay, including ECS initialization, rendering, and input.
@@ -53,25 +48,22 @@ public class PlayScreen extends AbstractScreen {
     @Override
     public void show() {
         super.show();
-
-        // Initialize ECS engine, input controller, and sprite batch
         engine = Configuration.getInstance().getEngine();
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 
-        // Create and add entities
-        IGameEntityFactory entityFactory = new BasicGameEntityFactory(engine);
-
-        engine.addEntity(entityFactory.createHook());
-
-
-        // Add ECS systems
-        System.out.println("adding systems");
-        RotationSystem rotationSystem = new RotationSystem();
-        rotationSystem.setHookPosition(
+        Vector2 hookPos = new Vector2(
             (int) (Configuration.getInstance().getScreenWidth() / 2),
             Configuration.getInstance().getOceanHeight()
         );
+
+        IEntityFactory hookFactory = new HookFactory(engine);
+        Entity hook = hookFactory.createEntity((int) hookPos.x, (int) hookPos.y);
+        engine.addEntity(hook);
+
+        // Add ECS systems
+        RotationSystem rotationSystem = new RotationSystem();
+        rotationSystem.setHookPosition(hookPos.x, hookPos.y);
         engine.addSystem(rotationSystem);
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new AnimationSystem());
@@ -86,8 +78,8 @@ public class PlayScreen extends AbstractScreen {
         System.out.println("added systems");
 
         World world = new World(engine);
-
         int levelNumber = 5;
+
         FishSystem fishSystem =  new FishSystem();
         engine.addSystem(fishSystem);
         GameEventBus.getInstance().register(fishSystem);
@@ -104,27 +96,6 @@ public class PlayScreen extends AbstractScreen {
         LevelConfig config = LevelConfigFactory.generateLevel(levelNumber);
         world.createLevel(config);
 
-        // 🖨️ DEBUG PRINT - remove later if needed
-        //System.out.println("==== DEBUG: LEVEL INFO ====");
-        //System.out.println("Level: " + levelNumber);
-        //System.out.println("Target Score: " + config.getTargetScore());
-        //System.out.println("Spawn Interval: " + config.getSpawnInterval());
-        //System.out.println("Total Fish to Spawn: " + config.getTotalFishToSpawn());
-        //System.out.println("Fish Spawn Probabilities:");
-        //for (Map.Entry<FishTypes, Float> entry : config.getSpawnChances().entrySet()) {
-        //    System.out.printf(" - %s: %.2f%%\n", entry.getKey().name(), entry.getValue() * 100);
-        //}
-        //System.out.println("===========================");
-
-        // create fish for this level
-
-        LinkedList<Entity> fishForLevel = prepareFishForLevel(entityFactory);
-        LevelFactory levelFactory = new LevelFactory(engine);
-        Entity levelEntity = levelFactory.createEntity(fishForLevel, 6f);
-        engine.addEntity(levelEntity);
-
-
-        //spawningSystem.configureFromLevel(config);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -134,10 +105,7 @@ public class PlayScreen extends AbstractScreen {
                     ImmutableArray<Entity> hooks = engine.getEntitiesFor(Family.all(HookComponent.class, TransformComponent.class, StateComponent.class).get());
                     if (hooks.size() > 0) {
                         Entity hook = hooks.first();
-                        // Post the event to the GameEventBus.
-                        //GameEventBus.getInstance().post(new FireInputEvent(hook));
                         GameEventBus.getInstance().post(new FireInputEvent(hook));
-                        System.out.println("FireInputEvent posted.");
                     }
                     return true;
                 }
@@ -175,8 +143,6 @@ public class PlayScreen extends AbstractScreen {
         }
 
         shapeRenderer.end();
-
-        // ECS updates/render
         engine.update(delta);
         stage.draw();
     }
@@ -186,26 +152,4 @@ public class PlayScreen extends AbstractScreen {
         super.dispose();
         batch.dispose();
     }
-
-    /**
-     * Generates an interleaved list of different fish types for the current level.
-     *
-     * @param entityFactory The entity factory used to create fish entities.
-     * @return An interleaved {@link LinkedList<Entity>} containing different fish types.
-     */
-    private LinkedList<Entity> prepareFishForLevel(IGameEntityFactory entityFactory) {
-        LinkedList<Entity> clownFish = entityFactory.createFish(FishTypes.CLOWN_FISH, 10);
-        LinkedList<Entity> greenFish = entityFactory.createFish(FishTypes.GREEN_FISH, 3);
-
-        LinkedList<Entity> fishForLevel = new LinkedList<>();
-
-        int maxSize = Math.max(clownFish.size(), greenFish.size());
-        for (int i = 0; i < maxSize; i++) {
-            if (i < clownFish.size()) fishForLevel.add(clownFish.get(i));
-            if (i < greenFish.size()) fishForLevel.add(greenFish.get(i));
-        }
-
-        return fishForLevel;
-    }
-
 }

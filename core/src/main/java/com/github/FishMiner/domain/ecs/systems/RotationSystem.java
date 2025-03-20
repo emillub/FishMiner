@@ -19,7 +19,6 @@ public class RotationSystem extends IteratingSystem {
     private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
     private ComponentMapper<StateComponent> sm = ComponentMapper.getFor(StateComponent.class);
 
-
     private Vector2 hookPosition = new Vector2();
 
     public RotationSystem() {

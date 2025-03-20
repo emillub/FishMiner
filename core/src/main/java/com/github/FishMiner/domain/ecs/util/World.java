@@ -33,8 +33,6 @@ public class World {
     }
 
     public void createLevel(LevelConfig config) {
-        // Add hook and background (static setup)
-        //createHook();
         createBackground();
 
         // (Optional) Add a static "level entity" to track score/goal if LevelFactory still used
@@ -43,6 +41,7 @@ public class World {
         engine.addEntity(levelEntity);
 
         // Configure spawn system (still preferred here so World controls the entire level logic)
+        engine.addSystem(new SpawningQueueSystem());
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
         if (spawningSystem != null) {
             spawningSystem.configureFromLevel(config);
@@ -52,11 +51,6 @@ public class World {
         score = 0f;
         state = WORLD_STATE_RUNNING;
     }
-
-    //private void createHook() {
-    //    Entity hook = factory.createHook();
-    //    engine.addEntity(hook);
-    //}
 
     private void createBackground() {
         // Optional: Move this to a separate BackgroundFactory class later
