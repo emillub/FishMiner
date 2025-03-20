@@ -14,8 +14,6 @@ public class TextureComponent implements Component {
     private int FRAME_COLS = 1;
     private int FRAME_ROWS = 1;
 
-    public String texturePath;
-
 
     /**
      * Handles textures and frame-based animations by extracting rows and columns from the texture filename.
@@ -45,11 +43,7 @@ public class TextureComponent implements Component {
      * @return The texture region representing the full texture.
      */
     public TextureRegion getRegion() {
-        try {
-            return this.region;
-        } catch (NullPointerException e) {
-            throw new IllegalStateException(texturePath + " is null: " + e.getLocalizedMessage());
-        }
+        return this.region;
     }
 
     public int getFrameCols() {
@@ -68,11 +62,7 @@ public class TextureComponent implements Component {
      * @return Width of a single frame.
      */
     public int getFrameWidth() {
-        try {
-            return region.getRegionWidth() / FRAME_COLS;
-        } catch (NullPointerException e) {
-            throw new IllegalStateException(texturePath + " is null: " + e.getLocalizedMessage());
-        }
+        return region.getRegionWidth() / FRAME_COLS;
     }
 
     /**

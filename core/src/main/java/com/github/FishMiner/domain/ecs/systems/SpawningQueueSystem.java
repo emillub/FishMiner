@@ -1,10 +1,15 @@
 package com.github.FishMiner.domain.ecs.systems;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.FishMiner.Configuration;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
@@ -15,12 +20,18 @@ import com.github.FishMiner.domain.states.WorldState;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * SpawningSystem is responsible for spawning fish entities at a set interval.
+ */
 public class SpawningQueueSystem extends EntitySystem {
-    private final IGameEntityFactory factory = new BasicGameEntityFactory();
 
+    private Engine engine;
     private float spawnTimer = 0f;
     private float spawnInterval;
     private Map<FishTypes, Float> spawnChances = new HashMap<>();
+    private int totalFishToSpawn = 0;
+    private int spawnedCount = 0;
+    private IGameEntityFactory factory;
     private World world;
 
     private boolean initialSpawnDone = false;
@@ -38,6 +49,12 @@ public class SpawningQueueSystem extends EntitySystem {
     }
 
     @Override
+    public void addedToEngine(Engine engine) {
+        this.engine = engine;
+        this.factory = new BasicGameEntityFactory(this.engine);
+    }
+
+    @Override
     public void update(float deltaTime) {
         if (world != null && world.getState() != WorldState.RUNNING) {
             return;
@@ -49,9 +66,9 @@ public class SpawningQueueSystem extends EntitySystem {
                 if (type != null) {
                     Entity fish = factory.createFish(type, 1).get(0);
                     // Adjust the fish's x-position to be within the screen bounds
-                    PositionComponent pos = fish.getComponent(PositionComponent.class);
-                    if (pos != null) {
-                        pos.position.x = MathUtils.random(Configuration.getInstance().getScreenWidth());
+                    TransformComponent transformComponent = fish.getComponent(TransformComponent.class);
+                    if (transformComponent != null) {
+                        transformComponent.pos.x = MathUtils.random(Configuration.getInstance().getScreenWidth());
                     }
                     getEngine().addEntity(fish);
                 }
@@ -69,7 +86,6 @@ public class SpawningQueueSystem extends EntitySystem {
                 getEngine().addEntity(fish); // Add the spawned fish to the engine
             }
         }
-
     }
 
     private FishTypes pickRandomFishType() {

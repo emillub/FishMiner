@@ -1,6 +1,7 @@
 package com.github.FishMiner.domain.ecs.entityFactories;
 
 public enum FishTypes {
+    // we should consider adding the dimensions of the assets here for FishWidth and FishHeight
     PINK_FISH("PINK_SQUARE.png", 9, 2, new int[]{5, 6}, 8, 10),  // Depth 5, 6, Speed 8, Weight 10
     BLUE_FISH("BLUE_SQUARE.png", 9, 2, new int[]{4, 5}, 7, 9),   // Depth 4, 5, Speed 7, Weight 9
     RED_FISH("RED_SQUARE.png", 9, 2, new int[]{3, 4}, 6, 8),     // Depth 3, 4, Speed 6, Weight 8

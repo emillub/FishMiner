@@ -7,18 +7,21 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.level.LevelConfigFactory;
+import com.github.FishMiner.domain.ecs.level.LevelConfig;
+import com.github.FishMiner.domain.ecs.level.LevelConfigFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
 import com.github.FishMiner.domain.ecs.systems.CollisionSystem;
 import com.github.FishMiner.domain.ecs.systems.HookSystem;
@@ -32,6 +35,8 @@ import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
 import com.github.FishMiner.domain.states.WorldState;
 import com.github.FishMiner.ui.controller.InputController;
+
+import java.util.LinkedList;
 
 
 /**
@@ -62,11 +67,15 @@ public class PlayScreen extends AbstractScreen {
 
 
         // Create and add entities
-        IGameEntityFactory entityFactory = new BasicGameEntityFactory(); // Abstract factory pattern
+        IGameEntityFactory entityFactory = new BasicGameEntityFactory(engine);
+
+        engine.addEntity(entityFactory.createHook());
+
+        entityFactory = new BasicGameEntityFactory(); // Abstract factory pattern
         engine.addEntity(entityFactory.createHook());  // Add hook to the scene
 
         // Add ECS systems
-        System.out.println("Adding systems...");
+        System.out.println("adding systems");
         RotationSystem rotationSystem = new RotationSystem();
         rotationSystem.setHookPosition(
             (int) (Configuration.getInstance().getScreenWidth() / 2),
@@ -90,19 +99,14 @@ public class PlayScreen extends AbstractScreen {
         LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore()); // Pass previous score
         world.createLevel(config);
 
-        // Setup ECS systems
-        SpawningQueueSystem spawningQueueSystem = engine.getSystem(SpawningQueueSystem.class);
-        if (spawningQueueSystem != null) {
-            spawningQueueSystem.configureFromLevel(config); // Configure spawn system with current level settings
-        }
 
         // Input system for interacting with the hook
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.SPACE) {
-                    // Retrieve the hook entity and post input event
-                    ImmutableArray<Entity> hooks = engine.getEntitiesFor(Family.all(HookComponent.class, PositionComponent.class, StateComponent.class).get());
+                    // Retrieve the hook entity from the engine.
+                    ImmutableArray<Entity> hooks = engine.getEntitiesFor(Family.all(HookComponent.class, TransformComponent.class, StateComponent.class).get());
                     if (hooks.size() > 0) {
                         Entity hook = hooks.first();
                         GameEventBus.getInstance().post(new FireInputEvent(hook));
