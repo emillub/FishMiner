@@ -56,7 +56,7 @@ public class PlayScreen extends AbstractScreen {
 
 
     private World world; // Add world to manage game state
-    private int levelNumber = 1; // Start at level 1
+    private int levelNumber = 19; // Start at level 1
 
     @Override
     public void show() {
@@ -158,7 +158,18 @@ public class PlayScreen extends AbstractScreen {
         shapeRenderer.end();
 
         batch.begin();
+        // Display timer and score information
         font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() - 10);
+        font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() - 40);
+
+        // Check if game state has changed from running
+        if (world.getState() == World.WORLD_STATE_WON || world.getState() == World.WORLD_STATE_LOST) {
+            String outcome = (world.getState() == World.WORLD_STATE_WON) ? "YOU WIN!" : "GAME OVER";
+            // Optionally, center the message on the screen
+            int centerX = Gdx.graphics.getWidth() / 2 - 50; // adjust the offset as needed
+            int centerY = Gdx.graphics.getHeight() / 2;
+            font.draw(batch, outcome, centerX, Gdx.graphics.getHeight() - 40);
+        }
         batch.end();
 
         // Update ECS systems and render

@@ -8,6 +8,7 @@ import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
 import com.github.FishMiner.domain.ecs.level.LevelConfig;
+import com.github.FishMiner.domain.ecs.util.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,14 +19,24 @@ public class SpawningQueueSystem extends EntitySystem {
     private float spawnTimer = 0f;
     private float spawnInterval = 6f; // Default value
     private Map<FishTypes, Float> spawnChances = new HashMap<>();
+    private World world;
 
     public void configureFromLevel(LevelConfig config) {
         this.spawnInterval = config.getSpawnInterval();
         this.spawnChances = config.getSpawnChances();
     }
 
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
     @Override
     public void update(float deltaTime) {
+        if (world != null && world.getState() != World.WORLD_STATE_RUNNING) {
+            return;
+        }
+
         spawnTimer += deltaTime;
 
         if (spawnTimer >= spawnInterval) {
@@ -36,6 +47,8 @@ public class SpawningQueueSystem extends EntitySystem {
                 getEngine().addEntity(fish); // Add the spawned fish to the engine
             }
         }
+
+
     }
 
     private FishTypes pickRandomFishType() {

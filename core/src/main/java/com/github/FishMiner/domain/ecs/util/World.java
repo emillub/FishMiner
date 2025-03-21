@@ -12,12 +12,11 @@ import com.github.FishMiner.domain.ecs.level.LevelConfig;
 
 import java.util.LinkedList;
 import java.util.Random;
-
 public class World {
 
     public static final int WORLD_STATE_RUNNING = 0;
-    public static final int WORLD_STATE_WIN = 1;
-    public static final int WORLD_STATE_LOSE = 2;
+    public static final int WORLD_STATE_WON = 1;
+    public static final int WORLD_STATE_LOST = 2;
 
     private final PooledEngine engine;
     private final Configuration config;
@@ -29,7 +28,6 @@ public class World {
     private int targetScore = 0;
     private float timer = 60f; // Start the timer at 60 seconds
 
-
     public World(PooledEngine engine) {
         this.engine = engine;
         this.config = Configuration.getInstance();
@@ -38,7 +36,7 @@ public class World {
 
     // Method to create a new level
     public void createLevel(LevelConfig config) {
-         createHook();
+        createHook();
         createBackground();
 
         // Add level setup (Target score and spawn system)
@@ -48,9 +46,11 @@ public class World {
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
         if (spawningSystem != null) {
             spawningSystem.configureFromLevel(config); // Setup spawn interval and spawn chances
+            spawningSystem.setWorld(this); // Optional: pass the world so it can check the game state
         }
 
-        // Reset the score at the start of the level
+
+        // Reset the score and timer at the start of the level
         score = 0f;
         timer = 60f;
         state = WORLD_STATE_RUNNING;
@@ -93,10 +93,21 @@ public class World {
         return targetScore;
     }
 
-    // Method to update the world time and check if the level is completed
+    // Method to update the world timer and determine game outcome when time runs out
     public void update(float deltaTime) {
-        if (timer > 0) {
-            timer -= deltaTime; // Decrease time by delta time each frame
+        if (state == WORLD_STATE_RUNNING) {
+            timer -= deltaTime;
+            if (timer <= 0) {
+                timer = 0;
+                // Determine if player won or lost based on score
+                if (score >= targetScore) {
+                    state = WORLD_STATE_WON;
+                    System.out.println("Game State changed to: WON");
+                } else {
+                    state = WORLD_STATE_LOST;
+                    System.out.println("Game State changed to: LOST");
+                }
+            }
         }
     }
 
