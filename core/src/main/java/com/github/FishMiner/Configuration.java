@@ -12,7 +12,7 @@ public class Configuration {
     private static int SCREEN_WIDTH = Gdx.graphics.getWidth();;
     private static int SCREEN_HEIGHT = Gdx.graphics.getHeight();
     public static final float OCEAN_HEIGHT_PERCENTAGE = 0.75f;
-    public static final int OCEAN_DEPTH_LEVELS = 4;
+    public static final int OCEAN_DEPTH_LEVELS = 6;
     private static final float RESOLUTION_X = 900f;
     private static final float RESOLUTION_Y = 1600f;
     private static float scaleX;
