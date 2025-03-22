@@ -19,6 +19,9 @@ public class Configuration {
     private static float scaleX;
     private static float scaleY;
 
+    private boolean soundEnabled = true;
+    private float musicVolume = 1f;
+
 
     private final Skin uiSkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
@@ -97,6 +100,22 @@ public class Configuration {
 
     public boolean isDebugMode() {
         return false;
+    }
+
+    public boolean isSoundEnabled() {
+        return soundEnabled;
+    }
+
+    public void setSoundEnabled(boolean enabled) {
+        this.soundEnabled = enabled;
+    }
+
+    public float getMusicVolume() {
+        return musicVolume;
+    }
+
+    public void setMusicVolume(float volume) {
+        this.musicVolume = volume;
     }
 
 }
