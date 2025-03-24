@@ -1,4 +1,4 @@
-package com.github.FishMiner.domain.ecs.level;
+package com.github.FishMiner.domain.level;
 
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 
@@ -10,13 +10,14 @@ public class LevelConfigFactory {
     public static LevelConfig generateLevel(int levelNumber, int previousScore) {
         // Base configuration values
         int baseTargetScore = 50;
-        float baseSpawnInterval = 2.0f;
+        float baseSpawnInterval = 6f;
+        int initialFishCount = 6;
 
         // Adjust target score: progressively increase the target score but ensure it aligns with previous levels' progress
         int targetScore = Math.max(baseTargetScore + (levelNumber - 1) * 30, previousScore + 20);
 
         // Adjust spawn interval: reduce spawn interval gradually to make the game faster
-        float spawnInterval = Math.max(1.5f, baseSpawnInterval - levelNumber * 0.15f); // Gradually reduce spawn interval
+        float spawnInterval = Math.min(1.5f, baseSpawnInterval - levelNumber * 0.15f); // Gradually reduce spawn interval
 
         // Spawn chances (weights must sum to <= 1.0f)
         Map<FishTypes, Float> spawnChances = new HashMap<>();
@@ -39,6 +40,6 @@ public class LevelConfigFactory {
             spawnChances.put(FishTypes.GREEN_FISH, 0.4f);  // Green Fish in early levels
         }
 
-        return new LevelConfig(targetScore, spawnInterval, spawnChances);
+        return new LevelConfig(targetScore, spawnInterval, spawnChances, initialFishCount);
     }
 }

@@ -1,17 +1,15 @@
-package com.github.FishMiner.domain.ecs.util;
+package com.github.FishMiner.domain;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.github.FishMiner.Configuration;
-import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.impl.LevelFactory;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
-import com.github.FishMiner.domain.ecs.level.LevelConfig;
+import com.github.FishMiner.domain.level.LevelConfig;
 
-import java.util.LinkedList;
 import java.util.Random;
+
 public class World {
 
     public static final int WORLD_STATE_RUNNING = 0;

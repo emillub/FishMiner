@@ -1,46 +1,36 @@
 package com.github.FishMiner.ui;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.PositionComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.impl.LevelFactory;
-import com.github.FishMiner.domain.ecs.level.LevelConfig;
-import com.github.FishMiner.domain.ecs.level.LevelConfigFactory;
+import com.github.FishMiner.domain.level.LevelConfig;
+import com.github.FishMiner.domain.level.LevelConfigFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
 import com.github.FishMiner.domain.ecs.systems.CollisionSystem;
-import com.github.FishMiner.domain.ecs.systems.FishSystem;
-import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
 import com.github.FishMiner.domain.ecs.systems.HookSystem;
 import com.github.FishMiner.domain.ecs.systems.MovementSystem;
 import com.github.FishMiner.domain.ecs.systems.PhysicalSystem;
 import com.github.FishMiner.domain.ecs.systems.RenderingSystem;
 import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
-import com.github.FishMiner.domain.ecs.util.World;
-import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
+import com.github.FishMiner.domain.World;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
 import com.github.FishMiner.ui.controller.InputController;
-
-import java.util.LinkedList;
-import java.util.Map;
 
 
 /**
@@ -56,7 +46,7 @@ public class PlayScreen extends AbstractScreen {
 
 
     private World world; // Add world to manage game state
-    private int levelNumber = 19; // Start at level 1
+    private int levelNumber = 13; // Start at level 1
 
     @Override
     public void show() {
@@ -158,19 +148,30 @@ public class PlayScreen extends AbstractScreen {
         shapeRenderer.end();
 
         batch.begin();
-        // Display timer and score information
         font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() - 10);
         font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() - 40);
-
-        // Check if game state has changed from running
-        if (world.getState() == World.WORLD_STATE_WON || world.getState() == World.WORLD_STATE_LOST) {
-            String outcome = (world.getState() == World.WORLD_STATE_WON) ? "YOU WIN!" : "GAME OVER";
-            // Optionally, center the message on the screen
-            int centerX = Gdx.graphics.getWidth() / 2 - 50; // adjust the offset as needed
-            int centerY = Gdx.graphics.getHeight() / 2;
-            font.draw(batch, outcome, centerX, Gdx.graphics.getHeight() - 40);
-        }
         batch.end();
+
+        // If the game is lost and the overlay hasn't been added yet, create it
+        if (world.getTimer() <= 0) {
+            if (world.getState() == World.WORLD_STATE_WON) {
+                // Proceed to next level for the next game if within level limit
+                if (levelNumber < 20) {
+                    levelNumber++;
+                    System.out.println("Advancing to level " + levelNumber);
+                    LevelConfig nextLevelConfig = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore());
+                    world.createLevel(nextLevelConfig);
+                } else {
+                    // All levels completed – trigger game completion flow
+                    System.out.println("Congratulations! All levels completed!");
+                    // For example, transition to a game-complete screen.
+                }
+            } else if (world.getState() == World.WORLD_STATE_LOST) {
+                // Handle game over logic here (e.g., restart level or show game-over overlay)
+                System.out.println("Game Over. Try again!");
+                // Optionally, you could recreate the same level or go to a menu.
+            }
+        }
 
         // Update ECS systems and render
         stage.act(delta);
@@ -178,6 +179,7 @@ public class PlayScreen extends AbstractScreen {
         stage.draw();
 
     }
+
 
     @Override
     public void dispose() {
