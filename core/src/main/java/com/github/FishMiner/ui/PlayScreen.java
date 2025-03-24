@@ -30,6 +30,7 @@ import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.World;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
+import com.github.FishMiner.domain.states.WorldState;
 import com.github.FishMiner.ui.controller.InputController;
 
 
@@ -45,8 +46,8 @@ public class PlayScreen extends AbstractScreen {
     private BitmapFont font;
 
 
-    private World world; // Add world to manage game state
-    private int levelNumber = 13; // Start at level 1
+    private World world;
+    private int levelNumber = 4; // Start at level 1
 
     @Override
     public void show() {
@@ -123,29 +124,7 @@ public class PlayScreen extends AbstractScreen {
 
         world.update(delta);
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        shapeRenderer.setColor(0.5f, 0.8f, 1f, 1f); // light sky blue
-        shapeRenderer.rect(0, Configuration.getInstance().getOceanHeight(),
-            Configuration.getInstance().getScreenWidth(),
-            Configuration.getInstance().getScreenHeight() - Configuration.getInstance().getOceanHeight());
-
-        // Depth levels (darker shades)
-        int levels = Configuration.getInstance().getDepthLevels();
-        int levelHeight = Configuration.getInstance().getOceanHeight() / levels;
-
-        for (int i = 0; i < levels; i++) {
-            float shade = 0.2f + (i * 0.15f); // darker as we go deeper
-            shapeRenderer.setColor(0f, 0f, shade, 1f);
-            shapeRenderer.rect(
-                0,
-                i * levelHeight,
-                Configuration.getInstance().getScreenWidth(),
-                levelHeight
-            );
-        }
-
-        shapeRenderer.end();
+        drawBackground();
 
         batch.begin();
         font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() - 10);
@@ -154,7 +133,7 @@ public class PlayScreen extends AbstractScreen {
 
         // If the game is lost and the overlay hasn't been added yet, create it
         if (world.getTimer() <= 0) {
-            if (world.getState() == World.WORLD_STATE_WON) {
+            if (world.getState() == WorldState.WON) {
                 // Proceed to next level for the next game if within level limit
                 if (levelNumber < 20) {
                     levelNumber++;
@@ -166,7 +145,7 @@ public class PlayScreen extends AbstractScreen {
                     System.out.println("Congratulations! All levels completed!");
                     // For example, transition to a game-complete screen.
                 }
-            } else if (world.getState() == World.WORLD_STATE_LOST) {
+            } else if (world.getState() == WorldState.LOST) {
                 // Handle game over logic here (e.g., restart level or show game-over overlay)
                 System.out.println("Game Over. Try again!");
                 // Optionally, you could recreate the same level or go to a menu.
@@ -179,13 +158,40 @@ public class PlayScreen extends AbstractScreen {
         stage.draw();
 
     }
+    private void drawBackground() {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        // Draw the ocean background (light sky blue)
+        shapeRenderer.setColor(0.5f, 0.8f, 1f, 1f);
+        shapeRenderer.rect(
+            0,
+            Configuration.getInstance().getOceanHeight(),
+            Configuration.getInstance().getScreenWidth(),
+            Configuration.getInstance().getScreenHeight() - Configuration.getInstance().getOceanHeight()
+        );
+
+        // Draw depth levels as darker shades
+        int levels = Configuration.getInstance().getDepthLevels();
+        int levelHeight = Configuration.getInstance().getOceanHeight() / levels;
+        for (int i = 0; i < levels; i++) {
+            float shade = 0.2f + (i * 0.15f);
+            shapeRenderer.setColor(0f, 0f, shade, 1f);
+            shapeRenderer.rect(
+                0,
+                i * levelHeight,
+                Configuration.getInstance().getScreenWidth(),
+                levelHeight
+            );
+        }
+
+        shapeRenderer.end();
+    }
 
 
     @Override
     public void dispose() {
         super.dispose();
         batch.dispose();
-        font.dispose(); // Dispose the font when done
-
+        font.dispose();
     }
 }

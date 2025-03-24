@@ -10,6 +10,7 @@ import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.World;
+import com.github.FishMiner.domain.states.WorldState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class SpawningQueueSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        if (world != null && world.getState() != World.WORLD_STATE_RUNNING) {
+        if (world != null && world.getState() != WorldState.RUNNING) {
             return;
         }
 
