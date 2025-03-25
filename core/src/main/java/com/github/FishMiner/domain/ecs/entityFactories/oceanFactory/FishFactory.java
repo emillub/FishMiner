@@ -1,4 +1,4 @@
-package com.github.FishMiner.domain.ecs.entityFactories.impl;
+package com.github.FishMiner.domain.ecs.entityFactories.oceanFactory;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -22,11 +22,11 @@ public class FishFactory {
     public static final int EURO_FACTOR = 10;
     private final Engine engine;
 
-    public FishFactory(Engine engine) {
+    protected FishFactory(Engine engine) {
         this.engine = engine;
     }
 
-    public Entity createEntity(FishTypes type) {
+    protected Entity createEntity(FishTypes type) {
         int[] allowedDepths = type.getAllowedDepthLevels();
         int chosenDepthLevel = allowedDepths[MathUtils.random(allowedDepths.length - 1)];
 
@@ -55,18 +55,18 @@ public class FishFactory {
         StateComponent<FishableObjectStates> stateComponent = engine.createComponent(StateComponent.class);
         AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
 
+        textureComponent.setRegion(texturePath, frameCols, frameRows);
+        System.out.println(textureComponent.texturePath);
 
         fishComponent.setDepthLevel(depthLevel);
         fishComponent.setWeight(weight);
         fishComponent.setBaseSpeed(speed);
-        fishComponent.width = 62;
-        fishComponent.height = 30;
+        fishComponent.width = textureComponent.getFrameWidth();
+        fishComponent.height = textureComponent.getFrameHeight();
 
         // spawns to the left or the right
         boolean movesRight = MathUtils.randomBoolean();
 
-        textureComponent.setRegion(texturePath, frameCols, frameRows);
-        System.out.println(textureComponent.texturePath);
 
         transformComponent.pos = new Vector3(
             FishUtils.getFishStartPosX(movesRight, textureComponent.getFrameWidth()),
@@ -81,7 +81,6 @@ public class FishFactory {
         boundsComponent.bounds.setY(transformComponent.pos.y);
         boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
         boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
-
 
         attachmentComponent.offset.x = 10;
 

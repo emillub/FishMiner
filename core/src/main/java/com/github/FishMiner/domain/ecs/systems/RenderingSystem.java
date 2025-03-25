@@ -46,8 +46,11 @@ public class RenderingSystem extends IteratingSystem {
         float rotation = (rot != null) ? rot.angle : 0f;
 
         float scaleX = 1f;
-        if (vel != null && vel.velocity.x > 0) {
-            scaleX = -1f;
+        if (pos != null) {
+            scaleX = pos.scale.x;
+            if (vel != null && vel.velocity.x > 0) {
+                scaleX = -pos.scale.x;
+            }
         }
 
         if (pos != null && anim != null && anim.currentAnimation != null) {
@@ -58,14 +61,14 @@ public class RenderingSystem extends IteratingSystem {
 
             batch.draw(
                 frame,
-                pos.pos.x + originX,
-                pos.pos.y + originY,
+                pos.pos.x - originX,
+                pos.pos.y - originY,
                 originX,
                 originY,
                 frame.getRegionWidth(),
                 frame.getRegionHeight(),
                 scaleX,
-                1f,
+                pos.scale.y,
                 rotation
             );
         } else if (tex != null) {

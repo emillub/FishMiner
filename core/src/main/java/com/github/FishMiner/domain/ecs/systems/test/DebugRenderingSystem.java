@@ -91,6 +91,7 @@ public class DebugRenderingSystem extends IteratingSystem {
             float boundHeight = 1;
             float boundPosX = pos.pos.x;
             float boundPosY = pos.pos.y;
+
             if (bound != null) {
                 boundWidth = bound.bounds.getWidth();
                 boundHeight = bound.bounds.getHeight();

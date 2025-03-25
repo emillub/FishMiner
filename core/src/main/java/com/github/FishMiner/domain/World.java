@@ -2,9 +2,11 @@ package com.github.FishMiner.domain;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
+import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.OceanEntityFactory;
+import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.states.WorldState;
@@ -27,7 +29,7 @@ public class World {
     public World(Engine engine) {
         this.engine = engine;
         this.config = Configuration.getInstance();
-        this.factory = new BasicGameEntityFactory(engine);
+        this.factory = new OceanEntityFactory(engine);
     }
 
     public void createLevel(LevelConfig config) {
@@ -82,4 +84,5 @@ public class World {
     public float getTimer() {
         return timer;
     }
+
 }

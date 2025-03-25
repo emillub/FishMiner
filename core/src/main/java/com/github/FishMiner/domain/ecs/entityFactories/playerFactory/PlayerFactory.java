@@ -21,20 +21,19 @@ public class PlayerFactory {
         this.engine = engine;
     }
 
-    public void addPlayerCharacter(Engine engine, int posX, int posY) {
-        Configuration config = Configuration.getInstance();
-        Entity player = createPlayer(
-            config.getScreenWidth() / 2,
-            (int) (config.getScreenHeight() * config.getOceanHeightPercentage())
-        );
+    public void addNewPlayerCharacterTo(Engine engine, int posX, int posY) {
+        Entity player = createPlayerEntity(posX, posY);
+        Entity hook = createHookEntity();
 
-        Entity hook = createHook(player);
+        AttachmentComponent hookAttachment = hook.getComponent(AttachmentComponent.class);
+        hookAttachment.parent = player;
+        hookAttachment.offset.y = 10;
 
         engine.addEntity(player);
         engine.addEntity(hook);
     }
 
-    private Entity createPlayer(int posX, int posY) {
+    private Entity createPlayerEntity(int posX, int posY) {
         Entity player = new Entity();
 
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
@@ -45,6 +44,7 @@ public class PlayerFactory {
 
         textureComponent.setRegion("fisherman.png");
 
+        // TODO: maybe player is added via the hook as an attachment? check this
         player.add(transformComponent);
         player.add(textureComponent);
 
@@ -57,7 +57,8 @@ public class PlayerFactory {
      * @param player The entity that holds the hook
      * @return A hook Entity
      */
-    private Entity createHook(Entity player) {
+    @SuppressWarnings("unchecked")
+    private Entity createHookEntity() {
         Entity hook = new Entity();
 
         HookComponent hookComponent = engine.createComponent(HookComponent.class);
@@ -85,9 +86,6 @@ public class PlayerFactory {
         boundsComponent.bounds.setY(transformComponent.pos.y);
         boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
         boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
-
-        attachmentComponent.offset.y = 10;
-        attachmentComponent.setParentEntity(player);
 
         // Add a StateComponent with a default state (SWINGING)
         hook.add(hookComponent);

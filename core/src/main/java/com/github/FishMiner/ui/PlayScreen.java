@@ -20,7 +20,7 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
+import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
 import com.github.FishMiner.domain.ecs.systems.FishSystem;
 import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
@@ -53,8 +53,6 @@ public class PlayScreen extends AbstractScreen {
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;
-
-
     private World world;
     private int levelNumber = 4; // Start at level 1
 
@@ -67,42 +65,15 @@ public class PlayScreen extends AbstractScreen {
         font = new BitmapFont();
         font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
 
-
-        Vector2 hookPos = new Vector2(
+        //Entity hook = hookFactory.createEntity((int) hookPos.x, (int) hookPos.y);
+        PlayerFactory playerFactory = new PlayerFactory(engine);
+        playerFactory.addNewPlayerCharacterTo(engine,
             (int) (Configuration.getInstance().getScreenWidth() / 2),
             Configuration.getInstance().getOceanHeight()
         );
 
-        IEntityFactory hookFactory = new HookFactory(engine);
-        Entity hook = hookFactory.createEntity((int) hookPos.x, (int) hookPos.y);
-        engine.addEntity(hook);
-
-        // Add ECS systems
-        RotationSystem rotationSystem = new RotationSystem();
-        rotationSystem.setHookPosition(hookPos.x, hookPos.y);
-        engine.addSystem(rotationSystem);
-        engine.addSystem(new CollisionSystem());
-        engine.addSystem(new AnimationSystem());
-        engine.addSystem(new MovementSystem());
-        engine.addSystem(new RenderingSystem(batch));
-        engine.addSystem(new HookSystem());
-        engine.addSystem(new PhysicalSystem());
-
-        SpawningQueueSystem spawningSystem = new SpawningQueueSystem();
-        engine.addSystem(spawningSystem);
-
-        FishSystem fishSystem =  new FishSystem();
-        engine.addSystem(fishSystem);
-        GameEventBus.getInstance().register(fishSystem);
-
-        HookInputSystem hookInputSystem = new HookInputSystem();
-        engine.addSystem(hookInputSystem);
-        GameEventBus.getInstance().register(hookInputSystem);
-
-        if (Configuration.getInstance().isDebugMode()) {
-            // toggle Debug Mode in Configuration
-            engine.addSystem(new DebugRenderingSystem());
-        }
+        // add systems to engine
+        addSystemTo(engine);
 
         // only init World after all systems and stuff has been added to engine:)
         world = new World(engine);
@@ -201,5 +172,31 @@ public class PlayScreen extends AbstractScreen {
         super.dispose();
         batch.dispose();
         font.dispose();
+    }
+
+    private void addSystemTo(Engine engine) {
+        // Add ECS systems
+        engine.addSystem(new CollisionSystem());
+        engine.addSystem(new AnimationSystem());
+        engine.addSystem(new MovementSystem());
+        engine.addSystem(new RenderingSystem(batch));
+        engine.addSystem(new HookSystem());
+        engine.addSystem(new PhysicalSystem());
+
+        SpawningQueueSystem spawningSystem = new SpawningQueueSystem();
+        engine.addSystem(spawningSystem);
+
+        FishSystem fishSystem =  new FishSystem();
+        engine.addSystem(fishSystem);
+        GameEventBus.getInstance().register(fishSystem);
+
+        HookInputSystem hookInputSystem = new HookInputSystem();
+        engine.addSystem(hookInputSystem);
+        GameEventBus.getInstance().register(hookInputSystem);
+
+        if (Configuration.getInstance().isDebugMode()) {
+            // toggle Debug Mode in Configuration
+            engine.addSystem(new DebugRenderingSystem());
+        }
     }
 }

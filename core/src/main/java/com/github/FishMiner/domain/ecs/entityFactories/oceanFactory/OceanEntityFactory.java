@@ -1,29 +1,24 @@
-package com.github.FishMiner.domain.ecs.entityFactories.impl;
+package com.github.FishMiner.domain.ecs.entityFactories.oceanFactory;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.Configuration;
-import com.github.FishMiner.domain.ecs.components.*;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.HookFactory;
 
 import java.util.LinkedList;
 
 
-public class BasicGameEntityFactory implements IGameEntityFactory {
+public class OceanEntityFactory implements IGameEntityFactory {
 
     private final Engine engine;
     private final FishFactory fishFactory;
     // HookFactory will be replaced with PlayerFactory soon
-    private final HookFactory hookFactory;
     private final Configuration config = Configuration.getInstance();
 
-    public BasicGameEntityFactory(Engine engine) {
+    public OceanEntityFactory(Engine engine) {
         this.engine = engine;
         this.fishFactory = new FishFactory(engine);
-        this.hookFactory = new HookFactory(engine);
     }
 
     @Override
