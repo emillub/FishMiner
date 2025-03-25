@@ -15,6 +15,8 @@ public class FishMinerGame extends Game {
     private static Music backgroundMusic;
     private static Music playMusic;
 
+    private boolean isUserLoggedIn = false;
+
     public FishMinerGame(FirebaseInterface firebase) {
         this.firebase = firebase;
     }
@@ -70,6 +72,14 @@ public class FishMinerGame extends Game {
 
     public FirebaseInterface getFirebase() {
         return firebase;
+    }
+
+    public boolean isUserLoggedIn(){
+        return isUserLoggedIn;
+    }
+
+    public void setUserLoggedIn(boolean loggedIn){
+        this.isUserLoggedIn = loggedIn;
     }
 
 

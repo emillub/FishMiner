@@ -28,37 +28,41 @@ public class LoginScreen extends AbstractScreen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Label titleLabel = new Label("Login", skin);
-        titleLabel.setFontScale(2f);
+        Label titleLabel = new Label("Welcome to FishMiner", skin);
+        titleLabel.setFontScale(2.5f);
+
 
         emailField = new TextField("", skin);
         emailField.setMessageText("Email");
-        emailField.getStyle().font.getData().setScale(1.5f);
+        emailField.getStyle().font.getData().setScale(1.4f);
 
         passwordField = new TextField("", skin);
         passwordField.setMessageText("Password");
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
-        passwordField.getStyle().font.getData().setScale(1.5f);
+        passwordField.getStyle().font.getData().setScale(1.4f);
 
         TextButton loginButton = new TextButton("Login", skin);
-        loginButton.getLabel().setFontScale(1.5f);
+        loginButton.getLabel().setFontScale(1.3f);
+
+        Label registerText = new Label("New player? Register below!", skin);
+        registerText.setFontScale(1.1f);
 
         TextButton registerButton = new TextButton("Register", skin);
-        registerButton.getLabel().setFontScale(1.5f);
+        registerButton.getLabel().setFontScale(1.3f);
 
         statusLabel = new Label("", skin);
         statusLabel.setFontScale(1.2f);
 
-        // Add everything in correct order
-        table.add(titleLabel).padBottom(40).row();
-        table.add(emailField).width(500).height(80).padBottom(20).row();
-        table.add(passwordField).width(500).height(80).padBottom(30).row();
-        table.add(loginButton).width(400).height(100).padBottom(20).row();
-        table.add(registerButton).width(400).height(100).padBottom(20).row();
-        table.add(statusLabel).padTop(20).row();
+        table.add(titleLabel).padBottom(40).colspan(2).row();
+        table.add(emailField).width(500).height(80).padBottom(20).colspan(2).row();
+        table.add(passwordField).width(500).height(80).padBottom(30).colspan(2).row();
+        table.add(loginButton).width(400).height(100).padBottom(20).colspan(2).row();
+        table.add(registerText).padBottom(10).colspan(2).row();
+        table.add(registerButton).width(400).height(100).padBottom(20).colspan(2).row();
+        table.add(statusLabel).padTop(20).colspan(2).row();
 
-        // --- Listeners ---
+        // Listeners
         loginButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -70,8 +74,10 @@ public class LoginScreen extends AbstractScreen {
                     @Override
                     public void onSuccess() {
                         Gdx.app.postRunnable(() -> {
+                            FishMinerGame game = ScreenManager.getInstance().getGame();
+                            game.setUserLoggedIn(true);
                             statusLabel.setText("Login successful!");
-                            ScreenManager.getInstance().startGamePressed();
+                            ScreenManager.getInstance().showMenu();
                         });
                     }
 
