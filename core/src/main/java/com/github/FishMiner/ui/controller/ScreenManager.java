@@ -12,6 +12,7 @@ public class ScreenManager {
     private Screen menuScreen;
     private Screen playScreen;
     private Screen pauseScreen;
+    private Screen settingScreen;
 
     private ScreenManager(Game game) {
         this.game = game;
@@ -43,6 +44,10 @@ public class ScreenManager {
             playScreen = new PlayScreen();
         }
         game.setScreen(playScreen);
+    }
+
+    public void setSettingScreen(Screen screen){
+        game.setScreen(screen);
     }
 
     public void pauseGamePressed() {

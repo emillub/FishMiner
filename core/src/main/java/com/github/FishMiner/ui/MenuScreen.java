@@ -21,6 +21,8 @@ public class MenuScreen extends AbstractScreen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        FishMinerGame.playBackgroundMusic();
+
 
         Table rootTable = new Table();
         rootTable.setFillParent(true);
@@ -28,6 +30,12 @@ public class MenuScreen extends AbstractScreen {
         stage.addActor(rootTable);
 
         TextButton settingsButton = new TextButton("Settings", skin);
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().setSettingScreen(new SettingScreen());
+            }
+        });
         TextButton loginButton = new TextButton("Login", skin);
 
         TextButton playButton = new TextButton("Play", skin);
