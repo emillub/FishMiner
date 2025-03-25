@@ -33,14 +33,14 @@ public class MenuScreen extends AbstractScreen {
         settingsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().setSettingScreen(new SettingScreen());
+                ScreenManager.getInstance().showSettingsScreen();
             }
         });
         TextButton loginButton = new TextButton("Login", skin);
         loginButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().setLoginScreen(new LoginScreen());
+                ScreenManager.getInstance().showLoginScreen();
             }
         });
 
@@ -48,7 +48,7 @@ public class MenuScreen extends AbstractScreen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().startGamePressed();
+                ScreenManager.getInstance().showPlayScreen();
             }
         });
 

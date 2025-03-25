@@ -92,7 +92,7 @@ public class SettingScreen extends AbstractScreen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().showMenu();
+                ScreenManager.getInstance().showMenuScreen();
             }
         });
         rootTable.add(backButton).pad(10);

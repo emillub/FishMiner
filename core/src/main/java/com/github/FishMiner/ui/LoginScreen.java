@@ -71,13 +71,14 @@ public class LoginScreen extends AbstractScreen {
                     public void onSuccess() {
                         Gdx.app.postRunnable(() -> {
                             statusLabel.setText("Login successful!");
-                            ScreenManager.getInstance().startGamePressed();
+                            ScreenManager.getInstance().showPlayScreen();
                         });
                     }
 
                     @Override
                     public void onFailure(String errorMessage) {
-                        Gdx.app.postRunnable(() -> statusLabel.setText("Login failed: " + errorMessage));
+                        Gdx.app.postRunnable(() -> statusLabel.setText("Login failed: " +
+                                errorMessage));
                     }
                 });
             }
@@ -103,7 +104,8 @@ public class LoginScreen extends AbstractScreen {
 
                     @Override
                     public void onFailure(String errorMessage) {
-                        Gdx.app.postRunnable(() -> statusLabel.setText("Registration failed: " + errorMessage));
+                        Gdx.app.postRunnable(() -> statusLabel.setText("Registration failed: " +
+                                errorMessage));
                     }
                 });
             }

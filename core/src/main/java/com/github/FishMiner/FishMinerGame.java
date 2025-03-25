@@ -19,6 +19,10 @@ public class FishMinerGame extends Game {
         this.firebase = firebase;
     }
 
+    public FishMinerGame() {
+        this.firebase = null;
+    }
+
     @Override
     public void create() {
         Configuration.getInstance().updateConfiguration();
@@ -39,7 +43,8 @@ public class FishMinerGame extends Game {
             backgroundMusic.play();
         }
 
-        ScreenManager.getInstance(this).showMenu();
+        ScreenManager.initialize(this);
+        ScreenManager.getInstance().showMenuScreen();
     }
 
     public static void playBackgroundMusic() {

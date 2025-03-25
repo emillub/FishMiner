@@ -1,70 +1,96 @@
 package com.github.FishMiner.ui.controller;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.ui.LoginScreen;
 import com.github.FishMiner.ui.MenuScreen;
 import com.github.FishMiner.ui.PlayScreen;
+import com.github.FishMiner.ui.SettingScreen;
 
 public class ScreenManager {
     private static ScreenManager instance;
-    private FishMinerGame game;
+    private final FishMinerGame game;
 
     private Screen menuScreen;
     private Screen playScreen;
     private Screen pauseScreen;
     private Screen settingScreen;
+    private Screen loginScreen;
 
     private ScreenManager(FishMinerGame game) {
         this.game = game;
-        this.menuScreen = new MenuScreen();
-        // Initialize more screens here
+        initializeScreens();
     }
 
-    public static ScreenManager getInstance(FishMinerGame game) {
+    private void initializeScreens() {
+        menuScreen = new MenuScreen();
+        settingScreen = new SettingScreen();
+        loginScreen = new LoginScreen();
+        pauseScreen = null; // Initialize lazily if needed
+        playScreen = null;
+    }
+
+    public static void initialize(FishMinerGame game) {
         if (instance == null) {
             instance = new ScreenManager(game);
         }
-        return instance;
     }
 
     public static ScreenManager getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("ScreenManager is not initialized. Initialize with getInstance(Game game) first.");
+            throw new IllegalStateException(
+                    "ScreenManager not initialized. Call initialize(FishMinerGame game) first.");
         }
         return instance;
     }
 
-    public FishMinerGame getGame() {
-        return game;
-    }
-
-    public void showMenu() {
+    public void showMenuScreen() {
         game.setScreen(menuScreen);
     }
 
-    public void startGamePressed() {
-        // Handle game start logic here
+    public void showPlayScreen() {
         if (playScreen == null) {
             playScreen = new PlayScreen();
         }
         game.setScreen(playScreen);
     }
 
-    public void setSettingScreen(Screen screen){
-        game.setScreen(screen);
+    public void showSettingsScreen() {
+        game.setScreen(settingScreen);
     }
 
-    public void setLoginScreen(LoginScreen loginScreen) {
+    public void showLoginScreen() {
         game.setScreen(loginScreen);
     }
 
-    public void pauseGamePressed() {
+    public void showPauseScreen() {
+        if (pauseScreen == null) {
+            // Initialize pause screen when needed
+            pauseScreen = new MenuScreen(); // Replace with actual PauseScreen implementation
+        }
         game.setScreen(pauseScreen);
     }
 
-    public void resumeGamePresed() {
-        game.setScreen(playScreen);
+    public void resumeGame() {
+        if (playScreen != null) {
+            game.setScreen(playScreen);
+        }
+    }
+
+    public void dispose() {
+        if (menuScreen != null)
+            menuScreen.dispose();
+        if (playScreen != null)
+            playScreen.dispose();
+        if (pauseScreen != null)
+            pauseScreen.dispose();
+        if (settingScreen != null)
+            settingScreen.dispose();
+        if (loginScreen != null)
+            loginScreen.dispose();
+    }
+
+    public FishMinerGame getGame() {
+        return game;
     }
 }
