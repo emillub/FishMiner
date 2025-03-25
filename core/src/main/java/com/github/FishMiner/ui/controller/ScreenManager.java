@@ -2,25 +2,27 @@ package com.github.FishMiner.ui.controller;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.ui.LoginScreen;
 import com.github.FishMiner.ui.MenuScreen;
 import com.github.FishMiner.ui.PlayScreen;
 
 public class ScreenManager {
     private static ScreenManager instance;
-    private Game game;
+    private FishMinerGame game;
 
     private Screen menuScreen;
     private Screen playScreen;
     private Screen pauseScreen;
     private Screen settingScreen;
 
-    private ScreenManager(Game game) {
+    private ScreenManager(FishMinerGame game) {
         this.game = game;
         this.menuScreen = new MenuScreen();
         // Initialize more screens here
     }
 
-    public static ScreenManager getInstance(Game game) {
+    public static ScreenManager getInstance(FishMinerGame game) {
         if (instance == null) {
             instance = new ScreenManager(game);
         }
@@ -32,6 +34,10 @@ public class ScreenManager {
             throw new IllegalStateException("ScreenManager is not initialized. Initialize with getInstance(Game game) first.");
         }
         return instance;
+    }
+
+    public FishMinerGame getGame() {
+        return game;
     }
 
     public void showMenu() {
@@ -48,6 +54,10 @@ public class ScreenManager {
 
     public void setSettingScreen(Screen screen){
         game.setScreen(screen);
+    }
+
+    public void setLoginScreen(LoginScreen loginScreen) {
+        game.setScreen(loginScreen);
     }
 
     public void pauseGamePressed() {
