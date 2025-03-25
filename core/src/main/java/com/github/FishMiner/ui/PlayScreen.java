@@ -21,12 +21,15 @@ import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
+import com.github.FishMiner.domain.ecs.systems.FishSystem;
+import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
+import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.level.LevelConfigFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.IEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.HookFactory;
-import com.github.FishMiner.domain.ecs.level.LevelConfig;
-import com.github.FishMiner.domain.ecs.level.LevelConfigFactory;
+import com.github.FishMiner.domain.level.LevelConfig;
+import com.github.FishMiner.domain.level.LevelConfigFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
 import com.github.FishMiner.domain.ecs.systems.CollisionSystem;
 import com.github.FishMiner.domain.ecs.systems.HookSystem;
@@ -39,9 +42,6 @@ import com.github.FishMiner.domain.World;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
 import com.github.FishMiner.domain.states.WorldState;
-import com.github.FishMiner.ui.controller.InputController;
-
-import java.util.LinkedList;
 
 
 /**
@@ -51,7 +51,6 @@ import java.util.LinkedList;
 public class PlayScreen extends AbstractScreen {
     private Engine engine;
     private SpriteBatch batch;
-    //private InputController controller;
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;
 
@@ -92,13 +91,6 @@ public class PlayScreen extends AbstractScreen {
         SpawningQueueSystem spawningSystem = new SpawningQueueSystem();
         engine.addSystem(spawningSystem);
 
-        System.out.println("added systems");
-
-        world = new World(engine);
-        LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore()); // Pass previous score
-        world.createLevel(config);
-
-
         FishSystem fishSystem =  new FishSystem();
         engine.addSystem(fishSystem);
         GameEventBus.getInstance().register(fishSystem);
@@ -107,13 +99,14 @@ public class PlayScreen extends AbstractScreen {
         engine.addSystem(hookInputSystem);
         GameEventBus.getInstance().register(hookInputSystem);
 
-
         if (Configuration.getInstance().isDebugMode()) {
             // toggle Debug Mode in Configuration
             engine.addSystem(new DebugRenderingSystem());
         }
 
-        LevelConfig config = LevelConfigFactory.generateLevel(levelNumber);
+        // only init World after all systems and stuff has been added to engine:)
+        world = new World(engine);
+        LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore()); // Pass previous score
         world.createLevel(config);
 
 
@@ -200,10 +193,7 @@ public class PlayScreen extends AbstractScreen {
                 levelHeight
             );
         }
-
         shapeRenderer.end();
-        engine.update(delta);
-        stage.draw();
     }
 
     @Override

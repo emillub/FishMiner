@@ -2,7 +2,6 @@ package com.github.FishMiner.domain;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.impl.BasicGameEntityFactory;
@@ -14,7 +13,7 @@ import java.util.Random;
 
 public class World {
 
-    private final PooledEngine engine;
+    private final Engine engine;
     private final Configuration config;
     private final IGameEntityFactory factory;
     private final Random random = new Random();
@@ -34,11 +33,6 @@ public class World {
     public void createLevel(LevelConfig config) {
         this.targetScore = config.getTargetScore(); // Set target score for current level
 
-        // TODO: this is from Jespers code, might not belong here any longer
-        LevelFactory levelFactory = new LevelFactory(engine);
-        Entity levelEntity = levelFactory.createEntity(new LinkedList<>(), config.getTargetScore());
-        engine.addEntity(levelEntity);
-
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
         if (spawningSystem != null) {
             spawningSystem.configureFromLevel(config);
@@ -48,11 +42,6 @@ public class World {
         score = 0f;
         timer = 60f;
         state = WorldState.RUNNING;
-    }
-
-    private void createHook() {
-        Entity hook = factory.createHook();
-        engine.addEntity(hook);
     }
 
     public void setState(WorldState newState) {
@@ -90,7 +79,6 @@ public class World {
             }
         }
     }
-
     public float getTimer() {
         return timer;
     }

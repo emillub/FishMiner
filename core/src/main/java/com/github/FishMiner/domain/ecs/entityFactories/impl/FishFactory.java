@@ -43,6 +43,7 @@ public class FishFactory {
         );
     }
 
+    @SuppressWarnings("unchecked")
     protected Entity createEntity(String texturePath, int frameCols, int frameRows, int depthLevel, float speed, int weight, FishTypes type) {
         Entity fish = new Entity();
         FishComponent fishComponent = engine.createComponent(FishComponent.class);
@@ -54,9 +55,7 @@ public class FishFactory {
         StateComponent<FishableObjectStates> stateComponent = engine.createComponent(StateComponent.class);
         AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
 
-        int fishValueInEuros = calculateFishValue(depthLevel, (int)speed, weight);
-        fish.add(new FishComponent(1.0f, fishValueInEuros));
-        //int fishValue = (int) ((float) depthLevel * weight * Math.abs(speed));
+
         fishComponent.setDepthLevel(depthLevel);
         fishComponent.setWeight(weight);
         fishComponent.setBaseSpeed(speed);
