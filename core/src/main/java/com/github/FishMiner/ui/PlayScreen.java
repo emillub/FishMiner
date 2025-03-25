@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.Configuration;
+import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.PositionComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
@@ -149,6 +150,9 @@ public class PlayScreen extends AbstractScreen {
                 return false;
             }
         });
+
+        FishMinerGame.playGameMusic();
+
     }
 
 
