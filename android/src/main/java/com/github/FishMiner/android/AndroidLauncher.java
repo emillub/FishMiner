@@ -13,8 +13,11 @@ public class AndroidLauncher extends AndroidApplication {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+
         AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
         configuration.useImmersiveMode = true; // Recommended, but not required.
-        initialize(new FishMinerGame(), configuration);
+
+        FirebaseHandlerAndroid firebaseHandlerAndroid = new FirebaseHandlerAndroid();
+        initialize(new FishMinerGame(firebaseHandlerAndroid), configuration);
     }
 }

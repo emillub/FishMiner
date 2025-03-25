@@ -37,6 +37,12 @@ public class MenuScreen extends AbstractScreen {
             }
         });
         TextButton loginButton = new TextButton("Login", skin);
+        loginButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().setLoginScreen(new LoginScreen());
+            }
+        });
 
         TextButton playButton = new TextButton("Play", skin);
         playButton.addListener(new ChangeListener() {
