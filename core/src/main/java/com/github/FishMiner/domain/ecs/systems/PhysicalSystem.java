@@ -23,8 +23,10 @@ public class PhysicalSystem extends IteratingSystem {
 
         try {
             ValidateUtil.validateNotNull(position, bounds);
-            bounds.bounds.setX(position.pos.x);
-            bounds.bounds.setY(position.pos.y);
+            bounds.bounds.x = position.pos.x - bounds.bounds.width * 0.5f;
+            bounds.bounds.y = position.pos.y - bounds.bounds.height * 0.5f;
+            //bounds.bounds.setX(position.pos.x);
+            //bounds.bounds.setY(position.pos.y);
         } catch (IllegalStateException e) {
             throw new IllegalStateException("Physical Entity is missing component:" + e.getLocalizedMessage());
         }

@@ -39,10 +39,12 @@ public class PlayerFactory {
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
 
-        transformComponent.pos.x = posX;
-        transformComponent.pos.y =  posY;
-
         textureComponent.setRegion("fisherman.png");
+
+        transformComponent.pos.x = posX;
+        transformComponent.pos.y =  posY + textureComponent.getFrameHeight() * 0.3f;
+        //transformComponent.scale = new Vector2(0.5f, 0.5f);
+
 
         // TODO: maybe player is added via the hook as an attachment? check this
         player.add(transformComponent);
@@ -54,7 +56,7 @@ public class PlayerFactory {
     /**
      * Note that we attempt to not set the position (transformComp) here.
      * Ideally, this should be done with the AttachmentComponent
-     * @param player The entity that holds the hook
+     * Must be attached to a player entity
      * @return A hook Entity
      */
     @SuppressWarnings("unchecked")
@@ -70,6 +72,7 @@ public class PlayerFactory {
         StateComponent<HookStates> stateComponent = engine.createComponent(StateComponent.class);
         AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
 
+        textureComponent.setRegion("hook_1cols_1rows.png");
         // TODO: remove rotation and handle this with transformComponent
         hook.add(rotationComponent);
 
@@ -77,15 +80,24 @@ public class PlayerFactory {
 
         velocityComponent.velocity = new Vector2(0, 0);
 
-        textureComponent.setRegion("hook_1cols_1rows.png");
-        System.out.println("hook_1cols_1rows.png set");
-        System.out.println(textureComponent.texturePath);
 
-        // TODO: fix misplaced bounds
-        boundsComponent.bounds.setX(transformComponent.pos.x);
-        boundsComponent.bounds.setY(transformComponent.pos.y);
-        boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
-        boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
+        //boundsComponent.bounds.setX(transformComponent.pos.x);
+        //boundsComponent.bounds.setY(transformComponent.pos.y);
+        //boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
+        //boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
+
+
+        // TODO: add scaling and centralize width and height via something other than textures
+        boundsComponent.bounds.setSize(
+            textureComponent.getFrameWidth(),
+            textureComponent.getFrameHeight()
+        );
+
+        boundsComponent.bounds.setPosition(
+            transformComponent.pos.x - boundsComponent.bounds.width * 0.5f,
+            transformComponent.pos.y - boundsComponent.bounds.height * 0.5f
+        );
+
 
         // Add a StateComponent with a default state (SWINGING)
         hook.add(hookComponent);

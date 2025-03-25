@@ -17,13 +17,13 @@ public class RenderingSystem extends IteratingSystem {
     private SpriteBatch batch;
     private ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<AnimationComponent> am = ComponentMapper.getFor(AnimationComponent.class);
-    private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
     private ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
+    private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
     private final ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
 
 
     public RenderingSystem(SpriteBatch batch) {
-        super(Family.all(TransformComponent.class).get());
+        super(Family.all(TransformComponent.class, TextureComponent.class).get());
         this.batch = batch;
     }
 
@@ -39,19 +39,19 @@ public class RenderingSystem extends IteratingSystem {
         TransformComponent pos = pm.get(entity);
         AnimationComponent anim = am.get(entity);
         TextureComponent tex = tm.get(entity);
-        RotationComponent rot = rm.get(entity);
         VelocityComponent vel = vm.get(entity);
-
+        RotationComponent rot = rm.get(entity);
 
         float rotation = (rot != null) ? rot.angle : 0f;
+        float scaleX = (pos != null) ? pos.scale.x : 1f;
+        float scaleY = (pos != null) ? pos.scale.y : 1f;
 
-        float scaleX = 1f;
-        if (pos != null) {
-            scaleX = pos.scale.x;
-            if (vel != null && vel.velocity.x > 0) {
-                scaleX = -pos.scale.x;
+        if (vel != null) {
+            if (vel.velocity.x > 0) {
+                scaleX = -scaleX;
             }
         }
+
 
         if (pos != null && anim != null && anim.currentAnimation != null) {
             TextureRegion frame = anim.currentAnimation.getKeyFrame(anim.timer, true);
@@ -68,15 +68,22 @@ public class RenderingSystem extends IteratingSystem {
                 frame.getRegionWidth(),
                 frame.getRegionHeight(),
                 scaleX,
-                pos.scale.y,
+                scaleY,
                 rotation
             );
-        } else if (tex != null) {
+        } else if (pos != null && tex != null && anim == null) {
+            float originX = tex.getFrameWidth() * 0.5f;
+            float originY = tex.getFrameHeight() * 0.5f;
+
             batch.draw(tex.getRegion(),
-                pos.pos.x, pos.pos.y,
-                tex.getRegion().getRegionWidth() / 2f, tex.getRegion().getRegionHeight() / 2f,  // Origin
-                tex.getRegion().getRegionWidth(), tex.getRegion().getRegionHeight(),
-                1f, 1f,
+                pos.pos.x - originX,
+                pos.pos.y - originY,
+                originX,
+                originY,
+                tex.getRegion().getRegionWidth(),
+                tex.getRegion().getRegionHeight(),
+                scaleX,
+                scaleY,
                 rotation
             );
         }
