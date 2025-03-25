@@ -13,65 +13,75 @@ import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
+import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.util.FishUtils;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 
-
 public class FishFactory {
 
-    protected static Entity createEntity(String texturePath, int frameCols, int frameRows,  int depthLevel, float speed, int weight) {
+    public static Entity createEntity(FishTypes type) {
+        int[] allowedDepths = type.getAllowedDepthLevels();
+        int chosenDepthLevel = allowedDepths[MathUtils.random(allowedDepths.length - 1)];
+
+        System.out.println("Spawning " + type.name() + " in depth level " + chosenDepthLevel);
+
+        return createEntity(
+            type.getTexturePath(),
+            type.getFrameCols(),
+            type.getFrameRows(),
+            chosenDepthLevel,
+            type.getSpeed(),
+            type.getWeight(),
+            type
+        );
+    }
+
+    protected static Entity createEntity(String texturePath, int frameCols, int frameRows, int depthLevel, float speed, int weight, FishTypes type) {
         Entity fish = new Entity();
 
-        // Fish value is determined by depth level, the weight and speed of the fish
+        float scaleFactor = 1.0f;
         int value = (int) ((float) depthLevel * weight * Math.abs(speed));
-        fish.add(new FishComponent(1f, value));
+        fish.add(new FishComponent(scaleFactor, value));
 
-        // Texture and Animation
         TextureComponent textureComponent = new TextureComponent(texturePath, frameCols, frameRows);
         fish.add(textureComponent);
 
-
-        // Position
         boolean movesRight = MathUtils.randomBoolean();
+        float fishHeight = textureComponent.getRegion().getRegionHeight();
+        float startX = FishUtils.getFishStartPosX(movesRight, textureComponent.getFrameWidth());
+        float adjustedVelocity = FishUtils.getFishDirectionX(movesRight, speed);
+
         Vector2 initialPosition = new Vector2(
-            FishUtils.getFishStartPosX(movesRight, textureComponent.getFrameWidth()),
-            FishUtils.getRandomDepthFor(depthLevel)
+            startX,
+            FishUtils.getRandomDepthFor(depthLevel, fishHeight)
         );
+
         PositionComponent fishPos = new PositionComponent(initialPosition);
         fish.add(fishPos);
 
-        // Velocity
-        float adjustedVelocity = FishUtils.getFishDirectionX(movesRight, speed);
-        fish.add(new VelocityComponent(new Vector2(adjustedVelocity,0)));
+        fish.add(new VelocityComponent(new Vector2(adjustedVelocity, 0)));
 
-        // Bounds for collision detection
-        fish.add(new BoundsComponent(fishPos.position, textureComponent.getRegion().getRegionWidth(), textureComponent.getRegion().getRegionHeight()));
+        BoundsComponent bc = new BoundsComponent();
+        bc.bounds.setPosition(fishPos.position);
+        bc.bounds.setWidth(textureComponent.getRegion().getRegionWidth());
+        bc.bounds.setHeight(textureComponent.getFrameHeight());
+        fish.add(bc);
 
-        // rotation
         fish.add(new RotationComponent(0f));
-
-        // Attachement to Hook
         fish.add(new AttachmentComponent(new Vector2(10, 0)));
-
-        // State component
         fish.add(new StateComponent<>(FishableObjectStates.FISHABLE));
 
-        // Animation
         AnimationComponent animationComponent = new AnimationComponent();
         animationComponent.addAnimation(FishableObjectStates.FISHABLE.getAnimationKey(), textureComponent, 0);
         animationComponent.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), textureComponent, 1, Animation.PlayMode.NORMAL);
-        animationComponent.addAnimation(FishableObjectStates.REELING.getAnimationKey(), textureComponent, 2);
-
+//        animationComponent.addAnimation(FishableObjectStates.REELING.getAnimationKey(), textureComponent, 2);
         animationComponent.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
+
+        animationComponent.setCurrentAnimation(FishableObjectStates.HOOKED.getAnimationKey());
         fish.add(animationComponent);
 
         return fish;
     }
-    
-
-
-
-
 
     private int getRandomHeightInRange(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);

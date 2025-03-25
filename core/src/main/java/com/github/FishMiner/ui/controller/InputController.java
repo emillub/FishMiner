@@ -3,7 +3,7 @@ package com.github.FishMiner.ui.controller;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.InputProcessor;
 import com.github.FishMiner.domain.events.GameEventBus;
-import com.github.FishMiner.domain.events.impl.FireHookEvent;
+import com.github.FishMiner.domain.events.impl.FireInputEvent;
 import com.github.FishMiner.domain.ecs.util.HookUtil;
 
 public class InputController implements InputProcessor {
@@ -15,7 +15,7 @@ public class InputController implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        GameEventBus.getInstance().post(new FireHookEvent(HookUtil.getHook(engine)));
+        GameEventBus.getInstance().post(new FireInputEvent(HookUtil.getHook(engine)));
         return true;
     }
 

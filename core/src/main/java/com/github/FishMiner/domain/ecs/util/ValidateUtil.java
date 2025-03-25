@@ -14,7 +14,7 @@ public final class ValidateUtil {
      * @throws IllegalArgumentException if an odd number of arguments is provided.
      * @throws IllegalArgumentException if any object is null, with its corresponding error message.
      */
-    public static void validateNotNull(Object... args) throws IllegalArgumentException {
+    public static void validateNotNull(Object... args) throws IllegalArgumentException, IllegalStateException {
         if (args.length % 2 != 0) {
             throw new IllegalArgumentException("validateNotNull expects an even number of arguments: object/message pairs.");
         }
@@ -22,7 +22,7 @@ public final class ValidateUtil {
             Object object = args[i];
             String message = (args[i + 1] instanceof String) ? (String) args[i + 1] : "Argument at index " + i + " is null.";
             if (object == null) {
-                throw new IllegalArgumentException(message);
+                throw new IllegalStateException(message);
             }
         }
     }
