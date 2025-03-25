@@ -19,6 +19,10 @@ public class FishMinerGame extends Game {
         this.firebase = firebase;
     }
 
+    public FishMinerGame() {
+        this.firebase = null;
+    }
+
     @Override
     public void create() {
         Configuration.getInstance().updateConfiguration();
