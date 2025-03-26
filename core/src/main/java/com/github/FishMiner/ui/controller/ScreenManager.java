@@ -3,6 +3,7 @@ package com.github.FishMiner.ui.controller;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.ui.LevelCompleteScreen;
 import com.github.FishMiner.ui.LoginScreen;
 import com.github.FishMiner.ui.MenuScreen;
 import com.github.FishMiner.ui.PlayScreen;
@@ -59,6 +60,8 @@ public class ScreenManager {
     public void setLoginScreen(LoginScreen loginScreen) {
         game.setScreen(loginScreen);
     }
+
+    public void setTestLevelCompleteScreen(LevelCompleteScreen levelCompleteScreen){game.setScreen(levelCompleteScreen);}
 
     public void pauseGamePressed() {
         game.setScreen(pauseScreen);
