@@ -58,7 +58,10 @@ com.badlogic.gdx.graphics.Color: {
     g: 0.84
     b: 0.58
     a: 1
-  }
+  },
+  panelBackground: { r: 0.14, g: 0.25, b: 0.35, a: 1 },
+  panelAccent: { r: 0.96, g: 0.84, b: 0.58, a: 1 },
+  panelShadow: { r: 0, g: 0, b: 0, a: 0.5 },
 
 }
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
@@ -77,6 +80,10 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
   golden-panel: {
     name: white,
     color: goldenBox
+  },
+  "rounded-panel": {
+    "name": "rounded-panel",
+    "color": "panelBackground"
   }
 }
 com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable: {

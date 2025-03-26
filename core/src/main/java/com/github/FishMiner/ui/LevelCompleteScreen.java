@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.FishMiner.Configuration;
 
@@ -50,15 +51,24 @@ public class LevelCompleteScreen extends AbstractScreen {
 
         Table table = new Table();
         table.setFillParent(true);
+        table.center();
         stage.addActor(table);
 
         Label titleLabel = new Label("Fish Miner", skin);
         titleLabel.setFontScale(3f);
 
-        Label messageLabel = new Label("You made it to the next level!", skin, "black");
-        messageLabel.setFontScale(1.2f);
+        Label messageLabel = new Label("You made it to the next level!", skin, "subtitle");
+        messageLabel.setFontScale(1.4f);
+        messageLabel.setAlignment(Align.center);
 
-        TextButton continueButton = new TextButton("Continue", skin);
+        TextButton continueButton = new TextButton("Continue", skin, "default");
+        continueButton.getLabel().setFontScale(1.1f);
+
+        Table messageBox = new Table(skin);
+        messageBox.setBackground("rounded-panel");
+        messageBox.defaults().pad(20).center();
+        messageBox.pad(30);
+
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -66,19 +76,13 @@ public class LevelCompleteScreen extends AbstractScreen {
             }
         });
 
+        messageBox.add(messageLabel).center().row();
+        messageBox.add(continueButton).width(220).height(70).center();
 
-        // Create a sub-table to act as the message box
-        Table messageBox = new Table(skin);
-        messageBox.setBackground("golden-panel");
-        messageBox.pad(20).defaults().pad(10);
-
-        messageBox.add(messageLabel).row();
-        messageBox.add(continueButton).width(200).height(60);
-
-        table.center().top().padTop(Gdx.graphics.getHeight() * 0.25f);
-        table.add(titleLabel).padBottom(50).row();
-        table.add(messageBox).center();
+        table.add(titleLabel).padBottom(60).row();
+        table.add(messageBox).center().row();
     }
+
 
 
     @Override
@@ -95,30 +99,27 @@ public class LevelCompleteScreen extends AbstractScreen {
     private void drawBackground() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        // Draw ocean background
+        int levels = Configuration.getInstance().getDepthLevels();
+        int levelHeight = Configuration.getInstance().getOceanHeight() / levels;
+
+        for (int i = 0; i < levels; i++) {
+            float blend = i / (float) levels;
+            shapeRenderer.setColor(0f, 0f, 0.2f + blend * 0.5f, 1f);
+            shapeRenderer.rect(0, i * levelHeight, Gdx.graphics.getWidth(), levelHeight);
+        }
+
+        // Sky (top part)
         shapeRenderer.setColor(0.5f, 0.8f, 1f, 1f);
         shapeRenderer.rect(
             0,
             Configuration.getInstance().getOceanHeight(),
-            Configuration.getInstance().getScreenWidth(),
-            Configuration.getInstance().getScreenHeight() - Configuration.getInstance().getOceanHeight()
+            Gdx.graphics.getWidth(),
+            Gdx.graphics.getHeight() - Configuration.getInstance().getOceanHeight()
         );
-
-        int levels = Configuration.getInstance().getDepthLevels();
-        int levelHeight = Configuration.getInstance().getOceanHeight() / levels;
-        for (int i = 0; i < levels; i++) {
-            float shade = 0.2f + (i * 0.15f);
-            shapeRenderer.setColor(0f, 0f, shade, 1f);
-            shapeRenderer.rect(
-                0,
-                i * levelHeight,
-                Configuration.getInstance().getScreenWidth(),
-                levelHeight
-            );
-        }
 
         shapeRenderer.end();
     }
+
 
     @Override
     public void dispose() {

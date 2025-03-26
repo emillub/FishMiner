@@ -378,3 +378,12 @@ window-resize
   orig: 13, 34
   offset: 0, 0
   index: -1
+rounded-panel
+  rotate: false
+  xy: 2, 204
+  size: 54, 101
+  split: 8, 8, 8, 8
+
+
+
+
