@@ -16,10 +16,8 @@ import com.github.FishMiner.Configuration;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 
-public class LevelCompleteScreen extends AbstractScreen {
+public class LevelLostScreen extends AbstractScreen {
 
-    private final int nextLevelNumber;
-    private final float previousScore;
     private Stage stage;
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
@@ -27,9 +25,8 @@ public class LevelCompleteScreen extends AbstractScreen {
     private Skin skin;
 
 
-    public LevelCompleteScreen(int nextLevelNumber, float previousScore) {
-        this.nextLevelNumber = nextLevelNumber;
-        this.previousScore = previousScore;
+    public LevelLostScreen() {
+
     }
 
     @Override
@@ -52,10 +49,10 @@ public class LevelCompleteScreen extends AbstractScreen {
         Label titleLabel = new Label("Fish Miner", skin);
         titleLabel.setFontScale(3f);
 
-        Label messageLabel = new Label("You made it to the next level!", skin);
+        Label messageLabel = new Label("You lost, start over!", skin);
         messageLabel.setFontScale(1.2f);
 
-        TextButton continueButton = new TextButton("Continue", skin);
+        TextButton continueButton = new TextButton("Back to menu", skin);
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
