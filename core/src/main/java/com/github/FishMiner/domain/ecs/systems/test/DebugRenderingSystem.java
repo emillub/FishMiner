@@ -7,7 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
@@ -22,7 +22,7 @@ public class DebugRenderingSystem extends IteratingSystem {
         private final ShapeRenderer posRenderer;
 
 
-        private final ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
+        private final ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);
         private final ComponentMapper<AnimationComponent> am = ComponentMapper.getFor(AnimationComponent.class);
         private final ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
         private final ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
@@ -33,7 +33,7 @@ public class DebugRenderingSystem extends IteratingSystem {
          * This system will process all entities with a PositionComponent.
          */
         public DebugRenderingSystem() {
-            super(Family.all(PositionComponent.class).get());
+            super(Family.all(TransformComponent.class).get());
             texRenderer = new ShapeRenderer();
             boundsRenderer = new ShapeRenderer();
             posRenderer = new ShapeRenderer();
@@ -53,7 +53,7 @@ public class DebugRenderingSystem extends IteratingSystem {
 
         @Override
         protected void processEntity(Entity entity, float deltaTime) {
-            PositionComponent pos = pm.get(entity);
+            TransformComponent pos = pm.get(entity);
             AnimationComponent anim = am.get(entity);
             TextureComponent tex = tm.get(entity);
             RotationComponent rot = rm.get(entity);
@@ -89,8 +89,9 @@ public class DebugRenderingSystem extends IteratingSystem {
 
             float boundWidth = 1;
             float boundHeight = 1;
-            float boundPosX = pos.position.x;
-            float boundPosY = pos.position.y;
+            float boundPosX = pos.pos.x;
+            float boundPosY = pos.pos.y;
+
             if (bound != null) {
                 boundWidth = bound.bounds.getWidth();
                 boundHeight = bound.bounds.getHeight();
@@ -100,7 +101,7 @@ public class DebugRenderingSystem extends IteratingSystem {
             }
 
             // TODO: rotate tex
-            texRenderer.rect(pos.position.x - texWidth / 2, pos.position.y - texHeight / 2, texWidth, texHeight);
-            posRenderer.point(pos.position.x, pos.position.y, 10);
+            texRenderer.rect(pos.pos.x - texWidth / 2, pos.pos.y - texHeight / 2, texWidth, texHeight);
+            posRenderer.point(pos.pos.x, pos.pos.y, 10);
         }
 }

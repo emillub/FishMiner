@@ -4,5 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryComponent {
-    List<FishComponent> fishInv = new ArrayList<>();
+    //TODO: create inventory component that holds:
+    //      money and various sinkers, hooks, reels the player owns.
+    // can also be used for the trader entity
 }

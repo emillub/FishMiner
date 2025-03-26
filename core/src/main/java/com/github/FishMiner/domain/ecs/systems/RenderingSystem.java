@@ -7,7 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
@@ -15,15 +15,15 @@ import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 
 public class RenderingSystem extends IteratingSystem {
     private SpriteBatch batch;
-    private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
+    private ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<AnimationComponent> am = ComponentMapper.getFor(AnimationComponent.class);
-    private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
     private ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
+    private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
     private final ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
 
 
     public RenderingSystem(SpriteBatch batch) {
-        super(Family.all(PositionComponent.class).get());
+        super(Family.all(TransformComponent.class, TextureComponent.class).get());
         this.batch = batch;
     }
 
@@ -36,19 +36,22 @@ public class RenderingSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        PositionComponent pos = pm.get(entity);
+        TransformComponent pos = pm.get(entity);
         AnimationComponent anim = am.get(entity);
         TextureComponent tex = tm.get(entity);
-        RotationComponent rot = rm.get(entity);
         VelocityComponent vel = vm.get(entity);
-
+        RotationComponent rot = rm.get(entity);
 
         float rotation = (rot != null) ? rot.angle : 0f;
+        float scaleX = (pos != null) ? pos.scale.x : 1f;
+        float scaleY = (pos != null) ? pos.scale.y : 1f;
 
-        float scaleX = 1f;
-        if (vel != null && vel.velocity.x > 0) {
-            scaleX = -1f;
+        if (vel != null) {
+            if (vel.velocity.x > 0) {
+                scaleX = -scaleX;
+            }
         }
+
 
         if (pos != null && anim != null && anim.currentAnimation != null) {
             TextureRegion frame = anim.currentAnimation.getKeyFrame(anim.timer, true);
@@ -58,22 +61,29 @@ public class RenderingSystem extends IteratingSystem {
 
             batch.draw(
                 frame,
-                pos.position.x + originX,
-                pos.position.y + originY,
+                pos.pos.x - originX,
+                pos.pos.y - originY,
                 originX,
                 originY,
                 frame.getRegionWidth(),
                 frame.getRegionHeight(),
                 scaleX,
-                1f,
+                scaleY,
                 rotation
             );
-        } else if (tex != null) {
+        } else if (pos != null && tex != null && anim == null) {
+            float originX = tex.getFrameWidth() * 0.5f;
+            float originY = tex.getFrameHeight() * 0.5f;
+
             batch.draw(tex.getRegion(),
-                pos.position.x, pos.position.y,
-                tex.getRegion().getRegionWidth() / 2f, tex.getRegion().getRegionHeight() / 2f,  // Origin
-                tex.getRegion().getRegionWidth(), tex.getRegion().getRegionHeight(),
-                1f, 1f,
+                pos.pos.x - originX,
+                pos.pos.y - originY,
+                originX,
+                originY,
+                tex.getRegion().getRegionWidth(),
+                tex.getRegion().getRegionHeight(),
+                scaleX,
+                scaleY,
                 rotation
             );
         }
