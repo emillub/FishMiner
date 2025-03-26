@@ -3,7 +3,6 @@ package com.github.FishMiner.ui;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,20 +10,15 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
-import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
-import com.github.FishMiner.domain.ecs.systems.FishSystem;
+import com.github.FishMiner.domain.ecs.systems.FishingSystem;
 import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
-import com.github.FishMiner.domain.level.LevelConfig;
-import com.github.FishMiner.domain.level.LevelConfigFactory;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.level.LevelConfigFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
@@ -33,7 +27,6 @@ import com.github.FishMiner.domain.ecs.systems.HookSystem;
 import com.github.FishMiner.domain.ecs.systems.MovementSystem;
 import com.github.FishMiner.domain.ecs.systems.PhysicalSystem;
 import com.github.FishMiner.domain.ecs.systems.RenderingSystem;
-import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.World;
 import com.github.FishMiner.domain.events.GameEventBus;
@@ -173,17 +166,17 @@ public class PlayScreen extends AbstractScreen {
 
     private void addSystemTo(Engine engine) {
         // Add ECS systems
-        engine.addSystem(new CollisionSystem());
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RenderingSystem(batch));
         engine.addSystem(new HookSystem());
         engine.addSystem(new PhysicalSystem());
+        engine.addSystem(new CollisionSystem());
 
         SpawningQueueSystem spawningSystem = new SpawningQueueSystem();
         engine.addSystem(spawningSystem);
 
-        FishSystem fishSystem =  new FishSystem();
+        FishingSystem fishSystem =  new FishingSystem();
         engine.addSystem(fishSystem);
         GameEventBus.getInstance().register(fishSystem);
 

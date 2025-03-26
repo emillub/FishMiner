@@ -3,10 +3,13 @@ package com.github.FishMiner.domain.ecs.entityFactories.playerFactory;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.Configuration;
+import com.github.FishMiner.domain.ecs.EntityEvent;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.PlayerComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
@@ -23,11 +26,12 @@ public class PlayerFactory {
 
     public void addNewPlayerCharacterTo(Engine engine, int posX, int posY) {
         Entity player = createPlayerEntity(posX, posY);
-        Entity hook = createHookEntity();
+        Entity hook = createHookEntity(player);
 
-        AttachmentComponent hookAttachment = hook.getComponent(AttachmentComponent.class);
-        hookAttachment.parent = player;
-        hookAttachment.offset.y = 10;
+        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+        playerComponent.hook = hook;
+
+        player.add(playerComponent);
 
         engine.addEntity(player);
         engine.addEntity(hook);
@@ -38,17 +42,23 @@ public class PlayerFactory {
 
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
+        PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 
         textureComponent.setRegion("fisherman.png");
-
         transformComponent.pos.x = posX;
         transformComponent.pos.y =  posY + textureComponent.getFrameHeight() * 0.3f;
-        //transformComponent.scale = new Vector2(0.5f, 0.5f);
+        transformComponent.pos.z = 0;
 
 
         // TODO: maybe player is added via the hook as an attachment? check this
+
+        playerComponent.hookAnchorPoint.x = transformComponent.pos.x + textureComponent.getFrameWidth() * 0.5f;
+        playerComponent.hookAnchorPoint.y = transformComponent.pos.y + textureComponent.getFrameHeight() * 0.5f;
+        playerComponent.hookAnchorPoint.z = transformComponent.pos.z + 1;
+
         player.add(transformComponent);
         player.add(textureComponent);
+        player.add(playerComponent);
 
         return player;
     }
@@ -60,7 +70,7 @@ public class PlayerFactory {
      * @return A hook Entity
      */
     @SuppressWarnings("unchecked")
-    private Entity createHookEntity() {
+    private Entity createHookEntity(Entity player) {
         Entity hook = new Entity();
 
         HookComponent hookComponent = engine.createComponent(HookComponent.class);
@@ -80,12 +90,8 @@ public class PlayerFactory {
 
         velocityComponent.velocity = new Vector2(0, 0);
 
-
-        //boundsComponent.bounds.setX(transformComponent.pos.x);
-        //boundsComponent.bounds.setY(transformComponent.pos.y);
-        //boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
-        //boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
-
+        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+        hookComponent.anchorPoint.set(playerComponent.hookAnchorPoint);
 
         // TODO: add scaling and centralize width and height via something other than textures
         boundsComponent.bounds.setSize(

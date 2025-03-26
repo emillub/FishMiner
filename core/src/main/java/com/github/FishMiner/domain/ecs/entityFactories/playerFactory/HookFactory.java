@@ -50,7 +50,7 @@ public class HookFactory implements IEntityFactory {
         // TODO: fix misplaced bounds
         boundsComponent.bounds.setX(transformComponent.pos.x);
         boundsComponent.bounds.setY(transformComponent.pos.y);
-        boundsComponent.bounds.setWidth(50);
+        boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
         boundsComponent.bounds.setHeight(50);
 
         hook.add(hookComponent);

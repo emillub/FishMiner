@@ -21,11 +21,13 @@ public class HookComponent implements Component {
 
     public final float swingOffset = 1;
 
-    public final Vector3 anchorPoint = new Vector3(
-        (float) (Configuration.getInstance().getScreenWidth() / 2),
-        (float) (Configuration.getInstance().getScreenHeight() - 200),
-        0
-    );
+    public Vector3 anchorPoint = new Vector3();
+
+    //public final Vector3 anchorPoint = new Vector3(
+    //    (float) (Configuration.getInstance().getScreenWidth() / 2),
+    //    (float) (Configuration.getInstance().getScreenHeight() - 200),
+    //    0
+    //);
 
     public void attachEntity(Entity fishableEntity) {
         this.attachedFishableEntity = fishableEntity;

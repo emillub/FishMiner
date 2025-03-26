@@ -1,7 +1,5 @@
 package com.github.FishMiner.domain.ecs.systems;
 
-import static java.util.Collections.rotate;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -9,7 +7,6 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.domain.ecs.components.FishComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
@@ -23,18 +20,20 @@ import com.github.FishMiner.domain.listeners.IGameEventListener;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.HookStates;
 
-public class FishSystem extends EntitySystem implements IGameEventListener<FishHitEvent> {
+public class FishingSystem extends EntitySystem implements IGameEventListener<FishHitEvent> {
 
     private ComponentMapper<HookComponent> hookMapper = ComponentMapper.getFor(HookComponent.class);
     private ComponentMapper<TransformComponent> posMapper = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
+    private ComponentMapper<StateComponent> stateMapper = ComponentMapper.getFor(StateComponent.class);
+    private ComponentMapper<FishComponent> fishMapper = ComponentMapper.getFor(FishComponent.class);
 
     private Entity hookEntity;
 
     /**
      * must be added to GameEventBus
      */
-    public FishSystem() {
+    public FishingSystem() {
     }
 
     @Override
