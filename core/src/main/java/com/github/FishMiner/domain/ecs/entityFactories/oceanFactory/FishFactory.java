@@ -13,6 +13,7 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
+import com.github.FishMiner.domain.ecs.components.WeightComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.util.FishUtils;
 import com.github.FishMiner.domain.states.FishableObjectStates;
@@ -38,13 +39,12 @@ public class FishFactory {
             type.getFrameRows(),
             chosenDepthLevel,
             type.getSpeed(),
-            type.getWeight(),
-            type
+            type.getWeight()
         );
     }
 
     @SuppressWarnings("unchecked")
-    protected Entity createEntity(String texturePath, int frameCols, int frameRows, int depthLevel, float speed, int weight, FishTypes type) {
+    protected Entity createEntity(String texturePath, int frameCols, int frameRows, int depthLevel, float speed, int weight) {
         Entity fish = new Entity();
         FishComponent fishComponent = engine.createComponent(FishComponent.class);
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
@@ -54,7 +54,7 @@ public class FishFactory {
         AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
         StateComponent<FishableObjectStates> stateComponent = engine.createComponent(StateComponent.class);
         AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
-
+        WeightComponent weightComponent = engine.createComponent(WeightComponent.class);
         textureComponent.setRegion(texturePath, frameCols, frameRows);
         System.out.println(textureComponent.texturePath);
 
@@ -63,6 +63,8 @@ public class FishFactory {
         fishComponent.setBaseSpeed(speed);
         fishComponent.width = textureComponent.getFrameWidth();
         fishComponent.height = textureComponent.getFrameHeight();
+
+        weightComponent.weight = fishComponent.weight;
 
         // spawns to the left or the right
         boolean movesRight = MathUtils.randomBoolean();
