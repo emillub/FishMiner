@@ -120,11 +120,11 @@ public class PlayScreen extends AbstractScreen {
                 ScreenManager.getInstance().showLevelCompleteScreen(levelNumber, world.getScore());
                 return;
             } else if (world.getState() == WorldState.LOST) {
-                // Handle game over logic here (e.g., restart level or show game-over overlay)
                 System.out.println("Game Over. Try again!");
-                // Optionally, you could recreate the same level or go to a menu.
+                ScreenManager.getInstance().showLevelLostScreen();
+                return;
             }
-        }
+    }
 
         // Update ECS systems and render
         stage.act(delta);

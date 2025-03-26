@@ -23,7 +23,6 @@ public class MenuScreen extends AbstractScreen {
         Gdx.input.setInputProcessor(stage);
         FishMinerGame.playBackgroundMusic();
 
-
         Table rootTable = new Table();
         rootTable.setFillParent(true);
         rootTable.setDebug(true);

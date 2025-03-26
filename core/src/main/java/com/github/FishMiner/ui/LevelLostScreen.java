@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.FishMiner.Configuration;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.github.FishMiner.ui.controller.ScreenManager;
 
 public class LevelLostScreen extends AbstractScreen {
 
@@ -56,9 +57,10 @@ public class LevelLostScreen extends AbstractScreen {
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Replace with transition back to game
+                ScreenManager.getInstance().showMenu();
             }
         });
+
 
         // Create a sub-table to act as the message box
         Table messageBox = new Table(skin);

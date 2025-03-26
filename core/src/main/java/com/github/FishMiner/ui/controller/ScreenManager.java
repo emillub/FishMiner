@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.ui.LevelCompleteScreen;
+import com.github.FishMiner.ui.LevelLostScreen;
 import com.github.FishMiner.ui.LoginScreen;
 import com.github.FishMiner.ui.MenuScreen;
 import com.github.FishMiner.ui.PlayScreen;
@@ -71,6 +72,12 @@ public class ScreenManager {
         playScreen = new PlayScreen(nextLevel, previousScore);
         game.setScreen(playScreen);
     }
+
+    public void showLevelLostScreen() {
+        LevelLostScreen lostScreen = new LevelLostScreen();
+        game.setScreen(lostScreen);
+    }
+
 
 
     public void pauseGamePressed() {
