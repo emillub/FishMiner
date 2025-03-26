@@ -48,7 +48,7 @@ public class ScreenManager {
     public void startGamePressed() {
         // Handle game start logic here
         if (playScreen == null) {
-            playScreen = new PlayScreen();
+            playScreen = new PlayScreen(1, 0f);
         }
         game.setScreen(playScreen);
     }
@@ -61,7 +61,17 @@ public class ScreenManager {
         game.setScreen(loginScreen);
     }
 
-    public void setTestLevelCompleteScreen(LevelCompleteScreen levelCompleteScreen){game.setScreen(levelCompleteScreen);}
+
+    public void showLevelCompleteScreen(int levelNumber, float previousScore) {
+        LevelCompleteScreen levelCompleteScreen = new LevelCompleteScreen(levelNumber, previousScore);
+        game.setScreen(levelCompleteScreen);
+    }
+
+    public void startNextLevel(int nextLevel, float previousScore) {
+        playScreen = new PlayScreen(nextLevel, previousScore);
+        game.setScreen(playScreen);
+    }
+
 
     public void pauseGamePressed() {
         game.setScreen(pauseScreen);

@@ -15,11 +15,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.FishMiner.Configuration;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.github.FishMiner.ui.controller.ScreenManager;
 
 public class LevelCompleteScreen extends AbstractScreen {
 
-    private final int nextLevelNumber;
-    private final float previousScore;
     private Stage stage;
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
@@ -27,10 +26,14 @@ public class LevelCompleteScreen extends AbstractScreen {
     private Skin skin;
 
 
-    public LevelCompleteScreen(int nextLevelNumber, float previousScore) {
-        this.nextLevelNumber = nextLevelNumber;
+    private final int levelNumber;
+    private final float previousScore;
+
+    public LevelCompleteScreen(int levelNumber, float previousScore) {
+        this.levelNumber = levelNumber;
         this.previousScore = previousScore;
     }
+
 
     @Override
     public void show() {
@@ -52,20 +55,21 @@ public class LevelCompleteScreen extends AbstractScreen {
         Label titleLabel = new Label("Fish Miner", skin);
         titleLabel.setFontScale(3f);
 
-        Label messageLabel = new Label("You made it to the next level!", skin);
+        Label messageLabel = new Label("You made it to the next level!", skin, "black");
         messageLabel.setFontScale(1.2f);
 
         TextButton continueButton = new TextButton("Continue", skin);
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Replace with transition back to game
+                ScreenManager.getInstance().startNextLevel(levelNumber + 1, previousScore);
             }
         });
 
+
         // Create a sub-table to act as the message box
         Table messageBox = new Table(skin);
-        messageBox.setBackground("window"); // You can customize this style in the skin
+        messageBox.setBackground("golden-panel");
         messageBox.pad(20).defaults().pad(10);
 
         messageBox.add(messageLabel).row();

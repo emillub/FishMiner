@@ -52,13 +52,6 @@ public class MenuScreen extends AbstractScreen {
             }
         });
 
-        TextButton testLevelCompleteButton = new TextButton("Test Level Complete", skin);
-        testLevelCompleteButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().setTestLevelCompleteScreen(new LevelCompleteScreen(2, 100)); // e.g., nextLevelNumber=2, previousScore=100
-            }
-        });
 
 
         rootTable.add(loginButton).expand().fillX().fill().fillY();
@@ -66,8 +59,6 @@ public class MenuScreen extends AbstractScreen {
         rootTable.add(playButton).expand().fillX().fill().fillY();
         rootTable.row();
         rootTable.add(settingsButton).expand().fillX().fill().fillY();
-        rootTable.row();
-        rootTable.add(testLevelCompleteButton).expand().fillX().fill().fillY();
     }
 
     @Override

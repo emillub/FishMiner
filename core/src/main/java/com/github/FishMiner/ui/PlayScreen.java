@@ -33,6 +33,7 @@ import com.github.FishMiner.domain.World;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
 import com.github.FishMiner.domain.states.WorldState;
+import com.github.FishMiner.ui.controller.ScreenManager;
 
 
 /**
@@ -45,7 +46,13 @@ public class PlayScreen extends AbstractScreen {
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;
     private World world;
-    private int levelNumber = 4; // Start at level 1
+    private int levelNumber;
+    private float previousScore;
+
+    public PlayScreen(int levelNumber, float previousScore) {
+        this.levelNumber = levelNumber;
+        this.previousScore = previousScore;
+    }
 
     @Override
     public void show() {
@@ -68,9 +75,8 @@ public class PlayScreen extends AbstractScreen {
 
         // only init World after all systems and stuff has been added to engine:)
         world = new World(engine);
-        LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore()); // Pass previous score
+        LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore());
         world.createLevel(config);
-
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -92,7 +98,6 @@ public class PlayScreen extends AbstractScreen {
 
     }
 
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -111,16 +116,9 @@ public class PlayScreen extends AbstractScreen {
         if (world.getTimer() <= 0) {
             if (world.getState() == WorldState.WON) {
                 // Proceed to next level for the next game if within level limit
-                if (levelNumber < 20) {
-                    levelNumber++;
-                    System.out.println("Advancing to level " + levelNumber);
-                    LevelConfig nextLevelConfig = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore());
-                    world.createLevel(nextLevelConfig);
-                } else {
-                    // All levels completed – trigger game completion flow
-                    System.out.println("Congratulations! All levels completed!");
-                    // For example, transition to a game-complete screen.
-                }
+                System.out.println("Advancing to level " + levelNumber);
+                ScreenManager.getInstance().showLevelCompleteScreen(levelNumber, world.getScore());
+                return;
             } else if (world.getState() == WorldState.LOST) {
                 // Handle game over logic here (e.g., restart level or show game-over overlay)
                 System.out.println("Game Over. Try again!");
