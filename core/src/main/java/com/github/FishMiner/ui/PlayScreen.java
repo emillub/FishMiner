@@ -63,9 +63,7 @@ public class PlayScreen extends AbstractScreen {
         font = new BitmapFont();
         font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
 
-        //Entity hook = hookFactory.createEntity((int) hookPos.x, (int) hookPos.y);
-        PlayerFactory playerFactory = new PlayerFactory(engine);
-        playerFactory.addNewPlayerCharacterTo(engine,
+        PlayerFactory.addNewPlayerCharacterTo(engine,
             (int) (Configuration.getInstance().getScreenWidth() / 2),
             Configuration.getInstance().getOceanHeight()
         );
