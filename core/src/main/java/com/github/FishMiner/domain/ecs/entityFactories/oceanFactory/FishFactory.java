@@ -101,6 +101,8 @@ public class FishFactory {
         fish.add(attachmentComponent);
         fish.add(stateComponent);
         fish.add(animationComponent);
+        fish.add(weightComponent);
+        fish.add(fishComponent);
 
         return fish;
     }
