@@ -2,6 +2,7 @@ package com.github.FishMiner.domain.ecs.entityFactories.playerFactory;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
@@ -12,8 +13,11 @@ import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.IEntityFactory;
 import com.github.FishMiner.domain.states.HookStates;
 
-import jdk.jfr.Unsigned;
 
+/**
+ * This is not used any longer. Only needed for testing, so do not use it otherwise
+ * @PlayerFactory replaces this class
+ */
 public class HookFactory implements IEntityFactory {
 
     private final Engine engine;
@@ -51,7 +55,8 @@ public class HookFactory implements IEntityFactory {
         boundsComponent.bounds.setX(transformComponent.pos.x);
         boundsComponent.bounds.setY(transformComponent.pos.y);
         boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
-        boundsComponent.bounds.setHeight(50);
+        boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
+
 
         hook.add(hookComponent);
         hook.add(transformComponent);
