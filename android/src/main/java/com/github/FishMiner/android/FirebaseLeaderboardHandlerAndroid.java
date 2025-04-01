@@ -15,13 +15,12 @@ public class FirebaseLeaderboardHandlerAndroid implements LeaderboardInterface {
         db = FirebaseFirestore.getInstance();
     }
 
-    // Submit a new high score
     public void submitScore(String username, int score) {
         Map<String, Object> scoreEntry = new HashMap<>();
         scoreEntry.put("username", username);
         scoreEntry.put("score", score);
 
-        db.collection("leaderboard")
+        db.collection("LeaderBoard")
             .add(scoreEntry)  // Firestore automatically generates a unique document ID
             .addOnSuccessListener(documentReference ->
                 System.out.println("Score added with ID: " + documentReference.getId()))
@@ -29,9 +28,8 @@ public class FirebaseLeaderboardHandlerAndroid implements LeaderboardInterface {
                 System.err.println("Error adding score: " + e.getMessage()));
     }
 
-    // Retrieve top 10 high scores
     public void getTopScores() {
-        db.collection("leaderboard")
+        db.collection("LeaderBoard")
             .orderBy("score", Query.Direction.DESCENDING) // Sort by highest score
             .limit(10) // Get top 10 scores
             .get()

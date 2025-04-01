@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.github.FishMiner.data.ports.out.FirebaseInterface;
+import com.github.FishMiner.data.ports.out.LeaderboardInterface;
 import com.github.FishMiner.ui.MenuScreen;
 import com.github.FishMiner.ui.PlayScreen;
 import com.github.FishMiner.ui.controller.ScreenManager;
@@ -12,12 +13,15 @@ import com.github.FishMiner.ui.controller.ScreenManager;
 
 public class FishMinerGame extends Game {
     private final FirebaseInterface firebase;
+    private final LeaderboardInterface leaderboard;
     private static Music backgroundMusic;
     private static Music playMusic;
 
-    public FishMinerGame(FirebaseInterface firebase) {
+    public FishMinerGame(FirebaseInterface firebase, LeaderboardInterface leaderboard) {
         this.firebase = firebase;
+        this.leaderboard = leaderboard;
     }
+
 
     @Override
     public void create() {
@@ -71,6 +75,7 @@ public class FishMinerGame extends Game {
     public FirebaseInterface getFirebase() {
         return firebase;
     }
+    public LeaderboardInterface getLeaderboard() { return leaderboard; }
 
 
 }
