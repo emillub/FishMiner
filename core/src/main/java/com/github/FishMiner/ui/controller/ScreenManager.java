@@ -78,8 +78,6 @@ public class ScreenManager {
         game.setScreen(lostScreen);
     }
 
-
-
     public void pauseGamePressed() {
         game.setScreen(pauseScreen);
     }

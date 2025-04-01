@@ -3,11 +3,7 @@ package com.github.FishMiner.domain.level;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.FishFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class LevelConfigFactory {
 
@@ -16,34 +12,48 @@ public class LevelConfigFactory {
         int initialFishCount = 6;
         int totalFishCount = Math.min(30, 10 + levelNumber * 2);
         int targetScore = Math.max(baseTargetScore + (levelNumber - 1) * 30, previousScore + 20);
+        float spawnInterval = 0f;
+        int numGarbage;
 
         Map<FishTypes, Float> spawnChances = new HashMap<>();
+
         if (levelNumber >= 10) {
             spawnChances.put(FishTypes.CLOWN_FISH, 0.3f);
             spawnChances.put(FishTypes.PINK_FISH, 0.4f);
             spawnChances.put(FishTypes.BLUE_FISH, 0.3f);
             spawnChances.put(FishTypes.GREEN_FISH, 0.2f);
-            spawnChances.put(FishTypes.RED_FISH, 0.3f);
+            spawnChances.put(FishTypes.YELLOW_BLUE_FISH, 0.3f);
             spawnChances.put(FishTypes.GRAY_ORANGE_FISH, 0.1f);
+            numGarbage = 3;
         } else if (levelNumber >= 5) {
             spawnChances.put(FishTypes.CLOWN_FISH, 0.4f);
             spawnChances.put(FishTypes.PINK_FISH, 0.3f);
             spawnChances.put(FishTypes.GREEN_FISH, 0.2f);
             spawnChances.put(FishTypes.BLUE_FISH, 0.1f);
+            numGarbage = 2;
         } else {
             spawnChances.put(FishTypes.CLOWN_FISH, 0.6f);
             spawnChances.put(FishTypes.GREEN_FISH, 0.4f);
+            numGarbage = 0;
         }
 
-        List<FishTypes> plannedFish = generatePlannedFish(targetScore, levelNumber, totalFishCount, spawnChances);
-        return new LevelConfig(targetScore, 0f, spawnChances, initialFishCount, totalFishCount, plannedFish);
+        List<FishTypes> plannedFish = generatePlannedFish(targetScore, totalFishCount, spawnChances);
+
+        return new LevelConfig(
+            targetScore,
+            spawnInterval,
+            spawnChances,
+            initialFishCount,
+            totalFishCount,
+            plannedFish,
+            numGarbage
+        );
     }
 
-    private static List<FishTypes> generatePlannedFish(int targetScore, int levelNumber, int totalFishCount, Map<FishTypes, Float> spawnWeights) {
+    private static List<FishTypes> generatePlannedFish(int targetScore, int totalFishCount, Map<FishTypes, Float> spawnWeights) {
         List<FishTypes> planned = new ArrayList<>();
         Random random = new Random();
 
-        // Build a weighted pool
         List<FishTypes> fishPool = new ArrayList<>();
         for (Map.Entry<FishTypes, Float> entry : spawnWeights.entrySet()) {
             int times = Math.round(entry.getValue() * 100);
@@ -56,9 +66,8 @@ public class LevelConfigFactory {
             fishPool.add(FishTypes.CLOWN_FISH);
         }
 
-        // Accumulate fish until value surpasses targetScore
         int currentValue = 0;
-        int buffer = 15; // safety buffer to avoid exact value
+        int buffer = 15;
         while (planned.size() < totalFishCount && currentValue < targetScore + buffer) {
             FishTypes fish = fishPool.get(random.nextInt(fishPool.size()));
             int avgDepth = average(fish.getAllowedDepthLevels());
@@ -68,14 +77,11 @@ public class LevelConfigFactory {
             currentValue += value;
         }
 
-        // If we still haven't filled the count, pad with cheapest fish
         while (planned.size() < totalFishCount) {
             planned.add(FishTypes.GRAY_ORANGE_FISH);
         }
 
-        // Debug info
         System.out.println("Planned " + planned.size() + " fish, total value: " + currentValue + ", target: " + targetScore);
-
         return planned;
     }
 
@@ -84,7 +90,4 @@ public class LevelConfigFactory {
         for (int v : values) sum += v;
         return values.length > 0 ? sum / values.length : 1;
     }
-
-
-
 }
