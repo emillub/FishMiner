@@ -40,12 +40,13 @@ public class FishFactory {
             type.getFrameRows(),
             chosenDepthLevel,
             type.getSpeed(),
-            type.getWeight()
+            type.getWeight(),
+            type.getScale()
         );
     }
 
     @SuppressWarnings("unchecked")
-    protected Entity createEntity(String texturePath, int frameCols, int frameRows, int depthLevel, float speed, int weight) {
+    protected Entity createEntity(String texturePath, int frameCols, int frameRows, int depthLevel, float speed, int weight, float scale) {
         Entity fish = engine.createEntity();
 
         FishComponent fishComponent = engine.createComponent(FishComponent.class);
@@ -76,8 +77,8 @@ public class FishFactory {
 
         // Start Y: based on depth
         float startY = FishUtils.getRandomDepthFor(depthLevel, fishComponent.height);
-
         transform.pos = new Vector3(startX, startY, 0);
+        transform.scale.set(scale, scale);
         velocity.velocity.x = FishUtils.getFishDirectionX(movesRight, speed);
 
         bounds.bounds.set(
@@ -91,8 +92,8 @@ public class FishFactory {
 
         state.changeState(FishableObjectStates.FISHABLE);
         animation.addAnimation(FishableObjectStates.FISHABLE.getAnimationKey(), texture, 0);
-        animation.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), texture, 1, Animation.PlayMode.NORMAL);
-        animation.addAnimation(FishableObjectStates.REELING.getAnimationKey(), texture, 1);
+        animation.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), texture, 0, Animation.PlayMode.NORMAL);
+        animation.addAnimation(FishableObjectStates.REELING.getAnimationKey(), texture, 0);
         animation.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
 
         fish.add(transform);

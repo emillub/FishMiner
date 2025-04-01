@@ -49,7 +49,7 @@ public class ScreenManager {
     public void startGamePressed() {
         // Handle game start logic here
         if (playScreen == null) {
-            playScreen = new PlayScreen(1, 0f);
+            playScreen = new PlayScreen(11, 0f);
         }
         game.setScreen(playScreen);
     }
@@ -77,8 +77,6 @@ public class ScreenManager {
         LevelLostScreen lostScreen = new LevelLostScreen();
         game.setScreen(lostScreen);
     }
-
-
 
     public void pauseGamePressed() {
         game.setScreen(pauseScreen);
