@@ -3,21 +3,19 @@ package com.github.FishMiner;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.github.FishMiner.data.ports.out.FirebaseInterface;
-import com.github.FishMiner.data.ports.out.LeaderboardInterface;
-import com.github.FishMiner.ui.MenuScreen;
-import com.github.FishMiner.ui.PlayScreen;
+import com.github.FishMiner.data.ports.out.ILogInAPI;
+import com.github.FishMiner.data.ports.out.ILeaderBoardAPI;
 import com.github.FishMiner.ui.controller.ScreenManager;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 
 public class FishMinerGame extends Game {
-    private final FirebaseInterface firebase;
-    private final LeaderboardInterface leaderboard;
+    private final ILogInAPI firebase;
+    private final ILeaderBoardAPI leaderboard;
     private static Music backgroundMusic;
     private static Music playMusic;
 
-    public FishMinerGame(FirebaseInterface firebase, LeaderboardInterface leaderboard) {
+    public FishMinerGame(ILogInAPI firebase, ILeaderBoardAPI leaderboard) {
         this.firebase = firebase;
         this.leaderboard = leaderboard;
     }
@@ -43,6 +41,7 @@ public class FishMinerGame extends Game {
         }
 
         ScreenManager.getInstance(this).showMenu();
+        getLeaderboard().submitScore("august", 69);
     }
 
     public static void playBackgroundMusic() {
@@ -71,10 +70,10 @@ public class FishMinerGame extends Game {
         return playMusic;
     }
 
-    public FirebaseInterface getFirebase() {
+    public ILogInAPI getFirebase() {
         return firebase;
     }
-    public LeaderboardInterface getLeaderboard() { return leaderboard; }
+    public ILeaderBoardAPI getLeaderboard() { return leaderboard; }
 
 
 }
