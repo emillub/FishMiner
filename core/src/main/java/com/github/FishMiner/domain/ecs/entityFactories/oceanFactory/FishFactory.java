@@ -1,11 +1,11 @@
 package com.github.FishMiner.domain.ecs.entityFactories.oceanFactory;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
@@ -32,7 +32,7 @@ public class FishFactory {
         int[] allowedDepths = type.getAllowedDepthLevels();
         int chosenDepthLevel = allowedDepths[MathUtils.random(allowedDepths.length - 1)];
 
-        System.out.println("Spawning " + type.name() + " in depth level " + chosenDepthLevel);
+        System.out.println("Spawning " + type.name() + " at depth level " + chosenDepthLevel);
 
         return createEntity(
             type.getTexturePath(),
@@ -49,64 +49,64 @@ public class FishFactory {
         Entity fish = engine.createEntity();
 
         FishComponent fishComponent = engine.createComponent(FishComponent.class);
-        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
-        VelocityComponent velocityComponent = engine.createComponent(VelocityComponent.class);
-        BoundsComponent boundsComponent = engine.createComponent(BoundsComponent.class);
-        TextureComponent textureComponent = engine.createComponent(TextureComponent.class);  // ✅ Use pooled component
-        AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
-        StateComponent<FishableObjectStates> stateComponent = engine.createComponent(StateComponent.class);
-        AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
-        WeightComponent weightComponent = engine.createComponent(WeightComponent.class);
+        TransformComponent transform = engine.createComponent(TransformComponent.class);
+        VelocityComponent velocity = engine.createComponent(VelocityComponent.class);
+        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        AttachmentComponent attachment = engine.createComponent(AttachmentComponent.class);
+        StateComponent<FishableObjectStates> state = engine.createComponent(StateComponent.class);
+        AnimationComponent animation = engine.createComponent(AnimationComponent.class);
+        WeightComponent weightComp = engine.createComponent(WeightComponent.class);
 
-        textureComponent.setRegion(texturePath, frameCols, frameRows);
-        System.out.println(textureComponent.texturePath);
-
+        texture.setRegion(texturePath, frameCols, frameRows);
         fishComponent.setDepthLevel(depthLevel);
         fishComponent.setWeight(weight);
         fishComponent.setBaseSpeed(speed);
-        fishComponent.width = textureComponent.getFrameWidth();
-        fishComponent.height = textureComponent.getFrameHeight();
+        fishComponent.width = texture.getFrameWidth();
+        fishComponent.height = texture.getFrameHeight();
 
-        weightComponent.weight = fishComponent.weight;
+        weightComp.weight = fishComponent.weight;
 
         boolean movesRight = MathUtils.randomBoolean();
+        float screenWidth = Configuration.getInstance().getScreenWidth();
 
-        transformComponent.pos = new Vector3(
-            FishUtils.getFishStartPosX(movesRight, textureComponent.getFrameWidth()),
-            FishUtils.getRandomDepthFor(depthLevel, fishComponent.height),
-            0
+        // Start X: just offscreen left or right
+        float startX = movesRight ? -fishComponent.width : screenWidth + fishComponent.width;
+        System.out.println("Fish moves " + (movesRight ? "right" : "left") + " from x=" + startX);
+
+        // Start Y: based on depth
+        float startY = FishUtils.getRandomDepthFor(depthLevel, fishComponent.height);
+
+        transform.pos = new Vector3(startX, startY, 0);
+        velocity.velocity.x = FishUtils.getFishDirectionX(movesRight, speed);
+
+        bounds.bounds.set(
+            transform.pos.x,
+            transform.pos.y,
+            fishComponent.width,
+            fishComponent.height
         );
 
-        velocityComponent.velocity.x  = FishUtils.getFishDirectionX(movesRight, speed);
+        attachment.offset.x = 10;
 
-        boundsComponent.bounds.setX(transformComponent.pos.x);
-        boundsComponent.bounds.setY(transformComponent.pos.y);
-        boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
-        boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
+        state.changeState(FishableObjectStates.FISHABLE);
+        animation.addAnimation(FishableObjectStates.FISHABLE.getAnimationKey(), texture, 0);
+        animation.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), texture, 1, Animation.PlayMode.NORMAL);
+        animation.addAnimation(FishableObjectStates.REELING.getAnimationKey(), texture, 1);
+        animation.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
 
-        attachmentComponent.offset.x = 10;
-
-        stateComponent.changeState(FishableObjectStates.FISHABLE);
-
-        animationComponent.addAnimation(FishableObjectStates.FISHABLE.getAnimationKey(), textureComponent, 0);
-        animationComponent.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), textureComponent, 1, Animation.PlayMode.NORMAL);
-        animationComponent.setCurrentAnimation(stateComponent.getState().getAnimationKey());
-        animationComponent.addAnimation(FishableObjectStates.REELING.getAnimationKey(), textureComponent, 1);
-        animationComponent.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
-
-        fish.add(transformComponent);
-        fish.add(textureComponent);
-        fish.add(velocityComponent);
-        fish.add(boundsComponent);
-        fish.add(attachmentComponent);
-        fish.add(stateComponent);
-        fish.add(animationComponent);
-        fish.add(weightComponent);
+        fish.add(transform);
+        fish.add(texture);
+        fish.add(velocity);
+        fish.add(bounds);
+        fish.add(attachment);
+        fish.add(state);
+        fish.add(animation);
+        fish.add(weightComp);
         fish.add(fishComponent);
 
         return fish;
     }
-
 
     public static int calculateFishValue(int depth, int speed, int weight) {
         float value = (float) (depth * speed * weight) / 100;
