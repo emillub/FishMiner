@@ -2,6 +2,7 @@ package com.github.FishMiner.domain.ecs.entityFactories.oceanFactory;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -21,9 +22,9 @@ import com.github.FishMiner.domain.states.FishableObjectStates;
 public class FishFactory {
 
     public static final int EURO_FACTOR = 10;
-    private final Engine engine;
+    private final PooledEngine engine;
 
-    protected FishFactory(Engine engine) {
+    protected FishFactory(PooledEngine engine) {
         this.engine = engine;
     }
 
@@ -45,16 +46,18 @@ public class FishFactory {
 
     @SuppressWarnings("unchecked")
     protected Entity createEntity(String texturePath, int frameCols, int frameRows, int depthLevel, float speed, int weight) {
-        Entity fish = new Entity();
+        Entity fish = engine.createEntity();
+
         FishComponent fishComponent = engine.createComponent(FishComponent.class);
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         VelocityComponent velocityComponent = engine.createComponent(VelocityComponent.class);
         BoundsComponent boundsComponent = engine.createComponent(BoundsComponent.class);
-        TextureComponent textureComponent = new TextureComponent();
+        TextureComponent textureComponent = engine.createComponent(TextureComponent.class);  // ✅ Use pooled component
         AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
         StateComponent<FishableObjectStates> stateComponent = engine.createComponent(StateComponent.class);
         AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
         WeightComponent weightComponent = engine.createComponent(WeightComponent.class);
+
         textureComponent.setRegion(texturePath, frameCols, frameRows);
         System.out.println(textureComponent.texturePath);
 
@@ -66,9 +69,7 @@ public class FishFactory {
 
         weightComponent.weight = fishComponent.weight;
 
-        // spawns to the left or the right
         boolean movesRight = MathUtils.randomBoolean();
-
 
         transformComponent.pos = new Vector3(
             FishUtils.getFishStartPosX(movesRight, textureComponent.getFrameWidth()),
@@ -77,7 +78,6 @@ public class FishFactory {
         );
 
         velocityComponent.velocity.x  = FishUtils.getFishDirectionX(movesRight, speed);
-
 
         boundsComponent.bounds.setX(transformComponent.pos.x);
         boundsComponent.bounds.setY(transformComponent.pos.y);
@@ -106,6 +106,7 @@ public class FishFactory {
 
         return fish;
     }
+
 
     public static int calculateFishValue(int depth, int speed, int weight) {
         float value = (float) (depth * speed * weight) / 100;
