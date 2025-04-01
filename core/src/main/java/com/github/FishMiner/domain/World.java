@@ -2,7 +2,9 @@ package com.github.FishMiner.domain;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.OceanEntityFactory;
@@ -15,7 +17,7 @@ import java.util.Random;
 
 public class World {
 
-    private final Engine engine;
+    private final PooledEngine engine;
     private final Configuration config;
     private final IGameEntityFactory factory;
     private final Random random = new Random();
@@ -26,7 +28,7 @@ public class World {
     private int targetScore = 0;
     private float timer = 60f;
 
-    public World(Engine engine) {
+    public World(PooledEngine engine) {
         this.engine = engine;
         this.config = Configuration.getInstance();
         this.factory = new OceanEntityFactory(engine);

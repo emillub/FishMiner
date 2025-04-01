@@ -3,6 +3,7 @@ package com.github.FishMiner.ui;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Pool;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
@@ -41,7 +43,7 @@ import com.github.FishMiner.ui.controller.ScreenManager;
  * It also provides a full-width control window with a Menu button to open an overlay.
  */
 public class PlayScreen extends AbstractScreen {
-    private Engine engine;
+    private PooledEngine engine;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;

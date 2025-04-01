@@ -3,6 +3,7 @@ package com.github.FishMiner.domain.ecs.systems;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
@@ -21,12 +22,10 @@ import java.util.Map;
  */
 public class SpawningQueueSystem extends EntitySystem {
 
-    private Engine engine;
+    private PooledEngine engine;
     private float spawnTimer = 0f;
     private float spawnInterval;
     private Map<FishTypes, Float> spawnChances = new HashMap<>();
-    private int totalFishToSpawn = 0;
-    private int spawnedCount = 0;
     private IGameEntityFactory factory;
     private World world;
 
@@ -46,7 +45,7 @@ public class SpawningQueueSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        this.engine = engine;
+        this.engine = (PooledEngine) engine;
         this.factory = new OceanEntityFactory(this.engine);
     }
 
@@ -66,7 +65,7 @@ public class SpawningQueueSystem extends EntitySystem {
                     if (transformComponent != null) {
                         transformComponent.pos.x = MathUtils.random(Configuration.getInstance().getScreenWidth());
                     }
-                    getEngine().addEntity(fish);
+                    engine.addEntity(fish);
                 }
             }
             initialSpawnDone = true;
@@ -79,7 +78,7 @@ public class SpawningQueueSystem extends EntitySystem {
             FishTypes type = pickRandomFishType();
             if (type != null) {
                 Entity fish = factory.createFish(type, 1).get(0);
-                getEngine().addEntity(fish); // Add the spawned fish to the engine
+                engine.addEntity(fish);
             }
         }
     }
