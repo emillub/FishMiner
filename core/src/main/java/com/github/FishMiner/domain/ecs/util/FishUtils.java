@@ -45,7 +45,8 @@ public class FishUtils {
      * @return int[] where 0 = minY, 1 = maxY
      */
     public static int[] getDepthIntervalFor(int depthLevel) {
-        int spawnableOceanHeight = Configuration.getInstance().getOceanHeight() - 50;
+        Configuration config = Configuration.getInstance();
+        int spawnableOceanHeight = (int) ((float) config.getScreenHeight() * config.getOceanHeightPercentage());
         int depthLevels = Configuration.getInstance().getDepthLevels();
 
         int segmentHeight = spawnableOceanHeight / depthLevels;

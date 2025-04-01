@@ -22,7 +22,6 @@ public class FishMinerGame extends Game {
         this.leaderboard = leaderboard;
     }
 
-
     @Override
     public void create() {
         Configuration.getInstance().updateConfiguration();

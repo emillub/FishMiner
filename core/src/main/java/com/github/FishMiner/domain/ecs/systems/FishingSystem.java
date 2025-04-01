@@ -7,10 +7,10 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.domain.ecs.components.FishComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
@@ -20,24 +20,26 @@ import com.github.FishMiner.domain.listeners.IGameEventListener;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.HookStates;
 
-public class FishSystem extends EntitySystem implements IGameEventListener<FishHitEvent> {
+public class FishingSystem extends EntitySystem implements IGameEventListener<FishHitEvent> {
 
     private ComponentMapper<HookComponent> hookMapper = ComponentMapper.getFor(HookComponent.class);
-    private ComponentMapper<PositionComponent> posMapper = ComponentMapper.getFor(PositionComponent.class);
+    private ComponentMapper<TransformComponent> posMapper = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
+    private ComponentMapper<StateComponent> stateMapper = ComponentMapper.getFor(StateComponent.class);
+    private ComponentMapper<FishComponent> fishMapper = ComponentMapper.getFor(FishComponent.class);
 
     private Entity hookEntity;
 
     /**
      * must be added to GameEventBus
      */
-    public FishSystem() {
+    public FishingSystem() {
     }
 
     @Override
     public void addedToEngine(Engine engine) {
         ImmutableArray<Entity> hooks = engine.getEntitiesFor(
-            Family.all(HookComponent.class, PositionComponent.class).get()
+            Family.all(HookComponent.class, TransformComponent.class).get()
         );
         if (hooks.size() > 0) {
             hookEntity = hooks.first();
@@ -54,7 +56,7 @@ public class FishSystem extends EntitySystem implements IGameEventListener<FishH
         // Process the fish attached to the hook, if any.
         if (hook.hasAttachedEntity()) {
             Entity fishEntity = hook.attachedFishableEntity;
-            PositionComponent fishPos = posMapper.get(fishEntity);
+            TransformComponent fishPos = posMapper.get(fishEntity);
             RotationComponent fishRot = rotMapper.get(fishEntity);
             StateComponent<FishableObjectStates> fishState = fishEntity.getComponent(StateComponent.class);
             FishComponent fishComp = fishEntity.getComponent(FishComponent.class);
@@ -67,9 +69,11 @@ public class FishSystem extends EntitySystem implements IGameEventListener<FishH
 
             // 2. If the hook is REELING, update the fish's position relative to the hook.
             if (hookState.state == HookStates.REELING) {
-                Vector2 rotatedOffset = new Vector2(hook.offset).rotateRad(hook.swingAngle);
-                PositionComponent hookPos = posMapper.get(hookEntity);
-                fishPos.position.set(hookPos.position).add(rotatedOffset);
+                Vector3 rotatedOffset = new Vector3(hook.offset)
+                    .rotate(new Vector3(0, 0, 1), hook.swingAngle * MathUtils.radiansToDegrees);
+                TransformComponent hookPos = posMapper.get(hookEntity);
+                fishPos.pos.set(hookPos.pos).add(rotatedOffset);
+
                 if (fishRot != null) {
                     fishRot.angle = hook.swingAngle * MathUtils.radiansToDegrees;
                 }
@@ -94,7 +98,7 @@ public class FishSystem extends EntitySystem implements IGameEventListener<FishH
     public void onEvent(FishHitEvent event) {
         if (hookEntity == null) {
             ImmutableArray<Entity> hooks = getEngine().getEntitiesFor(
-                Family.all(HookComponent.class, PositionComponent.class).get()
+                Family.all(HookComponent.class, TransformComponent.class).get()
             );
             if (hooks.size() > 0) {
                 hookEntity = hooks.first();

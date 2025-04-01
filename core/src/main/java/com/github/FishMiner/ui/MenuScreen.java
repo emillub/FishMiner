@@ -23,7 +23,6 @@ public class MenuScreen extends AbstractScreen {
         Gdx.input.setInputProcessor(stage);
         FishMinerGame.playBackgroundMusic();
 
-
         Table rootTable = new Table();
         rootTable.setFillParent(true);
         rootTable.setDebug(true);
@@ -52,11 +51,23 @@ public class MenuScreen extends AbstractScreen {
             }
         });
 
+        //TO TEST
+        TextButton TEST = new TextButton("TEST", skin);
+        TEST.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().showLevelCompleteScreen(1,0);
+            }
+        });
+
+
         rootTable.add(loginButton).expand().fillX().fill().fillY();
         rootTable.row();
         rootTable.add(playButton).expand().fillX().fill().fillY();
         rootTable.row();
         rootTable.add(settingsButton).expand().fillX().fill().fillY();
+        rootTable.row();
+        rootTable.add(TEST).expand().fillX().fill().fillY();
     }
 
     @Override

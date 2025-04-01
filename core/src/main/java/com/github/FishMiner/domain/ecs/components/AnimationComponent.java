@@ -32,7 +32,6 @@ public class AnimationComponent implements Component {
      */
     public float timer = 0f;
 
-
     /**
      * Adds an animation to the component using a specific key. This method splits the provided
      * texture into frames based on the given state row, creates an animation with a fixed frame duration,
