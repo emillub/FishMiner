@@ -12,7 +12,9 @@ public class Lwjgl3Launcher {
     }
 
     private static Lwjgl3Application createApplication() {
-        return new Lwjgl3Application(new FishMinerGame(), getDefaultConfiguration());
+        DesktopLogInAPI desktopLogInAPI = new DesktopLogInAPI();
+        DesktopLeaderBoardAPI desktopLeaderBoardAPI = new DesktopLeaderBoardAPI();
+        return new Lwjgl3Application(new FishMinerGame(desktopLogInAPI, desktopLeaderBoardAPI), getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {

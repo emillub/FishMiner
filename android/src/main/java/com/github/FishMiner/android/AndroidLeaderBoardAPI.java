@@ -3,15 +3,15 @@ package com.github.FishMiner.android;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.FishMiner.data.ports.out.LeaderboardInterface;
+import com.github.FishMiner.data.ports.out.ILeaderBoardAPI;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-public class FirebaseLeaderboardHandlerAndroid implements LeaderboardInterface {
+public class AndroidLeaderBoardAPI implements ILeaderBoardAPI {
     private final FirebaseFirestore db;
 
-    public FirebaseLeaderboardHandlerAndroid() {
+    public AndroidLeaderBoardAPI() {
         db = FirebaseFirestore.getInstance();
     }
 
