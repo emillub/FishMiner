@@ -22,7 +22,7 @@ public class LevelConfigFactory {
             spawnChances.put(FishTypes.PINK_FISH, 0.4f);
             spawnChances.put(FishTypes.BLUE_FISH, 0.3f);
             spawnChances.put(FishTypes.GREEN_FISH, 0.2f);
-            spawnChances.put(FishTypes.RED_FISH, 0.3f);
+            spawnChances.put(FishTypes.YELLOW_BLUE_FISH, 0.3f);
             spawnChances.put(FishTypes.GRAY_ORANGE_FISH, 0.1f);
             numGarbage = 3;
         } else if (levelNumber >= 5) {
