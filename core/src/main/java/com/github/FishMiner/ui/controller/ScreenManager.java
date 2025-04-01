@@ -49,7 +49,7 @@ public class ScreenManager {
     public void startGamePressed() {
         // Handle game start logic here
         if (playScreen == null) {
-            playScreen = new PlayScreen(11, 0f);
+            playScreen = new PlayScreen(1, 0f);
         }
         game.setScreen(playScreen);
     }
