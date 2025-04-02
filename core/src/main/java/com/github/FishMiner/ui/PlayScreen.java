@@ -32,6 +32,7 @@ import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
 import com.github.FishMiner.domain.ecs.systems.FishingSystem;
 import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
+import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.level.LevelConfigFactory;
@@ -109,6 +110,7 @@ public class PlayScreen extends AbstractScreen {
         world = new World(engine);
         LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore());
         world.createLevel(config);
+        GameEventBus.getInstance().register(world);
     }
 
     private void setupInput() {
@@ -204,9 +206,6 @@ public class PlayScreen extends AbstractScreen {
         stage.addActor(pauseOverlay);
     }
 
-
-
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -266,13 +265,24 @@ public class PlayScreen extends AbstractScreen {
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new SpawningQueueSystem());
 
+
         FishingSystem fishSystem = new FishingSystem();
+      
+        // Registrer systems that are also listeners
+        GameEventBus eventBus = GameEventBus.getInstance();
+
+        ScoreSystem scoreSystem = new ScoreSystem();
+        engine.addSystem(scoreSystem);
+        eventBus.register(scoreSystem);
+
+        FishingSystem fishSystem =  new FishingSystem();
+
         engine.addSystem(fishSystem);
-        GameEventBus.getInstance().register(fishSystem);
+        eventBus.register(fishSystem);
 
         HookInputSystem hookInputSystem = new HookInputSystem();
         engine.addSystem(hookInputSystem);
-        GameEventBus.getInstance().register(hookInputSystem);
+        eventBus.register(hookInputSystem);
 
         if (Configuration.getInstance().isDebugMode()) {
             engine.addSystem(new DebugRenderingSystem());
