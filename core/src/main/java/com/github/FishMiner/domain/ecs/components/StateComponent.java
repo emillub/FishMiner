@@ -15,4 +15,8 @@ public class StateComponent<T extends Enum<T>> implements Component {
         }
         return state;
     }
+
+    public String getAnimationKey() {
+        return state.toString();
+    }
 }

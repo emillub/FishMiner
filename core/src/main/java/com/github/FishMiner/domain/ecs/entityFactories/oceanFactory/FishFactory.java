@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.Configuration;
+import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
@@ -20,7 +21,7 @@ import com.github.FishMiner.domain.ecs.util.FishUtils;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 
 public class FishFactory {
-
+    private static final String TAG = "FishFactory";
     public static final int EURO_FACTOR = 10;
     private final PooledEngine engine;
 
@@ -91,10 +92,11 @@ public class FishFactory {
         attachment.offset.x = 10;
 
         state.changeState(FishableObjectStates.FISHABLE);
+
         animation.addAnimation(FishableObjectStates.FISHABLE.getAnimationKey(), texture, 0);
-        animation.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), texture, 0, Animation.PlayMode.NORMAL);
-        animation.addAnimation(FishableObjectStates.REELING.getAnimationKey(), texture, 0);
-        animation.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
+        animation.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), texture, 1, Animation.PlayMode.NORMAL);
+        Logger.getInstance().debug(TAG, "Added animationKey: " + FishableObjectStates.HOOKED.getAnimationKey());
+        animation.addAnimation(FishableObjectStates.REELING.getAnimationKey(), texture, 1);
 
         fish.add(transform);
         fish.add(texture);

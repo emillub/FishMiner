@@ -71,11 +71,8 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
             FishComponent fishComp = fishMapper.get(fishEntity);
 
 
-            // 1. If the hook is in FIRE state and the fish is FISHABLE, then hook it.
-            if (hookState.state == HookStates.FIRE && fishState.state == FishableObjectStates.FISHABLE) {
-                fishState.changeState(FishableObjectStates.HOOKED);
-                hookState.changeState(HookStates.REELING);
-            }
+            fishState.changeState(FishableObjectStates.HOOKED);
+
 
             // 2. If the hook is REELING, update the fish's position relative to the hook.
             if (hookState.state == HookStates.REELING) {
@@ -93,6 +90,7 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
             if (hookState.state == HookStates.RETURNED) {
                 if (fishComp != null) {
                     fishState.changeState(FishableObjectStates.CAPTURED);
+                    Logger.getInstance().debug(TAG, "FishState was changed to CAPTURED");
                     Entity playerParent = hookParent.getParent();
                     GameEventBus.getInstance().post(new FishCapturedEvent(fishEntity, playerParent));
                     fishEntity.remove(VelocityComponent.class); // this fish are no longer processed by MovementSystem
@@ -106,6 +104,7 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
 
     @Override
     public void onEvent(FishHitEvent event) {
+        Logger.getInstance().log(TAG, "FishHitEvent arrived");
         if (event.isHandled()) {
             return;
         }
@@ -123,6 +122,8 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
             HookComponent hook = hookMapper.get(hookEntity);
             if (hook.attachedFishableEntity == null) {
                 hook.attachedFishableEntity = event.getTarget();
+                StateComponent<FishableObjectStates> fishState = stateMapper.get(event.getTarget());
+                fishState.changeState(FishableObjectStates.HOOKED);
                 event.setHandled();
                 Logger.getInstance().log(TAG, "Fish hit processed: attached fish " + event.getTarget());
             }

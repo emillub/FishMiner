@@ -82,7 +82,7 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
             Vector3 target = new Vector3(
                 playerPos.pos.x,
                 playerPos.pos.y - 50,
-                playerPos.pos.z - 1);
+                playerPos.pos.z);
 
             Vector3 start = new Vector3(fishPos.pos);
 
@@ -92,7 +92,7 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
             float x = start.x + t * (target.x - start.x);
             float y = start.y + t * (target.y - start.y) + ARC_HEIGHT * (1 - t) * t; // the arc movment is calcd here
 
-            fishPos.pos.set(x, y, 0);
+            fishPos.pos.set(x, y, target.z - 1);
 
             entry.flyTime += deltaTime;
             // At end of animation, award points and dispose fish

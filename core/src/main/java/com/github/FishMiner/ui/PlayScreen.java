@@ -19,8 +19,10 @@ import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
+import com.github.FishMiner.domain.ecs.systems.BackgroundRenderSystem;
 import com.github.FishMiner.domain.ecs.systems.FishingSystem;
 import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
+import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
 import com.github.FishMiner.domain.level.LevelConfig;
@@ -104,14 +106,13 @@ public class PlayScreen extends AbstractScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        cam.update();
+        float score = world.getScore();
 
-        world.update(delta);
-
-        drawBackground();
 
         batch.begin();
         font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() - 10);
-        font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() - 40);
+        font.draw(batch, "Score: " + (int) score + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() - 40);
         batch.end();
 
         // If the game is lost and the overlay hasn't been added yet, create it
@@ -132,33 +133,7 @@ public class PlayScreen extends AbstractScreen {
         stage.act(delta);
         engine.update(delta);
         stage.draw();
-
-    }
-    private void drawBackground() {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        // Draw the ocean background (light sky blue)
-        shapeRenderer.setColor(0.5f, 0.8f, 1f, 1f);
-        shapeRenderer.rect(
-            0,
-            Configuration.getInstance().getOceanHeight(),
-            Configuration.getInstance().getScreenWidth(),
-            Configuration.getInstance().getScreenHeight() - Configuration.getInstance().getOceanHeight());
-
-        // Draw depth levels as darker shades
-        int levels = Configuration.getInstance().getDepthLevels();
-        int levelHeight = Configuration.getInstance().getOceanHeight() / levels;
-        for (int i = 0; i < levels; i++) {
-            float shade = 0.2f + (i * 0.15f);
-            shapeRenderer.setColor(0f, 0f, shade, 1f);
-            shapeRenderer.rect(
-                0,
-                i * levelHeight,
-                Configuration.getInstance().getScreenWidth(),
-                levelHeight
-            );
-        }
-        shapeRenderer.end();
+        world.update(delta);
     }
 
     @Override
@@ -169,14 +144,17 @@ public class PlayScreen extends AbstractScreen {
     }
 
     private void addSystemTo(Engine engine) {
-        // Add ECS systems
+        engine.addSystem(new BackgroundRenderSystem(shapeRenderer));
         engine.addSystem(new AnimationSystem());
+        RenderingSystem renderingSystem = new RenderingSystem(batch);
+        cam = renderingSystem.getCam();
+        engine.addSystem(renderingSystem);
         engine.addSystem(new MovementSystem());
-        engine.addSystem(new RenderingSystem(batch));
         engine.addSystem(new HookSystem());
         engine.addSystem(new PhysicalSystem());
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new SpawningQueueSystem());
+        engine.addSystem(new RotationSystem());
 
         // Registrer systems that are also listeners
         GameEventBus eventBus = GameEventBus.getInstance();

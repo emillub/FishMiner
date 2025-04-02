@@ -26,6 +26,7 @@ public class AnimationComponent implements Component {
      * The current active animation for the entity.
      */
     public Animation<TextureRegion> currentAnimation;
+    public String currentAnimationKey;
 
     /**
      * Timer to track the elapsed time used for animation frame selection.
@@ -94,7 +95,11 @@ public class AnimationComponent implements Component {
     public void setCurrentAnimation(String key) {
         if (animations.containsKey(key)) {
             currentAnimation = animations.get(key);
+            currentAnimationKey = key;
             timer = 0f;
         }
+    }
+    public String getCurrentAnimationKey() {
+        return currentAnimationKey != null ? currentAnimationKey : "UNKNOWN";
     }
 }

@@ -103,7 +103,7 @@ public class HookSystem extends IteratingSystem {
             if (hookPos.pos.dst(hook.anchorPoint) >= hook.reelLength || hook.attachedFishableEntity != null) {
                 hookState.changeState(HookStates.REELING);
                 if (hook.hasAttachedEntity()) {
-                  System.out.println("Returning: Fish caught");
+                  Logger.getInstance().log(TAG, "Hoos has attached entity: " + hook.attachedFishableEntity.toString());
                 }
             } else {
                 hookVel.velocity.set(hook.sinkerWeight, hook.sinkerWeight).setAngleDeg(hookRot.angle - 90);

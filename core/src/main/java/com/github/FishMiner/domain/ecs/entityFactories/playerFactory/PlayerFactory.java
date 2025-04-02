@@ -37,7 +37,7 @@ public class PlayerFactory {
         textureComponent.setRegion("fisherman.png");
         transformComponent.pos.x = posX;
         transformComponent.pos.y = posY + textureComponent.getFrameHeight() * 0.3f;
-        transformComponent.pos.z = 1f;
+        transformComponent.pos.z = 1;
 
         playerComponent.hookAnchorPoint.x = transformComponent.pos.x + textureComponent.getFrameWidth() * 0.5f;
         playerComponent.hookAnchorPoint.y = transformComponent.pos.y + textureComponent.getFrameHeight() * 0.5f;
@@ -71,12 +71,16 @@ public class PlayerFactory {
 
         textureComponent.setRegion("hook_1cols_1rows.png");
 
+
         stateComponent.changeState(HookStates.SWINGING);
         velocityComponent.velocity = new Vector2(0, 0);
 
         attachmentComponent.setParentEntity(player);
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+        TransformComponent playerPos = player.getComponent(TransformComponent.class);
+
         hookComponent.anchorPoint.set(playerComponent.hookAnchorPoint);
+        transformComponent.pos.z = playerPos.pos.z + 1;
 
         boundsComponent.bounds.setPosition(
             transformComponent.pos.x - boundsComponent.bounds.width * 0.5f,

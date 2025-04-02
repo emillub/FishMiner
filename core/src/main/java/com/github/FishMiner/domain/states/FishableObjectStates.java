@@ -1,14 +1,16 @@
 package com.github.FishMiner.domain.states;
 
+import com.github.FishMiner.Logger;
+
 public enum FishableObjectStates implements IState {
-    FISHABLE("fishable"),
-    HOOKED("hooked"),
-    REELING("reeling"),
-    CAPTURED("captured"),
+    FISHABLE("FISHABLE"),
+    HOOKED("HOOKED"),
+    REELING("REELING"),
+    CAPTURED("CAPTURED"),
 
     // Shark stuff:
-    ATTACKING("attacking"),
-    LEAVING("leaving");
+    ATTACKING("ATTACKING"),
+    LEAVING("LEAVING");
 
     private final String animationKey;
 
