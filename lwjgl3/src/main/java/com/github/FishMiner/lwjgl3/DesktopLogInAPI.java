@@ -1,7 +1,7 @@
 package com.github.FishMiner.lwjgl3;
 
-import com.github.FishMiner.data.ports.out.FirebaseAuthCallback;
-import com.github.FishMiner.data.ports.out.ILogInAPI;
+import com.github.FishMiner.data.services.FirebaseAuthCallback;
+import com.github.FishMiner.data.services.ILogInAPI;
 
 public class DesktopLogInAPI implements ILogInAPI {
     @Override

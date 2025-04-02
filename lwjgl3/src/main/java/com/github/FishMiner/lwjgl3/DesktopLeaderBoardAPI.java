@@ -1,10 +1,8 @@
 package com.github.FishMiner.lwjgl3;
 
-import com.github.FishMiner.data.ports.out.ILeaderBoardAPI;
+import com.github.FishMiner.data.services.ILeaderBoardService;
 
-public class DesktopLeaderBoardAPI implements ILeaderBoardAPI {
-    @Override
-    public void submitScore(String username, int score){}
+public class DesktopLeaderBoardAPI implements ILeaderBoardService {
     @Override
     public void getTopScores(){}
 }

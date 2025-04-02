@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.github.FishMiner.data.ports.out.FirebaseAuthCallback;
+import com.github.FishMiner.data.services.FirebaseAuthCallback;
 import com.github.FishMiner.ui.controller.ScreenManager;
 
 

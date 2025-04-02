@@ -1,4 +1,4 @@
-package com.github.FishMiner.data.ports.out;
+package com.github.FishMiner.data.services;
 
 public interface ILogInAPI {
     void login(String email, String password, FirebaseAuthCallback callback);
