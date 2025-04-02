@@ -76,6 +76,8 @@ public class World implements IGameEventListener<ScoreEvent> {
     }
 
     public void update(float deltaTime) {
+        if (state == WorldState.PAUSED){return;}
+
         if (state == WorldState.RUNNING) {
             timer -= deltaTime;
             if (timer <= 0) {
@@ -90,8 +92,21 @@ public class World implements IGameEventListener<ScoreEvent> {
             }
         }
     }
+
     public float getTimer() {
         return timer;
+    }
+
+    public boolean isPaused() {
+        return state == WorldState.PAUSED;
+    }
+
+    public void togglePause() {
+        if (state == WorldState.PAUSED) {
+            state = WorldState.RUNNING;
+        } else if (state == WorldState.RUNNING) {
+            state = WorldState.PAUSED;
+        }
     }
 
     @Override
