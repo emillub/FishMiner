@@ -5,12 +5,15 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
+import com.github.FishMiner.Logger;
+import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
+import com.github.FishMiner.domain.ecs.components.WeightComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
@@ -28,12 +31,14 @@ import com.github.FishMiner.domain.states.HookStates;
  * already updated by your MovementSystem and RotationSystem.
  */
 public class HookSystem extends IteratingSystem {
+    private static final String TAG = "HookSystem";
     private ComponentMapper<HookComponent> hm = ComponentMapper.getFor(HookComponent.class);
     private ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
     private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
     private ComponentMapper<StateComponent> sm = ComponentMapper.getFor(StateComponent.class);
     private ComponentMapper<BoundsComponent> bm = ComponentMapper.getFor(BoundsComponent.class);
+    private ComponentMapper<AttachmentComponent> am = ComponentMapper.getFor(AttachmentComponent.class);
 
     private float initialPosition;
     private float time; // time accumulator to drive the swinging oscillation
@@ -122,14 +127,10 @@ public class HookSystem extends IteratingSystem {
         }
 
         if (hookState.state == HookStates.RETURNED) {
-            if (hook.hasAttachedEntity()) {
-                StateComponent<FishableObjectStates> attachedState = hook.attachedFishableEntity.getComponent(StateComponent.class);
-                attachedState.changeState(FishableObjectStates.CAPTURED);
-                GameEventBus.getInstance().post(new FishCapturedEvent(hook.attachedFishableEntity));
-            }
-            else {
+            if (!hook.hasAttachedEntity()) {
                 hookState.changeState(HookStates.SWINGING);
             }
+
         }
     }
 }

@@ -22,6 +22,11 @@ public class EntityEvent {
         this.handled = false;
     }
 
+    public EntityEvent(Entity target, Entity source) {
+        this(target);
+        this.source = source;
+    }
+
     public boolean isHandled() {
         return handled;
     }

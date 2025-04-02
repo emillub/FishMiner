@@ -1,5 +1,6 @@
 package com.github.FishMiner.domain.ecs.systems;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
@@ -19,7 +20,14 @@ import com.github.FishMiner.domain.listeners.IGameEventListener;
 public class ScoreSystem extends EntitySystem implements IGameEventListener<FishCapturedEvent> {
     private final static String TAG = "ScoreSystem";
     private static final float FLY_DURATION = 1.0f;
+    private static final float ARC_HEIGHT = 50f;
 
+    private final ComponentMapper<ScoreComponent> sm = ComponentMapper.getFor(ScoreComponent.class);
+    private final ComponentMapper<TransformComponent> tm = ComponentMapper.getFor(TransformComponent.class);
+    private final ComponentMapper<FishComponent> fm = ComponentMapper.getFor(FishComponent.class);
+
+
+    private final Array<FishScoreData> capturedQueue = new Array<>();
     private static class FishScoreData {
         Entity player;
         Entity fishableObject;
@@ -27,19 +35,18 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
         boolean scoreSent;
     }
 
-    FishCapturedEvent event;
-    private final Array<FishScoreData> capturedQueue = new Array<>();
-
     public ScoreSystem() {
         Family.all(FishComponent.class, StateComponent.class).get();
-        super.setProcessing(true);
+        super.setProcessing(false);
     }
 
     @Override
     public void onEvent(FishCapturedEvent event) {
+        setProcessing(true);
         if (event.isHandled()) return;
 
         Entity scoringPlayer = event.getSource();
+
         Entity capturedFish = event.getTarget();
 
         try {
@@ -61,41 +68,51 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
     public void update(float deltaTime) {
         for (int i = 0; i < capturedQueue.size; i++) {
             FishScoreData entry = capturedQueue.get(i);
-            Entity fish = entry.fishableObject;
+            Entity fishedEntity = entry.fishableObject;
 
-            TransformComponent fishPos = fish.getComponent(TransformComponent.class);
+            TransformComponent fishPos = tm.get(fishedEntity);
             if (fishPos == null) {
                 Logger.getInstance().debug(TAG, "fishPos was missing TransformComponent");
-            }
-            ;
+            };
 
             // Send fish flying into the boat
             Entity player = entry.player;
 
-            TransformComponent playerPos = player.getComponent(TransformComponent.class);
-            Vector3 boatPos = new Vector3(playerPos.pos.x, playerPos.pos.y, 2);
+            TransformComponent playerPos = tm.get(player);
+            Vector3 target = new Vector3(
+                playerPos.pos.x,
+                playerPos.pos.y - 50,
+                playerPos.pos.z - 1);
+
             Vector3 start = new Vector3(fishPos.pos);
 
             float t = entry.flyTime / FLY_DURATION;
             t = Math.min(t, 1f);
 
-            float x = start.x + t * (boatPos.x - start.x);
-            float y = start.y + t * (boatPos.y - start.y) + 50 * (1 - t) * t; // the arc movment is calcd here
+            float x = start.x + t * (target.x - start.x);
+            float y = start.y + t * (target.y - start.y) + ARC_HEIGHT * (1 - t) * t; // the arc movment is calcd here
+
+            fishPos.pos.set(x, y, 0);
 
             entry.flyTime += deltaTime;
             // At end of animation, award points and dispose fish
             if (entry.flyTime >= FLY_DURATION && !entry.scoreSent) {
-                FishComponent fishComp = fish.getComponent(FishComponent.class);
-                ScoreComponent score = entry.player.getComponent(ScoreComponent.class);
+                FishComponent fishComp = fm.get(fishedEntity);
+                ScoreComponent score = sm.get(player);
 
                 if (fishComp != null && score != null) {
-                    GameEventBus.getInstance().post(new ScoreEvent(fishComp.getValue()));
+                    score.score += fishComp.getValue();
                     entry.scoreSent = true;
+                    GameEventBus.getInstance().post(new ScoreEvent(fishComp.getValue()));
                 }
-
-                getEngine().removeEntity(fish);
+                if (!fishedEntity.isScheduledForRemoval()) {
+                    getEngine().removeEntity(fishedEntity);
+                }
                 capturedQueue.removeIndex(i--); // Maintain index after removal
             }
+        }
+        if (capturedQueue.size <= 0) {
+            setProcessing(false);
         }
     }
 
