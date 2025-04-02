@@ -21,6 +21,7 @@ import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
 import com.github.FishMiner.domain.ecs.systems.FishingSystem;
 import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
+import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.level.LevelConfigFactory;
@@ -77,6 +78,7 @@ public class PlayScreen extends AbstractScreen {
         world = new World(engine);
         LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore());
         world.createLevel(config);
+        GameEventBus.getInstance().register(world);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -174,17 +176,22 @@ public class PlayScreen extends AbstractScreen {
         engine.addSystem(new HookSystem());
         engine.addSystem(new PhysicalSystem());
         engine.addSystem(new CollisionSystem());
+        engine.addSystem(new SpawningQueueSystem());
 
-        SpawningQueueSystem spawningSystem = new SpawningQueueSystem();
-        engine.addSystem(spawningSystem);
+        // Registrer systems that are also listeners
+        GameEventBus eventBus = GameEventBus.getInstance();
+
+        ScoreSystem scoreSystem = new ScoreSystem();
+        engine.addSystem(scoreSystem);
+        eventBus.register(scoreSystem);
 
         FishingSystem fishSystem =  new FishingSystem();
         engine.addSystem(fishSystem);
-        GameEventBus.getInstance().register(fishSystem);
+        eventBus.register(fishSystem);
 
         HookInputSystem hookInputSystem = new HookInputSystem();
         engine.addSystem(hookInputSystem);
-        GameEventBus.getInstance().register(hookInputSystem);
+        eventBus.register(hookInputSystem);
 
         if (Configuration.getInstance().isDebugMode()) {
             // toggle Debug Mode in Configuration

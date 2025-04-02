@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.github.FishMiner.domain.ecs.components.*;
 
+import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
 import com.github.FishMiner.domain.states.HookStates;
 
 public class PlayerFactory {
@@ -28,14 +29,15 @@ public class PlayerFactory {
     private static Entity createPlayerEntity(PooledEngine engine, int posX, int posY) {
         Entity player = engine.createEntity();
 
-        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
+        ScoreComponent scoreComponent = engine.createComponent(ScoreComponent.class);
 
         textureComponent.setRegion("fisherman.png");
         transformComponent.pos.x = posX;
         transformComponent.pos.y = posY + textureComponent.getFrameHeight() * 0.3f;
-        transformComponent.pos.z = 0f;
+        transformComponent.pos.z = 1f;
 
         playerComponent.hookAnchorPoint.x = transformComponent.pos.x + textureComponent.getFrameWidth() * 0.5f;
         playerComponent.hookAnchorPoint.y = transformComponent.pos.y + textureComponent.getFrameHeight() * 0.5f;
@@ -68,11 +70,11 @@ public class PlayerFactory {
         AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
 
         textureComponent.setRegion("hook_1cols_1rows.png");
-        hook.add(rotationComponent);
 
         stateComponent.changeState(HookStates.SWINGING);
         velocityComponent.velocity = new Vector2(0, 0);
 
+        attachmentComponent.setParentEntity(player);
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
         hookComponent.anchorPoint.set(playerComponent.hookAnchorPoint);
 
@@ -89,6 +91,7 @@ public class PlayerFactory {
         hook.add(textureComponent);
         hook.add(hookComponent);
         hook.add(transformComponent);
+        hook.add(rotationComponent);
         hook.add(velocityComponent);
         hook.add(stateComponent);
         hook.add(attachmentComponent);
