@@ -15,8 +15,6 @@ import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.components.WeightComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
-import com.github.FishMiner.domain.events.GameEventBus;
-import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.HookStates;
 
