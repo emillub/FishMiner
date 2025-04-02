@@ -266,8 +266,6 @@ public class PlayScreen extends AbstractScreen {
         engine.addSystem(new SpawningQueueSystem());
 
 
-        FishingSystem fishSystem = new FishingSystem();
-      
         // Registrer systems that are also listeners
         GameEventBus eventBus = GameEventBus.getInstance();
 
@@ -275,8 +273,8 @@ public class PlayScreen extends AbstractScreen {
         engine.addSystem(scoreSystem);
         eventBus.register(scoreSystem);
 
-        FishingSystem fishSystem =  new FishingSystem();
 
+        FishingSystem fishSystem =  new FishingSystem();
         engine.addSystem(fishSystem);
         eventBus.register(fishSystem);
 
