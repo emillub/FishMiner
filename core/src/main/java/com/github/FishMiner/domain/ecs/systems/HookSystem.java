@@ -12,6 +12,8 @@ import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
+import com.github.FishMiner.domain.events.GameEventBus;
+import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.HookStates;
 
@@ -25,7 +27,7 @@ import com.github.FishMiner.domain.states.HookStates;
  * Note: This system relies on the PositionComponent (and optionally RotationComponent)
  * already updated by your MovementSystem and RotationSystem.
  */
-public class HookSystem extends IteratingSystem{
+public class HookSystem extends IteratingSystem {
     private ComponentMapper<HookComponent> hm = ComponentMapper.getFor(HookComponent.class);
     private ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
@@ -117,16 +119,13 @@ public class HookSystem extends IteratingSystem{
             } else {
                 hookState.changeState(HookStates.RETURNED);
             }
-            //if (hookPos.position == hook.anchorPoint) {
-            //    hookState.changeState(HookStates.RETURNED);
-            //}
-
         }
 
         if (hookState.state == HookStates.RETURNED) {
             if (hook.hasAttachedEntity()) {
                 StateComponent<FishableObjectStates> attachedState = hook.attachedFishableEntity.getComponent(StateComponent.class);
                 attachedState.changeState(FishableObjectStates.CAPTURED);
+                GameEventBus.getInstance().post(new FishCapturedEvent(hook.attachedFishableEntity));
             }
             else {
                 hookState.changeState(HookStates.SWINGING);

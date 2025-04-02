@@ -12,16 +12,22 @@ public class EntityEvent {
 
     private Entity source;
 
+    /**
+     * Sets the event target and handled status by default
+     * Handled indicates whether this event has been processed
+     * @param target the relevant entity for this event
+     */
     public EntityEvent(Entity target) {
         this.target = target;
+        this.handled = false;
     }
 
     public boolean isHandled() {
         return handled;
     }
 
-    public void setHandled(boolean handled) {
-        this.handled = handled;
+    public void setHandled() {
+        this.handled = true;
     }
 
     public Entity getTarget() {

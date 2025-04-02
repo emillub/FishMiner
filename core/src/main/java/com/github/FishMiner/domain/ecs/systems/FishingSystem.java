@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.components.FishComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
@@ -21,7 +22,7 @@ import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.HookStates;
 
 public class FishingSystem extends EntitySystem implements IGameEventListener<FishHitEvent> {
-
+    public static final String TAG = "FishingSystem";
     private ComponentMapper<HookComponent> hookMapper = ComponentMapper.getFor(HookComponent.class);
     private ComponentMapper<TransformComponent> posMapper = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
@@ -96,6 +97,9 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
 
     @Override
     public void onEvent(FishHitEvent event) {
+        if (event.isHandled()) {
+            return;
+        }
         if (hookEntity == null) {
             ImmutableArray<Entity> hooks = getEngine().getEntitiesFor(
                 Family.all(HookComponent.class, TransformComponent.class).get()
@@ -110,7 +114,9 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
             HookComponent hook = hookMapper.get(hookEntity);
             if (hook.attachedFishableEntity == null) {
                 hook.attachedFishableEntity = event.getTarget();
-                System.out.println("Fish hit processed: attached fish " + event.getTarget());
+                event.setHandled();
+                Logger.getInstance().log(TAG, "Fish hit processed: attached fish " + event.getTarget());
+                System.out.println();
             }
         }
     }
