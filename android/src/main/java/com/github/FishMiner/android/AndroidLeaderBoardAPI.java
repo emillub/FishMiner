@@ -8,7 +8,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AndroidLeaderBoardAPI implements ILeaderBoardService {
     private final FirebaseFirestore db;
@@ -38,5 +40,17 @@ public class AndroidLeaderBoardAPI implements ILeaderBoardService {
                     callback.onFailure(task.getException().getMessage());
                 }
             });
+    }
+    public void submitScore(String username, int score, LeaderboardCallback callback) {
+        Map<String, Object> scoreEntry = new HashMap<>();
+        scoreEntry.put("username", username);
+        scoreEntry.put("score", score);
+
+        db.collection("LeaderBoard")
+            .add(scoreEntry)  // Firestore automatically generates a unique document ID
+            .addOnSuccessListener(documentReference ->
+                System.out.println("Score added with ID: " + documentReference.getId()))
+            .addOnFailureListener(e ->
+                System.err.println("Error adding score: " + e.getMessage()));
     }
 }

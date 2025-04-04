@@ -19,7 +19,6 @@ public class AndroidLauncher extends AndroidApplication {
 
         AndroidLogInAPI firebaseHandlerAndroid = new AndroidLogInAPI();
         AndroidLeaderBoardAPI leaderboardHandler = new AndroidLeaderBoardAPI();
-        FirebaseHighscoreService highscoreService = new FirebaseHighscoreService();
         initialize(new FishMinerGame(firebaseHandlerAndroid, leaderboardHandler), configuration);
     }
 }

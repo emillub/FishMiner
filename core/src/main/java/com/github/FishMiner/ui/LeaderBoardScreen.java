@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
@@ -18,6 +19,9 @@ import java.util.List;
 public class LeaderBoardScreen extends AbstractScreen {
 
     private Table scoreTable;
+    private TextField usernameField;
+    private TextField scoreField;
+    private Label statusLabel;
 
     public LeaderBoardScreen() {
         super();
@@ -33,11 +37,23 @@ public class LeaderBoardScreen extends AbstractScreen {
         stage.addActor(rootTable);
 
         Label titleLabel = new Label("Leaderboard", skin);
-        rootTable.add(titleLabel).expand().center().padBottom(20);
-        rootTable.row();
+        //rootTable.add(titleLabel).expand().center().padBottom(20);
+
+        usernameField = new TextField("", skin);
+        usernameField.setMessageText("Enter username");
+
+        scoreField = new TextField("", skin);
+        scoreField.setMessageText("Enter score");
+
+        TextButton submitButton = new TextButton("Submit Score", skin);
+        submitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                submitScore();
+            }
+        });
 
         scoreTable = new Table();
-        rootTable.add(scoreTable).expand().fill().padTop(20);
 
         fetchTopScores(); // Fetch scores when screen shows
 
@@ -48,9 +64,23 @@ public class LeaderBoardScreen extends AbstractScreen {
                 ScreenManager.getInstance().showMenu();
             }
         });
+        statusLabel = new Label("", skin);
 
+        Table inputTable = new Table();
+        inputTable.add(new Label("Username:", skin)).padRight(10);
+        inputTable.add(usernameField).width(150);
+        inputTable.row().padTop(10);
+        inputTable.add(new Label("Score:", skin)).padRight(10);
+        inputTable.add(scoreField).width(150);
+        inputTable.row().padTop(10);
+        inputTable.add(submitButton).colspan(2).center();
+        inputTable.row().padTop(10);
+        inputTable.add(statusLabel).colspan(2).center();
+
+        rootTable.add(inputTable).expand().fillX().fill().fillY();
         rootTable.row();
-        rootTable.add(backButton).expandX().fillX().padTop(20);
+        rootTable.add(scoreTable).expand().fillX().fill().fillY();
+        rootTable.row();
     }
 
     private void fetchTopScores() {
@@ -78,6 +108,41 @@ public class LeaderBoardScreen extends AbstractScreen {
             scoreTable.row().height(50);
             scoreTable.add(new Label(entry.getUsername(), skin)).left().pad(5);
             scoreTable.add(new Label(String.valueOf(entry.getScore()), skin)).right().pad(5);
+        }
+    }
+    private void submitScore() {
+        FishMinerGame game = ScreenManager.getInstance().getGame();
+        ILeaderBoardService leaderboard = game.getLeaderboard();
+
+        String username = usernameField.getText();
+        String scoreText = scoreField.getText();
+
+        if (username.isEmpty() || scoreText.isEmpty()) {
+            statusLabel.setText("Fields cannot be empty!");
+            return;
+        }
+
+        try {
+            int score = Integer.parseInt(scoreText);
+            leaderboard.submitScore(username, score, new LeaderboardCallback() {
+                @Override
+                public void onSuccess(List<Score> scores) {
+                    Gdx.app.postRunnable(() -> {
+                        fetchTopScores();
+                    });
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Gdx.app.postRunnable(() -> statusLabel.setText("Failed to submit score!"));
+                }
+            });
+
+            statusLabel.setText("Score submitted successfully!");
+            usernameField.setText(""); // Clear input
+            scoreField.setText("");
+        } catch (NumberFormatException e) {
+            statusLabel.setText("Invalid score! Must be a number.");
         }
     }
 
