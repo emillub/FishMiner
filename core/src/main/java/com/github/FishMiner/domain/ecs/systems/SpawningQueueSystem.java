@@ -7,36 +7,53 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.MathUtils;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
+import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.OceanEntityFactory;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.World;
 import com.github.FishMiner.domain.states.WorldState;
+import com.github.FishMiner.domain.ecs.entityFactories.GarbageTypes;
 
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * SpawningSystem is responsible for spawning fish entities at a set interval.
+ * SpawningSystem is responsible for spawning fish entities at even intervals,
+ * based on a finite pre-planned list of fish.
  */
+
 public class SpawningQueueSystem extends EntitySystem {
 
     private PooledEngine engine;
-    private float spawnTimer = 0f;
-    private float spawnInterval;
-    private Map<FishTypes, Float> spawnChances = new HashMap<>();
     private IGameEntityFactory factory;
     private World world;
+
+    private float spawnTimer = 0f;
+    private float spawnInterval = 1f;
 
     private boolean initialSpawnDone = false;
     private int initialFishCount = 0;
 
+    private int numGarbage = 0;
+
+    private List<FishTypes> plannedFish = new ArrayList<>();
+    private int spawnedCount = 0;
+
+    private final float LEVEL_DURATION = 60f;
+
     public void configureFromLevel(LevelConfig config) {
-        this.spawnInterval = config.getSpawnInterval();
-        this.spawnChances = config.getSpawnChances();
         this.initialFishCount = config.getInitialFishCount();
-        initialSpawnDone = false;
+        this.plannedFish = new ArrayList<>(config.getPlannedFish());
+        Collections.shuffle(this.plannedFish); // if you want some randomness
+        this.spawnedCount = 0;
+        this.spawnTimer = 0f;
+        this.spawnInterval = LEVEL_DURATION / Math.max(plannedFish.size(), 1); // avoid divide by zero
+        this.initialSpawnDone = false;
+        this.numGarbage = config.getNumGarbage();
     }
 
     public void setWorld(World world) {
@@ -51,45 +68,74 @@ public class SpawningQueueSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        if (world != null && world.getState() != WorldState.RUNNING) {
+        if (world == null || world.getState() != WorldState.RUNNING) {
             return;
         }
 
         if (!initialSpawnDone) {
-            for (int i = 0; i < initialFishCount; i++) {
-                FishTypes type = pickRandomFishType();
-                if (type != null) {
-                    Entity fish = factory.createFish(type, 1).get(0);
-                    // Adjust the fish's x-position to be within the screen bounds
-                    TransformComponent transformComponent = fish.getComponent(TransformComponent.class);
-                    if (transformComponent != null) {
-                        transformComponent.pos.x = MathUtils.random(Configuration.getInstance().getScreenWidth());
-                    }
-                    engine.addEntity(fish);
-                }
-            }
+            spawnInitialFish();
             initialSpawnDone = true;
         }
 
+        // Timed spawning of remaining fish
         spawnTimer += deltaTime;
-
-        if (spawnTimer >= spawnInterval * 3) {
-            spawnTimer = 0f; // Reset the timer
-            FishTypes type = pickRandomFishType();
-            if (type != null) {
-                Entity fish = factory.createFish(type, 1).get(0);
-                engine.addEntity(fish);
-            }
+        if (spawnedCount < plannedFish.size() && spawnTimer >= spawnInterval) {
+            spawnTimer = 0f;
+            spawnNextFish();
         }
     }
 
-    private FishTypes pickRandomFishType() {
-        float roll = MathUtils.random();
-        float cumulative = 0f;
-        for (Map.Entry<FishTypes, Float> entry : spawnChances.entrySet()) {
-            cumulative += entry.getValue();
-            if (roll <= cumulative) return entry.getKey();
+    private void spawnInitialFish() {
+        float screenWidth = Configuration.getInstance().getScreenWidth();
+        float margin = 20f;
+
+        for (int i = 0; i < initialFishCount && i < plannedFish.size(); i++) {
+            FishTypes type = plannedFish.get(i);
+            Entity fish = factory.createFish(type, 1).get(0);
+
+            TransformComponent transform = fish.getComponent(TransformComponent.class);
+            if (transform != null) {
+                float fishWidth = fish.getComponent(com.github.FishMiner.domain.ecs.components.FishComponent.class).width;
+                float minX = margin;
+                float maxX = screenWidth - fishWidth - margin;
+                transform.pos.x = MathUtils.random(minX, maxX);
+            }
+
+            engine.addEntity(fish);
+            spawnedCount++;
         }
-        return null;
+
+        // Spawn garbage
+        for (int i = 0; i < numGarbage; i++) {
+            Entity garbage = ((OceanEntityFactory) factory).createGarbage(GarbageTypes.GARBAGE, 1).get(0);
+
+            TransformComponent transform = garbage.getComponent(TransformComponent.class);
+            VelocityComponent velocity = garbage.getComponent(VelocityComponent.class);
+            if (transform != null && velocity != null) {
+                float garbageWidth = garbage.getComponent(com.github.FishMiner.domain.ecs.components.FishComponent.class).width;
+                float minX = margin;
+                float maxX = screenWidth - garbageWidth - margin;
+                transform.pos.x = MathUtils.random(minX, maxX);
+
+                // Garbage should not move
+                velocity.velocity.x = 0f;
+            }
+
+            engine.addEntity(garbage);
+        }
+
+        System.out.println("Spawned " + spawnedCount + " initial fish and " + numGarbage + " static garbage.");
+    }
+
+    private void spawnNextFish() {
+        if (spawnedCount < plannedFish.size()) {
+            spawnFish(plannedFish.get(spawnedCount));
+            spawnedCount++;
+        }
+    }
+
+    private void spawnFish(FishTypes type) {
+        Entity fish = factory.createFish(type, 1).get(0);
+        engine.addEntity(fish);
     }
 }
