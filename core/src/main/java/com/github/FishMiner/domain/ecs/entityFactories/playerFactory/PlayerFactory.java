@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.domain.ecs.components.PlayerComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
@@ -19,8 +20,8 @@ public class PlayerFactory {
     private PlayerFactory() {
     }
 
-    public static void addNewPlayerCharacterTo(Engine engine, int posX, int posY) {
-        Entity player = createPlayerEntity(engine, posX, posY);
+    public static void addNewPlayerCharacterTo(Engine engine, int posX, int posY, InventoryComponent existingInventory) {
+        Entity player = createPlayerEntity(engine, posX, posY, existingInventory);
         Entity hook = createHookEntity(engine, player);
 
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
@@ -32,7 +33,7 @@ public class PlayerFactory {
         engine.addEntity(hook);
     }
 
-    private static Entity createPlayerEntity(Engine engine, int posX, int posY) {
+    private static Entity createPlayerEntity(Engine engine, int posX, int posY, InventoryComponent existingInventory) {
         Entity player = new Entity();
 
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
@@ -55,6 +56,13 @@ public class PlayerFactory {
         player.add(textureComponent);
         player.add(playerComponent);
 
+        if (existingInventory != null) {
+            player.add(existingInventory);  // Reusing previous inventory
+        } else {
+            InventoryComponent inventory = engine.createComponent(InventoryComponent.class);
+            inventory.money = 0;
+            player.add(inventory);         // Default if none provided
+        }
         return player;
     }
 

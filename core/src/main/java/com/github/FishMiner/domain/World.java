@@ -2,13 +2,18 @@ package com.github.FishMiner.domain;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.github.FishMiner.Configuration;
+import com.github.FishMiner.domain.ecs.components.InventoryComponent;
+import com.github.FishMiner.domain.ecs.components.PlayerComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.OceanEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.level.LevelConfig;
+import com.github.FishMiner.domain.level.LevelConfigFactory;
 import com.github.FishMiner.domain.states.WorldState;
 
 import java.util.Random;
@@ -22,7 +27,7 @@ public class World {
 
     private WorldState state = WorldState.RUNNING;
 
-    private float score = 0f;
+    //private float score = 0f;
     private int targetScore = 0;
     private float timer = 60f;
 
@@ -32,7 +37,7 @@ public class World {
         this.factory = new OceanEntityFactory(engine);
     }
 
-    public void createLevel(LevelConfig config) {
+    public void createLevel(LevelConfig config, float startingScore) {
         this.targetScore = config.getTargetScore(); // Set target score for current level
 
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
@@ -40,8 +45,6 @@ public class World {
             spawningSystem.configureFromLevel(config);
             spawningSystem.setWorld(this);
         }
-
-        score = 0f;
         timer = 60f;
         state = WorldState.RUNNING;
     }
@@ -54,12 +57,15 @@ public class World {
         return state;
     }
 
-    public void increaseScore(float delta) {
-        this.score += delta;
-    }
-
     public float getScore() {
-        return score;
+        ImmutableArray<Entity> players = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
+        if (players.size() > 0) {
+            InventoryComponent inventory = players.first().getComponent(InventoryComponent.class);
+            if (inventory != null) {
+                return inventory.money;
+            }
+        }
+        return 0f;
     }
 
     public int getTargetScore() {
@@ -71,7 +77,7 @@ public class World {
             timer -= deltaTime;
             if (timer <= 0) {
                 timer = 0;
-                if (score >= targetScore) {
+                if (getScore() >= targetScore) {
                     state = WorldState.WON;
                     System.out.println("Game State changed to: WON");
                 } else {
@@ -84,5 +90,13 @@ public class World {
     public float getTimer() {
         return timer;
     }
+
+
+    public Engine getEngine() {
+        return this.engine;
+    }
+
+
+
 
 }

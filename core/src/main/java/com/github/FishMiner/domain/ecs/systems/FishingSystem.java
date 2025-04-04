@@ -81,9 +81,16 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
 
             // 3. When the hook is RETURNED, determine the outcome.
             if (hookState.state == HookStates.RETURNED) {
+                System.out.println(" Hook returned — checking fish capture");
+                System.out.println("fishComp: " + fishComp);
+                if (fishComp != null) {
+                    System.out.println("value: " + fishComp.getValue());
+                    System.out.println("depth: " + fishComp.depthLevel + ", weight: " + fishComp.weight + ", speed: " + fishComp.baseSpeed);
+                } //testing
                 if (fishComp != null && fishComp.getValue() > 0) {
                     fishState.changeState(FishableObjectStates.CAPTURED);
-                    GameEventBus.getInstance().post(new FishCapturedEvent(fishEntity));
+                    GameEventBus.getInstance().post(new FishCapturedEvent(fishEntity, fishComp.getValue()));
+                    System.out.println(" FishCapturedEvent posted with value: " + fishComp.getValue());
                 } else {
                     fishState.changeState(FishableObjectStates.ATTACKING);
                 }

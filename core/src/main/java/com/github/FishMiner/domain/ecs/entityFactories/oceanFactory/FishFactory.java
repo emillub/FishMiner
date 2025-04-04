@@ -94,6 +94,13 @@ public class FishFactory {
         animationComponent.addAnimation(FishableObjectStates.REELING.getAnimationKey(), textureComponent, 1);
         animationComponent.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
 
+        int value = calculateFishValue(depthLevel, (int) speed, weight);
+        fishComponent.setValue(value);
+
+        System.out.println("🎣 Fish created with value: " + value); // testing
+        System.out.println("🛠️ [DEBUG] Fish depth: " + fishComponent.getDepthLevel());
+        System.out.println("🛠️ [DEBUG] Fish value (calc): " + fishComponent.getValue());
+
         fish.add(transformComponent);
         fish.add(textureComponent);
         fish.add(velocityComponent);
@@ -104,11 +111,14 @@ public class FishFactory {
         fish.add(weightComponent);
         fish.add(fishComponent);
 
+
         return fish;
     }
 
     public static int calculateFishValue(int depth, int speed, int weight) {
+        if (depth <= 0) depth = 1; // Preventing 0-value fish by ensuring depth is at least 1!
         float value = (float) (depth * speed * weight) / 100;
         return Math.round(value * EURO_FACTOR);
     }
+
 }

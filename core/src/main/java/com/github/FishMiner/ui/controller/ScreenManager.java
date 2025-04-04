@@ -3,11 +3,13 @@ package com.github.FishMiner.ui.controller;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.ui.LevelCompleteScreen;
 import com.github.FishMiner.ui.LevelLostScreen;
 import com.github.FishMiner.ui.LoginScreen;
 import com.github.FishMiner.ui.MenuScreen;
 import com.github.FishMiner.ui.PlayScreen;
+import com.github.FishMiner.ui.UpgradeScreen;
 
 public class ScreenManager {
     private static ScreenManager instance;
@@ -17,17 +19,22 @@ public class ScreenManager {
     private Screen playScreen;
     private Screen pauseScreen;
     private Screen settingScreen;
+    private Screen upgradeScreen;
+
+    private InventoryComponent currentInventory;
+
 
     private ScreenManager(FishMinerGame game) {
         this.game = game;
         this.menuScreen = new MenuScreen();
-        // Initialize more screens here
+        this.currentInventory = new InventoryComponent(); //Starting always with a default.
     }
 
     public static ScreenManager getInstance(FishMinerGame game) {
         if (instance == null) {
             instance = new ScreenManager(game);
         }
+
         return instance;
     }
 
@@ -48,9 +55,15 @@ public class ScreenManager {
 
     public void startGamePressed() {
         // Handle game start logic here
-        if (playScreen == null) {
-            playScreen = new PlayScreen(1, 0f);
+        if (currentInventory == null) {
+            System.out.println("⚠️ currentInventory was null in ScreenManager — creating new one.");
+            currentInventory = new InventoryComponent();
         }
+        if (playScreen == null) {
+            playScreen = new PlayScreen(1, currentInventory
+            );
+        }
+
         game.setScreen(playScreen);
     }
 
@@ -63,19 +76,28 @@ public class ScreenManager {
     }
 
 
-    public void showLevelCompleteScreen(int levelNumber, float previousScore) {
-        LevelCompleteScreen levelCompleteScreen = new LevelCompleteScreen(levelNumber, previousScore);
-        game.setScreen(levelCompleteScreen);
+    public void showLevelCompleteScreen(int levelNumber, InventoryComponent inventory) {
+        this.currentInventory = inventory;
+        game.setScreen(new LevelCompleteScreen(levelNumber, inventory));
     }
 
-    public void startNextLevel(int nextLevel, float previousScore) {
-        playScreen = new PlayScreen(nextLevel, previousScore);
-        game.setScreen(playScreen);
+    public void startNextLevel(int nextLevel, float previousScore, InventoryComponent inventory) {
+        this.currentInventory = inventory;
+        game.setScreen(new PlayScreen(nextLevel, inventory));
     }
 
     public void showLevelLostScreen() {
         LevelLostScreen lostScreen = new LevelLostScreen();
         game.setScreen(lostScreen);
+    }
+
+    public void showUpgradeScreen(int nextLevel, InventoryComponent inventory){
+        this.currentInventory = inventory;
+        game.setScreen(new UpgradeScreen(nextLevel, inventory));
+    }
+
+    public InventoryComponent getCurrentInventory() {
+        return currentInventory;
     }
 
 

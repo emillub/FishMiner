@@ -5,8 +5,13 @@ import com.github.FishMiner.domain.events.EntityEvent;
 import com.github.FishMiner.domain.events.IGameEvent;
 
 public class FishCapturedEvent extends EntityEvent implements IGameEvent {
-    public FishCapturedEvent(Entity fish) {
-        super(fish);
+    private final int value;
+    public FishCapturedEvent(Entity fish, int value) {
+        super(fish); this.value = value;
+    }
+
+    public int getValue() {
+        return value;
     }
 
 }

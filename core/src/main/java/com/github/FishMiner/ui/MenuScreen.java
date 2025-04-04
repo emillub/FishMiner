@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.ui.controller.ScreenManager;
 
 public class MenuScreen extends AbstractScreen {
@@ -56,7 +57,9 @@ public class MenuScreen extends AbstractScreen {
         TEST.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().showLevelCompleteScreen(1,0);
+                InventoryComponent inventory = new InventoryComponent();
+                inventory.money = 200;
+                ScreenManager.getInstance().showLevelCompleteScreen(1, inventory);
             }
         });
 

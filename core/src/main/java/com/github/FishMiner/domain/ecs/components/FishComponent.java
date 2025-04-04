@@ -13,6 +13,7 @@ public class FishComponent implements Component {
      * @see com.github.FishMiner.domain.ecs.util.World
      */
     public int depthLevel;
+    public int value;
 
     /**
      * The weight determines the weight assigned to the Fish Entity's WeightComponent.
@@ -50,9 +51,10 @@ public class FishComponent implements Component {
 
     public void setDepthLevel(int depthLevel) {
         int totalDepthLevels =  Configuration.getInstance().getDepthLevels();
-        if (depthLevel < 0 || depthLevel > totalDepthLevels) {
+        if (depthLevel < 1 || depthLevel > totalDepthLevels) {
             throw  new IllegalArgumentException("invalid depth level. Must be in range (1, " + totalDepthLevels + ")");
         }
+        this.depthLevel = depthLevel;
     }
 
     public void setWeight(int weight) {
@@ -64,4 +66,13 @@ public class FishComponent implements Component {
         this.baseSpeed = Math.abs(baseSpeed);
 
     }
+
+    public void setValue(int value) {
+        this.value = Math.max(0, value);
+    }
+
+    public int getDepthLevel() {
+        return this.depthLevel;
+    }
+
 }
