@@ -13,4 +13,6 @@ public class DesktopLogInAPI implements ILogInAPI {
     public void register(String email, String password, FirebaseAuthCallback callback){
 
     }
+    @Override
+    public String getCurrentUsername(){return "Success";}
 }

@@ -33,4 +33,12 @@ public class AndroidLogInAPI implements ILogInAPI {
                 }
             });
     }
+    @Override
+    public String getCurrentUsername() {
+        if (auth.getCurrentUser() != null) {
+            return auth.getCurrentUser().getEmail();
+        } else {
+            return null;
+        }
+    }
 }

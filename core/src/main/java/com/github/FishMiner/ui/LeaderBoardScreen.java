@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.data.Score;
 import com.github.FishMiner.data.services.ILeaderBoardService;
+import com.github.FishMiner.data.services.ILogInAPI;
 import com.github.FishMiner.data.services.LeaderboardCallback;
 import com.github.FishMiner.ui.controller.ScreenManager;
 
@@ -39,8 +40,8 @@ public class LeaderBoardScreen extends AbstractScreen {
         Label titleLabel = new Label("Leaderboard", skin);
         //rootTable.add(titleLabel).expand().center().padBottom(20);
 
-        usernameField = new TextField("", skin);
-        usernameField.setMessageText("Enter username");
+        //usernameField = new TextField("", skin);
+        //usernameField.setMessageText("Enter username");
 
         scoreField = new TextField("", skin);
         scoreField.setMessageText("Enter score");
@@ -55,7 +56,7 @@ public class LeaderBoardScreen extends AbstractScreen {
 
         scoreTable = new Table();
 
-        fetchTopScores(); // Fetch scores when screen shows
+        fetchTopScores();
 
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
@@ -67,8 +68,8 @@ public class LeaderBoardScreen extends AbstractScreen {
         statusLabel = new Label("", skin);
 
         Table inputTable = new Table();
-        inputTable.add(new Label("Username:", skin)).padRight(10);
-        inputTable.add(usernameField).width(150);
+        //inputTable.add(new Label("Username:", skin)).padRight(10);
+        //inputTable.add(usernameField).width(150);
         inputTable.row().padTop(10);
         inputTable.add(new Label("Score:", skin)).padRight(10);
         inputTable.add(scoreField).width(150);
@@ -81,6 +82,7 @@ public class LeaderBoardScreen extends AbstractScreen {
         rootTable.row();
         rootTable.add(scoreTable).expand().fillX().fill().fillY();
         rootTable.row();
+        rootTable.add(backButton).expand().fillX().fill().fillY();
     }
 
     private void fetchTopScores() {
@@ -113,12 +115,13 @@ public class LeaderBoardScreen extends AbstractScreen {
     private void submitScore() {
         FishMinerGame game = ScreenManager.getInstance().getGame();
         ILeaderBoardService leaderboard = game.getLeaderboard();
+        ILogInAPI login = game.getFirebase(); // Assuming you have this injected via FishMinerGame
 
-        String username = usernameField.getText();
+        String username = login.getCurrentUsername();
         String scoreText = scoreField.getText();
 
-        if (username.isEmpty() || scoreText.isEmpty()) {
-            statusLabel.setText("Fields cannot be empty!");
+        if (username == null || scoreText.isEmpty()) {
+            statusLabel.setText("You're not logged in or score is empty.");
             return;
         }
 
@@ -128,24 +131,21 @@ public class LeaderBoardScreen extends AbstractScreen {
                 @Override
                 public void onSuccess(List<Score> scores) {
                     Gdx.app.postRunnable(() -> {
+                        statusLabel.setText("Score submitted!");
+                        scoreField.setText("");
                         fetchTopScores();
                     });
                 }
 
                 @Override
                 public void onFailure(String message) {
-                    Gdx.app.postRunnable(() -> statusLabel.setText("Failed to submit score!"));
+                    Gdx.app.postRunnable(() -> statusLabel.setText("Failed to submit score."));
                 }
             });
-
-            statusLabel.setText("Score submitted successfully!");
-            usernameField.setText(""); // Clear input
-            scoreField.setText("");
         } catch (NumberFormatException e) {
-            statusLabel.setText("Invalid score! Must be a number.");
+            statusLabel.setText("Invalid score format.");
         }
     }
-
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0f, 0f, 0f, 1f);

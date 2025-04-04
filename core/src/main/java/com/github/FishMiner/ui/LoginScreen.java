@@ -47,6 +47,14 @@ public class LoginScreen extends AbstractScreen {
         TextButton registerButton = new TextButton("Register", skin);
         registerButton.getLabel().setFontScale(1.5f);
 
+        TextButton backButton = new TextButton("Back", skin);
+        backButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().showMenu();
+            }
+        });
+
         statusLabel = new Label("", skin);
         statusLabel.setFontScale(1.2f);
 
@@ -57,6 +65,7 @@ public class LoginScreen extends AbstractScreen {
         table.add(loginButton).width(400).height(100).padBottom(20).row();
         table.add(registerButton).width(400).height(100).padBottom(20).row();
         table.add(statusLabel).padTop(20).row();
+        table.add(backButton).width(400).height(100).padBottom(20).row();
 
         // --- Listeners ---
         loginButton.addListener(new ChangeListener() {
