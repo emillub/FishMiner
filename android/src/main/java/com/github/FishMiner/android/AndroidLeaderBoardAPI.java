@@ -22,7 +22,7 @@ public class AndroidLeaderBoardAPI implements ILeaderBoardService {
     @Override
     public void getTopScores(LeaderboardCallback callback) {
         db.collection("LeaderBoard")
-            .orderBy("score", Query.Direction.DESCENDING) // Sort by highest score
+            .orderBy("score", Query.Direction.DESCENDING)
             .limit(10) // Get top 10 scores
             .get()
             .addOnCompleteListener(task -> {
@@ -42,15 +42,33 @@ public class AndroidLeaderBoardAPI implements ILeaderBoardService {
             });
     }
     public void submitScore(String username, int score, LeaderboardCallback callback) {
-        Map<String, Object> scoreEntry = new HashMap<>();
-        scoreEntry.put("username", username);
-        scoreEntry.put("score", score);
-
         db.collection("LeaderBoard")
-            .add(scoreEntry)  // Firestore automatically generates a unique document ID
-            .addOnSuccessListener(documentReference ->
-                System.out.println("Score added with ID: " + documentReference.getId()))
-            .addOnFailureListener(e ->
-                System.err.println("Error adding score: " + e.getMessage()));
+            .whereEqualTo("username", username)
+            .get()
+            .addOnSuccessListener(queryDocumentSnapshots -> {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Long existingScore = document.getLong("score");
+                        if (existingScore != null && score > existingScore) {
+                            db.collection("LeaderBoard").document(document.getId())
+                                .update("score", score)
+                                .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+                                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+                        } else {
+                            callback.onSuccess(null);
+                        }
+                    }
+                } else {
+                    Map<String, Object> scoreEntry = new HashMap<>();
+                    scoreEntry.put("username", username);
+                    scoreEntry.put("score", score);
+
+                    db.collection("LeaderBoard")
+                        .add(scoreEntry)
+                        .addOnSuccessListener(documentReference -> callback.onSuccess(null))
+                        .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+                }
+            })
+            .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 }

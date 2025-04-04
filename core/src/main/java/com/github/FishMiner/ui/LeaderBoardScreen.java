@@ -20,7 +20,6 @@ import java.util.List;
 public class LeaderBoardScreen extends AbstractScreen {
 
     private Table scoreTable;
-    private TextField usernameField;
     private TextField scoreField;
     private Label statusLabel;
 
@@ -36,12 +35,6 @@ public class LeaderBoardScreen extends AbstractScreen {
         rootTable.setFillParent(true);
         rootTable.setDebug(true);
         stage.addActor(rootTable);
-
-        Label titleLabel = new Label("Leaderboard", skin);
-        //rootTable.add(titleLabel).expand().center().padBottom(20);
-
-        //usernameField = new TextField("", skin);
-        //usernameField.setMessageText("Enter username");
 
         scoreField = new TextField("", skin);
         scoreField.setMessageText("Enter score");
@@ -68,8 +61,6 @@ public class LeaderBoardScreen extends AbstractScreen {
         statusLabel = new Label("", skin);
 
         Table inputTable = new Table();
-        //inputTable.add(new Label("Username:", skin)).padRight(10);
-        //inputTable.add(usernameField).width(150);
         inputTable.row().padTop(10);
         inputTable.add(new Label("Score:", skin)).padRight(10);
         inputTable.add(scoreField).width(150);
@@ -106,16 +97,23 @@ public class LeaderBoardScreen extends AbstractScreen {
 
     private void updateLeaderboardUI(List<Score> scores) {
         scoreTable.clear();
+        int place = 1;
         for (Score entry : scores) {
+            String placeLabel = place + ".";
+            Label placeNumber = new Label(placeLabel, skin);
+
             scoreTable.row().height(50);
+            scoreTable.add(placeNumber).left().pad(5).width(40);
             scoreTable.add(new Label(entry.getUsername(), skin)).left().pad(5);
             scoreTable.add(new Label(String.valueOf(entry.getScore()), skin)).right().pad(5);
+
+            place++;
         }
     }
     private void submitScore() {
         FishMinerGame game = ScreenManager.getInstance().getGame();
         ILeaderBoardService leaderboard = game.getLeaderboard();
-        ILogInAPI login = game.getFirebase(); // Assuming you have this injected via FishMinerGame
+        ILogInAPI login = game.getFirebase();
 
         String username = login.getCurrentUsername();
         String scoreText = scoreField.getText();
