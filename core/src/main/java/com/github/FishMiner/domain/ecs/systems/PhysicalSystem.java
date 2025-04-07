@@ -22,7 +22,7 @@ public class PhysicalSystem extends IteratingSystem {
         BoundsComponent bounds = bm.get(entity);
 
         try {
-            ValidateUtil.validateNotNull(position, bounds);
+            ValidateUtil.validateMultipleNotNull(position, bounds);
             bounds.bounds.x = position.pos.x - bounds.bounds.width * 0.5f;
             bounds.bounds.y = position.pos.y - bounds.bounds.height * 0.5f;
             //bounds.bounds.setX(position.pos.x);

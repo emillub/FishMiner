@@ -91,7 +91,7 @@ public class TextureComponent implements Component {
      */
     private void setAndValidateFrameCols(int cols) {
         try {
-            ValidateUtil.validatePositiveInt(cols);
+            ValidateUtil.validatePositiveInt(cols, "cols");
             this.FRAME_COLS = cols;
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Cannot set texture cols: cannot be less than 0: " + e);
@@ -105,7 +105,7 @@ public class TextureComponent implements Component {
      */
     private void setAndValidateFrameRows(int rows) {
         try {
-            ValidateUtil.validatePositiveInt(rows);
+            ValidateUtil.validatePositiveInt(rows, "rows");
             this.FRAME_ROWS = rows;
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Cannot set texture rows: cannot be less than 0: " + e);

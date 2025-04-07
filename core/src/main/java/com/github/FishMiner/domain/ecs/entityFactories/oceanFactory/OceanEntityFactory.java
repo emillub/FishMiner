@@ -16,7 +16,6 @@ public class OceanEntityFactory implements IGameEntityFactory {
     private final PooledEngine engine;
     private final FishFactory fishFactory;
     private  final GarbageFactory garbageFactory;
-    // HookFactory will be replaced with PlayerFactory soon
     private final Configuration config = Configuration.getInstance();
 
     public OceanEntityFactory(PooledEngine engine) {

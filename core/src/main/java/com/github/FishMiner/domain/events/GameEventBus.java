@@ -29,7 +29,7 @@ public class GameEventBus {
     public <E extends IGameEvent> void register(IGameEventListener<E> listener) {
         Class<E> eventType = listener.getEventType();
         listeners.computeIfAbsent(eventType, k -> new ArrayList<>()).add(listener);
-        Logger.getInstance().log(TAG, "Listener registrered: " + listener.getClass().getName());
+        Logger.getInstance().log(TAG, "Listener registrered: " + listener.getClass().getName() + ". Type: " + listener.getEventType());
     }
 
     public <E extends IGameEvent> void unregister(IGameEventListener<E> listener) {

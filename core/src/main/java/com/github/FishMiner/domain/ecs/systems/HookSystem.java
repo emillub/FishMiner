@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
-import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
@@ -13,9 +12,7 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.ecs.components.WeightComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
-import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.HookStates;
 
 
@@ -66,7 +63,7 @@ public class HookSystem extends IteratingSystem {
         }
 
 
-        ValidateUtil.validateNotNull(
+        ValidateUtil.validateMultipleNotNull(
             hookPos, "Hook Position cannot be null",
             hookRot, "Hook rotation cannot be null",
             hookVel, "Hook Velocity cannot be null"

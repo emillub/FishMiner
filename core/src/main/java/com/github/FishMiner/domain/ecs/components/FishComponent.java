@@ -2,6 +2,7 @@ package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
 import com.github.FishMiner.Configuration;
+import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 
 public class FishComponent implements Component {
@@ -12,7 +13,6 @@ public class FishComponent implements Component {
      * The depthLevel is translated into the Fish Entity's vertical position in the ocean.
      */
     public int depthLevel;
-    public int value;
 
     /**
      * The weight determines the weight assigned to the Fish Entity's WeightComponent.
@@ -44,13 +44,15 @@ public class FishComponent implements Component {
     public int height = 30;
 
     public int getValue() {
-        ValidateUtil.validatePositiveNumbers(depthLevel, weight, (int) baseSpeed);
+        ValidateUtil.validatePositiveFloat(weight, "weight");
+        ValidateUtil.validatePositiveFloat(baseSpeed, "baseSpeed");
+        ValidateUtil.validatePositiveFloat(depthLevel, "depthLevel");
         return (int) Math.abs(depthLevel * weight * baseSpeed);
     }
 
     public void setDepthLevel(int depthLevel) {
         int totalDepthLevels =  Configuration.getInstance().getDepthLevels();
-        if (depthLevel < 1 || depthLevel > totalDepthLevels) {
+        if (depthLevel <= 0 || depthLevel > totalDepthLevels) {
             throw  new IllegalArgumentException("invalid depth level. Must be in range (1, " + totalDepthLevels + ")");
         }
         this.depthLevel = depthLevel;
@@ -65,13 +67,4 @@ public class FishComponent implements Component {
         this.baseSpeed = Math.abs(baseSpeed);
 
     }
-
-    public void setValue(int value) {
-        this.value = Math.max(0, value);
-    }
-
-    public int getDepthLevel() {
-        return this.depthLevel;
-    }
-
 }

@@ -2,8 +2,6 @@ package com.github.FishMiner.domain;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
@@ -51,6 +49,7 @@ public class World implements IGameEventListener<ScoreEvent> {
             spawningSystem.configureFromLevel(config);
             spawningSystem.setWorld(this);
         }
+        //score = startingScore;
         timer = 60f;
         state = WorldState.RUNNING;
     }
@@ -65,25 +64,29 @@ public class World implements IGameEventListener<ScoreEvent> {
 
 
     private void increaseScore(float scoreIncrease) {
-        ValidateUtil.validatePositiveFloat(scoreIncrease);
+        ValidateUtil.validatePositiveFloat(scoreIncrease, "scoreIncrease");
         score += scoreIncrease;
     }
 
     private void decreaseScore(float scoreDecrease) {
-        ValidateUtil.validatePositiveFloat(scoreDecrease);
+        ValidateUtil.validatePositiveFloat(scoreDecrease, "scoreDecrease");
         this.score = Math.max(score - scoreDecrease, 0);
     }
 
     public float getScore() {
-        ImmutableArray<Entity> players = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
-        if (players.size() > 0) {
-            InventoryComponent inventory = players.first().getComponent(InventoryComponent.class);
-            if (inventory != null) {
-                return inventory.money;
-            }
-        }
-        return 0f;
+        return score;
     }
+
+    //public float getScore() {
+    //    ImmutableArray<Entity> players = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
+    //    if (players.size() > 0) {
+    //        InventoryComponent inventory = players.first().getComponent(InventoryComponent.class);
+    //        if (inventory != null) {
+    //            return inventory.money;
+    //        }
+    //    }
+    //    return 0f;
+    //}
 
     public int getTargetScore() {
         return targetScore;
@@ -140,7 +143,7 @@ public class World implements IGameEventListener<ScoreEvent> {
 
     @Override
     public Class<ScoreEvent> getEventType() {
-        return null;
+        return ScoreEvent.class;
     }
 
     public Engine getEngine() {
