@@ -1,4 +1,4 @@
-package com.github.FishMiner.data.ports.out;
+package com.github.FishMiner.data.services;
 
 public interface FirebaseAuthCallback {
     void onSuccess();

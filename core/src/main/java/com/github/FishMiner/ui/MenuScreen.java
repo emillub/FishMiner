@@ -60,6 +60,14 @@ public class MenuScreen extends AbstractScreen {
             }
         });
 
+        TextButton leaderboardButton = new TextButton("Leaderboard", skin);
+        leaderboardButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().setLeaderBoardScreen(new LeaderBoardScreen());
+            }
+        });
+
 
         rootTable.add(loginButton).expand().fillX().fill().fillY();
         rootTable.row();
@@ -68,6 +76,8 @@ public class MenuScreen extends AbstractScreen {
         rootTable.add(settingsButton).expand().fillX().fill().fillY();
         rootTable.row();
         rootTable.add(TEST).expand().fillX().fill().fillY();
+        rootTable.row();
+        rootTable.add(leaderboardButton).expand().fillX().fill().fillY();
     }
 
     @Override

@@ -8,10 +8,22 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Pool;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.Logger;
@@ -47,13 +59,26 @@ import com.github.FishMiner.ui.controller.ScreenManager;
  */
 public class PlayScreen extends AbstractScreen {
     private static final String TAG = "PlayScreen";
+
+    private static final float OVERLAY_ALPHA = 0.6f;
+    private static final int BUTTON_WIDTH = 200;
+    private static final int BUTTON_HEIGHT = 60;
+
+    // Core
     private PooledEngine engine;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;
     private World world;
-    private int levelNumber;
-    private float previousScore;
+
+    // Level info
+    private final int levelNumber;
+    private final float previousScore;
+
+    // UI
+    private TextButton pauseButton;
+    private Table pauseOverlay;
+    private boolean overlayVisible = false;
 
     public PlayScreen(int levelNumber, float previousScore) {
         this.levelNumber = levelNumber;
@@ -63,31 +88,42 @@ public class PlayScreen extends AbstractScreen {
     @Override
     public void show() {
         super.show();
+        initializeCore();
+        setupWorld();
+        setupInput();
+        setupPauseUI();
+        FishMinerGame.playGameMusic();
+    }
+
+    private void initializeCore() {
         engine = Configuration.getInstance().getEngine();
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         font = new BitmapFont();
-        font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
+        font.setColor(Color.BLACK);
 
         PlayerFactory.addNewPlayerCharacterTo(engine,
             (int) (Configuration.getInstance().getScreenWidth() / 2),
             Configuration.getInstance().getOceanHeight()
         );
 
-        // add systems to engine
         addSystemTo(engine);
+    }
 
-        // only init World after all systems and stuff has been added to engine:)
+    private void setupWorld() {
         world = new World(engine);
         LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore());
         world.createLevel(config);
         GameEventBus.getInstance().register(world);
+    }
 
-        Gdx.input.setInputProcessor(new InputAdapter() {
+    private void setupInput() {
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
-                if (keycode == Input.Keys.SPACE) {
-                    // Retrieve the hook entity from the engine.
+                if (keycode == Input.Keys.SPACE && !world.isPaused()) {
                     ImmutableArray<Entity> hooks = engine.getEntitiesFor(Family.all(HookComponent.class, TransformComponent.class, StateComponent.class).get());
                     if (hooks.size() > 0) {
                         Entity hook = hooks.first();
@@ -98,9 +134,80 @@ public class PlayScreen extends AbstractScreen {
                 return false;
             }
         });
+        Gdx.input.setInputProcessor(multiplexer);
+    }
 
-        FishMinerGame.playGameMusic();
+    private void setupPauseUI() {
+        Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
+        // === Pause Button (icon only) ===
+        Texture pauseTexture = new Texture(Gdx.files.internal("pause-button.png"));
+        TextureRegionDrawable pauseDrawable = new TextureRegionDrawable(new TextureRegion(pauseTexture));
+
+        TextButton.TextButtonStyle pauseStyle = new TextButton.TextButtonStyle();
+        pauseStyle.up = pauseDrawable;
+        pauseStyle.down = pauseDrawable;
+        pauseStyle.over = null;
+        pauseStyle.font = new BitmapFont();
+
+        pauseButton = new TextButton("", pauseStyle);
+        pauseButton.setSize(48, 48);
+        pauseButton.setPosition(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 60);
+        pauseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                world.togglePause();
+                overlayVisible = world.isPaused();
+                pauseOverlay.setVisible(overlayVisible);
+                pauseButton.setVisible(!overlayVisible);
+            }
+        });
+
+        // === Pause Overlay ===
+        pauseOverlay = new Table();
+        pauseOverlay.setFillParent(true);
+        pauseOverlay.setVisible(false);
+        pauseOverlay.setBackground(skin.newDrawable("white", 0, 0, 0, 0.6f));
+        pauseOverlay.center();
+
+        // Red button background
+        TextureRegionDrawable redDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("Red-Button.png")));
+
+        // Text button style for overlay
+        TextButton.TextButtonStyle redStyle = new TextButton.TextButtonStyle();
+        redStyle.up = redDrawable;
+        redStyle.down = redDrawable;
+        redStyle.font = skin.getFont("default"); // or "default" if your skin uses that
+        redStyle.fontColor = Color.WHITE;
+
+        // Resume button
+        TextButton resumeButton = new TextButton("Resume", redStyle);
+        resumeButton.pad(10);
+        resumeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                world.togglePause();
+                overlayVisible = false;
+                pauseOverlay.setVisible(false);
+                pauseButton.setVisible(true);
+            }
+        });
+
+        // Quit button
+        TextButton quitButton = new TextButton("Quit", redStyle);
+        quitButton.pad(10);
+        quitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ScreenManager.getInstance().showMenu();
+            }
+        });
+
+        pauseOverlay.add(resumeButton).width(200).height(60).pad(20).row();
+        pauseOverlay.add(quitButton).width(200).height(60).pad(10);
+
+        stage.addActor(pauseButton);
+        stage.addActor(pauseOverlay);
     }
 
     @Override
@@ -122,20 +229,14 @@ public class PlayScreen extends AbstractScreen {
             }
     }
 
-        // Update ECS systems and render
         stage.act(delta);
-        engine.update(delta);
+        if (!world.isPaused()) {
+            engine.update(delta);
+        }
         stage.draw();
         world.update(delta);
         updateScoreTimeOverlay(batch);
 
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        batch.dispose();
-        font.dispose();
     }
 
     /**
@@ -182,5 +283,12 @@ public class PlayScreen extends AbstractScreen {
             // toggle Debug Mode in Configuration
             engine.addSystem(new DebugRenderingSystem());
         }
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        batch.dispose();
+        font.dispose();
     }
 }

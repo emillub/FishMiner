@@ -1,0 +1,117 @@
+@startuml FullClassDiagramWithRequestManager
+
+' UI Layer
+package "ui.screens" {
+    class LoginScreen
+    class MainMenuScreen
+    class SettingsScreen
+}
+
+package "ui.interfaces" {
+    interface IRequestManager
+}
+
+' Domain Layer
+package "domain.handlers" {
+    interface ILoginHandler
+    interface IRegisterUserHandler
+    interface ILeaderboardFetcher
+    interface IHighscoreUpdater
+    interface IUserSettingsSaver
+    interface IUserSettingsFetcher
+
+    interface LoginCallback {
+        +onSuccess()
+        +onFailure(error: String)
+    }
+
+    class RequestManager
+}
+
+' Data Layer
+package "data.handlers" {
+    class LoginHandler
+    class RegisterUserHandler
+    class LeaderboardFetcher
+    class HighscoreUpdater
+    class UserSettingsSaver
+    class UserSettingsFetcher
+}
+
+' Data Source Layer (Interfaces)
+package "data.services" {
+    interface IAuthService
+    interface ILeaderboardService
+    interface IHighscoreService
+    interface IUserSettingsService
+}
+
+' Android Platform-Specific Services
+package "android.data.services" {
+    class FirebaseAuthService
+    class FirebaseLeaderboardService
+    class FirebaseHighscoreService
+    class FirebaseUserSettingsService
+}
+
+' Desktop Platform-Specific Services
+package "desktop.data.services" {
+    class MockAuthService
+    class MockLeaderboardService
+    class MockHighscoreService
+    class MockUserSettingsService
+}
+
+' Game Entry Point
+package "core" {
+    class FishMinerGame
+}
+
+' UI -> Domain (via IRequestManager)
+LoginScreen --> IRequestManager
+MainMenuScreen --> IRequestManager
+SettingsScreen --> IRequestManager
+
+' IRequestManager implemented by RequestManager
+IRequestManager <|.. RequestManager
+
+' RequestManager uses all domain handlers
+RequestManager --> ILoginHandler
+RequestManager --> IRegisterUserHandler
+RequestManager --> ILeaderboardFetcher
+RequestManager --> IHighscoreUpdater
+RequestManager --> IUserSettingsSaver
+RequestManager --> IUserSettingsFetcher
+
+' Domain to Data
+ILoginHandler <|.. LoginHandler
+IRegisterUserHandler <|.. RegisterUserHandler
+ILeaderboardFetcher <|.. LeaderboardFetcher
+IHighscoreUpdater <|.. HighscoreUpdater
+IUserSettingsSaver <|.. UserSettingsSaver
+IUserSettingsFetcher <|.. UserSettingsFetcher
+
+' Data to Service Interfaces
+LoginHandler --> IAuthService
+RegisterUserHandler --> IAuthService
+LeaderboardFetcher --> ILeaderboardService
+HighscoreUpdater --> IHighscoreService
+UserSettingsSaver --> IUserSettingsService
+UserSettingsFetcher --> IUserSettingsService
+
+' Service Interfaces to Android Implementations
+IAuthService <|.. FirebaseAuthService
+ILeaderboardService <|.. FirebaseLeaderboardService
+IHighscoreService <|.. FirebaseHighscoreService
+IUserSettingsService <|.. FirebaseUserSettingsService
+
+' Service Interfaces to Desktop Implementations
+IAuthService <|.. MockAuthService
+ILeaderboardService <|.. MockLeaderboardService
+IHighscoreService <|.. MockHighscoreService
+IUserSettingsService <|.. MockUserSettingsService
+
+' Game entry uses RequestManager (only)
+FishMinerGame --> RequestManager
+
+@enduml
