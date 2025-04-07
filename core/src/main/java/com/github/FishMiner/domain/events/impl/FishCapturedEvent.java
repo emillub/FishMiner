@@ -7,6 +7,7 @@ import com.github.FishMiner.domain.events.IGameEvent;
 
 public class FishCapturedEvent extends EntityEvent implements IGameEvent {
     private static final String TAG = "FishCapturedEvent";
+  
     public FishCapturedEvent(Entity fish, Entity player) {
         super(fish, player);
         Logger.getInstance().log(TAG, player + " captured fish: " + fish);

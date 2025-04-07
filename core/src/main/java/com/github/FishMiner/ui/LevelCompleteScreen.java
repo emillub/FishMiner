@@ -9,14 +9,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.FishMiner.Configuration;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.ui.controller.ScreenManager;
+import java.util.Locale;
 
 public class LevelCompleteScreen extends AbstractScreen {
 
@@ -28,11 +28,17 @@ public class LevelCompleteScreen extends AbstractScreen {
 
 
     private final int levelNumber;
-    private final float previousScore;
+    private final InventoryComponent inventory;
 
-    public LevelCompleteScreen(int levelNumber, float previousScore) {
+
+    private float transitionTimer = 0f;
+    private final float delayBeforeNextScreen = 1.5f; // seconds before switching to UpgradeScreen
+
+
+
+    public LevelCompleteScreen(int levelNumber, InventoryComponent inventory) {
         this.levelNumber = levelNumber;
-        this.previousScore = previousScore;
+        this.inventory = inventory;
     }
 
 
@@ -49,38 +55,16 @@ public class LevelCompleteScreen extends AbstractScreen {
 
         skin = Configuration.getInstance().getUiSkin();
 
+        String winMessage = String.format(Locale.US, "You won with %.0f points. Good job!", inventory.money);
+        Label winLabel = new Label(winMessage, skin);
+        winLabel.setFontScale(2f);
+        winLabel.setAlignment(Align.center);
+
         Table table = new Table();
         table.setFillParent(true);
         table.center();
         stage.addActor(table);
-
-        Label titleLabel = new Label("Fish Miner", skin);
-        titleLabel.setFontScale(3f);
-
-        Label messageLabel = new Label("You made it to the next level!", skin, "subtitle");
-        messageLabel.setFontScale(1.4f);
-        messageLabel.setAlignment(Align.center);
-
-        TextButton continueButton = new TextButton("Continue", skin, "default");
-        continueButton.getLabel().setFontScale(1.1f);
-
-        Table messageBox = new Table(skin);
-        messageBox.setBackground("rounded-panel");
-        messageBox.defaults().pad(20).center();
-        messageBox.pad(30);
-
-        continueButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().startNextLevel(levelNumber + 1, previousScore);
-            }
-        });
-
-        messageBox.add(messageLabel).center().row();
-        messageBox.add(continueButton).width(220).height(70).center();
-
-        table.add(titleLabel).padBottom(60).row();
-        table.add(messageBox).center().row();
+        table.add(winLabel).center().padTop(20);
     }
 
 
@@ -94,6 +78,13 @@ public class LevelCompleteScreen extends AbstractScreen {
 
         stage.act(delta);
         stage.draw();
+
+
+        // After delay, go to UpgradeScreen
+        transitionTimer += delta;
+        if (transitionTimer >= delayBeforeNextScreen) {
+            ScreenManager.getInstance().showUpgradeScreen(levelNumber + 1, inventory);
+        }
     }
 
     private void drawBackground() {

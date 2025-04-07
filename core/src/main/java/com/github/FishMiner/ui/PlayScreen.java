@@ -28,6 +28,8 @@ import com.github.FishMiner.Configuration;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.InventoryComponent;
+import com.github.FishMiner.domain.ecs.components.PlayerComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
@@ -49,6 +51,7 @@ import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.World;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
+import com.github.FishMiner.domain.listeners.FishCaptureListener;
 import com.github.FishMiner.domain.states.WorldState;
 import com.github.FishMiner.ui.controller.ScreenManager;
 
@@ -71,6 +74,10 @@ public class PlayScreen extends AbstractScreen {
     private BitmapFont font;
     private World world;
 
+    private int levelNumber;
+    private InventoryComponent inventory;
+
+
     // Level info
     private final int levelNumber;
     private final float previousScore;
@@ -80,9 +87,11 @@ public class PlayScreen extends AbstractScreen {
     private Table pauseOverlay;
     private boolean overlayVisible = false;
 
-    public PlayScreen(int levelNumber, float previousScore) {
+
+
+    public PlayScreen(int levelNumber, InventoryComponent inventory) {
         this.levelNumber = levelNumber;
-        this.previousScore = previousScore;
+        this.inventory = (inventory != null) ? inventory : new InventoryComponent();
     }
 
     @Override
@@ -104,7 +113,7 @@ public class PlayScreen extends AbstractScreen {
 
         PlayerFactory.addNewPlayerCharacterTo(engine,
             (int) (Configuration.getInstance().getScreenWidth() / 2),
-            Configuration.getInstance().getOceanHeight()
+            Configuration.getInstance().getOceanHeight(), inventory
         );
 
         addSystemTo(engine);
@@ -112,9 +121,14 @@ public class PlayScreen extends AbstractScreen {
 
     private void setupWorld() {
         world = new World(engine);
-        LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore());
-        world.createLevel(config);
-        GameEventBus.getInstance().register(world);
+
+        GameEventBus.getInstance().register(new FishCaptureListener(world));
+        LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) inventory.money);
+        world.createLevel(config, inventory.money);
+
+        //LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore());
+        //world.createLevel(config);
+        //GameEventBus.getInstance().register(world);
     }
 
     private void setupInput() {
@@ -219,6 +233,27 @@ public class PlayScreen extends AbstractScreen {
         // If the game is lost and the overlay hasn't been added yet, create it
         if (world.getTimer() <= 0) {
             if (world.getState() == WorldState.WON) {
+                Logger.getInstance().log(TAG, "Advancing to level " + levelNumber);
+                ImmutableArray<Entity> players = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
+                if (players.size() > 0) {
+                    Entity player = players.first();
+                    inventory = player.getComponent(InventoryComponent.class);
+                    //testing
+                    if (inventory == null) {
+                        System.err.println("Player has no InventoryComponent!");
+                        return; // prevent crash
+                    }
+
+                    ScreenManager.getInstance().showLevelCompleteScreen(levelNumber, inventory);
+                    return;
+                }
+
+            } else if (world.getState() == WorldState.LOST) {
+                System.out.println("Game Over. Try again!");
+
+                if (inventory != null){
+                    inventory.money = 0;
+                }
                 Logger.getInstance().debug(TAG, "Advancing to level " + levelNumber);
                 ScreenManager.getInstance().showLevelCompleteScreen(levelNumber, world.getScore());
                 return;
@@ -227,7 +262,7 @@ public class PlayScreen extends AbstractScreen {
                 ScreenManager.getInstance().showLevelLostScreen();
                 return;
             }
-    }
+        }
 
         stage.act(delta);
         if (!world.isPaused()) {
@@ -236,8 +271,8 @@ public class PlayScreen extends AbstractScreen {
         stage.draw();
         world.update(delta);
         updateScoreTimeOverlay(batch);
-
     }
+
 
     /**
      * Updates the display for score and time remaining. Must be rendered after everything else.
@@ -271,7 +306,7 @@ public class PlayScreen extends AbstractScreen {
         engine.addSystem(scoreSystem);
         eventBus.register(scoreSystem);
 
-        FishingSystem fishSystem =  new FishingSystem();
+        FishingSystem fishSystem = new FishingSystem();
         engine.addSystem(fishSystem);
         eventBus.register(fishSystem);
 
