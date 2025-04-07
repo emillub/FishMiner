@@ -18,6 +18,7 @@ import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.components.WeightComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.util.FishUtils;
+import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 
 public class FishFactory {
@@ -30,20 +31,32 @@ public class FishFactory {
     }
 
     protected Entity createEntity(FishTypes type) {
-        int[] allowedDepths = type.getAllowedDepthLevels();
-        int chosenDepthLevel = allowedDepths[MathUtils.random(allowedDepths.length - 1)];
+        try {
+            int[] allowedDepths = type.getAllowedDepthLevels();
+            int chosenDepthLevel = allowedDepths[MathUtils.random(allowedDepths.length - 1)];
 
-        System.out.println("Spawning " + type.name() + " at depth level " + chosenDepthLevel);
-
-        return createEntity(
-            type.getTexturePath(),
-            type.getFrameCols(),
-            type.getFrameRows(),
-            chosenDepthLevel,
-            type.getSpeed(),
-            type.getWeight(),
-            type.getScale()
-        );
+            validateFishFields(
+                type.getTexturePath(),
+                type.getFrameCols(),
+                type.getFrameRows(),
+                chosenDepthLevel,
+                type.getSpeed(),
+                type.getWeight(),
+                type.getScale()
+            );
+            return createEntity(
+                type.getTexturePath(),
+                type.getFrameCols(),
+                type.getFrameRows(),
+                chosenDepthLevel,
+                type.getSpeed(),
+                type.getWeight(),
+                type.getScale()
+            );
+        } catch (IllegalArgumentException e) {
+            Logger.getInstance().error(TAG, "Invalid value(s) for createEntity: " + e.getMessage(), e);
+            throw e;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -94,15 +107,10 @@ public class FishFactory {
         state.changeState(FishableObjectStates.FISHABLE);
 
         animation.addAnimation(FishableObjectStates.FISHABLE.getAnimationKey(), texture, 0);
-        animation.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), texture, 1, Animation.PlayMode.NORMAL);
-        Logger.getInstance().debug(TAG, "Added animationKey: " + FishableObjectStates.HOOKED.getAnimationKey());
-        animation.addAnimation(FishableObjectStates.REELING.getAnimationKey(), texture, 1);
+        animation.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), texture, 0, Animation.PlayMode.NORMAL);
+        animation.addAnimation(FishableObjectStates.REELING.getAnimationKey(), texture, 0);
+        animation.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
 
-
-        int value = calculateFishValue(depthLevel, (int) speed, weight);
-        fishComponent.setValue(value);
-
-       
         fish.add(transform);
         fish.add(texture);
         fish.add(velocity);
@@ -122,4 +130,13 @@ public class FishFactory {
         return Math.round(value * EURO_FACTOR);
     }
 
+    private void validateFishFields(String texturePath, int frameCols, int frameRows, int depthLevel, float speed, int weight, float scale) {
+        ValidateUtil.validateNotNull(texturePath, "texturePath");
+        ValidateUtil.validatePositiveInt(depthLevel, "depthLevel");
+        ValidateUtil.validatePositiveInt(frameCols, "frameCols");
+        ValidateUtil.validatePositiveInt(frameRows, "frameRows");
+        ValidateUtil.validatePositiveInt(weight, "weight");
+        ValidateUtil.validatePositiveFloat(speed, "speed");
+        ValidateUtil.validatePositiveFloat(scale, "scale");
+    }
 }

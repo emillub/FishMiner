@@ -46,11 +46,10 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
         if (event.isHandled()) return;
 
         Entity scoringPlayer = event.getSource();
-
         Entity capturedFish = event.getTarget();
 
         try {
-            ValidateUtil.validateNotNull(scoringPlayer, capturedFish);
+            ValidateUtil.validateMultipleNotNull(scoringPlayer, capturedFish);
             capturedQueue.add(new FishScoreData() {{
                 this.player = scoringPlayer;
                 this.fishableObject = capturedFish;
@@ -82,7 +81,7 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
             Vector3 target = new Vector3(
                 playerPos.pos.x,
                 playerPos.pos.y - 50,
-                playerPos.pos.z);
+                playerPos.pos.z - 1);
 
             Vector3 start = new Vector3(fishPos.pos);
 
@@ -97,16 +96,17 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
             entry.flyTime += deltaTime;
             // At end of animation, award points and dispose fish
             if (entry.flyTime >= FLY_DURATION && !entry.scoreSent) {
-                FishComponent fishComp = fm.get(fishedEntity);
-                ScoreComponent score = sm.get(player);
-
-                if (fishComp != null && score != null) {
-                    score.score += fishComp.getValue();
-                    entry.scoreSent = true;
-                    GameEventBus.getInstance().post(new ScoreEvent(fishComp.getValue()));
-                }
                 if (!fishedEntity.isScheduledForRemoval()) {
                     getEngine().removeEntity(fishedEntity);
+                    FishComponent fishComp = fm.get(fishedEntity);
+                    ScoreComponent score = sm.get(player);
+
+                    ValidateUtil.validateMultipleNotNull(fishComp, score);
+
+                    score.score += fishComp.getValue();
+                    GameEventBus.getInstance().post(new ScoreEvent(fishComp.getValue()));
+                    entry.scoreSent = true;
+
                 }
                 capturedQueue.removeIndex(i--); // Maintain index after removal
             }

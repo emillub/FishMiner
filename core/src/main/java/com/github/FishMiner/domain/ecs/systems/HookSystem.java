@@ -13,9 +13,7 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.ecs.components.WeightComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
-import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.HookStates;
 
 
@@ -66,7 +64,7 @@ public class HookSystem extends IteratingSystem {
         }
 
 
-        ValidateUtil.validateNotNull(
+        ValidateUtil.validateMultipleNotNull(
             hookPos, "Hook Position cannot be null",
             hookRot, "Hook rotation cannot be null",
             hookVel, "Hook Velocity cannot be null"
@@ -89,9 +87,6 @@ public class HookSystem extends IteratingSystem {
             float dx = posX - hook.anchorPoint.x;
             float dy = posY - hook.anchorPoint.y;
 
-            // Compute the angle (in degrees) of that vector.
-            // MathUtils.atan2 returns the angle relative to the positive x-axis.
-            // Adding 90° makes 0° represent the hook hanging straight down.
             hookRot.angle = MathUtils.atan2(dy, dx) * MathUtils.radiansToDegrees + 90;
 
         }

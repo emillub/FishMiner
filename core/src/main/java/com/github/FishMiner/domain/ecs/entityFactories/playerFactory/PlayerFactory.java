@@ -61,6 +61,7 @@ public class PlayerFactory {
         player.add(transformComponent);
         player.add(textureComponent);
         player.add(playerComponent);
+        player.add(scoreComponent);
 
         if (existingInventory != null) {
             player.add(existingInventory);  // Reusing previous inventory

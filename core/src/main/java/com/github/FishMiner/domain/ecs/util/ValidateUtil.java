@@ -17,7 +17,7 @@ public final class ValidateUtil {
      * @throws IllegalArgumentException if an odd number of arguments is provided.
      * @throws IllegalArgumentException if any object is null, with its corresponding error message.
      */
-    public static void validateNotNull(Object... args) throws IllegalArgumentException, IllegalStateException {
+    public static void validateMultipleNotNull(Object... args) throws IllegalArgumentException, IllegalStateException {
         if (args.length % 2 != 0) {
             throw new IllegalArgumentException("validateNotNull expects an even number of arguments: object/message pairs.");
         }
@@ -29,6 +29,19 @@ public final class ValidateUtil {
                 Logger.getInstance().error(TAG, "validateNotNull(): object was null. ", exception);
                 throw exception;
             }
+        }
+    }
+
+    /**
+     * Null check for single object with name for easy debugging
+     * @param arg the non-null object
+     * @param argTag the field name of the object
+     */
+    public static void validateNotNull(Object arg, String argTag) {
+        if (arg == null) {
+            IllegalStateException exception = new IllegalStateException(argTag + "cannot be null");
+            Logger.getInstance().error(TAG, "validateNotNull() caught exception: ", exception);
+            throw exception;
         }
     }
 
@@ -47,19 +60,49 @@ public final class ValidateUtil {
         }
     }
 
-    public static void validatePositiveInt(int arg) throws IllegalArgumentException {
-        if (arg < 0) {
-            IllegalArgumentException exception = new IllegalArgumentException("Positive integer was negative.");
+    /**
+     * Validator for integers >= 0 with name of variable for easy debugging
+     * @param arg positive value
+     * @param argTag the field name of the object
+     * @throws IllegalArgumentException if check fails
+     */
+    public static void validatePositiveInt(int arg, String argTag) throws IllegalArgumentException {
+        if (arg <= 0) {
+            IllegalArgumentException exception = new IllegalArgumentException(argTag + " cannot be 0 or less. Was: " + arg);
             Logger.getInstance().error(TAG, "validatePositiveInt(): ", exception);
             throw exception;
         }
     }
 
-    public static void validatePositiveFloat(float arg) throws IllegalArgumentException {
-        if (arg < 0) {
-            IllegalArgumentException exception = new IllegalArgumentException("Positive float was negative.");
+    // TODO: uncomment, use or remove this
+    //public static void validatePositiveInt(int arg, String argName) throws IllegalArgumentException {
+    //    if (arg <= 0) {
+    //        IllegalArgumentException exception = new IllegalArgumentException("Positive integer was negative.");
+    //        Logger.getInstance().error(TAG, "validatePositiveInt(): ", exception);
+    //        throw exception;
+    //    }
+    //}
+
+    public static void validatePositiveFloat(float arg, String argTag) throws IllegalArgumentException {
+        if (arg <= 0) {
+            IllegalArgumentException exception = new IllegalArgumentException(argTag + " cannot be 0 or less.");
             Logger.getInstance().error(TAG, "validatePositiveFloat(): ", exception);
             throw exception;
+        }
+    }
+
+    public static void validateMoreThanZero(Number... args) throws IllegalArgumentException {
+        String m1 = "Argument at index ";
+        String m2 = " is negative: ";
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] == null) {
+                throw new IllegalArgumentException(m1 + i + m2 + args[i]);
+            }
+            if (args[i].doubleValue() <= 0) {
+                IllegalArgumentException exception = new IllegalArgumentException(m1 + i + m2 + args[i]);
+                Logger.getInstance().error(TAG, "validateMoreThanZero(): ", exception);
+                throw exception;
+            }
         }
     }
 }

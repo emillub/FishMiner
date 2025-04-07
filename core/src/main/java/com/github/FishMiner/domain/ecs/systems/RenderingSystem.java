@@ -68,7 +68,7 @@ public class RenderingSystem extends SortedIteratingSystem {
             RotationComponent rot = rotMapper.get(entity);
             try {
                 // These can never be null
-                ValidateUtil.validateNotNull(pos, tex);
+                ValidateUtil.validateMultipleNotNull(pos, tex);
             } catch (IllegalArgumentException e) {
                 Logger.getInstance().debug(TAG, "Some entity was missing transform or texture component", e);
                 continue;
