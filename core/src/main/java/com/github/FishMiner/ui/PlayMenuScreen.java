@@ -81,6 +81,11 @@ public class PlayMenuScreen extends AbstractScreen {
     public void resize(int width, int height) { }
 
     @Override
+    protected void buildUI() {
+        //No UI components needed for this screen, I guess?
+    }
+
+    @Override
     public void pause() { }
 
     @Override

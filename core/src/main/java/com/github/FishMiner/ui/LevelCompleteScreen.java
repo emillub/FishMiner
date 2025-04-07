@@ -20,17 +20,13 @@ import java.util.Locale;
 
 public class LevelCompleteScreen extends AbstractScreen {
 
-    private Stage stage;
+    //private Stage stage;
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
     private BitmapFont font;
     private Skin skin;
-
-
     private final int levelNumber;
     private final InventoryComponent inventory;
-
-
     private float transitionTimer = 0f;
     private final float delayBeforeNextScreen = 1.5f; // seconds before switching to UpgradeScreen
 
@@ -49,24 +45,25 @@ public class LevelCompleteScreen extends AbstractScreen {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
+        buildUI();
+    }
 
-        stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+    @Override
+    protected void buildUI() {
+        stage.clear();
 
-        skin = Configuration.getInstance().getUiSkin();
-
+        float scale = Configuration.getInstance().getUniformScale();
         String winMessage = String.format(Locale.US, "You won with %.0f points. Good job!", inventory.money);
         Label winLabel = new Label(winMessage, skin);
-        winLabel.setFontScale(2f);
+        winLabel.setFontScale(2f * scale);
         winLabel.setAlignment(Align.center);
 
         Table table = new Table();
         table.setFillParent(true);
         table.center();
+        table.add(winLabel).center().padTop(40 * scale);
         stage.addActor(table);
-        table.add(winLabel).center().padTop(20);
     }
-
 
 
     @Override

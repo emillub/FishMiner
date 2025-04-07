@@ -2,7 +2,10 @@ package com.github.FishMiner.domain.ecs.entityFactories.playerFactory;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
@@ -40,9 +43,24 @@ public class PlayerFactory {
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
         PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
 
+        Configuration config = Configuration.getInstance();
         textureComponent.setRegion("fisherman.png");
+
+        float scale = config.getUniformScale();
+        float textureHeight = textureComponent.getFrameHeight() * scale;
+        float oceanY = config.getOceanHeight();
+
+        // Calculating boat offset based on device orientation/platform
+        float boatOffset = 40f * scale;
+        if (config.isLandscapeAndroid()) {
+            boatOffset = 30f * scale;
+        } else if (config.isPortraitAndroid()) {
+            boatOffset -= 40f * scale;
+        }
+
+        transformComponent.scale.set(0.7f * scale, 0.7f * scale);
         transformComponent.pos.x = posX;
-        transformComponent.pos.y =  posY + textureComponent.getFrameHeight() * 0.3f;
+        transformComponent.pos.y = oceanY + (textureHeight / 2f) - boatOffset;
         transformComponent.pos.z = 0f;
 
 
@@ -95,6 +113,9 @@ public class PlayerFactory {
 
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
         hookComponent.anchorPoint.set(playerComponent.hookAnchorPoint);
+
+        float scale = Configuration.getInstance().getUniformScale();
+        transformComponent.scale.set(scale, scale);
 
         // TODO: add scaling and centralize width and height via something other than textures
         boundsComponent.bounds.setPosition(

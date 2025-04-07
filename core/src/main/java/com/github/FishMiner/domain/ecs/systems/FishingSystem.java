@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.FishComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
@@ -29,6 +30,7 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
     private ComponentMapper<FishComponent> fishMapper = ComponentMapper.getFor(FishComponent.class);
 
     private Entity hookEntity;
+    private float scale = Configuration.getInstance().getUniformScale();
 
     /**
      * must be added to GameEventBus
@@ -70,7 +72,7 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
             // 2. If the hook is REELING, update the fish's position relative to the hook.
             if (hookState.state == HookStates.REELING) {
                 Vector3 rotatedOffset = new Vector3(hook.offset)
-                    .rotate(new Vector3(0, 0, 1), hook.swingAngle * MathUtils.radiansToDegrees);
+                    .rotate(new Vector3(0, 0, 1), hook.swingAngle * MathUtils.radiansToDegrees).scl(scale);
                 TransformComponent hookPos = posMapper.get(hookEntity);
                 fishPos.pos.set(hookPos.pos).add(rotatedOffset);
 

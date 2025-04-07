@@ -4,6 +4,7 @@ package com.github.FishMiner.domain.ecs.entityFactories.playerFactory;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector3;
+import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
@@ -26,8 +27,11 @@ public class SinkerFactory implements IEntityFactory {
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         WeightComponent weightComponent = engine.createComponent(WeightComponent.class);
 
+        float scale = Configuration.getInstance().getUniformScale();
+
         textureComponent.setRegion("sinker_1cols_1rows.png");
         transformComponent.pos = new Vector3(100, 100, 1);
+        transformComponent.scale.set(scale, scale);
         weightComponent.weight = 10;
 
         sinker.add(textureComponent);

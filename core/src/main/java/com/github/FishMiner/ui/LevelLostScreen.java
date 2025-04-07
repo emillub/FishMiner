@@ -19,7 +19,7 @@ import com.github.FishMiner.ui.controller.ScreenManager;
 
 public class LevelLostScreen extends AbstractScreen {
 
-    private Stage stage;
+    //private Stage stage;
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
     private BitmapFont font;
@@ -37,23 +37,26 @@ public class LevelLostScreen extends AbstractScreen {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
+        buildUI();
+    }
 
-        stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+    @Override
+    protected void buildUI() {
+        stage.clear();
 
-        skin = Configuration.getInstance().getUiSkin();
-
+        float scale = Configuration.getInstance().getUniformScale();
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
         Label titleLabel = new Label("Fish Miner", skin);
-        titleLabel.setFontScale(3f);
+        titleLabel.setFontScale(3f * scale);
 
         Label messageLabel = new Label("You lost, start over!", skin);
-        messageLabel.setFontScale(1.2f);
+        messageLabel.setFontScale(1.5f * scale);
 
         TextButton continueButton = new TextButton("Back to menu", skin);
+        continueButton.getLabel().setFontScale(1.5f * scale);
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -61,18 +64,18 @@ public class LevelLostScreen extends AbstractScreen {
             }
         });
 
-
-        // Create a sub-table to act as the message box
+        // Creating a sub-table to act as the message box
         Table messageBox = new Table(skin);
-        messageBox.setBackground("window"); // You can customize this style in the skin
-        messageBox.pad(20).defaults().pad(10);
-
+        messageBox.setBackground("window");
+        messageBox.pad(30 * scale).defaults().pad(15 * scale);
         messageBox.add(messageLabel).row();
-        messageBox.add(continueButton).width(200).height(60);
+        messageBox.add(continueButton).width(300 * scale).height(80 * scale);
 
         table.center().top().padTop(Gdx.graphics.getHeight() * 0.25f);
-        table.add(titleLabel).padBottom(50).row();
+        table.add(titleLabel).padBottom(50 * scale).row();
         table.add(messageBox).center();
+
+
     }
 
 

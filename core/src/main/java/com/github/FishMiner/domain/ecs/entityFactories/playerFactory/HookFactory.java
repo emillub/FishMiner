@@ -3,6 +3,7 @@ package com.github.FishMiner.domain.ecs.entityFactories.playerFactory;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
@@ -42,6 +43,9 @@ public class HookFactory implements IEntityFactory {
 
         transformComponent.pos.x = x;
         transformComponent.pos.y = y;
+
+        float scale = Configuration.getInstance().getUniformScale();
+        transformComponent.scale.set(scale, scale);
 
         // rotation
         hook.add(rotationComponent);

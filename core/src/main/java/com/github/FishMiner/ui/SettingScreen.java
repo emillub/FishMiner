@@ -25,8 +25,11 @@ public class SettingScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        super.show();
+        buildUI();
+        //Gdx.input.setInputProcessor(stage);
 
+        /*
         Table rootTable = new Table();
         rootTable.setFillParent(true);
         stage.addActor(rootTable);
@@ -96,6 +99,83 @@ public class SettingScreen extends AbstractScreen {
             }
         });
         rootTable.add(backButton).pad(10);
+
+         */
+    }
+
+    @Override
+    protected void buildUI() {
+        stage.clear();
+
+        float scale = Configuration.getInstance().getUniformScale();
+
+        Table rootTable = new Table();
+        rootTable.setFillParent(true);
+        stage.addActor(rootTable);
+
+        Label titleLabel = new Label("Settings", skin);
+        titleLabel.setFontScale(3.5f * scale);
+        rootTable.add(titleLabel).pad(30 * scale).row();
+
+        soundCheckBox = new CheckBox(" Enable Sound", skin);
+        soundCheckBox.getLabel().setFontScale(2f * scale);
+        soundCheckBox.setChecked(Configuration.getInstance().isSoundEnabled());
+        soundCheckBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                boolean isEnabled = soundCheckBox.isChecked();
+                Configuration.getInstance().setSoundEnabled(isEnabled);
+
+                Music backgroundMusic = FishMinerGame.getBackgroundMusic();
+                Music playMusic = FishMinerGame.getPlayMusic();
+
+                if (isEnabled) {
+                    // Resume whichever one is currently relevant
+                    if (playMusic.isPlaying()) {
+                        playMusic.play();
+                    } else {
+                        backgroundMusic.play();
+                    }
+                } else {
+                    backgroundMusic.pause();
+                    playMusic.pause();
+                }
+            }
+        });
+
+        rootTable.add(soundCheckBox).pad(10 * scale).row();
+
+        Label volumeLabel = new Label("Music Volume", skin);
+        volumeLabel.setFontScale(2f * scale);
+        rootTable.add(volumeLabel).pad(10 * scale).row();
+
+        volumeSlider = new Slider(0f, 1f, 0.1f, false, skin);
+        volumeSlider.setValue(Configuration.getInstance().getMusicVolume());
+        volumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                float volume = volumeSlider.getValue();
+                Configuration.getInstance().setMusicVolume(volume);
+                FishMinerGame.getBackgroundMusic().setVolume(volume);
+                FishMinerGame.getPlayMusic().setVolume(volume);
+            }
+        });
+
+        rootTable.add(volumeSlider).width(300 * scale).pad(10 * scale).row();
+
+        TextButton backButton = new TextButton("Back to Menu", skin);
+        backButton.getLabel().setFontScale(2f * scale);
+        backButton.getLabel().setColor(Color.WHITE);
+        backButton.setColor(Color.BLACK);
+
+        backButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().showMenu();
+            }
+        });
+        rootTable.add(backButton).pad(20 * scale).row();
+
     }
 
     @Override

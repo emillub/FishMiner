@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.github.FishMiner.Configuration;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
@@ -20,6 +21,7 @@ public class RenderingSystem extends IteratingSystem {
     private ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
     private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
     private final ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
+    private final float scale = Configuration.getInstance().getUniformScale();
 
 
     public RenderingSystem(SpriteBatch batch) {
@@ -43,8 +45,8 @@ public class RenderingSystem extends IteratingSystem {
         RotationComponent rot = rm.get(entity);
 
         float rotation = (rot != null) ? rot.angle : 0f;
-        float scaleX = (pos != null) ? pos.scale.x : 1f;
-        float scaleY = (pos != null) ? pos.scale.y : 1f;
+        float scaleX = (pos != null) ? pos.scale.x * scale : scale;
+        float scaleY = (pos != null) ? pos.scale.y * scale : scale;
 
         if (vel != null) {
             if (vel.velocity.x > 0) {

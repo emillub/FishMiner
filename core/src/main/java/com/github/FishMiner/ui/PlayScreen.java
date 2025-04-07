@@ -64,7 +64,9 @@ public class PlayScreen extends AbstractScreen {
         engine = Configuration.getInstance().getEngine();
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
+        float scale = Configuration.getInstance().getUniformScale();
         font = new BitmapFont();
+        font.getData().setScale(1.3f * scale);
         font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
 
         PlayerFactory.addNewPlayerCharacterTo(engine,
@@ -100,7 +102,14 @@ public class PlayScreen extends AbstractScreen {
         });
 
         FishMinerGame.playGameMusic();
+        buildUI();
 
+    }
+
+    @Override
+    protected void buildUI() {
+        // Currently no UI widgets (HUD uses BitmapFont + SpriteBatch)
+        // In future: Add pause button, HUD, controls etc. here
     }
 
     @Override
@@ -114,7 +123,7 @@ public class PlayScreen extends AbstractScreen {
 
         batch.begin();
         font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() - 10);
-        font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() - 40);
+        font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() - 60);
         batch.end();
 
         // If the game is lost and the overlay hasn't been added yet, create it

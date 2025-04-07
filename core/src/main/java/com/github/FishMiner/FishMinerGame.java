@@ -24,10 +24,6 @@ public class FishMinerGame extends Game {
 
     @Override
     public void create() {
-        Configuration.getInstance().updateConfiguration();
-
-
-
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("StartMusic.ogg"));
         playMusic = Gdx.audio.newMusic(Gdx.files.internal("TownTheme.ogg"));
 

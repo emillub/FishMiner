@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.github.FishMiner.Configuration;
 import com.github.FishMiner.FishMinerGame;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.github.FishMiner.data.ports.out.FirebaseAuthCallback;
@@ -22,41 +23,49 @@ public class LoginScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        super.show();
+        buildUI();
+    }
+
+    @Override
+    protected void buildUI() {
+        stage.clear();
+        float scale = Configuration.getInstance().getUniformScale();
 
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
         Label titleLabel = new Label("Login", skin);
-        titleLabel.setFontScale(2f);
+        titleLabel.setFontScale(3f * scale);
 
         emailField = new TextField("", skin);
         emailField.setMessageText("Email");
-        emailField.getStyle().font.getData().setScale(1.5f);
+        emailField.getStyle().font.getData().setScale(1.5f * scale);
 
         passwordField = new TextField("", skin);
         passwordField.setMessageText("Password");
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
-        passwordField.getStyle().font.getData().setScale(1.5f);
+        passwordField.getStyle().font.getData().setScale(1.5f * scale);
 
         TextButton loginButton = new TextButton("Login", skin);
-        loginButton.getLabel().setFontScale(1.5f);
+        loginButton.getLabel().setFontScale(1.5f * scale);
+
 
         TextButton registerButton = new TextButton("Register", skin);
-        registerButton.getLabel().setFontScale(1.5f);
+        registerButton.getLabel().setFontScale(1.5f * scale);
 
         statusLabel = new Label("", skin);
-        statusLabel.setFontScale(1.2f);
+        statusLabel.setFontScale(1.2f * scale);
 
-        // Add everything in correct order
-        table.add(titleLabel).padBottom(40).row();
-        table.add(emailField).width(500).height(80).padBottom(20).row();
-        table.add(passwordField).width(500).height(80).padBottom(30).row();
-        table.add(loginButton).width(400).height(100).padBottom(20).row();
-        table.add(registerButton).width(400).height(100).padBottom(20).row();
-        table.add(statusLabel).padTop(20).row();
+        table.add(titleLabel).padBottom(40 * scale).row();
+        table.add(emailField).width(500 * scale).height(80 * scale).padBottom(20 * scale).row();
+        table.add(passwordField).width(500 * scale).height(80 * scale).padBottom(30 * scale).row();
+        table.add(loginButton).width(400 * scale).height(100 * scale).padBottom(20 * scale).row();
+        table.add(registerButton).width(400 * scale).height(100 * scale).padBottom(20 * scale).row();
+        table.add(statusLabel).padTop(20 * scale).row();
+
 
         // --- Listeners ---
         loginButton.addListener(new ChangeListener() {
@@ -109,7 +118,6 @@ public class LoginScreen extends AbstractScreen {
             }
         });
     }
-
 
 
     @Override
