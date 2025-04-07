@@ -1,7 +1,7 @@
 package com.github.FishMiner.android;
 
-import com.github.FishMiner.data.ports.out.FirebaseAuthCallback;
-import com.github.FishMiner.data.ports.out.ILogInAPI;
+import com.github.FishMiner.data.services.FirebaseAuthCallback;
+import com.github.FishMiner.data.services.ILogInAPI;
 import com.google.firebase.auth.FirebaseAuth;
 public class AndroidLogInAPI implements ILogInAPI {
     private FirebaseAuth auth;
@@ -32,5 +32,13 @@ public class AndroidLogInAPI implements ILogInAPI {
                     callback.onFailure(task.getException().getMessage());
                 }
             });
+    }
+    @Override
+    public String getCurrentUsername() {
+        if (auth.getCurrentUser() != null) {
+            return auth.getCurrentUser().getEmail();
+        } else {
+            return null;
+        }
     }
 }
