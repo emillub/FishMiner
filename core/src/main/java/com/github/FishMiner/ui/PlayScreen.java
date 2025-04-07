@@ -12,9 +12,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.Pool;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
@@ -46,6 +46,7 @@ import com.github.FishMiner.ui.controller.ScreenManager;
  * It also provides a full-width control window with a Menu button to open an overlay.
  */
 public class PlayScreen extends AbstractScreen {
+    private static final String TAG = "PlayScreen";
     private PooledEngine engine;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
@@ -107,23 +108,15 @@ public class PlayScreen extends AbstractScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         cam.update();
-        float score = world.getScore();
-
-
-        batch.begin();
-        font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() - 10);
-        font.draw(batch, "Score: " + (int) score + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() - 40);
-        batch.end();
 
         // If the game is lost and the overlay hasn't been added yet, create it
         if (world.getTimer() <= 0) {
             if (world.getState() == WorldState.WON) {
-                // Proceed to next level for the next game if within level limit
-                System.out.println("Advancing to level " + levelNumber);
+                Logger.getInstance().debug(TAG, "Advancing to level " + levelNumber);
                 ScreenManager.getInstance().showLevelCompleteScreen(levelNumber, world.getScore());
                 return;
             } else if (world.getState() == WorldState.LOST) {
-                System.out.println("Game Over. Try again!");
+                Logger.getInstance().debug(TAG, "Game over. Level reached: " + levelNumber);
                 ScreenManager.getInstance().showLevelLostScreen();
                 return;
             }
@@ -134,6 +127,8 @@ public class PlayScreen extends AbstractScreen {
         engine.update(delta);
         stage.draw();
         world.update(delta);
+        updateScoreTimeOverlay(batch);
+
     }
 
     @Override
@@ -141,6 +136,18 @@ public class PlayScreen extends AbstractScreen {
         super.dispose();
         batch.dispose();
         font.dispose();
+    }
+
+    /**
+     * Updates the display for score and time remaining. Must be rendered after everything else.
+     * If not rendered last, it will be rendered behind the background
+     * @param batch spritebatch for this screen
+     */
+    private void updateScoreTimeOverlay(SpriteBatch batch) {
+        batch.begin();
+        font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() * 0.95f);
+        font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() * 0.98f);
+        batch.end();
     }
 
     private void addSystemTo(Engine engine) {
