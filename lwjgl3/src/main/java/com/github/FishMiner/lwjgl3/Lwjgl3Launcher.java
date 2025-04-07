@@ -3,8 +3,8 @@ package com.github.FishMiner.lwjgl3;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.github.FishMiner.FishMinerGame;
-import com.github.FishMiner.data.ports.out.FirebaseInterface;
-import com.github.FishMiner.data.ports.out.LeaderboardInterface;
+//import com.github.FishMiner.data.ports.out.FirebaseInterface;
+//import com.github.FishMiner.data.ports.out.LeaderboardInterface;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {

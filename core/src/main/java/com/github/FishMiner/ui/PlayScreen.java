@@ -74,13 +74,9 @@ public class PlayScreen extends AbstractScreen {
     private BitmapFont font;
     private World world;
 
+    // Level info
     private int levelNumber;
     private InventoryComponent inventory;
-
-
-    // Level info
-    private final int levelNumber;
-    private final float previousScore;
 
     // UI
     private TextButton pauseButton;
@@ -255,7 +251,7 @@ public class PlayScreen extends AbstractScreen {
                     inventory.money = 0;
                 }
                 Logger.getInstance().debug(TAG, "Advancing to level " + levelNumber);
-                ScreenManager.getInstance().showLevelCompleteScreen(levelNumber, world.getScore());
+                ScreenManager.getInstance().showLevelCompleteScreen(levelNumber, inventory);
                 return;
             } else if (world.getState() == WorldState.LOST) {
                 Logger.getInstance().debug(TAG, "Game over. Level reached: " + levelNumber);

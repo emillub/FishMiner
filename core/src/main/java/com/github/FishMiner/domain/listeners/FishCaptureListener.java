@@ -18,8 +18,6 @@ public class FishCaptureListener implements IGameEventListener<FishCapturedEvent
     }
     @Override
     public void onEvent(FishCapturedEvent event) {
-        System.out.println("FishCapturedEvent received with value: " + event.getValue());
-        System.out.println("Score BEFORE: " + world.getScore());
         Engine engine = world.getEngine();
         if(engine != null) {
             ImmutableArray<Entity> players = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());

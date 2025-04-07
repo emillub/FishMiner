@@ -15,6 +15,7 @@ import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.OceanEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
+import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 import com.github.FishMiner.domain.events.ScoreEvent;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.level.LevelConfigFactory;
@@ -31,7 +32,7 @@ public class World implements IGameEventListener<ScoreEvent> {
     private final Random random = new Random();
 
     private WorldState state = WorldState.RUNNING;
-    private float score = 0f;
+    private float score;
     private int targetScore = 0;
     private float timer = 60f;
 
@@ -39,6 +40,7 @@ public class World implements IGameEventListener<ScoreEvent> {
         this.engine = engine;
         this.config = Configuration.getInstance();
         this.factory = new OceanEntityFactory(engine);
+        this.score = 0f;
     }
 
     public void createLevel(LevelConfig config, float startingScore) {
@@ -62,7 +64,13 @@ public class World implements IGameEventListener<ScoreEvent> {
     }
 
 
+    private void increaseScore(float scoreIncrease) {
+        ValidateUtil.validatePositiveFloat(scoreIncrease);
+        score += scoreIncrease;
+    }
+
     private void decreaseScore(float scoreDecrease) {
+        ValidateUtil.validatePositiveFloat(scoreDecrease);
         this.score = Math.max(score - scoreDecrease, 0);
     }
 
@@ -102,7 +110,7 @@ public class World implements IGameEventListener<ScoreEvent> {
     public float getTimer() {
         return timer;
     }
-  
+
     public boolean isPaused() {
         return state == WorldState.PAUSED;
     }
