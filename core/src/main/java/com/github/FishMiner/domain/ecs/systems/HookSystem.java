@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
+import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
@@ -86,9 +87,6 @@ public class HookSystem extends IteratingSystem {
             float dx = posX - hook.anchorPoint.x;
             float dy = posY - hook.anchorPoint.y;
 
-            // Compute the angle (in degrees) of that vector.
-            // MathUtils.atan2 returns the angle relative to the positive x-axis.
-            // Adding 90° makes 0° represent the hook hanging straight down.
             hookRot.angle = MathUtils.atan2(dy, dx) * MathUtils.radiansToDegrees + 90;
 
         }
