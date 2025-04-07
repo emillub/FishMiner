@@ -26,12 +26,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Pool;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
+import com.github.FishMiner.domain.ecs.systems.BackgroundRenderSystem;
 import com.github.FishMiner.domain.ecs.systems.FishingSystem;
 import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
+import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
 import com.github.FishMiner.domain.level.LevelConfig;
@@ -55,6 +58,7 @@ import com.github.FishMiner.ui.controller.ScreenManager;
  * It also provides a full-width control window with a Menu button to open an overlay.
  */
 public class PlayScreen extends AbstractScreen {
+    private static final String TAG = "PlayScreen";
 
     private static final float OVERLAY_ALPHA = 0.6f;
     private static final int BUTTON_WIDTH = 200;
@@ -103,7 +107,7 @@ public class PlayScreen extends AbstractScreen {
             Configuration.getInstance().getOceanHeight()
         );
 
-        addSystems(engine);
+        addSystemTo(engine);
     }
 
     private void setupWorld() {
@@ -210,61 +214,55 @@ public class PlayScreen extends AbstractScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        cam.update();
 
-        world.update(delta);
-        drawBackground();
-
-        batch.begin();
-        font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() - 10);
-        font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() - 40);
-        batch.end();
-
-        if (world.getState() == WorldState.WON) {
-            ScreenManager.getInstance().showLevelCompleteScreen(levelNumber, world.getScore());
-            return;
-        } else if (world.getState() == WorldState.LOST) {
-            ScreenManager.getInstance().showLevelLostScreen();
-            return;
-        }
+        // If the game is lost and the overlay hasn't been added yet, create it
+        if (world.getTimer() <= 0) {
+            if (world.getState() == WorldState.WON) {
+                Logger.getInstance().debug(TAG, "Advancing to level " + levelNumber);
+                ScreenManager.getInstance().showLevelCompleteScreen(levelNumber, world.getScore());
+                return;
+            } else if (world.getState() == WorldState.LOST) {
+                Logger.getInstance().debug(TAG, "Game over. Level reached: " + levelNumber);
+                ScreenManager.getInstance().showLevelLostScreen();
+                return;
+            }
+    }
 
         stage.act(delta);
         if (!world.isPaused()) {
             engine.update(delta);
         }
         stage.draw();
+        world.update(delta);
+        updateScoreTimeOverlay(batch);
+
     }
 
-    private void drawBackground() {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        shapeRenderer.setColor(0.5f, 0.8f, 1f, 1f);
-        shapeRenderer.rect(
-            0,
-            Configuration.getInstance().getOceanHeight(),
-            Configuration.getInstance().getScreenWidth(),
-            Configuration.getInstance().getScreenHeight() - Configuration.getInstance().getOceanHeight()
-        );
-
-        int levels = Configuration.getInstance().getDepthLevels();
-        int levelHeight = Configuration.getInstance().getOceanHeight() / levels;
-        for (int i = 0; i < levels; i++) {
-            float shade = 0.2f + (i * 0.15f);
-            shapeRenderer.setColor(0f, 0f, shade, 1f);
-            shapeRenderer.rect(0, i * levelHeight, Configuration.getInstance().getScreenWidth(), levelHeight);
-        }
-
-        shapeRenderer.end();
+    /**
+     * Updates the display for score and time remaining. Must be rendered after everything else.
+     * If not rendered last, it will be rendered behind the background
+     * @param batch spritebatch for this screen
+     */
+    private void updateScoreTimeOverlay(SpriteBatch batch) {
+        batch.begin();
+        font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() * 0.95f);
+        font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() * 0.98f);
+        batch.end();
     }
 
-    private void addSystems(Engine engine) {
+    private void addSystemTo(Engine engine) {
+        engine.addSystem(new BackgroundRenderSystem(shapeRenderer));
         engine.addSystem(new AnimationSystem());
+        RenderingSystem renderingSystem = new RenderingSystem(batch);
+        cam = renderingSystem.getCam();
+        engine.addSystem(renderingSystem);
         engine.addSystem(new MovementSystem());
-        engine.addSystem(new RenderingSystem(batch));
         engine.addSystem(new HookSystem());
         engine.addSystem(new PhysicalSystem());
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new SpawningQueueSystem());
-
+        engine.addSystem(new RotationSystem());
 
         // Registrer systems that are also listeners
         GameEventBus eventBus = GameEventBus.getInstance();
@@ -272,7 +270,6 @@ public class PlayScreen extends AbstractScreen {
         ScoreSystem scoreSystem = new ScoreSystem();
         engine.addSystem(scoreSystem);
         eventBus.register(scoreSystem);
-
 
         FishingSystem fishSystem =  new FishingSystem();
         engine.addSystem(fishSystem);
@@ -283,6 +280,7 @@ public class PlayScreen extends AbstractScreen {
         eventBus.register(hookInputSystem);
 
         if (Configuration.getInstance().isDebugMode()) {
+            // toggle Debug Mode in Configuration
             engine.addSystem(new DebugRenderingSystem());
         }
     }

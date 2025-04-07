@@ -26,7 +26,6 @@ public class World implements IGameEventListener<ScoreEvent> {
     private final Random random = new Random();
 
     private WorldState state = WorldState.RUNNING;
-
     private float score = 0f;
     private int targetScore = 0;
     private float timer = 60f;
@@ -64,7 +63,7 @@ public class World implements IGameEventListener<ScoreEvent> {
     }
 
     private void decreaseScore(float scoreDecrease) {
-        score = Math.max(score - scoreDecrease, 0);
+        this.score = Math.max(score - scoreDecrease, 0);
     }
 
     public float getScore() {
