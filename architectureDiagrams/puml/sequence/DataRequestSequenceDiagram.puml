@@ -1,0 +1,38 @@
+@startuml UserLoginSequenceDiagram
+
+actor User
+participant LoginScreen
+participant IRequestManager
+participant RequestManager
+participant ILoginHandler
+participant LoginHandler
+participant IAuthService
+participant FirebaseAuthService
+participant Firebase
+
+User -> LoginScreen : Clicks Login Button
+LoginScreen -> IRequestManager : login(email, password, callback)
+IRequestManager -> RequestManager : login(...)
+RequestManager -> ILoginHandler : login(...)
+ILoginHandler -> LoginHandler : login(...)
+LoginHandler -> IAuthService : login(...)
+IAuthService -> FirebaseAuthService : login(...)
+FirebaseAuthService -> Firebase : signInWithEmailAndPassword(...)
+
+alt Success
+    Firebase --> FirebaseAuthService : success
+    FirebaseAuthService --> LoginHandler : callback.onSuccess()
+    LoginHandler --> ILoginHandler : callback.onSuccess()
+    ILoginHandler --> RequestManager : callback.onSuccess()
+    RequestManager --> IRequestManager : callback.onSuccess()
+    IRequestManager --> LoginScreen : callback.onSuccess()
+else Failure
+    Firebase --> FirebaseAuthService : error
+    FirebaseAuthService --> LoginHandler : callback.onFailure()
+    LoginHandler --> ILoginHandler : callback.onFailure()
+    ILoginHandler --> RequestManager : callback.onFailure()
+    RequestManager --> IRequestManager : callback.onFailure()
+    IRequestManager --> LoginScreen : callback.onFailure(error)
+end
+
+@enduml

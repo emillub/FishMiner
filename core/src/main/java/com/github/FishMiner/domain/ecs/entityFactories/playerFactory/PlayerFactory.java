@@ -1,8 +1,9 @@
 package com.github.FishMiner.domain.ecs.entityFactories.playerFactory;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
+
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
@@ -13,6 +14,11 @@ import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
+
+import com.github.FishMiner.domain.ecs.components.*;
+
+import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
+
 import com.github.FishMiner.domain.states.HookStates;
 
 public class PlayerFactory {
@@ -20,7 +26,7 @@ public class PlayerFactory {
     private PlayerFactory() {
     }
 
-    public static void addNewPlayerCharacterTo(Engine engine, int posX, int posY, InventoryComponent existingInventory) {
+    public static void addNewPlayerCharacterTo(PooledEngine engine, int posX, int posY, InventoryComponent existingInventory) {
         Entity player = createPlayerEntity(engine, posX, posY, existingInventory);
         Entity hook = createHookEntity(engine, player);
 
@@ -33,20 +39,20 @@ public class PlayerFactory {
         engine.addEntity(hook);
     }
 
-    private static Entity createPlayerEntity(Engine engine, int posX, int posY, InventoryComponent existingInventory) {
-        Entity player = new Entity();
 
-        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
+    private static Entity createPlayerEntity(PooledEngine engine, int posX, int posY, InventoryComponent existingInventory) {
+        Entity player = engine.createEntity();
+
+
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
+        ScoreComponent scoreComponent = engine.createComponent(ScoreComponent.class);
 
         textureComponent.setRegion("fisherman.png");
         transformComponent.pos.x = posX;
-        transformComponent.pos.y =  posY + textureComponent.getFrameHeight() * 0.3f;
-        transformComponent.pos.z = 0f;
-
-
-        // TODO: maybe player is added via the hook as an attachment? check this
+        transformComponent.pos.y = posY + textureComponent.getFrameHeight() * 0.3f;
+        transformComponent.pos.z = 1;
 
         playerComponent.hookAnchorPoint.x = transformComponent.pos.x + textureComponent.getFrameWidth() * 0.5f;
         playerComponent.hookAnchorPoint.y = transformComponent.pos.y + textureComponent.getFrameHeight() * 0.5f;
@@ -73,8 +79,8 @@ public class PlayerFactory {
      * @return A hook Entity
      */
     @SuppressWarnings("unchecked")
-    private static Entity createHookEntity(Engine engine, Entity player) {
-        Entity hook = new Entity();
+    private static Entity createHookEntity(PooledEngine engine, Entity player) {
+        Entity hook = engine.createEntity();
 
         HookComponent hookComponent = engine.createComponent(HookComponent.class);
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
@@ -86,17 +92,18 @@ public class PlayerFactory {
         AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
 
         textureComponent.setRegion("hook_1cols_1rows.png");
-        // TODO: remove rotation and handle this with transformComponent
-        hook.add(rotationComponent);
+
 
         stateComponent.changeState(HookStates.SWINGING);
-
         velocityComponent.velocity = new Vector2(0, 0);
 
+        attachmentComponent.setParentEntity(player);
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
-        hookComponent.anchorPoint.set(playerComponent.hookAnchorPoint);
+        TransformComponent playerPos = player.getComponent(TransformComponent.class);
 
-        // TODO: add scaling and centralize width and height via something other than textures
+        hookComponent.anchorPoint.set(playerComponent.hookAnchorPoint);
+        transformComponent.pos.z = playerPos.pos.z + 1;
+
         boundsComponent.bounds.setPosition(
             transformComponent.pos.x - boundsComponent.bounds.width * 0.5f,
             transformComponent.pos.y - boundsComponent.bounds.height * 0.5f
@@ -107,12 +114,10 @@ public class PlayerFactory {
             textureComponent.getFrameHeight()
         );
 
-
-
-        // Add a StateComponent with a default state (SWINGING)
         hook.add(textureComponent);
         hook.add(hookComponent);
         hook.add(transformComponent);
+        hook.add(rotationComponent);
         hook.add(velocityComponent);
         hook.add(stateComponent);
         hook.add(attachmentComponent);
@@ -121,4 +126,3 @@ public class PlayerFactory {
         return hook;
     }
 }
-

@@ -17,6 +17,7 @@ public abstract class AbstractScreen implements Screen {
 
     protected Stage stage;
     protected Skin skin;
+    protected OrthographicCamera cam;
 
     public AbstractScreen() {
         stage = new Stage(new FitViewport(

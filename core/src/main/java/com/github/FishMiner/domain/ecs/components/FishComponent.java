@@ -10,7 +10,6 @@ public class FishComponent implements Component {
      * The depth level is a positive value determined by the number of "lanes" in the ocean,
      * by using a value defined in the World (currently in Configuration)
      * The depthLevel is translated into the Fish Entity's vertical position in the ocean.
-     * @see com.github.FishMiner.domain.ecs.util.World
      */
     public int depthLevel;
     public int value;

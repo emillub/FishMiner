@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.domain.ecs.components.InventoryComponent;
+
+import com.github.FishMiner.ui.LeaderBoardScreen;
 import com.github.FishMiner.ui.LevelCompleteScreen;
 import com.github.FishMiner.ui.LevelLostScreen;
 import com.github.FishMiner.ui.LoginScreen;
@@ -74,7 +76,9 @@ public class ScreenManager {
     public void setLoginScreen(LoginScreen loginScreen) {
         game.setScreen(loginScreen);
     }
-
+    public void setLeaderBoardScreen(LeaderBoardScreen leaderBoardScreen){
+        game.setScreen(leaderBoardScreen);
+    }
 
     public void showLevelCompleteScreen(int levelNumber, InventoryComponent inventory) {
         this.currentInventory = inventory;
@@ -99,9 +103,7 @@ public class ScreenManager {
     public InventoryComponent getCurrentInventory() {
         return currentInventory;
     }
-
-
-
+  
     public void pauseGamePressed() {
         game.setScreen(pauseScreen);
     }

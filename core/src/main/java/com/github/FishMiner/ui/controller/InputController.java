@@ -1,15 +1,15 @@
 package com.github.FishMiner.ui.controller;
 
-import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.InputProcessor;
 import com.github.FishMiner.domain.events.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
 import com.github.FishMiner.domain.ecs.util.HookUtil;
 
 public class InputController implements InputProcessor {
-    private final Engine engine;
+    private final PooledEngine engine;
 
-    public InputController(Engine engine) {
+    public InputController(PooledEngine engine) {
         this.engine = engine;
     }
 

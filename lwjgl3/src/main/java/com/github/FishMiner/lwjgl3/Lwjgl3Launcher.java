@@ -11,13 +11,16 @@ public class Lwjgl3Launcher {
     public static void main(String[] args) {
         if (StartupHelper.startNewJvmIfRequired()) return; // This handles macOS support and helps on Windows.
         createApplication();
-        FirebaseInterface firebase;
-        LeaderboardInterface leaderboard;
+        //FirebaseInterface firebase;
+        //LeaderboardInterface leaderboard;
     }
 
 
     private static Lwjgl3Application createApplication() {
-        return new Lwjgl3Application(new FishMinerGame(firebase, leaderboard), getDefaultConfiguration());
+        DesktopLogInAPI desktopLogInAPI = new DesktopLogInAPI();
+        DesktopLeaderBoardAPI desktopLeaderBoardAPI = new DesktopLeaderBoardAPI();
+        return new Lwjgl3Application(new FishMinerGame(desktopLogInAPI, desktopLeaderBoardAPI), getDefaultConfiguration());
+        //return new Lwjgl3Application(new FishMinerGame(firebase, leaderboard), getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
