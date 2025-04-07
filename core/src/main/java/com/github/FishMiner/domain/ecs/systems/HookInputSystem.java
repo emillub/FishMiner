@@ -7,28 +7,41 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.util.HookUtil;
-import com.github.FishMiner.domain.events.IEventListener;
-import com.github.FishMiner.domain.events.impl.FireHookEvent;
-import com.github.FishMiner.domain.states.EntityState;
+import com.github.FishMiner.domain.events.impl.FireInputEvent;
+import com.github.FishMiner.domain.listeners.IGameEventListener;
+import com.github.FishMiner.domain.states.HookStates;
 
+public class HookInputSystem extends EntitySystem implements IGameEventListener<FireInputEvent> {
 
-public class HookInputSystem extends EntitySystem implements IEventListener<FireHookEvent> {
-    ComponentMapper<HookComponent> hm = ComponentMapper.getFor(HookComponent.class);
+    private final ComponentMapper<HookComponent> hm = ComponentMapper.getFor(HookComponent.class);
     private Entity hook;
 
-    @Override
-    public void onEvent(FireHookEvent event) {
-        Entity hook = event.getEventEntity();
-        StateComponent<EntityState.HookStates> stateComponent = hook.getComponent(StateComponent.class);
-        if (stateComponent.state == EntityState.HookStates.SWINGING) {
-            stateComponent.changeState(EntityState.HookStates.FIRE);
-        }
+    public HookInputSystem() {
     }
+
     @Override
     public void addedToEngine(Engine engine) {
         hook = HookUtil.getHook(engine);
         if (hook == null) {
             throw new IllegalArgumentException("Hook cannot be null");
         }
+    }
+
+    @Override
+    public void onEvent(FireInputEvent event) {
+        // Fire the hook only if its state is SWINGING
+        Entity hookEntity = event.getTarget();
+        if (hookEntity == null) {
+            throw new IllegalArgumentException("Hook entity cannot be null");
+        }
+        StateComponent<HookStates> stateComponent =  hookEntity.getComponent(StateComponent.class);
+        if (stateComponent != null && stateComponent.state == HookStates.SWINGING) {
+            stateComponent.changeState(HookStates.FIRE);
+        }
+    }
+
+    @Override
+    public Class<FireInputEvent> getEventType() {
+        return FireInputEvent.class;
     }
 }

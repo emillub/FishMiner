@@ -6,7 +6,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.FishComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
+import com.github.FishMiner.domain.ecs.components.StateComponent;
 
 
 public final class HookUtil {
@@ -23,10 +25,14 @@ public final class HookUtil {
      */
     public static Entity getHook(Engine engine) {
         ImmutableArray<Entity> hookEntities = engine.getEntitiesFor(
-            Family.all(BoundsComponent.class, PositionComponent.class)
+            Family.all(HookComponent.class, BoundsComponent.class, TransformComponent.class, StateComponent.class)
                 .exclude(FishComponent.class)
                 .get()
         );
-        return hookEntities.size() > 0 ? hookEntities.first() : null;
+        Entity hook = hookEntities.size() > 0 ? hookEntities.first() : null;
+        if (hook == null) {
+            throw new RuntimeException("HookUtil says: Hook cannot be null");
+        }
+        return hook;
     }
 }

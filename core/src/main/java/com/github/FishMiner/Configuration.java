@@ -1,28 +1,34 @@
 package com.github.FishMiner;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Configuration {
+
     private static Configuration instance;
-    private int screenWidth;
-    private int screenHeight;
+    private static PooledEngine engine;
+    private static int SCREEN_WIDTH = Gdx.graphics.getWidth();;
+    private static int SCREEN_HEIGHT = Gdx.graphics.getHeight();
+    public static final float OCEAN_HEIGHT_PERCENTAGE = 0.75f;
+    public static final int OCEAN_DEPTH_LEVELS = 6;
+    private static final float RESOLUTION_X = 900f;
+    private static final float RESOLUTION_Y = 1600f;
+    private static float scaleX;
+    private static float scaleY;
 
-    private float scaleX;
-    private float scaleY;
+    private boolean soundEnabled = true;
+    private float musicVolume = 1f;
 
-    private final float resolutionX = 640f;
-    private final float resolutionY = 480f;
 
     private final Skin uiSkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
-
     private Configuration() {
-        screenWidth = Gdx.graphics.getWidth();
-        screenHeight = Gdx.graphics.getHeight();
-        scaleX = screenWidth / resolutionX;
-        scaleY = screenHeight / resolutionY;
+        engine = new PooledEngine();
+        scaleX = SCREEN_WIDTH / RESOLUTION_X;
+        scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
     }
 
     public static Configuration getInstance() {
@@ -32,23 +38,34 @@ public class Configuration {
         return instance;
     }
 
+    public PooledEngine getEngine() { return engine; }
+
     public Vector2 getScaledPosition(float x, float y) {
         return new Vector2(x * scaleX, y * scaleY);
     }
 
-    public void updateConfiguration() {
-        this.screenWidth = Gdx.graphics.getWidth();
-        this.screenHeight = Gdx.graphics.getHeight();
-        this.scaleX = screenWidth / resolutionX;
-        this.scaleY = screenHeight / resolutionY;
+    public float getScalePosX() {
+        return scaleX;
     }
 
+    public float getScalePosY() {
+        return scaleY;
+    }
+
+    public void updateConfiguration() {
+        SCREEN_WIDTH = Gdx.graphics.getWidth();
+        SCREEN_HEIGHT = Gdx.graphics.getHeight();
+        scaleX = SCREEN_WIDTH / RESOLUTION_X;
+        scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
+    }
+
+
     public int getScreenWidth() {
-        return screenWidth;
+        return SCREEN_WIDTH;
     }
 
     public int getScreenHeight() {
-        return screenHeight;
+        return SCREEN_HEIGHT;
     }
 
     public float getScaleY() {
@@ -61,20 +78,44 @@ public class Configuration {
     }
 
     public float getBaseSpeed() {
-        float baseSpeed = 100f;
+        float baseSpeed = 1f;
         return baseSpeed * scaleX;
     }
 
-    public int getOceanHeight() {
-        return (int) (3f * screenHeight) / 4;
+    public float getOceanHeightPercentage() {
+        return OCEAN_HEIGHT_PERCENTAGE;
     }
 
-    public int getHighestSpawnPos() {
-        return this.getOceanHeight() * 4/5;
+    public int getOceanHeight() {
+        return (int) (SCREEN_HEIGHT * OCEAN_HEIGHT_PERCENTAGE);
+    }
+
+    public int getDepthLevels() {
+        return OCEAN_DEPTH_LEVELS;
     }
 
     public Skin getUiSkin() {
         return uiSkin;
+    }
+
+    public boolean isDebugMode() {
+        return false;
+    }
+
+    public boolean isSoundEnabled() {
+        return soundEnabled;
+    }
+
+    public void setSoundEnabled(boolean enabled) {
+        this.soundEnabled = enabled;
+    }
+
+    public float getMusicVolume() {
+        return musicVolume;
+    }
+
+    public void setMusicVolume(float volume) {
+        this.musicVolume = volume;
     }
 
 }

@@ -1,51 +1,136 @@
 package com.github.FishMiner.domain.ecs.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.github.FishMiner.Logger;
+import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
+import com.github.FishMiner.domain.ecs.components.FishComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
-import com.github.FishMiner.domain.ecs.components.PositionComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
+import com.github.FishMiner.domain.ecs.components.StateComponent;
+import com.github.FishMiner.domain.ecs.components.VelocityComponent;
+import com.github.FishMiner.domain.ecs.util.ValidateUtil;
+import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
+import com.github.FishMiner.domain.events.impl.FishHitEvent;
+import com.github.FishMiner.domain.events.GameEventBus;
+import com.github.FishMiner.domain.listeners.IGameEventListener;
+import com.github.FishMiner.domain.states.FishableObjectStates;
+import com.github.FishMiner.domain.states.HookStates;
 
-/**
- * FishingSystem is responsible for attaching the fish to the hook.
- * For each hook that has an attached fish, this system updates the fish’s PositionComponent
- * so that its position is the hook's position plus the rotated offset. Optionally, it can update
- * the fish’s rotation to match the hook.
- */
-public class FishingSystem extends IteratingSystem {
-    private ComponentMapper<HookComponent> hookMapper = ComponentMapper.getFor(HookComponent.class);
-    private ComponentMapper<PositionComponent> posMapper = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
+public class FishingSystem extends EntitySystem implements IGameEventListener<FishHitEvent> {
+    public static final String TAG = "FishingSystem";
+    private final ComponentMapper<HookComponent> hookMapper = ComponentMapper.getFor(HookComponent.class);
+    private final ComponentMapper<TransformComponent> posMapper = ComponentMapper.getFor(TransformComponent.class);
+    private final ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
+    private final ComponentMapper<StateComponent> stateMapper = ComponentMapper.getFor(StateComponent.class);
+    private final ComponentMapper<FishComponent> fishMapper = ComponentMapper.getFor(FishComponent.class);
+    private final ComponentMapper<AttachmentComponent> attachmentMapper = ComponentMapper.getFor(AttachmentComponent.class);
 
+    private Entity hookEntity;
+
+    /**
+     * must be added to GameEventBus
+     */
     public FishingSystem() {
-        // We iterate over hooks, as the hook holds the reference to an attached fish.
-        super(Family.all(HookComponent.class, PositionComponent.class).get());
     }
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) {
-        HookComponent hook = hookMapper.get(entity);
-        PositionComponent hookPos = posMapper.get(entity);
+    public void addedToEngine(Engine engine) {
+        ImmutableArray<Entity> hooks = engine.getEntitiesFor(
+            Family.all(HookComponent.class, TransformComponent.class, AttachmentComponent.class).get()
+        );
+        if (hooks.size() > 0) {
+            hookEntity = hooks.first();
+        }
+    }
 
-        if (hook.attachedFish != null) {
-            Entity fish = hook.attachedFish;
-            PositionComponent fishPos = posMapper.get(fish);
-            RotationComponent fishRot = rotMapper.get(fish);
+    @Override
+    @SuppressWarnings("unchecked")
+    public void update(float deltaTime) {
+        if (hookEntity == null) return;
 
-            if (fishPos != null) {
-                // Compute the rotated offset based on the hook’s current swing angle.
-                Vector2 rotatedOffset = new Vector2(hook.offset).rotateRad(hook.swingAngle);
-                // Update the fish’s position: hook position plus the rotated offset.
-                fishPos.position.set(hookPos.position).add(rotatedOffset);
+        HookComponent hook = hookMapper.get(hookEntity);
+
+        // Process the fish attached to the hook, if any.
+        if (hook.hasAttachedEntity()) {
+            StateComponent<HookStates> hookState = hookEntity.getComponent(StateComponent.class);
+            TransformComponent hookPos = posMapper.get(hookEntity);
+            AttachmentComponent hookParent = attachmentMapper.get(hookEntity);
+
+            Entity fishEntity = hook.attachedFishableEntity;
+            StateComponent<FishableObjectStates> fishState = stateMapper.get(fishEntity);
+            TransformComponent fishPos = posMapper.get(fishEntity);
+            RotationComponent fishRot = rotMapper.get(fishEntity);
+            FishComponent fishComp = fishMapper.get(fishEntity);
+
+
+            // 1. If the hook is in FIRE state and the fish is FISHABLE, then hook it.
+            if (hookState.state == HookStates.FIRE && fishState.state == FishableObjectStates.FISHABLE) {
+                fishState.changeState(FishableObjectStates.HOOKED);
+                hookState.changeState(HookStates.REELING);
             }
-            if (fishRot != null) {
-                // Optionally, set the fish's rotation to match the hook's rotation.
-                fishRot.angle = hook.swingAngle * MathUtils.radiansToDegrees;
+
+            // 2. If the hook is REELING, update the fish's position relative to the hook.
+            if (hookState.state == HookStates.REELING) {
+                Vector3 rotatedOffset = new Vector3(hook.offset)
+                    .rotate(new Vector3(0, 0, 1), hook.swingAngle * MathUtils.radiansToDegrees);
+
+                fishPos.pos.set(hookPos.pos).add(rotatedOffset);
+
+                if (fishRot != null) {
+                    fishRot.angle = hook.swingAngle * MathUtils.radiansToDegrees;
+                }
+            }
+
+            // 3. When the hook is RETURNED
+            if (hookState.state == HookStates.RETURNED) {
+                if (fishComp != null) {
+                    fishState.changeState(FishableObjectStates.CAPTURED);
+                    Entity playerParent = hookParent.getParent();
+                    GameEventBus.getInstance().post(new FishCapturedEvent(fishEntity, playerParent));
+                    fishEntity.remove(VelocityComponent.class); // this fish are no longer processed by MovementSystem
+                } else {
+                    fishState.changeState(FishableObjectStates.ATTACKING);
+                }
+                hook.attachedFishableEntity = null;
             }
         }
+    }
+
+    @Override
+    public void onEvent(FishHitEvent event) {
+        if (event.isHandled()) {
+            return;
+        }
+        if (hookEntity == null) {
+            ImmutableArray<Entity> hooks = getEngine().getEntitiesFor(
+                Family.all(HookComponent.class, TransformComponent.class).get()
+            );
+            if (hooks.size() > 0) {
+                hookEntity = hooks.first();
+            }
+        }
+
+        // When a FishHitEvent is received, attach the fish to the hook if none is attached.
+        if (hookEntity != null) {
+            HookComponent hook = hookMapper.get(hookEntity);
+            if (hook.attachedFishableEntity == null) {
+                hook.attachedFishableEntity = event.getTarget();
+                event.setHandled();
+                Logger.getInstance().log(TAG, "Fish hit processed: attached fish " + event.getTarget());
+            }
+        }
+    }
+
+    @Override
+    public Class<FishHitEvent> getEventType() {
+        return FishHitEvent.class;
     }
 }

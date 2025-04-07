@@ -1,21 +1,18 @@
 package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
-import com.github.FishMiner.domain.states.IState;
 
-
-public class StateComponent<T extends IState> implements Component {
+public class StateComponent<T extends Enum<T>> implements Component {
     public T state;
 
-    public StateComponent(T initialState) {
-        this.state = initialState;
+    public void changeState(T newState) {
+        this.state = newState;
     }
 
-    public void changeState(T newState) {
-        if (state != null) {
-            state.onExit();
+    public T getState() {
+        if (state == null) {
+            throw new IllegalStateException("cannot getState from entity where state is null");
         }
-        state = newState;
-        state.onEnter();
+        return state;
     }
 }

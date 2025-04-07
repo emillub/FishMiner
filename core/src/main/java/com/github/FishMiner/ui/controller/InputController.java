@@ -1,21 +1,21 @@
 package com.github.FishMiner.ui.controller;
 
-import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.InputProcessor;
-import com.github.FishMiner.domain.events.EventBus;
-import com.github.FishMiner.domain.events.impl.FireHookEvent;
+import com.github.FishMiner.domain.events.GameEventBus;
+import com.github.FishMiner.domain.events.impl.FireInputEvent;
 import com.github.FishMiner.domain.ecs.util.HookUtil;
 
 public class InputController implements InputProcessor {
-    private final Engine engine;
+    private final PooledEngine engine;
 
-    public InputController(Engine engine) {
+    public InputController(PooledEngine engine) {
         this.engine = engine;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        EventBus.getInstance().post(new FireHookEvent(HookUtil.getHook(engine)));
+        GameEventBus.getInstance().post(new FireInputEvent(HookUtil.getHook(engine)));
         return true;
     }
 

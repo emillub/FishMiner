@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.ui.controller.ScreenManager;
 
 public class MenuScreen extends AbstractScreen {
 
@@ -19,53 +20,64 @@ public class MenuScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        super.show();
+        Gdx.input.setInputProcessor(stage);
+        FishMinerGame.playBackgroundMusic();
 
-        // Create a window to serve as the main menu container
-        Window window = new Window("Main Menu", skin, "default");
-        window.defaults().pad(10f);
+        Table rootTable = new Table();
+        rootTable.setFillParent(true);
+        rootTable.setDebug(true);
+        stage.addActor(rootTable);
 
-        // Create a table for button layout
-        Table buttonTable = new Table();
-        buttonTable.defaults().pad(10f).fillX().uniformX();
+        TextButton settingsButton = new TextButton("Settings", skin);
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().setSettingScreen(new SettingScreen());
+            }
+        });
+        TextButton loginButton = new TextButton("Login", skin);
+        loginButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().setLoginScreen(new LoginScreen());
+            }
+        });
 
-        // Create and add the Play button
         TextButton playButton = new TextButton("Play", skin);
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // Start the game by switching to GameScreen
-                ((FishMinerGame) Gdx.app.getApplicationListener()).setScreen(new PlayScreen());
+                ScreenManager.getInstance().startGamePressed();
             }
         });
-        buttonTable.add(playButton);
-        buttonTable.row();
 
-        // Create and add the Exit button
-        TextButton exitButton = new TextButton("Exit", skin);
-        exitButton.addListener(new ChangeListener() {
+        //TO TEST
+        TextButton TEST = new TextButton("TEST", skin);
+        TEST.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // Exit the application
-                Gdx.app.exit();
+                ScreenManager.getInstance().showLevelCompleteScreen(1,0);
             }
         });
-        buttonTable.add(exitButton);
 
-        // Add the button table to the window
-        window.add(buttonTable).expand().fill();
-        window.pack();
+        TextButton leaderboardButton = new TextButton("Leaderboard", skin);
+        leaderboardButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().setLeaderBoardScreen(new LeaderBoardScreen());
+            }
+        });
 
-        // Center the window on the stage
-        window.setPosition(
-            MathUtils.roundPositive(stage.getWidth() / 2f - window.getWidth() / 2f),
-            MathUtils.roundPositive(stage.getHeight() / 2f - window.getHeight() / 2f)
-        );
 
-        // Add a fade-in effect for a smoother transition
-        window.addAction(Actions.sequence(Actions.alpha(0f), Actions.fadeIn(1f)));
-
-        stage.addActor(window);
+        rootTable.add(loginButton).expand().fillX().fill().fillY();
+        rootTable.row();
+        rootTable.add(playButton).expand().fillX().fill().fillY();
+        rootTable.row();
+        rootTable.add(settingsButton).expand().fillX().fill().fillY();
+        rootTable.row();
+        rootTable.add(TEST).expand().fillX().fill().fillY();
+        rootTable.row();
+        rootTable.add(leaderboardButton).expand().fillX().fill().fillY();
     }
 
     @Override
