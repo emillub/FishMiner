@@ -81,4 +81,11 @@ public class DesktopLogInAPI implements ILogInAPI {
     public String getIdToken() {
         return idToken;
     }
+
+    @Override
+    public void logout() {
+        idToken = null;
+        currentUsername = null;
+    }
+
 }

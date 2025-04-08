@@ -103,7 +103,7 @@ public class ScreenManager {
     public InventoryComponent getCurrentInventory() {
         return currentInventory;
     }
-  
+
     public void pauseGamePressed() {
         game.setScreen(pauseScreen);
     }
