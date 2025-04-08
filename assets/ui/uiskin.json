@@ -316,6 +316,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
         fontDisabled: gray
     },
     com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+        "buttonBlue": {"name": "white", "color": { "r": 0.3, "g": 0.45, "b": 0.85, "a": 1 }},
         buttonUp: { name: rect, color: up },
         buttonOver: { name: rect, color: over },
         buttonDown: { name: rect, color: down },
@@ -435,7 +436,15 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
         text: { font: default, fontColor: up, overFontColor: over, downFontColor: down, disabledFontColor: disabled,
             pressedOffsetY: -1, pressedOffsetX: 1 },
         textToggle: { font: default, fontColor: up, overFontColor: over, downFontColor: down, disabledFontColor:
-        disabled, checkedFontColor: font, checkedOverFontColor: fontOver, pressedOffsetY: -1, pressedOffsetX: 1 }
+        disabled, checkedFontColor: font, checkedOverFontColor: fontOver, pressedOffsetY: -1, pressedOffsetX: 1 },
+      "blue-accent": {
+        "up": "buttonBlue",
+        "down": "buttonBlue",
+        "over": "buttonBlue",
+        "font": "default",
+        "fontColor": "white"
+      }
+
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
         default: { font: default, messageFont: default, fontColor: font, focusedFontColor: fontOver, disabledFontColor: fontDisabled,
