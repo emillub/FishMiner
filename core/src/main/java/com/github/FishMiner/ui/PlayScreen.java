@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -93,6 +94,7 @@ public class PlayScreen extends AbstractScreen {
     @Override
     public void show() {
         super.show();
+        stage.clear(); // make sure stage is clean when entering play screen
         initializeCore();
         setupWorld();
         setupInput();
@@ -125,23 +127,40 @@ public class PlayScreen extends AbstractScreen {
 
     private void setupInput() {
         InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(stage);
+
         multiplexer.addProcessor(new InputAdapter() {
+
             @Override
-            public boolean keyDown(int keycode) {
-                if (keycode == Input.Keys.SPACE && !world.isPaused()) {
-                    ImmutableArray<Entity> hooks = engine.getEntitiesFor(Family.all(HookComponent.class, TransformComponent.class, StateComponent.class).get());
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                if (pointer > 0) return false;
+
+                Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(screenX, screenY));
+                if (stage.hit(stageCoords.x, stageCoords.y, true) == null) {
+                    return triggerHook();
+                }
+                return false;
+            }
+
+
+            private boolean triggerHook() {
+                if (!world.isPaused()) {
+                    ImmutableArray<Entity> hooks = engine.getEntitiesFor(
+                        Family.all(HookComponent.class, TransformComponent.class, StateComponent.class).get()
+                    );
                     if (hooks.size() > 0) {
                         Entity hook = hooks.first();
                         GameEventBus.getInstance().post(new FireInputEvent(hook));
+                        return true;
                     }
-                    return true;
                 }
                 return false;
             }
         });
+
+        multiplexer.addProcessor(stage);
         Gdx.input.setInputProcessor(multiplexer);
     }
+
 
     private void setupPauseUI() {
         Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
