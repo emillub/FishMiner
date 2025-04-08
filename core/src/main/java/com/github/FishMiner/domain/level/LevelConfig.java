@@ -42,11 +42,8 @@ public class LevelConfig {
     public Map<IEntityType, Float> getSpawnChances() { return spawnChances; }
     public int getInitialFishCount() { return initialFishCount; }
     public int getTotalFishCount() { return totalFishCount; }
-    public List<FishTypes> getPlannedFish() {
-        return plannedEntities.stream()
-            .filter(entity -> entity instanceof FishTypes)
-            .map(entity -> (FishTypes) entity)
-            .collect(Collectors.toList());
+    public List<IEntityType> getPlannedFish() {
+        return plannedEntities;
     }
 
     public List<SharkTypes> getPlannedSharks() {

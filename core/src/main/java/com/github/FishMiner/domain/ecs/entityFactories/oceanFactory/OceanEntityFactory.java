@@ -21,7 +21,6 @@ public class OceanEntityFactory implements IOceanEntityFactory {
     private final FishFactory fishFactory;
     private  final GarbageFactory garbageFactory;
     private final SharkFactory sharkFactory;
-    private final Configuration config = Configuration.getInstance();
 
     public OceanEntityFactory(PooledEngine engine) {
         this.engine = engine;
@@ -32,16 +31,17 @@ public class OceanEntityFactory implements IOceanEntityFactory {
 
     @Override
     public Entity createEntity(IEntityType type) {
-        if (type instanceof FishTypes) {
-            return createFish((FishTypes) type, 1).get(0);
-        } else if (type instanceof SharkTypes) {
+        if (type.getClass().equals(SharkTypes.class)) {
             return createSharks((SharkTypes) type, 1).get(0);
+        } else if (type.getClass().equals(FishTypes.class)) {
+            return createFish((FishTypes) type, 1).get(0);
         } else {
             IllegalArgumentException e = new IllegalArgumentException("Unsupported entity type: " + type);
             Logger.getInstance().error(TAG, e.getMessage(), e);
             throw e;
         }
     }
+
 
     @Override
     public LinkedList<Entity> createFish(FishTypes fishType, int amount) {

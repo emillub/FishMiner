@@ -33,7 +33,6 @@ public class LevelConfigFactory {
             spawnChances.put(FishTypes.PINK_FISH, 0.3f);
             spawnChances.put(FishTypes.GREEN_FISH, 0.2f);
             spawnChances.put(SharkTypes.BLUE_SHARK, 0.1f);
-            spawnChances.put(GarbageTypes.GARBAGE, 1f);
             numGarbage = 2;
         } else {
             spawnChances.put(FishTypes.CLOWN_FISH, 0.6f);
@@ -73,7 +72,7 @@ public class LevelConfigFactory {
         int currentValue = 0;
         int buffer = 15;
         while (planned.size() < totalFishCount && currentValue < targetScore + buffer) {
-            IEntityType fish = (FishTypes) fishPool.get(random.nextInt(fishPool.size()));
+            IEntityType fish = fishPool.get(random.nextInt(fishPool.size()));
             int avgDepth = average(fish.getAllowedDepthLevels());
             int value = FishFactory.calculateFishValue(avgDepth, fish.getSpeed(), fish.getWeight());
 

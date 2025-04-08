@@ -108,7 +108,8 @@ public class SharkFactory {
             state.changeState(FishableObjectStates.FISHABLE);
 
             animation.addAnimation(FishableObjectStates.FISHABLE.getAnimationKey(), texture, 0);
-            animation.addAnimation(FishableObjectStates.ATTACKING.getAnimationKey(), texture, 1, Animation.PlayMode.NORMAL);
+            //Todo: set this to stateRow 1 when all Fish has row
+            animation.addAnimation(FishableObjectStates.ATTACKING.getAnimationKey(), texture, 0, Animation.PlayMode.NORMAL);
             animation.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
 
             fish.add(transform);

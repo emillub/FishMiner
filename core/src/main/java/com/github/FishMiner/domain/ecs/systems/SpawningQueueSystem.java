@@ -9,10 +9,8 @@ import com.github.FishMiner.Configuration;
 import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.IEntityType;
 import com.github.FishMiner.domain.ecs.entityFactories.IOceanEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.SharkTypes;
 import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.OceanEntityFactory;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.World;
@@ -39,13 +37,14 @@ public class SpawningQueueSystem extends EntitySystem {
     private boolean initialSpawnDone = false;
     private int initialFishCount = 0;
     private int numGarbage = 0;
-    private List<FishTypes> plannedFish = new ArrayList<>();
+    private List<IEntityType> plannedFish = new ArrayList<>();
     private int spawnedCount = 0;
     private final float LEVEL_DURATION = 60f;
 
     public void configureFromLevel(LevelConfig config) {
         this.initialFishCount = config.getInitialFishCount();
-        this.plannedFish = new ArrayList<>(config.getPlannedFish());
+        this.plannedFish = config.getPlannedFish();
+
         Collections.shuffle(this.plannedFish); // if you want some randomness
         this.spawnedCount = 0;
         this.spawnTimer = 0f;
@@ -80,7 +79,7 @@ public class SpawningQueueSystem extends EntitySystem {
         spawnTimer += deltaTime;
         if (spawnedCount < plannedFish.size() && spawnTimer >= spawnInterval) {
             spawnTimer = 0f;
-            spawnNextFish();
+            spawnNextFishableEntity();
         }
     }
 
@@ -104,6 +103,7 @@ public class SpawningQueueSystem extends EntitySystem {
             spawnedCount++;
         }
 
+
         // Spawn garbage
         for (int i = 0; i < numGarbage; i++) {
             Entity garbage = ((IOceanEntityFactory) factory).createGarbage(GarbageTypes.GARBAGE, 1).get(0);
@@ -125,15 +125,15 @@ public class SpawningQueueSystem extends EntitySystem {
         Logger.getInstance().log(TAG, "Spawned " + spawnedCount + " initial fish and " + numGarbage + " static garbage.");
     }
 
-    private void spawnNextFish() {
+    private void spawnNextFishableEntity() {
         if (spawnedCount < plannedFish.size()) {
-            spawnFish(plannedFish.get(spawnedCount));
+            spawnFishableEntity(plannedFish.get(spawnedCount));
             spawnedCount++;
         }
     }
 
-    private void spawnFish(FishTypes type) {
-        Entity fish = factory.createFish(type, 1).get(0);
-        engine.addEntity(fish);
+    private void spawnFishableEntity(IEntityType type) {
+        Entity fishableEntity = factory.createEntity(type);
+        engine.addEntity(fishableEntity);
     }
 }
