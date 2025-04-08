@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.components.FishComponent;
 import com.github.FishMiner.domain.ecs.components.ScoreComponent;
+import com.github.FishMiner.domain.ecs.components.SharkComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
@@ -22,9 +23,10 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
     private static final float FLY_DURATION = 1.0f;
     private static final float ARC_HEIGHT = 50f;
 
-    private final ComponentMapper<ScoreComponent> sm = ComponentMapper.getFor(ScoreComponent.class);
-    private final ComponentMapper<TransformComponent> tm = ComponentMapper.getFor(TransformComponent.class);
-    private final ComponentMapper<FishComponent> fm = ComponentMapper.getFor(FishComponent.class);
+    private final ComponentMapper<ScoreComponent> scoreCompMapper = ComponentMapper.getFor(ScoreComponent.class);
+    private final ComponentMapper<TransformComponent> transformCompMapper = ComponentMapper.getFor(TransformComponent.class);
+    private final ComponentMapper<FishComponent> fishCompMapper = ComponentMapper.getFor(FishComponent.class);
+    private final ComponentMapper<SharkComponent> sharkCompMapper = ComponentMapper.getFor(SharkComponent.class);
 
 
     private final Array<FishScoreData> capturedQueue = new Array<>();
@@ -69,15 +71,13 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
             FishScoreData entry = capturedQueue.get(i);
             Entity fishedEntity = entry.fishableObject;
 
-            TransformComponent fishPos = tm.get(fishedEntity);
-            if (fishPos == null) {
-                Logger.getInstance().debug(TAG, "fishPos was missing TransformComponent");
-            };
+            TransformComponent fishPos = transformCompMapper.get(fishedEntity);
+            ValidateUtil.validateNotNull(fishPos, "ScoreSystem/update: fishPos was null.");
 
             // Send fish flying into the boat
             Entity player = entry.player;
 
-            TransformComponent playerPos = tm.get(player);
+            TransformComponent playerPos = transformCompMapper.get(player);
             Vector3 target = new Vector3(
                 playerPos.pos.x,
                 playerPos.pos.y - 50,
@@ -97,16 +97,24 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
             // At end of animation, award points and dispose fish
             if (entry.flyTime >= FLY_DURATION && !entry.scoreSent) {
                 if (!fishedEntity.isScheduledForRemoval()) {
-                    getEngine().removeEntity(fishedEntity);
-                    FishComponent fishComp = fm.get(fishedEntity);
-                    ScoreComponent score = sm.get(player);
+                    try {
+                        FishComponent fishComp = fishCompMapper.get(fishedEntity);
+                        ScoreComponent scoreComp = scoreCompMapper.get(player);
+                        ValidateUtil.validateMultipleNotNull(
+                            fishComp, "fishComp cannot be null",
+                            scoreComp, "scoreComp Cannot be null."
+                        );
 
-                    ValidateUtil.validateMultipleNotNull(fishComp, score);
+                        SharkComponent sharkComp = sharkCompMapper.get(fishedEntity);
+                        float scoreDifference = (sharkComp == null) ? fishComp.getValue() : fishComp.getValue() * sharkComp.getDamage();
+                        scoreComp.setScore(scoreDifference);
 
-                    score.score += fishComp.getValue();
-                    GameEventBus.getInstance().post(new ScoreEvent(fishComp.getValue()));
-                    entry.scoreSent = true;
-
+                        GameEventBus.getInstance().post(new ScoreEvent(scoreComp.getScore()));
+                        entry.scoreSent = true;
+                        getEngine().removeEntity(fishedEntity);
+                    } catch (IllegalArgumentException e) {
+                        Logger.getInstance().error(TAG, e.getMessage(), e);
+                    }
                 }
                 capturedQueue.removeIndex(i--); // Maintain index after removal
             }
@@ -115,7 +123,6 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
             setProcessing(false);
         }
     }
-
 
     @Override
     public Class<FishCapturedEvent> getEventType() {

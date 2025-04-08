@@ -108,9 +108,6 @@ public class LeaderBoardScreen extends AbstractScreen {
         rootTable.add(contentWrapper).expand().fill();
     }
 
-
-
-
     private void fetchTopScores() {
         FishMinerGame game = ScreenManager.getInstance().getGame();
         ILeaderBoardService leaderboard = game.getLeaderboard();
@@ -132,7 +129,6 @@ public class LeaderBoardScreen extends AbstractScreen {
 
     private void updateLeaderboardUI(List<Score> scores) {
         scoreTable.clear();
-
         int place = 1;
         for (Score entry : scores) {
             Table rowTable = new Table();
@@ -206,5 +202,4 @@ public class LeaderBoardScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
     }
-
 }

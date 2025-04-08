@@ -80,7 +80,7 @@ public class LoginScreen extends AbstractScreen {
                     public void onSuccess() {
                         Gdx.app.postRunnable(() -> {
                             statusLabel.setText("Login successful!");
-                            ScreenManager.getInstance().startGamePressed();
+                            ScreenManager.getInstance().showMenu();
                         });
                     }
 
