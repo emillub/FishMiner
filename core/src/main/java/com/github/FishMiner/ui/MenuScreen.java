@@ -53,13 +53,13 @@ public class MenuScreen extends AbstractScreen {
         });
 
         //TO TEST
-        TextButton TEST = new TextButton("TEST", skin);
-        TEST.addListener(new ChangeListener() {
+        TextButton testButton = new TextButton("TEST LEVEL 50", skin);
+        testButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 InventoryComponent inventory = new InventoryComponent();
                 inventory.money = 200;
-                ScreenManager.getInstance().showLevelCompleteScreen(1, inventory);
+                ScreenManager.getInstance().startNextLevel(50, inventory.money, inventory);
             }
         });
 
@@ -78,7 +78,7 @@ public class MenuScreen extends AbstractScreen {
         rootTable.row();
         rootTable.add(settingsButton).expand().fillX().fill().fillY();
         rootTable.row();
-        rootTable.add(TEST).expand().fillX().fill().fillY();
+        rootTable.add(testButton).expand().fillX().fill().fillY();
         rootTable.row();
         rootTable.add(leaderboardButton).expand().fillX().fill().fillY();
     }
