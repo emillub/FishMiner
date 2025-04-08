@@ -129,18 +129,17 @@ public class LeaderBoardScreen extends AbstractScreen {
 
     private void updateLeaderboardUI(List<Score> scores) {
         scoreTable.clear();
+
         int place = 1;
         for (Score entry : scores) {
             Table rowTable = new Table();
             rowTable.pad(5).padLeft(10).padRight(10);
-
-            // Light blue row background
-            rowTable.setBackground(skin.newDrawable("white", 0.3f, 0.4f, 0.9f, 0.4f)); // adjust alpha as needed
+            rowTable.setBackground(skin.newDrawable("white", 0.3f, 0.4f, 0.9f, 0.4f)); // light blue with transparency
 
             Label rankLabel = new Label(place + ".", skin);
-            Label nameLabel = new Label(entry.getUsername(), skin);
-            Label scoreLabel = new Label(String.valueOf(entry.getScore()), skin);
-            scoreLabel.setColor(Color.ORANGE);
+            Label nameLabel = new Label(entry.username(), skin);
+            Label scoreLabel = new Label(String.valueOf(entry.score()), skin);
+            scoreLabel.setColor(Color.ORANGE); // or any color you prefer
 
             rowTable.add(rankLabel).width(40).left().pad(5);
             rowTable.add(nameLabel).expandX().left().pad(5);
@@ -148,9 +147,11 @@ public class LeaderBoardScreen extends AbstractScreen {
 
             scoreTable.row().padBottom(8); // vertical space between rows
             scoreTable.add(rowTable).expandX().fillX();
+
             place++;
         }
     }
+
 
     private TextButton createStyledButton(String text) {
         TextButton.TextButtonStyle customStyle = new TextButton.TextButtonStyle();
