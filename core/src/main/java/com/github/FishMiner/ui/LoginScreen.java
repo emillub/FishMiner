@@ -2,25 +2,28 @@ package com.github.FishMiner.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.github.FishMiner.data.services.FirebaseAuthCallback;
 import com.github.FishMiner.ui.controller.ScreenManager;
 
 public class LoginScreen extends AbstractScreen {
 
+    private final String initialMessage;
+    private final boolean[] isLoginMode = {true};
+
     private TextField emailField;
     private TextField passwordField;
     private TextField confirmPasswordField;
     private Label statusLabel;
-
-    private final String initialMessage;
+    private Label titleLabel;
+    private TextButton submitButton;
+    private Label toggleLink;
+    private Table dynamicContainer;
 
     public LoginScreen() {
         this("");
@@ -30,103 +33,110 @@ public class LoginScreen extends AbstractScreen {
         super();
         this.initialMessage = initialMessage;
     }
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-
-        final boolean[] isLoginMode = {true};
+        stage.getRoot().setColor(0.1f, 0.2f, 0.3f, 1); // Background color
 
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        stage.getRoot().setColor(0.1f, 0.2f, 0.3f, 1);
 
-        Label titleLabel = new Label("LOGIN", skin, "subtitle");
-        titleLabel.setFontScale(2f);
+        initializeUIElements();
+        addToggleBehavior();
+        addSubmitBehavior();
 
-        emailField = new TextField("", skin);
-        emailField.setMessageText("Email");
-        emailField.getStyle().font.getData().setScale(1.5f);
-        emailField.getStyle().messageFontColor = Color.LIGHT_GRAY;
-        emailField.setAlignment(Align.left);
-
-        passwordField = new TextField("", skin);
-        passwordField.setMessageText("Password");
-        passwordField.setPasswordMode(true);
-        passwordField.setPasswordCharacter('*');
-        passwordField.getStyle().font.getData().setScale(1.5f);
-        passwordField.getStyle().messageFontColor = Color.LIGHT_GRAY;
-        passwordField.setAlignment(Align.left);
-
-        confirmPasswordField = new TextField("", skin);
-        confirmPasswordField.setMessageText("Confirm Password");
-        confirmPasswordField.setPasswordMode(true);
-        confirmPasswordField.setPasswordCharacter('*');
-        confirmPasswordField.getStyle().font.getData().setScale(1.5f);
-        confirmPasswordField.getStyle().messageFontColor = Color.LIGHT_GRAY;
-        confirmPasswordField.setAlignment(Align.left);
-
-        statusLabel = new Label(initialMessage, skin);
-        statusLabel.setFontScale(1.2f);
-
-        TextButton submitButton = new TextButton("Login", skin, "blue-accent");
-        submitButton.getLabel().setFontScale(1.5f);
-
-        Label toggleLink = new Label("Don't have an account? Register", skin);
-
-        toggleLink.setColor(Color.LIGHT_GRAY);
-        toggleLink.setFontScale(1f);
-
-        TextButton backButton = new TextButton("Back to Menu", skin, "blue-accent");
-        backButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().showMenu();
-            }
-        });
-
-        Table dynamicContainer = new Table();
-
-        toggleLink.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                isLoginMode[0] = !isLoginMode[0];
-
-                titleLabel.setText(isLoginMode[0] ? "LOGIN" : "REGISTER");
-                submitButton.setText(isLoginMode[0] ? "Login" : "Register");
-                toggleLink.setText(isLoginMode[0]
-                    ? "Don't have an account? Register"
-                    : "Already have an account? Log in");
-
-                statusLabel.setText("");
-
-                // Rebuild dynamic content
-                dynamicContainer.clear();
-
-                if (!isLoginMode[0]) {
-                    dynamicContainer.add(confirmPasswordField).width(500).height(80).padBottom(20).row();
-                }
-
-                dynamicContainer.add(toggleLink).left().padBottom(30).padLeft(50).row();
-                dynamicContainer.add(statusLabel).padTop(20).row();
-                dynamicContainer.add(submitButton).width(400).height(100).padBottom(20).row();
-            }
-        });
-
-
-        // Static layout
         table.add(titleLabel).padBottom(40).row();
         table.add(emailField).width(500).height(80).padBottom(20).row();
         table.add(passwordField).width(500).height(80).padBottom(20).row();
         table.add(dynamicContainer).row();
+
+        TextButton backButton = createStyledButton("Back to Menu");
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ScreenManager.getInstance().showMenu();
+            }
+        });
+
         table.add(backButton).right().padRight(50).width(180).height(50).padBottom(30).row();
 
-        // Initial login layout
+        renderLoginLayout(); // Initial layout
+    }
+
+    private void initializeUIElements() {
+        titleLabel = new Label("LOGIN", skin, "subtitle");
+        titleLabel.setFontScale(2f);
+
+        emailField = createTextField("  Email");
+        passwordField = createTextField("  Password", true);
+        confirmPasswordField = createTextField("Confirm Password", true);
+        confirmPasswordField.setVisible(false);
+
+        statusLabel = new Label(initialMessage, skin);
+        statusLabel.setFontScale(1.2f);
+
+        submitButton = createStyledButton("Login");
+        submitButton.getLabel().setFontScale(1.5f);
+
+        toggleLink = new Label("Don't have an account? Register", skin);
+        toggleLink.setColor(Color.LIGHT_GRAY);
+        toggleLink.setFontScale(1f);
+
+        dynamicContainer = new Table();
+    }
+
+    private TextField createTextField(String placeholder) {
+        return createTextField(placeholder, false);
+    }
+
+    private TextField createTextField(String placeholder, boolean isPassword) {
+        TextField field = new TextField("", skin);
+        field.setMessageText(placeholder);
+        field.getStyle().font.getData().setScale(1.5f);
+        field.getStyle().messageFontColor = Color.LIGHT_GRAY;
+        field.setAlignment(Align.left);
+        if (isPassword) {
+            field.setPasswordMode(true);
+            field.setPasswordCharacter('*');
+        }
+        return field;
+    }
+
+    private void addToggleBehavior() {
+        toggleLink.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isLoginMode[0] = !isLoginMode[0];
+                renderLoginLayout();
+            }
+        });
+    }
+
+    private void renderLoginLayout() {
+        titleLabel.setText(isLoginMode[0] ? "LOGIN" : "REGISTER");
+        submitButton.setText(isLoginMode[0] ? "Login" : "Register");
+        toggleLink.setText(isLoginMode[0]
+            ? "Don't have an account? Register"
+            : "Already have an account? Log in");
+        statusLabel.setText(initialMessage);
+
+        confirmPasswordField.setVisible(!isLoginMode[0]); // <-- add this
+
         dynamicContainer.clear();
-        dynamicContainer.add(toggleLink).left().padBottom(30).padLeft(50).row();
+
+        if (!isLoginMode[0]) {
+            dynamicContainer.add(confirmPasswordField).width(500).height(80).padBottom(20).row();
+        }
+
+        dynamicContainer.add(toggleLink).left().padBottom(30).row();
         dynamicContainer.add(statusLabel).padTop(20).row();
         dynamicContainer.add(submitButton).width(400).height(100).padBottom(20).row();
+    }
 
+
+    private void addSubmitBehavior() {
         submitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -145,42 +155,52 @@ public class LoginScreen extends AbstractScreen {
                 }
 
                 FishMinerGame game = ScreenManager.getInstance().getGame();
+
                 if (isLoginMode[0]) {
-                    game.getFirebase().login(email, password, new FirebaseAuthCallback() {
-                        @Override
-                        public void onSuccess() {
-                            Gdx.app.postRunnable(() -> {
-                                statusLabel.setText("Login successful!");
-                                ScreenManager.getInstance().showMenu();
-                            });
-                        }
-
-                        @Override
-                        public void onFailure(String errorMessage) {
-                            Gdx.app.postRunnable(() -> statusLabel.setText("Login failed: " + errorMessage));
-                        }
-                    });
+                    game.getFirebase().login(email, password, createAuthCallback("Login"));
                 } else {
-                    game.getFirebase().register(email, password, new FirebaseAuthCallback() {
-                        @Override
-                        public void onSuccess() {
-                            Gdx.app.postRunnable(() -> {
-                                ScreenManager.getInstance().setLoginScreen(
-                                    new LoginScreen("Registration successful! Please log in.")
-                                );
-                            });
-                        }
-
-                        @Override
-                        public void onFailure(String errorMessage) {
-                            Gdx.app.postRunnable(() -> statusLabel.setText("Registration failed: " + errorMessage));
-                        }
-                    });
+                    game.getFirebase().register(email, password, createAuthCallback("Register"));
                 }
             }
         });
     }
 
+    private FirebaseAuthCallback createAuthCallback(String mode) {
+        return new FirebaseAuthCallback() {
+            @Override
+            public void onSuccess() {
+                Gdx.app.postRunnable(() -> {
+                    if (mode.equals("Login")) {
+                        statusLabel.setText("Login successful!");
+                        ScreenManager.getInstance().showMenu();
+                    } else {
+                        ScreenManager.getInstance().setLoginScreen(
+                            new LoginScreen("Registration successful! Please log in.")
+                        );
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Gdx.app.postRunnable(() ->
+                    statusLabel.setText(mode + " failed: " + errorMessage));
+            }
+        };
+    }
+
+    private TextButton createStyledButton(String text) {
+        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+        style.up = skin.newDrawable("white", new Color(0.2f, 0.4f, 0.8f, 1f));      // Normal
+        style.down = skin.newDrawable("white", new Color(0.15f, 0.3f, 0.6f, 1f));   // Pressed
+        style.over = skin.newDrawable("white", new Color(0.25f, 0.5f, 1f, 1f));     // Hover
+        style.font = skin.getFont("default");
+        style.fontColor = Color.WHITE;
+
+        TextButton button = new TextButton(text, style);
+        button.getLabel().setFontScale(1.5f);
+        return button;
+    }
 
     @Override
     public void render(float delta) {
