@@ -10,8 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.data.services.FirebaseAuthCallback;
 import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.ui.controller.ScreenManager;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.github.FishMiner.data.services.ILogInAPI;
 
 public class MenuScreen extends AbstractScreen {
 
@@ -29,26 +32,24 @@ public class MenuScreen extends AbstractScreen {
         rootTable.setDebug(true);
         stage.addActor(rootTable);
 
-        TextButton settingsButton = new TextButton("Settings", skin);
-        settingsButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().setSettingScreen(new SettingScreen());
-            }
-        });
-        TextButton loginButton = new TextButton("Login", skin);
-        loginButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().setLoginScreen(new LoginScreen());
-            }
-        });
+        ILogInAPI loginAPI = ScreenManager.getInstance().getGame().getFirebase();
+        String currentUser = loginAPI.getCurrentUsername();
+
+        //Buttons
 
         TextButton playButton = new TextButton("Play", skin);
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 ScreenManager.getInstance().startGamePressed();
+            }
+        });
+
+        TextButton settingsButton = new TextButton("Settings", skin);
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().setSettingScreen(new SettingScreen());
             }
         });
 
@@ -71,16 +72,51 @@ public class MenuScreen extends AbstractScreen {
             }
         });
 
+        //If not logged in
+        if (currentUser == null || currentUser.equals("Guest")) {
+            TextButton loginButton = new TextButton("Login", skin);
+            loginButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    ScreenManager.getInstance().setLoginScreen(new LoginScreen());
+                }
+            });
+            rootTable.add(loginButton).expand().fillX().fill().fillY();
+            rootTable.row();
 
-        rootTable.add(loginButton).expand().fillX().fill().fillY();
-        rootTable.row();
-        rootTable.add(playButton).expand().fillX().fill().fillY();
-        rootTable.row();
-        rootTable.add(settingsButton).expand().fillX().fill().fillY();
-        rootTable.row();
-        rootTable.add(testButton).expand().fillX().fill().fillY();
-        rootTable.row();
-        rootTable.add(leaderboardButton).expand().fillX().fill().fillY();
+            rootTable.add(playButton).expand().fillX().fill().fillY();
+            rootTable.row();
+            rootTable.add(leaderboardButton).expand().fillX().fill().fillY();
+            rootTable.row();
+            rootTable.add(settingsButton).expand().fillX().fill().fillY();
+            rootTable.row();
+            rootTable.add(testButton).expand().fillX().fill().fillY();
+            rootTable.row();
+        } else {
+            // Logged in
+            rootTable.add(leaderboardButton).expand().fillX().fill().fillY();
+            rootTable.row();
+            rootTable.add(playButton).expand().fillX().fill().fillY();
+            rootTable.row();
+            rootTable.add(settingsButton).expand().fillX().fill().fillY();
+            rootTable.row();
+            rootTable.add(testButton).expand().fillX().fill().fillY();
+            rootTable.row();
+
+            TextButton logoutButton = new TextButton("Logout", skin);
+            logoutButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    ScreenManager.getInstance().getGame().getFirebase().logout();
+                    Gdx.app.postRunnable(() -> {
+                        ScreenManager.getInstance().showMenu();
+                    });
+                }
+            });
+            rootTable.add(logoutButton).expand().fillX().fill().fillY();
+            rootTable.row();
+        }
+
     }
 
     @Override

@@ -41,4 +41,10 @@ public class AndroidLogInAPI implements ILogInAPI {
             return null;
         }
     }
+
+    @Override
+    public void logout() {
+        com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+    }
+
 }

@@ -26,7 +26,7 @@ public class DesktopLeaderBoardAPI implements ILeaderBoardService {
                 DesktopLogInAPI loginAPI = (DesktopLogInAPI) ScreenManager.getInstance().getGame().getFirebase();
                 String idToken = loginAPI.getIdToken();
                 if (idToken == null) {
-                    callback.onFailure("No auth token available. Please log in.");
+                    callback.onFailure("Login required to submit score.");
                     return;
                 }
 
@@ -39,29 +39,26 @@ public class DesktopLeaderBoardAPI implements ILeaderBoardService {
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setDoOutput(true);
 
-                String json = "{\n" +
-                    "  \"fields\": {\n" +
-                    "    \"username\": { \"stringValue\": \"" + username + "\" },\n" +
-                    "    \"score\": { \"integerValue\": \"" + score + "\" }\n" +
-                    "  }\n" +
-                    "}";
+                JSONObject payload = new JSONObject();
+                JSONObject fields = new JSONObject();
+                fields.put("username", new JSONObject().put("stringValue", username));
+                fields.put("score", new JSONObject().put("integerValue", score));
+                payload.put("fields", fields);
 
                 try (OutputStream os = conn.getOutputStream()) {
-                    os.write(json.getBytes(StandardCharsets.UTF_8));
+                    os.write(payload.toString().getBytes(StandardCharsets.UTF_8));
                 }
 
                 int responseCode = conn.getResponseCode();
                 if (responseCode == 200) {
                     callback.onSuccess(null);
                 } else {
-                    InputStream errorStream = conn.getErrorStream();
-                    String errorMsg = new BufferedReader(new InputStreamReader(errorStream))
-                        .lines().reduce("", (acc, line) -> acc + line + "\n");
-                    callback.onFailure("Error: " + errorMsg);
+                    String errorMsg = readStream(conn.getErrorStream());
+                    callback.onFailure("Submit failed: " + errorMsg);
                 }
 
             } catch (Exception e) {
-                callback.onFailure(e.getMessage());
+                callback.onFailure("Error submitting score: " + e.getMessage());
             }
         }).start();
     }
@@ -72,17 +69,18 @@ public class DesktopLeaderBoardAPI implements ILeaderBoardService {
             try {
                 DesktopLogInAPI loginAPI = (DesktopLogInAPI) ScreenManager.getInstance().getGame().getFirebase();
                 String idToken = loginAPI.getIdToken();
-                if (idToken == null) {
-                    callback.onFailure("No auth token. Please log in.");
-                    return;
-                }
 
-                String endpoint = "https://firestore.googleapis.com/v1/projects/fishminer-482a2/databases/(default)/documents:runQuery";
+                String endpoint = "https://firestore.googleapis.com/v1/projects/" +
+                    FIREBASE_PROJECT_ID + "/databases/(default)/documents:runQuery";
 
                 HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Authorization", "Bearer " + idToken);
                 conn.setRequestProperty("Content-Type", "application/json");
+
+                if (idToken != null) {
+                    conn.setRequestProperty("Authorization", "Bearer " + idToken);
+                }
+
                 conn.setDoOutput(true);
 
                 String query = "{\n" +
@@ -98,22 +96,14 @@ public class DesktopLeaderBoardAPI implements ILeaderBoardService {
                 }
 
                 int responseCode = conn.getResponseCode();
-                InputStream is = (responseCode == 200) ? conn.getInputStream() : conn.getErrorStream();
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
+                String response = readStream(responseCode == 200 ? conn.getInputStream() : conn.getErrorStream());
 
                 if (responseCode != 200) {
-                    callback.onFailure("Failed to fetch scores: " + response.toString());
+                    callback.onFailure("Failed to fetch scores: " + response);
                     return;
                 }
 
-                // Parse JSON using org.json
-                JSONArray results = new JSONArray(response.toString());
+                JSONArray results = new JSONArray(response);
                 List<Score> scoreList = new ArrayList<>();
 
                 for (int i = 0; i < results.length(); i++) {
@@ -136,14 +126,14 @@ public class DesktopLeaderBoardAPI implements ILeaderBoardService {
         }).start();
     }
 
-    // Utility method to extract field values from JSON without a library
-    private String extractField(String json, String fieldName) {
-        String key = "\"" + fieldName + "\":";
-        int start = json.indexOf(key);
-        if (start == -1) return "";
-        int valueStart = json.indexOf(":", start) + 1;
-        int valueEnd = json.indexOf("\"", valueStart + 2);
-        return json.substring(valueStart, valueEnd).replaceAll("\"", "").trim();
+    private String readStream(InputStream is) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            builder.append(line);
+        }
+        return builder.toString();
     }
 
 }
