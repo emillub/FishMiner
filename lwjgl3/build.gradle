@@ -36,6 +36,7 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
   implementation "com.github.MrStahlfelge.gdx-websockets:common:$websocketVersion"
   implementation project(':core')
+  implementation 'org.json:json:20230227'
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-backend-lwjgl3:$graalHelperVersion"
