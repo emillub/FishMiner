@@ -18,7 +18,6 @@ public class FishMinerGame extends Game {
     public FishMinerGame(ILogInAPI firebase, ILeaderBoardService leaderboard) {
         this.firebase = firebase;
         this.leaderboard = leaderboard;
-
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.github.FishMiner.domain.ecs.entityFactories;
 
-public enum GarbageTypes {
+public enum GarbageTypes implements IEntityType {
     GARBAGE("GARBAGE.png", 6, 1, new int[]{2,3, 4, 5, 6}, 2);
 
     private final String texturePath;

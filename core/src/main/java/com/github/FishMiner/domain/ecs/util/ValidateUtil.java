@@ -91,6 +91,13 @@ public final class ValidateUtil {
         }
     }
 
+    public static void validateNegativeFloat(float arg, String argTag) throws IllegalArgumentException {
+        if (arg >= 0) {
+            IllegalArgumentException exception = new IllegalArgumentException(argTag + " cannot be 0 or more.");
+            Logger.getInstance().error(TAG, "validateNegativeFloat(): ", exception);
+            throw exception;
+        }
+    }
     public static void validateMoreThanZero(Number... args) throws IllegalArgumentException {
         String m1 = "Argument at index ";
         String m2 = " is negative: ";
