@@ -104,8 +104,8 @@ public class LeaderBoardScreen extends AbstractScreen {
 
             scoreTable.row().height(50);
             scoreTable.add(placeNumber).left().pad(5).width(40);
-            scoreTable.add(new Label(entry.getUsername(), skin)).left().pad(5);
-            scoreTable.add(new Label(String.valueOf(entry.getScore()), skin)).right().pad(5);
+            scoreTable.add(new Label(entry.username(), skin)).left().pad(5);
+            scoreTable.add(new Label(String.valueOf(entry.score()), skin)).right().pad(5);
 
             place++;
         }

@@ -60,7 +60,7 @@ public class FishFactory {
     }
 
     @SuppressWarnings("unchecked")
-    protected Entity createEntity(String texturePath, int frameCols, int frameRows, int depthLevel, float speed, int weight, float scale) {
+    private Entity createEntity(String texturePath, int frameCols, int frameRows, int depthLevel, float speed, int weight, float scale) {
         Entity fish = engine.createEntity();
 
         FishComponent fishComponent = engine.createComponent(FishComponent.class);

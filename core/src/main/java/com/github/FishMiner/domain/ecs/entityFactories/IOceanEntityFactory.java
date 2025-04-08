@@ -5,14 +5,18 @@ package com.github.FishMiner.domain.ecs.entityFactories;
 import com.badlogic.ashley.core.Entity;
 
 import java.util.LinkedList;
-import java.util.List;
 
 
 /**
  * Classes that implement this interface can create lists of various Fish, Trash, and all the components that make up a player
  */
-public interface IGameEntityFactory {
+public interface IOceanEntityFactory {
+
+    Entity createEntity(IEntityType type);
     LinkedList<Entity> createFish(FishTypes type, int amount);
+    LinkedList<Entity> createGarbage(GarbageTypes type, int amount);
+    LinkedList<Entity> createSharks(SharkTypes type, int amount);
+
 }
 
 

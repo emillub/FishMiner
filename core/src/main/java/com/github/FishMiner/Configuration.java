@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class Configuration {
 
     private static Configuration instance;
+    public boolean testMode = true;
     private static PooledEngine engine;
     private static int SCREEN_WIDTH = Gdx.graphics.getWidth();;
     private static int SCREEN_HEIGHT = Gdx.graphics.getHeight();

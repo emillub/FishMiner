@@ -1,22 +1,15 @@
 package com.github.FishMiner.domain;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pool;
 import com.github.FishMiner.Configuration;
-import com.github.FishMiner.domain.ecs.components.InventoryComponent;
-import com.github.FishMiner.domain.ecs.components.PlayerComponent;
 import com.github.FishMiner.Logger;
-import com.github.FishMiner.domain.ecs.entityFactories.IGameEntityFactory;
+import com.github.FishMiner.domain.ecs.entityFactories.IOceanEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.OceanEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 import com.github.FishMiner.domain.events.ScoreEvent;
 import com.github.FishMiner.domain.level.LevelConfig;
-import com.github.FishMiner.domain.level.LevelConfigFactory;
 import com.github.FishMiner.domain.listeners.IGameEventListener;
 import com.github.FishMiner.domain.states.WorldState;
 
@@ -26,11 +19,11 @@ public class World implements IGameEventListener<ScoreEvent> {
     private final static String TAG = "World";
     private final PooledEngine engine;
     private final Configuration config;
-    private final IGameEntityFactory factory;
+    private final IOceanEntityFactory factory;
     private final Random random = new Random();
 
     private WorldState state = WorldState.RUNNING;
-    private float score;
+    private int score;
     private int targetScore = 0;
     private float timer = 60f;
 
@@ -38,10 +31,10 @@ public class World implements IGameEventListener<ScoreEvent> {
         this.engine = engine;
         this.config = Configuration.getInstance();
         this.factory = new OceanEntityFactory(engine);
-        this.score = 0f;
+        this.score = 0;
     }
 
-    public void createLevel(LevelConfig config, float startingScore, Float customTimer) {
+    public void createLevel(LevelConfig config, int startingScore, Float customTimer) {
         this.targetScore = config.getTargetScore(); // Set target score for current level
 
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
@@ -49,8 +42,9 @@ public class World implements IGameEventListener<ScoreEvent> {
             spawningSystem.configureFromLevel(config);
             spawningSystem.setWorld(this);
         }
-//        score = startingScore;
+
         timer = (customTimer != null) ? customTimer : 60f;
+        score = startingScore;
         state = WorldState.RUNNING;
     }
 
@@ -62,16 +56,6 @@ public class World implements IGameEventListener<ScoreEvent> {
         return state;
     }
 
-
-    private void increaseScore(float scoreIncrease) {
-        ValidateUtil.validatePositiveFloat(scoreIncrease, "scoreIncrease");
-        score += scoreIncrease;
-    }
-
-    private void decreaseScore(float scoreDecrease) {
-        ValidateUtil.validatePositiveFloat(scoreDecrease, "scoreDecrease");
-        this.score = Math.max(score - scoreDecrease, 0);
-    }
 
     public float getScore() {
         return score;
@@ -132,11 +116,13 @@ public class World implements IGameEventListener<ScoreEvent> {
             Logger.getInstance().debug(TAG, "Received and denied a handled event");
             return;
         }
-        float scoreDifference = event.getValue();
-        if (scoreDifference < 0) {
-            decreaseScore(scoreDifference);
-        } else {
-            increaseScore(scoreDifference);
+        int newScore = (int) event.getScore();
+        if (score > newScore) {
+            score = newScore;
+            // TODO: display green text with score increase in PlayScreen
+        } else if (score < newScore) {
+            score = newScore;
+            // TODO: display red text with score decrease in PlayScreen
         }
         event.setHandled(true);
     }
