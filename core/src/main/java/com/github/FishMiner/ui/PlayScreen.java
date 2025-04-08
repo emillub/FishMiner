@@ -117,14 +117,10 @@ public class PlayScreen extends AbstractScreen {
 
     private void setupWorld() {
         world = new World(engine);
-
         GameEventBus.getInstance().register(new FishCaptureListener(world));
         LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) inventory.money);
-        world.createLevel(config, inventory.money);
-
-        //LevelConfig config = LevelConfigFactory.generateLevel(levelNumber, (int) world.getScore());
-        //world.createLevel(config);
-        //GameEventBus.getInstance().register(world);
+        Float customTimer = (levelNumber >= 50) ? 15f : null;
+        world.createLevel(config, inventory.money, customTimer);
     }
 
     private void setupInput() {

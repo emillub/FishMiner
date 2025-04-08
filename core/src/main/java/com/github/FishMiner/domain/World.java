@@ -41,7 +41,7 @@ public class World implements IGameEventListener<ScoreEvent> {
         this.score = 0f;
     }
 
-    public void createLevel(LevelConfig config, float startingScore) {
+    public void createLevel(LevelConfig config, float startingScore, Float customTimer) {
         this.targetScore = config.getTargetScore(); // Set target score for current level
 
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
@@ -49,8 +49,8 @@ public class World implements IGameEventListener<ScoreEvent> {
             spawningSystem.configureFromLevel(config);
             spawningSystem.setWorld(this);
         }
-        //score = startingScore;
-        timer = 60f;
+//        score = startingScore;
+        timer = (customTimer != null) ? customTimer : 60f;
         state = WorldState.RUNNING;
     }
 
