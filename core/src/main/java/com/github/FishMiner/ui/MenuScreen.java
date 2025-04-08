@@ -89,4 +89,10 @@ public class MenuScreen extends AbstractScreen {
         stage.act(delta);
         stage.draw();
     }
+
+    @Override
+    public void hide() {
+        super.hide();
+        stage.clear();
+    }
 }
