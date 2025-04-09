@@ -48,7 +48,7 @@ package "data.services" {
 
 ' Android Platform-Specific Services
 package "android.data.services" {
-    class FirebaseAuthService
+    class AndroidAuthService
     class FirebaseLeaderboardService
     class FirebaseHighscoreService
     class FirebaseUserSettingsService

@@ -19,30 +19,32 @@ import com.github.FishMiner.domain.ecs.components.*;
 
 import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
 
+import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 import com.github.FishMiner.domain.states.HookStates;
 
 public class PlayerFactory {
+    private static final String TAG = "PlayerFactory";
+    private static Entity player;
 
     private PlayerFactory() {
     }
 
     public static void addNewPlayerCharacterTo(PooledEngine engine, int posX, int posY, InventoryComponent existingInventory) {
-        Entity player = createPlayerEntity(engine, posX, posY, existingInventory);
-        Entity hook = createHookEntity(engine, player);
+        Entity playerEntity = createPlayerEntity(engine, posX, posY, existingInventory);
+        Entity hook = createHookEntity(engine, playerEntity);
 
-        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+        PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
         playerComponent.hook = hook;
 
-        player.add(playerComponent);
+        playerEntity.add(playerComponent);
 
-        engine.addEntity(player);
+        engine.addEntity(playerEntity);
         engine.addEntity(hook);
+        player = playerEntity;
     }
-
 
     private static Entity createPlayerEntity(PooledEngine engine, int posX, int posY, InventoryComponent existingInventory) {
         Entity player = engine.createEntity();
-
 
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
@@ -125,5 +127,10 @@ public class PlayerFactory {
         hook.add(boundsComponent);
 
         return hook;
+    }
+
+    public static Entity getPlayer() {
+        ValidateUtil.validateNotNull(player, TAG + " -> player");
+        return player;
     }
 }

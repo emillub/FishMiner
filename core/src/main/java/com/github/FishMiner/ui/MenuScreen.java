@@ -11,10 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.domain.ecs.components.InventoryComponent;
+import com.github.FishMiner.domain.ports.in.IGameEventBus;
 import com.github.FishMiner.ui.controller.ScreenManager;
 
 public class MenuScreen extends AbstractScreen {
-
     public MenuScreen() {
         super();
     }

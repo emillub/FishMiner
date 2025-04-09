@@ -17,7 +17,7 @@ public class Lwjgl3Launcher {
 
 
     private static Lwjgl3Application createApplication() {
-        DesktopLogInAPI desktopLogInAPI = new DesktopLogInAPI();
+        DesktopAuthService desktopLogInAPI = new DesktopAuthService();
         DesktopLeaderBoardAPI desktopLeaderBoardAPI = new DesktopLeaderBoardAPI();
         return new Lwjgl3Application(new FishMinerGame(desktopLogInAPI, desktopLeaderBoardAPI), getDefaultConfiguration());
         //return new Lwjgl3Application(new FishMinerGame(firebase, leaderboard), getDefaultConfiguration());

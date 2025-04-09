@@ -1,15 +1,13 @@
 package com.github.FishMiner.domain.events.impl;
 
 import com.badlogic.ashley.core.Entity;
-import com.github.FishMiner.domain.events.EntityEvent;
-import com.github.FishMiner.domain.events.IGameEvent;
+import com.github.FishMiner.domain.events.AbstractEntityEvent;
+import com.github.FishMiner.domain.ports.in.IGameEvent;
 
 
-public class FishHitEvent extends EntityEvent implements IGameEvent {
-
+public class FishHitEvent extends AbstractEntityEvent implements IGameEvent {
     public FishHitEvent(Entity fishableObject) {
         super(fishableObject);
     }
-
 }
 

@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
@@ -18,28 +17,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Pool;
 import com.github.FishMiner.Configuration;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.Logger;
-import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.domain.ecs.components.PlayerComponent;
-import com.github.FishMiner.domain.ecs.components.TransformComponent;
-import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.ecs.entityFactories.playerFactory.PlayerFactory;
 import com.github.FishMiner.domain.ecs.systems.BackgroundRenderSystem;
 import com.github.FishMiner.domain.ecs.systems.FishingSystem;
 import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
 import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
+import com.github.FishMiner.domain.gameEntities.PlayerCharacter;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.level.LevelConfigFactory;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
@@ -50,11 +44,11 @@ import com.github.FishMiner.domain.ecs.systems.PhysicalSystem;
 import com.github.FishMiner.domain.ecs.systems.RenderingSystem;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.World;
-import com.github.FishMiner.domain.events.GameEventBus;
+import com.github.FishMiner.domain.eventBus.GameEventBus;
 import com.github.FishMiner.domain.events.impl.FireInputEvent;
-import com.github.FishMiner.domain.listeners.FishCaptureListener;
 import com.github.FishMiner.domain.states.WorldState;
 import com.github.FishMiner.ui.controller.ScreenManager;
+import com.github.FishMiner.ui.ports.in.IPlayer;
 
 
 /**
@@ -75,16 +69,15 @@ public class PlayScreen extends AbstractScreen {
     private BitmapFont font;
     private World world;
 
+    private IPlayer playerCharacter;
+
     // Level info
     private int levelNumber;
     private InventoryComponent inventory;
-
     // UI
     private TextButton pauseButton;
     private Table pauseOverlay;
     private boolean overlayVisible = false;
-
-
 
     public PlayScreen(int levelNumber, InventoryComponent inventory) {
         this.levelNumber = levelNumber;
@@ -97,23 +90,18 @@ public class PlayScreen extends AbstractScreen {
         stage.clear(); // make sure stage is clean when entering play screen
         initializeCore();
         setupWorld();
+        setupPlayer();
         setupInput();
         setupPauseUI();
         FishMinerGame.playGameMusic();
     }
 
     private void initializeCore() {
-        engine = Configuration.getInstance().getEngine();
+        engine = new PooledEngine();
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         font = new BitmapFont();
         font.setColor(Color.BLACK);
-
-        PlayerFactory.addNewPlayerCharacterTo(engine,
-            (int) (Configuration.getInstance().getScreenWidth() / 2),
-            Configuration.getInstance().getOceanHeight(), inventory
-        );
-
         addSystemTo(engine);
     }
 
@@ -125,33 +113,25 @@ public class PlayScreen extends AbstractScreen {
         world.createLevel(config, (int) inventory.money, customTimer);
     }
 
+    private void setupPlayer() {
+        Configuration config = Configuration.getInstance();
+        Vector2 scaledPos = new Vector2(
+          config.getScreenWidth() * 0.5f,
+          config.getScreenHeight() * config.getOceanHeightPercentage()
+        );
+        this.playerCharacter = PlayerCharacter.getInstance(engine, (int) scaledPos.x, (int) scaledPos.y);
+    }
+
     private void setupInput() {
         InputMultiplexer multiplexer = new InputMultiplexer();
-
         multiplexer.addProcessor(new InputAdapter() {
-
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 if (pointer > 0) return false;
 
                 Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(screenX, screenY));
                 if (stage.hit(stageCoords.x, stageCoords.y, true) == null) {
-                    return triggerHook();
-                }
-                return false;
-            }
-
-
-            private boolean triggerHook() {
-                if (!world.isPaused()) {
-                    ImmutableArray<Entity> hooks = engine.getEntitiesFor(
-                        Family.all(HookComponent.class, TransformComponent.class, StateComponent.class).get()
-                    );
-                    if (hooks.size() > 0) {
-                        Entity hook = hooks.first();
-                        GameEventBus.getInstance().post(new FireInputEvent(hook));
-                        return true;
-                    }
+                    GameEventBus.getInstance().post(new FireInputEvent(playerCharacter.getHook()));
                 }
                 return false;
             }
@@ -160,7 +140,6 @@ public class PlayScreen extends AbstractScreen {
         multiplexer.addProcessor(stage);
         Gdx.input.setInputProcessor(multiplexer);
     }
-
 
     private void setupPauseUI() {
         Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));

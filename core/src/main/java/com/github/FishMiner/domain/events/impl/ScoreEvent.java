@@ -1,6 +1,7 @@
-package com.github.FishMiner.domain.events;
+package com.github.FishMiner.domain.events.impl;
 
 import com.github.FishMiner.Logger;
+import com.github.FishMiner.domain.ports.in.IGameEvent;
 
 public class ScoreEvent implements IGameEvent {
     private final static String TAG = "ScoreEvent";
@@ -13,8 +14,8 @@ public class ScoreEvent implements IGameEvent {
         this.handled = false;
     }
 
-    public void setHandled(boolean handled) {
-        this.handled = handled;
+    public void setHandled() {
+        this.handled = true;
     }
 
     public float getScore() {

@@ -1,7 +1,7 @@
 package com.github.FishMiner.lwjgl3;
 
 import com.github.FishMiner.data.services.FirebaseAuthCallback;
-import com.github.FishMiner.data.services.ILogInAPI;
+import com.github.FishMiner.data.ports.out.IAuthService;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -9,7 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class DesktopLogInAPI implements ILogInAPI {
+public class DesktopAuthService implements IAuthService {
 
     private final String API_KEY = "AIzaSyAvXR0t2vP72YM3Dg0wRh9RMYXigUvkElY" ;
     private String currentUsername = null;

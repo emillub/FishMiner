@@ -1,4 +1,4 @@
-package com.github.FishMiner.data.services;
+package com.github.FishMiner.data.ports.out;
 
 import com.github.FishMiner.data.services.LeaderboardCallback;
 

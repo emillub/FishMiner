@@ -9,10 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class Configuration {
 
     private static Configuration instance;
-    private static PooledEngine engine;
+
     private static int SCREEN_WIDTH = Gdx.graphics.getWidth();;
     private static int SCREEN_HEIGHT = Gdx.graphics.getHeight();
-    public static final float OCEAN_HEIGHT_PERCENTAGE = 0.75f;
+    private static final float OCEAN_HEIGHT_PERCENTAGE = 0.75f;
     public static final int OCEAN_DEPTH_LEVELS = 6;
     private static final float RESOLUTION_X = 900f;
     private static final float RESOLUTION_Y = 1600f;
@@ -26,7 +26,6 @@ public class Configuration {
     private final Skin uiSkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
     private Configuration() {
-        engine = new PooledEngine();
         scaleX = SCREEN_WIDTH / RESOLUTION_X;
         scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
     }
@@ -37,8 +36,6 @@ public class Configuration {
         }
         return instance;
     }
-
-    public PooledEngine getEngine() { return engine; }
 
     public Vector2 getScaledPosition(float x, float y) {
         return new Vector2(x * scaleX, y * scaleY);
@@ -70,11 +67,6 @@ public class Configuration {
 
     public float getScaleY() {
         return scaleY;
-    }
-
-    public float getGravity() {
-        float gravity = 9.8f;
-        return gravity * scaleY;
     }
 
     public float getBaseSpeed() {

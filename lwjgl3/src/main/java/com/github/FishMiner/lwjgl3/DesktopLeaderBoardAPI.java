@@ -1,7 +1,7 @@
 package com.github.FishMiner.lwjgl3;
 
 import com.github.FishMiner.data.Score;
-import com.github.FishMiner.data.services.ILeaderBoardService;
+import com.github.FishMiner.data.ports.out.ILeaderBoardService;
 import com.github.FishMiner.data.services.LeaderboardCallback;
 import com.github.FishMiner.ui.controller.ScreenManager;
 
@@ -23,7 +23,7 @@ public class DesktopLeaderBoardAPI implements ILeaderBoardService {
     public void submitScore(String username, int score, LeaderboardCallback callback) {
         new Thread(() -> {
             try {
-                DesktopLogInAPI loginAPI = (DesktopLogInAPI) ScreenManager.getInstance().getGame().getFirebase();
+                DesktopAuthService loginAPI = (DesktopAuthService) ScreenManager.getInstance().getGame().getFirebase();
                 String idToken = loginAPI.getIdToken();
                 if (idToken == null) {
                     callback.onFailure("No auth token available. Please log in.");
@@ -70,7 +70,7 @@ public class DesktopLeaderBoardAPI implements ILeaderBoardService {
     public void getTopScores(LeaderboardCallback callback) {
         new Thread(() -> {
             try {
-                DesktopLogInAPI loginAPI = (DesktopLogInAPI) ScreenManager.getInstance().getGame().getFirebase();
+                DesktopAuthService loginAPI = (DesktopAuthService) ScreenManager.getInstance().getGame().getFirebase();
                 String idToken = loginAPI.getIdToken();
                 if (idToken == null) {
                     callback.onFailure("No auth token. Please log in.");

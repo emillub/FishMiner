@@ -1,10 +1,14 @@
 package com.github.FishMiner.ui.controller;
 
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 
+import com.github.FishMiner.domain.ecs.util.ValidateUtil;
+import com.github.FishMiner.domain.ports.in.IGameEventBus;
 import com.github.FishMiner.ui.LeaderBoardScreen;
 import com.github.FishMiner.ui.LevelCompleteScreen;
 import com.github.FishMiner.ui.LevelLostScreen;
@@ -14,37 +18,39 @@ import com.github.FishMiner.ui.PlayScreen;
 import com.github.FishMiner.ui.UpgradeScreen;
 
 public class ScreenManager {
+    private final static String TAG = "ScreenManager";
     private static ScreenManager instance;
-    private FishMinerGame game;
-
-    private Screen menuScreen;
+    private final FishMinerGame game;
+    private final Screen menuScreen;
     private Screen playScreen;
     private Screen pauseScreen;
     private Screen settingScreen;
     private Screen upgradeScreen;
-
     private InventoryComponent currentInventory;
 
 
     private ScreenManager(FishMinerGame game) {
         this.game = game;
         this.menuScreen = new MenuScreen();
-        this.currentInventory = new InventoryComponent(); //Starting always with a default.
+        this.currentInventory = new InventoryComponent();
     }
 
     public static ScreenManager getInstance(FishMinerGame game) {
         if (instance == null) {
             instance = new ScreenManager(game);
         }
-
         return instance;
     }
 
     public static ScreenManager getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException("ScreenManager is not initialized. Initialize with getInstance(Game game) first.");
+        try {
+            ValidateUtil.validateNotNull(instance, "ScreenManager.instance");
+            return instance;
+        } catch (IllegalArgumentException e) {
+            IllegalStateException exception = new IllegalStateException("ScreenManager cannot be null");
+            Logger.getInstance().error(TAG, "ScreenManager is not initialized. Initialize with getInstance(Game game) first.", exception);
+            throw exception;
         }
-        return instance;
     }
 
     public FishMinerGame getGame() {
@@ -58,12 +64,11 @@ public class ScreenManager {
     public void startGamePressed() {
         // Handle game start logic here
         if (currentInventory == null) {
-            System.out.println("⚠️ currentInventory was null in ScreenManager — creating new one.");
+            Logger.getInstance().error(TAG, "currentInventory was null in ScreenManager — creating new one.");
             currentInventory = new InventoryComponent();
         }
         if (playScreen == null) {
-            playScreen = new PlayScreen(1, currentInventory
-            );
+            playScreen = new PlayScreen(1, currentInventory);
         }
 
         game.setScreen(playScreen);
@@ -103,12 +108,12 @@ public class ScreenManager {
     public InventoryComponent getCurrentInventory() {
         return currentInventory;
     }
-  
+
     public void pauseGamePressed() {
         game.setScreen(pauseScreen);
     }
 
-    public void resumeGamePresed() {
+    public void resumeGamePressed() {
         game.setScreen(playScreen);
     }
 }

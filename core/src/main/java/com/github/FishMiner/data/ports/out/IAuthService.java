@@ -1,6 +1,8 @@
-package com.github.FishMiner.data.services;
+package com.github.FishMiner.data.ports.out;
 
-public interface ILogInAPI {
+import com.github.FishMiner.data.services.FirebaseAuthCallback;
+
+public interface IAuthService {
     void login(String email, String password, FirebaseAuthCallback callback);
     void register(String email, String password, FirebaseAuthCallback callback);
     String getCurrentUsername();

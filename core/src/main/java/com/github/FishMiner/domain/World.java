@@ -7,10 +7,9 @@ import com.github.FishMiner.Logger;
 import com.github.FishMiner.domain.ecs.entityFactories.IOceanEntityFactory;
 import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.OceanEntityFactory;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
-import com.github.FishMiner.domain.ecs.util.ValidateUtil;
-import com.github.FishMiner.domain.events.ScoreEvent;
+import com.github.FishMiner.domain.events.impl.ScoreEvent;
 import com.github.FishMiner.domain.level.LevelConfig;
-import com.github.FishMiner.domain.listeners.IGameEventListener;
+import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.states.WorldState;
 
 import java.util.Random;
@@ -21,7 +20,6 @@ public class World implements IGameEventListener<ScoreEvent> {
     private final Configuration config;
     private final IOceanEntityFactory factory;
     private final Random random = new Random();
-
     private WorldState state = WorldState.RUNNING;
     private int score;
     private int targetScore = 0;
@@ -38,6 +36,7 @@ public class World implements IGameEventListener<ScoreEvent> {
         this.targetScore = config.getTargetScore(); // Set target score for current level
 
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
+
         if (spawningSystem != null) {
             spawningSystem.configureFromLevel(config);
             spawningSystem.setWorld(this);
@@ -124,7 +123,7 @@ public class World implements IGameEventListener<ScoreEvent> {
             score = newScore;
             // TODO: display red text with score decrease in PlayScreen
         }
-        event.setHandled(true);
+        event.setHandled();
     }
 
     @Override

@@ -13,10 +13,10 @@ import com.github.FishMiner.domain.ecs.components.SharkComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.util.ValidateUtil;
-import com.github.FishMiner.domain.events.GameEventBus;
-import com.github.FishMiner.domain.events.ScoreEvent;
+import com.github.FishMiner.domain.eventBus.GameEventBus;
+import com.github.FishMiner.domain.events.impl.ScoreEvent;
 import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
-import com.github.FishMiner.domain.listeners.IGameEventListener;
+import com.github.FishMiner.domain.ports.in.IGameEventListener;
 
 public class ScoreSystem extends EntitySystem implements IGameEventListener<FishCapturedEvent> {
     private final static String TAG = "ScoreSystem";

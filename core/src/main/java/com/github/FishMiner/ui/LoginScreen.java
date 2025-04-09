@@ -7,7 +7,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.github.FishMiner.data.services.FirebaseAuthCallback;
+import com.github.FishMiner.domain.eventBus.GameEventBus;
+import com.github.FishMiner.domain.ports.in.IGameEventBus;
 import com.github.FishMiner.ui.controller.ScreenManager;
+import com.github.FishMiner.ui.events.LoginRequestEvent;
 
 
 public class LoginScreen extends AbstractScreen {
@@ -73,22 +76,8 @@ public class LoginScreen extends AbstractScreen {
             public void changed(ChangeEvent event, Actor actor) {
                 String email = emailField.getText();
                 String password = passwordField.getText();
+                GameEventBus.getInstance().post(new LoginRequestEvent(email, password));
 
-                FishMinerGame game = ScreenManager.getInstance().getGame();
-                game.getFirebase().login(email, password, new FirebaseAuthCallback() {
-                    @Override
-                    public void onSuccess() {
-                        Gdx.app.postRunnable(() -> {
-                            statusLabel.setText("Login successful!");
-                            ScreenManager.getInstance().startGamePressed();
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(String errorMessage) {
-                        Gdx.app.postRunnable(() -> statusLabel.setText("Login failed: " + errorMessage));
-                    }
-                });
             }
         });
 

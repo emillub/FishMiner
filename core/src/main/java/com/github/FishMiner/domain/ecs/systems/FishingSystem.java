@@ -16,11 +16,10 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.ecs.util.ValidateUtil;
 import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
 import com.github.FishMiner.domain.events.impl.FishHitEvent;
-import com.github.FishMiner.domain.events.GameEventBus;
-import com.github.FishMiner.domain.listeners.IGameEventListener;
+import com.github.FishMiner.domain.eventBus.GameEventBus;
+import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.HookStates;
 

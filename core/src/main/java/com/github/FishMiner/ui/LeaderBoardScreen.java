@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.data.Score;
-import com.github.FishMiner.data.services.ILeaderBoardService;
-import com.github.FishMiner.data.services.ILogInAPI;
+import com.github.FishMiner.data.ports.out.ILeaderBoardService;
+import com.github.FishMiner.data.ports.out.IAuthService;
 import com.github.FishMiner.data.services.LeaderboardCallback;
 import com.github.FishMiner.ui.controller.ScreenManager;
 
@@ -113,7 +113,7 @@ public class LeaderBoardScreen extends AbstractScreen {
     private void submitScore() {
         FishMinerGame game = ScreenManager.getInstance().getGame();
         ILeaderBoardService leaderboard = game.getLeaderboard();
-        ILogInAPI login = game.getFirebase();
+        IAuthService login = game.getFirebase();
 
         String username = login.getCurrentUsername();
         String scoreText = scoreField.getText();

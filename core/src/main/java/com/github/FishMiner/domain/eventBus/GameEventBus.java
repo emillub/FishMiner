@@ -1,8 +1,9 @@
-package com.github.FishMiner.domain.events;
+package com.github.FishMiner.domain.eventBus;
 
 import com.github.FishMiner.Logger;
-import com.github.FishMiner.domain.events.IGameEvent;
-import com.github.FishMiner.domain.listeners.IGameEventListener;
+import com.github.FishMiner.domain.ports.in.IGameEvent;
+import com.github.FishMiner.domain.ports.in.IGameEventBus;
+import com.github.FishMiner.domain.ports.in.IGameEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;

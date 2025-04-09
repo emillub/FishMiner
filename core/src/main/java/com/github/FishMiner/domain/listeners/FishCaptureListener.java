@@ -7,9 +7,10 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.github.FishMiner.domain.World;
 import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.domain.ecs.components.PlayerComponent;
+import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
 
-public class FishCaptureListener implements IGameEventListener<FishCapturedEvent>{
+public class FishCaptureListener implements IGameEventListener<FishCapturedEvent> {
 
     private final World world;
 
