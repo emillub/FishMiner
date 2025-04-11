@@ -3,34 +3,33 @@ package com.github.FishMiner.domain;
 import com.badlogic.ashley.core.PooledEngine;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.ValidateUtil;
-import com.github.FishMiner.domain.ecs.systems.TraderSystem;
-import com.github.FishMiner.domain.events.ecsEvents.TransactionEvent;
+import com.github.FishMiner.domain.ecs.components.TraderComponent;
 import com.github.FishMiner.domain.factories.playerFactory.TraderFactory;
-import com.github.FishMiner.domain.shop.UpgradeItem;
+import java.util.List;
 import com.badlogic.ashley.core.Entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * Holds all available upgrade items in the game.
+ * The UpgradeStore now works more like the World.
+ * An instance is created (and stored in GameContext) and can be used
+ * by screens to get the available upgrade products.
  */
 public class UpgradeStore {
-    private static final String TAG = "UpgradeStore";
     private static UpgradeStore instance;
     private final PooledEngine engine;
-    private TransactionEvent transactionEvent;
-    private Entity trader;
-    private TraderFactory traderFactory;
+    private final Entity trader;
+    private final List<Entity> products;
 
     public UpgradeStore(PooledEngine engine) {
         this.engine = engine;
+        // Create the trader and add products (for example, a heavy sinker).
         TraderFactory.addNewTraderTo(engine,
             (int) (Configuration.getInstance().getScreenWidth() * 0.5f),
             (int) (Configuration.getInstance().getScreenWidth() * 0.5f)
         );
         trader = TraderFactory.getTraderEntity();
-        ValidateUtil.validateNotNull(trader, "PlayerCharacter -> playerEntity");
+        ValidateUtil.validateNotNull(trader, "Trader must not be null");
+        TraderComponent traderComponent = trader.getComponent(TraderComponent.class);
+        products = traderComponent.getProducts();
     }
 
     public static UpgradeStore getInstance(PooledEngine engine) {
@@ -40,19 +39,18 @@ public class UpgradeStore {
         return instance;
     }
 
-    protected void update(float deltaTime) {
-        engine.getSystem(TraderSystem.class).update(deltaTime);
+    // Exposes the list of upgrade (product) entities.
+    public List<Entity> getUpgradeProducts() {
+        return products;
     }
 
-    public static Map<String, UpgradeItem> getAvailableUpgrades() {
-        Map<String, UpgradeItem> store = new HashMap<>();
-        store.put("long_reel", new UpgradeItem(
-            "Long_reel",
-            "Long Reel",
-            "Reach deeper fish",
-            10,
-            "red"
-        ));
-        return store;
+    // Controls whether the trader is rendered onscreen.
+    public void setRenderTrader(boolean isRender) {
+        trader.getComponent(TraderComponent.class).setRenderTrader(isRender);
+    }
+
+    // Optionally, you might add an update method (similar to World.update)
+    public void update(float deltaTime) {
+        engine.update(deltaTime);
     }
 }

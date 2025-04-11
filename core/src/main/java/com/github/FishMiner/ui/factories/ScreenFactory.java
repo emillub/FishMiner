@@ -14,36 +14,26 @@ import com.github.FishMiner.ui.screens.SettingScreen;
 import com.github.FishMiner.ui.screens.UpgradeScreen;
 
 public class ScreenFactory implements IScreenFactory {
+    private static final String TAG = "ScreenFactory";
+
     public ScreenFactory() {
     }
 
     @Override
     public Screen getScreen(ScreenType type, GameContext gameContext) {
+        Screen newScreen;
         switch (type) {
-            case PLAY -> {
-                return new PlayScreen(gameContext);
-            }
-            case MENU -> {
-                return new MenuScreen(gameContext);
-            }
-            case LOGIN -> {
-                return new LoginScreen(gameContext);
-            }
-            case LEADERBOARD -> {
-                return new LeaderBoardScreen(gameContext);
-            }
-            case LEVEL_COMPLETE -> {
-                return new LevelCompleteScreen(gameContext);
-            }
-            case LEVEL_LOST -> {
-                return new LevelLostScreen(gameContext);
-            }
-            case SETTINGS -> {
-                return new SettingScreen(gameContext);
-            }
-            case UPGRADE -> {
-                return new UpgradeScreen(gameContext);
-            }
-        }
+            case PLAY -> newScreen = new PlayScreen(gameContext);
+            case MENU -> newScreen = new MenuScreen(gameContext);
+            case LOGIN -> newScreen = new LoginScreen(gameContext);
+            case LEADERBOARD -> newScreen = new LeaderBoardScreen(gameContext);
+            case LEVEL_COMPLETE -> newScreen = new LevelCompleteScreen(gameContext);
+            case LEVEL_LOST -> newScreen = new LevelLostScreen(gameContext);
+            case SETTINGS -> newScreen = new SettingScreen(gameContext);
+            case UPGRADE -> newScreen = new UpgradeScreen(gameContext);
+            default ->
+                throw new IllegalArgumentException(TAG + "No screen exists for type: " + type);
+        };
+        return newScreen;
     }
 }

@@ -57,6 +57,7 @@ public class GameContext implements IGameContext {
         addSystemsToEngine(renderer, batch, cam);
         this.player = initPlayer(engine);
         this.store = initUpgradeStore(engine);
+        this.store = initUpgradeStore(engine);
         this.world = new World(engine);
 
         initStartLevel(world);
@@ -109,11 +110,7 @@ public class GameContext implements IGameContext {
     }
 
     private UpgradeStore initUpgradeStore(PooledEngine engine) {
-        Configuration config = Configuration.getInstance();
-        return UpgradeStore.getInstance(engine,
-            (int) (config.getScreenWidth() * 0.5f),
-            (int) (config.getScreenHeight() * 0.5f)
-        );
+        return UpgradeStore.getInstance(engine);
     }
 
     private void initStartLevel(World world) {
@@ -185,6 +182,10 @@ public class GameContext implements IGameContext {
     public IPlayer getPlayer() {
         return (IPlayer) player;
     }
+    public UpgradeStore getUpgradeStore() {
+        return store;
+    }
+
 
     public World getWorld() {
         return world;

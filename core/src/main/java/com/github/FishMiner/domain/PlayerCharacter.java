@@ -32,14 +32,14 @@ public class PlayerCharacter implements IPlayer {
     }
 
     public Entity getHook() {
-        return playerEntity.getComponent(PlayerComponent.class).hook;
+        return playerEntity.getComponent(PlayerComponent.class).getHook();
     }
     public Entity getSinker() {
-        return playerEntity.getComponent(PlayerComponent.class).sinker;
+        return playerEntity.getComponent(PlayerComponent.class).getSinker();
     }
 
     public Entity getReel() {
-        return playerEntity.getComponent(PlayerComponent.class).reel;
+        return playerEntity.getComponent(PlayerComponent.class).getReel();
     }
 
     @Override

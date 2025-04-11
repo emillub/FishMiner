@@ -9,12 +9,11 @@ public class TransactionEvent extends AbstractEntityEvent implements IGameEvent 
         super(product);
         super.setSource(buyer);
     }
-    public void setApproved(boolean approved) {
-        isApproved = approved;
+    public void setApproved(boolean isApproved) {
+        this.isApproved = isApproved;
     }
 
-    public void getApproved() {
+    public boolean getApproved() {
         return isApproved;
     }
-
 }

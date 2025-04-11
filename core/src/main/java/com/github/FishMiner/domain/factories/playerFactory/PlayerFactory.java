@@ -32,7 +32,7 @@ public class PlayerFactory {
         Entity hook = createHookEntity(engine, playerEntity);
 
         PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
-        playerComponent.hook = hook;
+        playerComponent.setHook(hook);
 
         playerEntity.add(playerComponent);
 

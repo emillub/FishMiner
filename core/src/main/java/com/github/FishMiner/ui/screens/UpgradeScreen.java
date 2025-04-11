@@ -1,7 +1,6 @@
 package com.github.FishMiner.ui.screens;
 
-
-import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,31 +8,38 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
-import com.github.FishMiner.domain.shop.UpgradeItem;
+import com.github.FishMiner.domain.eventBus.GameEventBus;
+import com.github.FishMiner.domain.events.ecsEvents.TransactionEvent;
+import com.github.FishMiner.domain.ecs.components.SinkerComponent;
+import com.github.FishMiner.domain.ecs.components.ReelComponent;
+import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
 import com.github.FishMiner.domain.UpgradeStore;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.ui.ports.in.IPlayer;
 import com.github.FishMiner.ui.ports.out.ScreenType;
-
-import java.util.Map;
+import java.util.List;
 
 public class UpgradeScreen extends AbstractScreen implements IGameScreen {
-    private final Map<String, UpgradeItem> shopItems;
-    //private final float previousScore;
-    private PooledEngine engine;
+    private final List<Entity> upgradeProducts;
     private IPlayer player;
+    private UpgradeStore upgradeStore;
 
-    public UpgradeScreen(GameContext gameContext){
+    public UpgradeScreen(GameContext gameContext) {
         super(gameContext);
         screenType = ScreenType.UPGRADE;
         player = gameContext.getPlayer();
-        this.shopItems = UpgradeStore.getAvailableUpgrades();
+        // Retrieve the upgrade store from GameContext (which now holds an instance of UpgradeStore)
+        this.upgradeStore = gameContext.getUpgradeStore();
+        this.upgradeProducts = upgradeStore.getUpgradeProducts();
     }
 
     @Override
     public void show() {
         super.show();
+        // Ensure the trader (and its upgrades) are rendered
+        upgradeStore.setRenderTrader(true);
         Gdx.input.setInputProcessor(stage);
+
         Table table = new Table();
         table.setFillParent(true);
         table.top().padTop(40);
@@ -48,28 +54,36 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
         moneyLabel.setFontScale(1.3f);
         table.add(moneyLabel).padBottom(30).row();
 
-        for (UpgradeItem item : shopItems.values()) {
-            Label itemLabel = new Label(item.name + " (" + item.cost + ")", skin);
+        // Iterate over each upgrade product available in the store.
+        for (Entity product : upgradeProducts) {
+            String productName = "";
+            int productPrice = 0;
+
+            // Determine the display name from attached components.
+            if (product.getComponent(SinkerComponent.class) != null) {
+                productName = product.getComponent(SinkerComponent.class).name;
+            } else if (product.getComponent(ReelComponent.class) != null) {
+                productName = product.getComponent(ReelComponent.class).getName();
+            }
+            // Get the cost from the UpgradeComponent.
+            productPrice = product.getComponent(UpgradeComponent.class).getPrice();
+
+            Label itemLabel = new Label(productName + " (" + productPrice + ")", skin);
             itemLabel.setFontScale(1.1f);
 
             final TextButton buyButton = new TextButton("Buy", skin);
             buyButton.pad(6);
 
-            if (inventory.hasUpgrade(item.id)) {
-                buyButton.setDisabled(true);
-                buyButton.setText(item.name + " (Owned)");
-            }
-
+            // When the buy button is pressed, create and post a TransactionEvent.
+            String finalProductName = productName;
             buyButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    if (!inventory.hasUpgrade(item.id) && inventory.money >= item.cost) {
-                        inventory.spendMoney(item.cost);
-                        inventory.addUpgrade(item.id);
-                        buyButton.setDisabled(true);
-                        buyButton.setText(item.name + " (Owned)");
-                        moneyLabel.setText("Points: " + inventory.money);
-                    }
+                    // Assuming the player provides its underlying entity via getEntity()
+                    TransactionEvent txEvent = new TransactionEvent(player.getPlayerEntity(), product);
+                    GameEventBus.getInstance().post(txEvent);
+                    buyButton.setDisabled(true);
+                    buyButton.setText(finalProductName + " (Processing)");
                 }
             });
 
@@ -86,7 +100,9 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
         continueButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("🎮 Continue to level " + nextLevel);
+                // Optionally hide the upgrade trader when continuing.
+                upgradeStore.setRenderTrader(false);
+                System.out.println("🎮 Continue to next level.");
                 ScreenManager.getInstance().startNextLevel();
             }
         });

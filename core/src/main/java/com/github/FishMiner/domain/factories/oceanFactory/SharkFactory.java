@@ -19,7 +19,7 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.components.WeightComponent;
 import com.github.FishMiner.domain.factories.SharkTypes;
-import com.github.FishMiner.domain.ecs.utils.FishUtils;
+import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 
@@ -90,10 +90,10 @@ public class SharkFactory {
             float startX = movesRight ? -fishComponent.width : screenWidth + fishComponent.width;
 
             // Start Y: based on depth
-            float startY = FishUtils.getRandomDepthFor(depthLevel, fishComponent.height);
+            float startY = DomainUtils.getRandomDepthFor(depthLevel, fishComponent.height);
             transform.pos = new Vector3(startX, startY, 0);
             transform.scale.set(scale, scale);
-            velocity.velocity.x = FishUtils.getFishDirectionX(movesRight, speed);
+            velocity.velocity.x = DomainUtils.getFishDirectionX(movesRight, speed);
 
             bounds.bounds.set(
                 transform.pos.x,

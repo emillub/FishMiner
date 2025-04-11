@@ -9,6 +9,7 @@ import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.TraderComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
+import com.github.FishMiner.domain.factories.SinkerTypes;
 import com.github.FishMiner.domain.states.TraderStates;
 
 public class TraderFactory {
@@ -18,10 +19,11 @@ public class TraderFactory {
 
     public static void addNewTraderTo(PooledEngine engine, int posX, int posY) {
         traderEntity = createTraderEntity(engine, posX, posY);
-        Entity heavySinker = SinkerFactory.createEntity(engine, "Heavy Sinker", 400, 20f);
+        Entity heavySinker = SinkerFactory.createEntity(engine, SinkerTypes.HEAVY_SINKER);
 
         TraderComponent traderComponent = traderEntity.getComponent(TraderComponent.class);
-        traderComponent.products.add(heavySinker);
+        traderComponent.addProduct(heavySinker);
+
 
         engine.addEntity(traderEntity);
         engine.addEntity(heavySinker);

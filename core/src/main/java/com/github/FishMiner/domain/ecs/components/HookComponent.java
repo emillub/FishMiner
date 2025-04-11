@@ -3,7 +3,7 @@ package com.github.FishMiner.domain.ecs.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector3;
-import com.github.FishMiner.domain.ecs.utils.FishUtils;
+import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 
 
 public class HookComponent implements Component {
@@ -13,7 +13,7 @@ public class HookComponent implements Component {
     public Vector3 offset = new Vector3(0, -2, 1);
 
     // temp reelLength. This actually belongs to the ReelComponent
-    public final float reelLength = FishUtils.getDepthIntervalFor(1)[1];
+    public final float reelLength = DomainUtils.getDepthIntervalFor(1)[1];
 
     public final int sinkerWeight = 2;
 

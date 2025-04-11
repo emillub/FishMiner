@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.ecs.components.*;
 import com.github.FishMiner.domain.factories.GarbageTypes;
-import com.github.FishMiner.domain.ecs.utils.FishUtils;
+import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 
 public class GarbageFactory {
@@ -60,11 +60,11 @@ public class GarbageFactory {
         boolean movesRight = MathUtils.randomBoolean();
         float screenWidth = Configuration.getInstance().getScreenWidth();
         float startX = movesRight ? -fishLike.width : screenWidth + fishLike.width;
-        float startY = FishUtils.getRandomDepthFor(depthLevel, fishLike.height);
+        float startY = DomainUtils.getRandomDepthFor(depthLevel, fishLike.height);
 
         transform.pos = new Vector3(startX, startY, 0);
         transform.scale.set(scale, scale);
-        velocity.velocity.x = FishUtils.getFishDirectionX(movesRight, 1.5f);
+        velocity.velocity.x = DomainUtils.getFishDirectionX(movesRight, 1.5f);
 
         bounds.bounds.set(startX, startY, fishLike.width, fishLike.height);
         attachment.offset.x = 10;

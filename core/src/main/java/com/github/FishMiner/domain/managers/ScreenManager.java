@@ -151,6 +151,7 @@ public class ScreenManager {
             public void onEvent(ChangeScreenEvent event) {
                 if (event.isHandled()) return;
                 switchScreenTo(event.getScreenType());
+                event.setHandled();
             }
             @Override
             public Class<ChangeScreenEvent> getEventType() {
@@ -168,6 +169,7 @@ public class ScreenManager {
             public void onEvent(PrepareScreenEvent event) {
                 if (event.isHandled()) return;
                 prepareNewScreen(event.getScreenType());
+                event.setHandled();
             }
             @Override
             public Class<PrepareScreenEvent> getEventType() {

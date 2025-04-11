@@ -2,9 +2,9 @@ package com.github.FishMiner.domain.ecs.utils;
 
 import com.github.FishMiner.common.Configuration;
 
-public class FishUtils {
+public class DomainUtils {
 
-    private FishUtils() {
+    private DomainUtils() {
         // Prevent instantiation
     }
 
@@ -79,5 +79,12 @@ public class FishUtils {
         return (float) (Math.random() * (maxY - minY) + minY);
     }
 
+    public static float getLengthDepthFor(int depthLevel, int entityHeight) {
+        int oceanHeight = Configuration.getInstance().getOceanHeight();
+        int depthLevels = Configuration.getInstance().getDepthLevels();
+        int segmentHeight = oceanHeight / depthLevels;
+
+        return oceanHeight - ((depthLevel - 1) * segmentHeight) - entityHeight;
+    }
 
 }

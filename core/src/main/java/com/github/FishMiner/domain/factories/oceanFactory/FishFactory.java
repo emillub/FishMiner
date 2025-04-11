@@ -17,7 +17,7 @@ import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.components.WeightComponent;
 import com.github.FishMiner.domain.factories.FishTypes;
-import com.github.FishMiner.domain.ecs.utils.FishUtils;
+import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 
@@ -90,10 +90,10 @@ public class FishFactory {
         System.out.println("Fish moves " + (movesRight ? "right" : "left") + " from x=" + startX);
 
         // Start Y: based on depth
-        float startY = FishUtils.getRandomDepthFor(depthLevel, fishComponent.height);
+        float startY = DomainUtils.getRandomDepthFor(depthLevel, fishComponent.height);
         transform.pos = new Vector3(startX, startY, 0);
         transform.scale.set(scale, scale);
-        velocity.velocity.x = FishUtils.getFishDirectionX(movesRight, speed);
+        velocity.velocity.x = DomainUtils.getFishDirectionX(movesRight, speed);
 
         bounds.bounds.set(
             transform.pos.x,
