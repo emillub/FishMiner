@@ -8,14 +8,10 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.github.FishMiner.domain.ecs.components.FishComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
-import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.states.FishableObjectStates;
-import com.github.FishMiner.domain.states.HookStates;
-import com.github.FishMiner.domain.states.IState;
 
 
 public class RotationSystem extends IteratingSystem {

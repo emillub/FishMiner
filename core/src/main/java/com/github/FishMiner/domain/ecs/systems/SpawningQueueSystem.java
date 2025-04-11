@@ -5,17 +5,18 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.MathUtils;
-import com.github.FishMiner.Configuration;
-import com.github.FishMiner.Logger;
+import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.common.Logger;
+import com.github.FishMiner.domain.ecs.components.FishableComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.ecs.entityFactories.IEntityType;
-import com.github.FishMiner.domain.ecs.entityFactories.IOceanEntityFactory;
-import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.OceanEntityFactory;
+import com.github.FishMiner.domain.factories.IEntityType;
+import com.github.FishMiner.domain.factories.IOceanEntityFactory;
+import com.github.FishMiner.domain.factories.oceanFactory.OceanEntityFactory;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.World;
 import com.github.FishMiner.domain.states.WorldState;
-import com.github.FishMiner.domain.ecs.entityFactories.GarbageTypes;
+import com.github.FishMiner.domain.factories.GarbageTypes;
 
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import java.util.List;
 public class SpawningQueueSystem extends EntitySystem {
     private static final String TAG = "SpawningQueueSystem";
     private PooledEngine engine;
-    private IOceanEntityFactory factory;
+    private OceanEntityFactory factory;
     private World world;
     private float spawnTimer = 0f;
     private float spawnInterval = 1f;
@@ -93,7 +94,7 @@ public class SpawningQueueSystem extends EntitySystem {
 
             TransformComponent transform = fishableEntity.getComponent(TransformComponent.class);
             if (transform != null) {
-                float fishWidth = fishableEntity.getComponent(com.github.FishMiner.domain.ecs.components.FishComponent.class).width;
+                float fishWidth = fishableEntity.getComponent(FishableComponent.class).width;
                 float minX = margin;
                 float maxX = screenWidth - fishWidth - margin;
                 transform.pos.x = MathUtils.random(minX, maxX);
@@ -103,7 +104,6 @@ public class SpawningQueueSystem extends EntitySystem {
             spawnedCount++;
         }
 
-
         // Spawn garbage
         for (int i = 0; i < numGarbage; i++) {
             Entity garbage = ((IOceanEntityFactory) factory).createGarbage(GarbageTypes.GARBAGE, 1).get(0);
@@ -111,8 +111,9 @@ public class SpawningQueueSystem extends EntitySystem {
             TransformComponent transform = garbage.getComponent(TransformComponent.class);
             VelocityComponent velocity = garbage.getComponent(VelocityComponent.class);
             if (transform != null && velocity != null) {
-                float garbageWidth = garbage.getComponent(com.github.FishMiner.domain.ecs.components.FishComponent.class).width;
-                float minX = margin;
+                float garbageWidth = garbage.getComponent(FishableComponent.class).width;
+                float minX;
+                minX = margin;
                 float maxX = screenWidth - garbageWidth - margin;
                 transform.pos.x = MathUtils.random(minX, maxX);
 

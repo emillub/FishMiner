@@ -1,8 +1,7 @@
 package com.github.FishMiner.data.handlers;
 
-import com.github.FishMiner.data.services.FirebaseAuthCallback;
+import com.github.FishMiner.domain.ports.out.FirebaseAuthCallback;
 import com.github.FishMiner.data.ports.out.IAuthService;
-import com.github.FishMiner.domain.handlers.LoginCallBack;
 import com.github.FishMiner.domain.handlers.ILoginHandler;
 
 public class LoginHandler implements ILoginHandler {
@@ -13,7 +12,7 @@ public class LoginHandler implements ILoginHandler {
     }
 
     @Override
-    public void login(String email, String password, LoginCallBack callback) {
+    public void login(String email, String password, FirebaseAuthCallback callback) {
         authService.login(email, password, new FirebaseAuthCallback() {
             @Override
             public void onSuccess() {

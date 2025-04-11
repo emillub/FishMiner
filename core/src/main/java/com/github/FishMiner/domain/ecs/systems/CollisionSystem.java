@@ -6,12 +6,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
-import com.github.FishMiner.domain.ecs.components.FishComponent;
+import com.github.FishMiner.domain.ecs.components.FishableComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.events.impl.FishHitEvent;
+import com.github.FishMiner.domain.events.ecsEvents.FishHitEvent;
 import com.github.FishMiner.domain.eventBus.GameEventBus;
 
 import java.util.HashSet;
@@ -30,14 +30,14 @@ public class CollisionSystem extends EntitySystem {
     private ComponentMapper<TransformComponent> posMapper = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
     private ComponentMapper<StateComponent> stateMapper = ComponentMapper.getFor(StateComponent.class);
-    private ComponentMapper<FishComponent> fishMapper = ComponentMapper.getFor(FishComponent.class);
+    private ComponentMapper<FishableComponent> fishMapper = ComponentMapper.getFor(FishableComponent.class);
 
     private final Set<Entity> caughtFish = new HashSet<>(); // A set to track fish that have already triggered a hit event.
     private Entity hookEntity;
 
     private final Family fishFamily = Family.all(
         BoundsComponent.class,
-        FishComponent.class,
+        FishableComponent.class,
         TransformComponent.class,
         StateComponent.class,
         VelocityComponent.class

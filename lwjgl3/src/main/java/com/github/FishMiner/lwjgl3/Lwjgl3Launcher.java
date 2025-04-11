@@ -3,24 +3,20 @@ package com.github.FishMiner.lwjgl3;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.github.FishMiner.FishMinerGame;
-//import com.github.FishMiner.data.ports.out.FirebaseInterface;
-//import com.github.FishMiner.data.ports.out.LeaderboardInterface;
+
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
     public static void main(String[] args) {
         if (StartupHelper.startNewJvmIfRequired()) return; // This handles macOS support and helps on Windows.
         createApplication();
-        //FirebaseInterface firebase;
-        //LeaderboardInterface leaderboard;
     }
 
 
     private static Lwjgl3Application createApplication() {
-        DesktopAuthService desktopLogInAPI = new DesktopAuthService();
-        DesktopLeaderBoardAPI desktopLeaderBoardAPI = new DesktopLeaderBoardAPI();
-        return new Lwjgl3Application(new FishMinerGame(desktopLogInAPI, desktopLeaderBoardAPI), getDefaultConfiguration());
-        //return new Lwjgl3Application(new FishMinerGame(firebase, leaderboard), getDefaultConfiguration());
+        DesktopAuthService desktopAuthService = new DesktopAuthService();
+        DesktopLeaderboardService desktopLeaderboardService = new DesktopLeaderboardService();
+        return new Lwjgl3Application(new FishMinerGame(desktopAuthService, desktopLeaderboardService), getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {

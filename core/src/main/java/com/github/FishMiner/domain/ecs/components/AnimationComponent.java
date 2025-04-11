@@ -102,4 +102,8 @@ public class AnimationComponent implements Component {
     public String getCurrentAnimationKey() {
         return currentAnimationKey != null ? currentAnimationKey : "UNKNOWN";
     }
+
+    public TextureRegion getCurrentFrame() {
+        return currentAnimation.getKeyFrame(timer, true);
+    }
 }

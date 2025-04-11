@@ -4,10 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException; // Correct exception type
-import com.github.FishMiner.domain.ecs.util.ValidateUtil;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.github.FishMiner.common.ValidateUtil;
 
 public class TextureComponent implements Component {
     private TextureRegion region;

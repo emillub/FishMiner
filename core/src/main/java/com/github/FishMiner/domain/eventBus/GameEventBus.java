@@ -1,8 +1,7 @@
 package com.github.FishMiner.domain.eventBus;
 
-import com.github.FishMiner.Logger;
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ports.in.IGameEvent;
-import com.github.FishMiner.domain.ports.in.IGameEventBus;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ public class GameEventBus {
 
     private GameEventBus() {
         listeners = new HashMap<>();
-        Logger.getInstance().log(TAG, "GameEventBus initialized.");
     }
 
     public static GameEventBus getInstance() {
@@ -30,7 +28,7 @@ public class GameEventBus {
     public <E extends IGameEvent> void register(IGameEventListener<E> listener) {
         Class<E> eventType = listener.getEventType();
         listeners.computeIfAbsent(eventType, k -> new ArrayList<>()).add(listener);
-        Logger.getInstance().log(TAG, "Listener registrered: " + listener.getClass().getName() + ". Type: " + listener.getEventType());
+        Logger.getInstance().log(TAG, "Listener registered: " + listener.getClass().getName() + ". Type: " + listener.getEventType());
     }
 
     public <E extends IGameEvent> void unregister(IGameEventListener<E> listener) {

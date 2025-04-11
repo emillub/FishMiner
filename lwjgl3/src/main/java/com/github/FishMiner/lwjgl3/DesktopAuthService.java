@@ -1,7 +1,8 @@
 package com.github.FishMiner.lwjgl3;
 
-import com.github.FishMiner.data.services.FirebaseAuthCallback;
 import com.github.FishMiner.data.ports.out.IAuthService;
+import com.github.FishMiner.domain.ports.out.FirebaseAuthCallback;
+
 import org.json.JSONObject;
 
 import java.io.*;

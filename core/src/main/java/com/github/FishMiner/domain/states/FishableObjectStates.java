@@ -1,7 +1,5 @@
 package com.github.FishMiner.domain.states;
 
-import com.github.FishMiner.Logger;
-
 public enum FishableObjectStates implements IState {
     FISHABLE("FISHABLE"),
     HOOKED("HOOKED"),

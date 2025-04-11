@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
-import com.github.FishMiner.domain.ecs.util.ValidateUtil;
+import com.github.FishMiner.common.ValidateUtil;
 
 public class PhysicalSystem extends IteratingSystem {
     private final ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);

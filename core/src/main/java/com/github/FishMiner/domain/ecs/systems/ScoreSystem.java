@@ -6,16 +6,16 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.github.FishMiner.Logger;
-import com.github.FishMiner.domain.ecs.components.FishComponent;
+import com.github.FishMiner.common.Logger;
+import com.github.FishMiner.domain.ecs.components.FishableComponent;
 import com.github.FishMiner.domain.ecs.components.ScoreComponent;
 import com.github.FishMiner.domain.ecs.components.SharkComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
-import com.github.FishMiner.domain.ecs.util.ValidateUtil;
+import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.eventBus.GameEventBus;
-import com.github.FishMiner.domain.events.impl.ScoreEvent;
-import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
+import com.github.FishMiner.domain.events.ScoreEvent;
+import com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 
 public class ScoreSystem extends EntitySystem implements IGameEventListener<FishCapturedEvent> {
@@ -25,7 +25,7 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
 
     private final ComponentMapper<ScoreComponent> scoreCompMapper = ComponentMapper.getFor(ScoreComponent.class);
     private final ComponentMapper<TransformComponent> transformCompMapper = ComponentMapper.getFor(TransformComponent.class);
-    private final ComponentMapper<FishComponent> fishCompMapper = ComponentMapper.getFor(FishComponent.class);
+    private final ComponentMapper<FishableComponent> fishCompMapper = ComponentMapper.getFor(FishableComponent.class);
     private final ComponentMapper<SharkComponent> sharkCompMapper = ComponentMapper.getFor(SharkComponent.class);
 
 
@@ -38,7 +38,7 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
     }
 
     public ScoreSystem() {
-        Family.all(FishComponent.class, StateComponent.class).get();
+        Family.all(FishableComponent.class, StateComponent.class).get();
         super.setProcessing(false);
     }
 
@@ -98,7 +98,7 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
             if (entry.flyTime >= FLY_DURATION && !entry.scoreSent) {
                 if (!fishedEntity.isScheduledForRemoval()) {
                     try {
-                        FishComponent fishComp = fishCompMapper.get(fishedEntity);
+                        FishableComponent fishComp = fishCompMapper.get(fishedEntity);
                         ScoreComponent scoreComp = scoreCompMapper.get(player);
                         ValidateUtil.validateMultipleNotNull(
                             fishComp, "fishComp cannot be null",
@@ -108,7 +108,6 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
                         SharkComponent sharkComp = sharkCompMapper.get(fishedEntity);
                         float scoreDifference = (sharkComp == null) ? fishComp.getValue() : fishComp.getValue() * sharkComp.getDamage();
                         scoreComp.setScore(scoreDifference);
-
                         GameEventBus.getInstance().post(new ScoreEvent(scoreComp.getScore()));
                         entry.scoreSent = true;
                         getEngine().removeEntity(fishedEntity);

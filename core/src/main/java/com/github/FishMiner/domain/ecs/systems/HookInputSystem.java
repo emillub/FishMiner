@@ -1,19 +1,15 @@
 package com.github.FishMiner.domain.ecs.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.github.FishMiner.Logger;
-import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.ecs.util.HookUtil;
-import com.github.FishMiner.domain.ecs.util.ValidateUtil;
-import com.github.FishMiner.domain.events.impl.FireInputEvent;
+import com.github.FishMiner.common.ValidateUtil;
+import com.github.FishMiner.domain.events.ecsEvents.HookInputEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.states.HookStates;
 
-public class HookInputSystem extends EntitySystem implements IGameEventListener<FireInputEvent> {
+public class HookInputSystem extends EntitySystem implements IGameEventListener<HookInputEvent> {
     private static final String TAG = "HookInputSystem";
     private Entity hook;
 
@@ -27,7 +23,7 @@ public class HookInputSystem extends EntitySystem implements IGameEventListener<
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onEvent(FireInputEvent event) {
+    public void onEvent(HookInputEvent event) {
         if (!event.isHandled()) {
             Entity hookEntity = event.getTarget();
             ValidateUtil.validateNotNull(hookEntity,  TAG + " -> hookEntity");
@@ -41,7 +37,7 @@ public class HookInputSystem extends EntitySystem implements IGameEventListener<
     }
 
     @Override
-    public Class<FireInputEvent> getEventType() {
-        return FireInputEvent.class;
+    public Class<HookInputEvent> getEventType() {
+        return HookInputEvent.class;
     }
 }

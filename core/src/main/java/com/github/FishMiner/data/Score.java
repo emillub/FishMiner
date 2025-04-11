@@ -1,6 +1,6 @@
 package com.github.FishMiner.data;
 
-import com.github.FishMiner.domain.ecs.util.ValidateUtil;
+import com.github.FishMiner.common.ValidateUtil;
 
 public record Score(String username, int score) {
     public Score {

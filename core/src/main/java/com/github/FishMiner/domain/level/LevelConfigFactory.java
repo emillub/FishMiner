@@ -1,17 +1,16 @@
 package com.github.FishMiner.domain.level;
 
-import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
-import com.github.FishMiner.domain.ecs.entityFactories.GarbageTypes;
-import com.github.FishMiner.domain.ecs.entityFactories.IEntityType;
-import com.github.FishMiner.domain.ecs.entityFactories.SharkTypes;
-import com.github.FishMiner.domain.ecs.entityFactories.oceanFactory.FishFactory;
+import com.github.FishMiner.domain.factories.FishTypes;
+import com.github.FishMiner.domain.factories.IEntityType;
+import com.github.FishMiner.domain.factories.SharkTypes;
+import com.github.FishMiner.domain.factories.oceanFactory.FishFactory;
 
 import java.util.*;
 
 public class LevelConfigFactory {
 
     public static LevelConfig generateLevel(int levelNumber, int previousScore) {
-        int baseTargetScore = 50;
+        int baseTargetScore = 300;
         int initialFishCount = 6;
         int totalFishCount = Math.min(30, 10 + levelNumber * 2);
         int targetScore = Math.max(baseTargetScore + (levelNumber - 1) * 30, previousScore + 20);

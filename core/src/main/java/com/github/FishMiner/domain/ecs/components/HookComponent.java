@@ -2,10 +2,8 @@ package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.github.FishMiner.Configuration;
-import com.github.FishMiner.domain.ecs.util.FishUtils;
+import com.github.FishMiner.domain.ecs.utils.FishUtils;
 
 
 public class HookComponent implements Component {

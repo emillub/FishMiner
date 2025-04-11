@@ -4,10 +4,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.github.FishMiner.Logger;
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.IState;
 
 @SuppressWarnings("unchecked")

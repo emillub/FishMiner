@@ -2,7 +2,7 @@ package com.github.FishMiner.domain.ecs.systems;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.github.FishMiner.Configuration;
+import com.github.FishMiner.common.Configuration;
 
 public class BackgroundRenderSystem extends EntitySystem {
     private final ShapeRenderer shapeRenderer;

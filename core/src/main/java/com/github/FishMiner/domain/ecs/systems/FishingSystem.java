@@ -8,16 +8,16 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.github.FishMiner.Logger;
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
-import com.github.FishMiner.domain.ecs.components.FishComponent;
+import com.github.FishMiner.domain.ecs.components.FishableComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.events.impl.FishCapturedEvent;
-import com.github.FishMiner.domain.events.impl.FishHitEvent;
+import com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent;
+import com.github.FishMiner.domain.events.ecsEvents.FishHitEvent;
 import com.github.FishMiner.domain.eventBus.GameEventBus;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.states.FishableObjectStates;
@@ -29,7 +29,7 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
     private final ComponentMapper<TransformComponent> posMapper = ComponentMapper.getFor(TransformComponent.class);
     private final ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
     private final ComponentMapper<StateComponent> stateMapper = ComponentMapper.getFor(StateComponent.class);
-    private final ComponentMapper<FishComponent> fishMapper = ComponentMapper.getFor(FishComponent.class);
+    private final ComponentMapper<FishableComponent> fishMapper = ComponentMapper.getFor(FishableComponent.class);
     private final ComponentMapper<AttachmentComponent> attachmentMapper = ComponentMapper.getFor(AttachmentComponent.class);
 
     private Entity hookEntity;
@@ -67,7 +67,7 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
             StateComponent<FishableObjectStates> fishState = stateMapper.get(fishEntity);
             TransformComponent fishPos = posMapper.get(fishEntity);
             RotationComponent fishRot = rotMapper.get(fishEntity);
-            FishComponent fishComp = fishMapper.get(fishEntity);
+            FishableComponent fishComp = fishMapper.get(fishEntity);
 
 
             fishState.changeState(FishableObjectStates.HOOKED);

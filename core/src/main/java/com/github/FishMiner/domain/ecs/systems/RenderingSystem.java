@@ -5,23 +5,18 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
-import com.github.FishMiner.Configuration;
-import com.github.FishMiner.Logger;
+import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.ecs.util.ValidateUtil;
-import com.github.FishMiner.domain.ecs.util.ZComparator;
-
-import java.util.Comparator;
+import com.github.FishMiner.common.ValidateUtil;
+import com.github.FishMiner.domain.ecs.utils.ZComparator;
 
 
 public class RenderingSystem extends SortedIteratingSystem {
@@ -32,21 +27,17 @@ public class RenderingSystem extends SortedIteratingSystem {
     private final ComponentMapper<TextureComponent> texMapper = ComponentMapper.getFor(TextureComponent.class);
     private final ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
     private final ComponentMapper<VelocityComponent> velocityMapper = ComponentMapper.getFor(VelocityComponent.class);
-    private ImmutableArray<Entity> entities;
+    protected ImmutableArray<Entity> entities;
     private OrthographicCamera cam;
 
-    public RenderingSystem(SpriteBatch batch) {
+    public RenderingSystem(SpriteBatch batch, OrthographicCamera cam) {
         super(
             Family.all(TransformComponent.class, TextureComponent.class).get(),
             new ZComparator()
         );
         this.batch = batch;
+        this.cam = cam;
         entities = getEntities();
-
-        int worldWidth = Configuration.getInstance().getScreenWidth();
-        int worldHeight = Configuration.getInstance().getScreenHeight();
-        cam = new OrthographicCamera(worldWidth, worldHeight);
-        cam.position.set(worldWidth / 2f, worldHeight / 2f, 0);
     }
 
     @Override
@@ -85,24 +76,23 @@ public class RenderingSystem extends SortedIteratingSystem {
             }
             TextureRegion frame = (anim != null) ? anim.currentAnimation.getKeyFrame(anim.timer, true) : tex.getRegion();
 
+            //TextureRegion frame = anim.currentAnimation.getKeyFrame(anim.timer, true);
 
-                //TextureRegion frame = anim.currentAnimation.getKeyFrame(anim.timer, true);
+            float originX = frame.getRegionWidth() / 2f;
+            float originY = frame.getRegionHeight() / 2f;
 
-                float originX = frame.getRegionWidth() / 2f;
-                float originY = frame.getRegionHeight() / 2f;
-
-                batch.draw(
-                    frame,
-                    pos.pos.x - originX,
-                    pos.pos.y - originY,
-                    originX,
-                    originY,
-                    frame.getRegionWidth(),
-                    frame.getRegionHeight(),
-                    scaleX,
-                    scaleY,
-                    rotation
-                );
+            batch.draw(
+                frame,
+                pos.pos.x - originX,
+                pos.pos.y - originY,
+                originX,
+                originY,
+                frame.getRegionWidth(),
+                frame.getRegionHeight(),
+                scaleX,
+                scaleY,
+                rotation
+            );
         }
         batch.end();
     }

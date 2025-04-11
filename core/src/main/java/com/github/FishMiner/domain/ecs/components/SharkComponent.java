@@ -1,7 +1,7 @@
 package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
-import com.github.FishMiner.domain.ecs.util.ValidateUtil;
+import com.github.FishMiner.common.ValidateUtil;
 
 public class SharkComponent implements Component {
     private float damage;

@@ -1,13 +1,11 @@
 package com.github.FishMiner.domain.level;
 
-import com.github.FishMiner.domain.ecs.entityFactories.FishTypes;
-import com.github.FishMiner.domain.ecs.entityFactories.IEntityType;
-import com.github.FishMiner.domain.ecs.entityFactories.SharkTypes;
+import com.github.FishMiner.domain.factories.IEntityType;
+import com.github.FishMiner.domain.factories.SharkTypes;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class LevelConfig {
     private final int targetScore;
@@ -17,7 +15,6 @@ public class LevelConfig {
     private final int totalFishCount;
     private final List<IEntityType> plannedEntities;
     private final int numGarbage;
-
 
     public LevelConfig(
         int targetScore,

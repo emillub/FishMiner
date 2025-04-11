@@ -1,6 +1,6 @@
 package com.github.FishMiner.data.ports.out;
 
-import com.github.FishMiner.data.services.LeaderboardCallback;
+import com.github.FishMiner.domain.ports.out.LeaderboardCallback;
 
 public  interface ILeaderBoardService {
     void getTopScores(LeaderboardCallback callback);
