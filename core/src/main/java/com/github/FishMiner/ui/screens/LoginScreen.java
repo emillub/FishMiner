@@ -1,20 +1,22 @@
 package com.github.FishMiner.ui.screens;
 
+import static com.github.FishMiner.ui.ports.out.ScreenType.LOGIN;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.github.FishMiner.common.Logger;
-import com.github.FishMiner.domain.GameContext;
-import com.github.FishMiner.domain.eventBus.GameEventBus;
-import com.github.FishMiner.domain.events.dataEvents.AuthResponseEvent;
+import com.github.FishMiner.domain.GameEventBus;
+import com.github.FishMiner.domain.events.data.AuthResponseEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
-import com.github.FishMiner.ui.events.LoginRequestEvent;
+import com.github.FishMiner.ui.events.data.LoginRequestEvent;
+import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
-import com.github.FishMiner.ui.events.RegisterUserRequest;
+import com.github.FishMiner.ui.events.data.RegisterUserRequest;
 
 
 public class LoginScreen extends AbstractScreen implements IGameScreen {
@@ -23,9 +25,9 @@ public class LoginScreen extends AbstractScreen implements IGameScreen {
     private TextField passwordField;
     private Label statusLabel;
 
-    public LoginScreen(GameContext gameContext) {
+    public LoginScreen(IGameContext gameContext) {
         super(gameContext);
-        screenType = ScreenType.LOGIN;
+        screenType = LOGIN;
         GameEventBus.getInstance().register(getAuthResponseListener());
     }
 

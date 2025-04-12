@@ -1,15 +1,13 @@
 package com.github.FishMiner.domain.managers;
 
-import com.github.FishMiner.domain.ports.out.FirebaseAuthCallback;
-import com.github.FishMiner.domain.eventBus.GameEventBus;
-import com.github.FishMiner.domain.events.dataEvents.AuthResponseEvent;
-import com.github.FishMiner.domain.ports.out.ILeaderboardFetcher;
-import com.github.FishMiner.domain.ports.out.ILeaderboardPoster;
+import com.github.FishMiner.domain.ports.in.data.FirebaseAuthCallback;
+import com.github.FishMiner.domain.GameEventBus;
+import com.github.FishMiner.domain.events.data.AuthResponseEvent;
 import com.github.FishMiner.domain.ports.out.ILoginHandler;
 import com.github.FishMiner.domain.ports.out.IUserRegistrationHandler;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.ui.events.LoginRequestEvent;
-import com.github.FishMiner.ui.events.RegisterUserRequest;
+import com.github.FishMiner.ui.events.data.LoginRequestEvent;
+import com.github.FishMiner.ui.events.data.RegisterUserRequest;
 import com.github.FishMiner.ui.ports.in.IRequestManager;
 
 public class RequestManager implements IRequestManager {

@@ -13,11 +13,12 @@ import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.data.ports.out.ILeaderBoardService;
 import com.github.FishMiner.data.ports.out.IAuthService;
 import com.github.FishMiner.domain.GameContext;
-import com.github.FishMiner.domain.eventBus.GameEventBus;
+import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
-import com.github.FishMiner.domain.ports.out.LeaderboardCallback;
+import com.github.FishMiner.domain.ports.in.data.LeaderboardCallback;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
     private TextField scoreField;
     private Label statusLabel;
 
-    public LeaderBoardScreen(GameContext gameContext) {
+    public LeaderBoardScreen(IGameContext gameContext) {
         super(gameContext);
         screenType = ScreenType.LEADERBOARD;
     }

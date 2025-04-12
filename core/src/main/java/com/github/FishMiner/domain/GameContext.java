@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.ecs.components.ScoreComponent;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
+import com.github.FishMiner.domain.ecs.systems.AttachmentSystem;
 import com.github.FishMiner.domain.ecs.systems.BackgroundRenderSystem;
 import com.github.FishMiner.domain.ecs.systems.CollisionSystem;
 import com.github.FishMiner.domain.ecs.systems.FishingSystem;
@@ -24,7 +25,6 @@ import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.ecs.systems.StoreSystem;
 import com.github.FishMiner.domain.ecs.systems.TransactionSystem;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
-import com.github.FishMiner.domain.eventBus.GameEventBus;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent;
 import com.github.FishMiner.domain.level.LevelConfig;
@@ -44,9 +44,8 @@ public class GameContext implements IGameContext {
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
     private final OrthographicCamera cam;
-
-    private PrepareScreenEvent prepareScreenEvent;
     private boolean isPrepareScreenPosted = false;
+    private PrepareScreenEvent prepareScreenEvent;
 
     private ChangeScreenEvent sentEvent = null;
 
@@ -92,9 +91,9 @@ public class GameContext implements IGameContext {
                 sentEvent = new ChangeScreenEvent(ScreenType.LEVEL_COMPLETE);
                 GameEventBus.getInstance().post(sentEvent);
             } else if (sentEvent.isHandled()) {
-                prepareNextLevel();
+                createNextLevel();
                 sentEvent = null;
-                prepareScreenPosted = false; // reset for the next level if needed
+                prepareScreenPosted = false;
             }
         } else if (world.getState() == WorldState.LOST) {
             if (sentEvent == null) {
@@ -109,10 +108,15 @@ public class GameContext implements IGameContext {
         }
     }
 
-    public void prepareNextLevel() {
+    public void createNextLevel() {
         world.nextLevel(player.getScore());
     }
 
+    /**
+     * When the game is lost this method removes all the existing entities from engine.
+     * It then creates new ones, adds them to the engine and assigns them to this.player.
+     * Then a new the World creates reuses the PlayScreen with Level 1
+     */
     public void resetContext() {
         engine.removeEntity(player.getSinker());
         engine.removeEntity(player.getHook());
@@ -148,6 +152,7 @@ public class GameContext implements IGameContext {
 
     private void addSystemsToEngine(ShapeRenderer renderer, SpriteBatch batch, OrthographicCamera cam, UpgradeStore store) {
         engine.addSystem(new BackgroundRenderSystem(renderer));
+        engine.addSystem(new AttachmentSystem());
         engine.addSystem(new StoreSystem(store.getTraderEntity()));
         engine.addSystem(new RenderingSystem(batch, cam));
         engine.addSystem(new AnimationSystem());
@@ -157,6 +162,7 @@ public class GameContext implements IGameContext {
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new SpawningQueueSystem());
         engine.addSystem(new RotationSystem());
+        // not ready yet:
 
         // Register systems that are also listeners
         ScoreSystem scoreSystem = new ScoreSystem();

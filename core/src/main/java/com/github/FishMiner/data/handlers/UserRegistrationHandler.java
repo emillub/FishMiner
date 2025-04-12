@@ -1,7 +1,7 @@
 package com.github.FishMiner.data.handlers;
 
 import com.github.FishMiner.data.ports.out.IAuthService;
-import com.github.FishMiner.domain.ports.out.FirebaseAuthCallback;
+import com.github.FishMiner.domain.ports.in.data.FirebaseAuthCallback;
 import com.github.FishMiner.domain.ports.out.IUserRegistrationHandler;
 
 public class UserRegistrationHandler implements IUserRegistrationHandler {

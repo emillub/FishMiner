@@ -64,23 +64,23 @@ public class FishFactory {
         Entity fish = engine.createEntity();
 
         FishableComponent fishComponent = engine.createComponent(FishableComponent.class);
-        TransformComponent transform = engine.createComponent(TransformComponent.class);
-        VelocityComponent velocity = engine.createComponent(VelocityComponent.class);
-        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-        AttachmentComponent attachment = engine.createComponent(AttachmentComponent.class);
-        StateComponent<FishableObjectStates> state = engine.createComponent(StateComponent.class);
-        AnimationComponent animation = engine.createComponent(AnimationComponent.class);
-        WeightComponent weightComp = engine.createComponent(WeightComponent.class);
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
+        VelocityComponent velocityComponent = engine.createComponent(VelocityComponent.class);
+        BoundsComponent boundsComponent = engine.createComponent(BoundsComponent.class);
+        TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
+        AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
+        StateComponent<FishableObjectStates> stateComponent = engine.createComponent(StateComponent.class);
+        AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
+        WeightComponent weightComponent = engine.createComponent(WeightComponent.class);
 
-        texture.setRegion(texturePath, frameCols, frameRows);
+        textureComponent.setRegion(texturePath, frameCols, frameRows);
         fishComponent.setDepthLevel(depthLevel);
         fishComponent.setWeight(weight);
         fishComponent.setBaseSpeed(speed);
-        fishComponent.width = texture.getFrameWidth();
-        fishComponent.height = texture.getFrameHeight();
+        fishComponent.width = textureComponent.getFrameWidth();
+        fishComponent.height = textureComponent.getFrameHeight();
 
-        weightComp.weight = fishComponent.weight;
+        weightComponent.weight = fishComponent.weight;
 
         boolean movesRight = MathUtils.randomBoolean();
         float screenWidth = Configuration.getInstance().getScreenWidth();
@@ -91,34 +91,34 @@ public class FishFactory {
 
         // Start Y: based on depth
         float startY = DomainUtils.getRandomDepthFor(depthLevel, fishComponent.height);
-        transform.pos = new Vector3(startX, startY, 0);
-        transform.scale.set(scale, scale);
-        velocity.velocity.x = DomainUtils.getFishDirectionX(movesRight, speed);
+        transformComponent.pos = new Vector3(startX, startY, 0);
+        transformComponent.scale.set(scale, scale);
+        velocityComponent.velocity.x = DomainUtils.getFishDirectionX(movesRight, speed);
 
-        bounds.bounds.set(
-            transform.pos.x,
-            transform.pos.y,
+        boundsComponent.bounds.set(
+            transformComponent.pos.x,
+            transformComponent.pos.y,
             fishComponent.width,
             fishComponent.height
         );
 
-        attachment.offset.x = 10;
+        attachmentComponent.offset.x = 10;
 
-        state.changeState(FishableObjectStates.FISHABLE);
+        stateComponent.changeState(FishableObjectStates.FISHABLE);
 
-        animation.addAnimation(FishableObjectStates.FISHABLE.getAnimationKey(), texture, 0);
-        animation.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), texture, 0, Animation.PlayMode.NORMAL);
-        animation.addAnimation(FishableObjectStates.REELING.getAnimationKey(), texture, 0);
-        animation.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
+        animationComponent.addAnimation(FishableObjectStates.FISHABLE.getAnimationKey(), textureComponent, 0);
+        animationComponent.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), textureComponent, 0, Animation.PlayMode.NORMAL);
+        animationComponent.addAnimation(FishableObjectStates.REELING.getAnimationKey(), textureComponent, 0);
+        animationComponent.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
 
-        fish.add(transform);
-        fish.add(texture);
-        fish.add(velocity);
-        fish.add(bounds);
-        fish.add(attachment);
-        fish.add(state);
-        fish.add(animation);
-        fish.add(weightComp);
+        fish.add(transformComponent);
+        fish.add(textureComponent);
+        fish.add(velocityComponent);
+        fish.add(boundsComponent);
+        fish.add(attachmentComponent);
+        fish.add(stateComponent);
+        fish.add(animationComponent);
+        fish.add(weightComponent);
         fish.add(fishComponent);
 
         return fish;

@@ -6,9 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
-import com.github.FishMiner.domain.eventBus.GameEventBus;
+import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.ecsEvents.TransactionEvent;
 import com.github.FishMiner.domain.ecs.components.SinkerComponent;
 import com.github.FishMiner.domain.ecs.components.ReelComponent;
@@ -16,15 +15,16 @@ import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
 import com.github.FishMiner.domain.UpgradeStore;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.ui.ports.in.IPlayer;
+import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 import java.util.List;
 
 public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     private final List<Entity> upgradeProducts;
-    private IPlayer player;
-    private UpgradeStore upgradeStore;
+    private final IPlayer player;
+    private final UpgradeStore upgradeStore;
 
-    public UpgradeScreen(GameContext gameContext) {
+    public UpgradeScreen(IGameContext gameContext) {
         super(gameContext);
         screenType = ScreenType.UPGRADE;
         player = gameContext.getPlayer();

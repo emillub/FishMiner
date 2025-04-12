@@ -1,7 +1,7 @@
 package com.github.FishMiner.domain.factories;
 
 public enum ReelTypes {
-    BASIC_REEL("BASIC_REEL.png", "BasicReel", 1, 1, 5.0f, 4, 0);
+    BASIC_REEL("BASIC_REEL.png", "BasicReel", 8, 1, 5.0f, 4, 0);
     //LONG_REEL("LONG_REEL.png", "LongReel", 1, 1, 4.5f, 6, 10),
     //FAST_REEL("FAST_REEL.png", "FastReel", 1, 1, 7.5f, 4, 15),
     //ADVANCED_REEL("ADVANCED_REEL.png", "AdvancedReel", 1, 1, 10.0f, 6, 20);
@@ -15,6 +15,8 @@ public enum ReelTypes {
     private final int price;
     private final float scale;
 
+    // Note that if the price=0 the entity will not have the upgrade component
+    // Thus, the basic Reel (starting reel) should have the price as 0 and all other reels should have a price
     ReelTypes(String texturePath, String name, int frameCols, int frameRows, float returnSpeed, int depthLevel, int price) {
         this(texturePath, name, frameCols, frameRows, returnSpeed, depthLevel, price, 1.0f);
     }

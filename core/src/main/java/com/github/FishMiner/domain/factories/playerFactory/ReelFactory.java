@@ -57,7 +57,9 @@ public class ReelFactory {
 
         stateComponent.changeState(HookStates.SWINGING);
 
-        if (price == 0) {
+        animationComponent.addAnimation(HookStates.SWINGING.getAnimationKey(), textureComponent, 0);
+
+        if (price <= 0) {
             upgradeComponent.setUpgraded(true);
         } else {
             upgradeComponent.setType(reel);

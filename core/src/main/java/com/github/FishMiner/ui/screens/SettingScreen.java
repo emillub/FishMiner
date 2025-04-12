@@ -15,18 +15,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.domain.GameContext;
-import com.github.FishMiner.domain.eventBus.GameEventBus;
+import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
 public class SettingScreen extends AbstractScreen implements IGameScreen {
 
     private CheckBox soundCheckBox;
     private Slider volumeSlider;
-    public SettingScreen(GameContext gameContext) {
+    public SettingScreen(IGameContext gameContext) {
         super(gameContext);
         screenType = ScreenType.SETTINGS;
     }

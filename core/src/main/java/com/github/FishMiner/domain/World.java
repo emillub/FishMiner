@@ -2,7 +2,6 @@ package com.github.FishMiner.domain;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.github.FishMiner.common.Logger;
-import com.github.FishMiner.domain.eventBus.GameEventBus;
 import com.github.FishMiner.domain.factories.oceanFactory.OceanEntityFactory;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.events.ScoreEvent;

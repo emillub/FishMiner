@@ -1,4 +1,4 @@
-package com.github.FishMiner.domain.events.dataEvents;
+package com.github.FishMiner.domain.events.data;
 
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ports.in.IGameEvent;

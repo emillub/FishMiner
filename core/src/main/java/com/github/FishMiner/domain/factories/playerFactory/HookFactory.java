@@ -2,8 +2,12 @@ package com.github.FishMiner.domain.factories.playerFactory;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.PlayerComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
@@ -21,8 +25,7 @@ public class HookFactory {
 
     }
 
-    @SuppressWarnings("unchecked")
-    protected static Entity createEntity(PooledEngine engine, int posX, int posY) {
+    protected static Entity createEntity(PooledEngine engine, int posZ, Vector3 anchorPoint) {
         Entity hook = engine.createEntity();
 
         HookComponent hookComponent = engine.createComponent(HookComponent.class);
@@ -32,28 +35,33 @@ public class HookFactory {
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
         VelocityComponent velocityComponent = engine.createComponent(VelocityComponent.class);
         StateComponent<HookStates> stateComponent = engine.createComponent(StateComponent.class);
-
-        transformComponent.pos.x = posX;
-        transformComponent.pos.y = posY;
-
-        stateComponent.changeState(HookStates.SWINGING);
+        AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
 
         textureComponent.setRegion("hook_1cols_1rows.png");
-        System.out.println(textureComponent.texturePath);
+        stateComponent.changeState(HookStates.SWINGING);
+        velocityComponent.velocity = new Vector2(0, 0);
 
-        // TODO: fix misplaced bounds
-        boundsComponent.bounds.setX(transformComponent.pos.x);
-        boundsComponent.bounds.setY(transformComponent.pos.y);
-        boundsComponent.bounds.setWidth(textureComponent.getFrameWidth());
-        boundsComponent.bounds.setHeight(textureComponent.getFrameHeight());
+        hookComponent.anchorPoint.set(anchorPoint);
+        transformComponent.pos.z = posZ + 1;
 
+        boundsComponent.bounds.setPosition(
+            transformComponent.pos.x - boundsComponent.bounds.width * 0.5f,
+            transformComponent.pos.y - boundsComponent.bounds.height * 0.5f
+        );
+
+        boundsComponent.bounds.setSize(
+            textureComponent.getFrameWidth(),
+            textureComponent.getFrameHeight()
+        );
+
+        hook.add(textureComponent);
         hook.add(hookComponent);
         hook.add(transformComponent);
-        hook.add(velocityComponent);
-        hook.add(boundsComponent);
         hook.add(rotationComponent);
+        hook.add(velocityComponent);
         hook.add(stateComponent);
-        hook.add(textureComponent);
+        hook.add(attachmentComponent);
+        hook.add(boundsComponent);
 
         return hook;
     }

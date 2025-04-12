@@ -3,6 +3,7 @@ package com.github.FishMiner.ui.factories;
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.domain.ports.in.IScreenFactory;
+import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 import com.github.FishMiner.ui.screens.LeaderBoardScreen;
 import com.github.FishMiner.ui.screens.LevelCompleteScreen;
@@ -20,7 +21,7 @@ public class ScreenFactory implements IScreenFactory {
     }
 
     @Override
-    public Screen getScreen(ScreenType type, GameContext gameContext) {
+    public Screen getScreen(ScreenType type, IGameContext gameContext) {
         Screen newScreen;
         switch (type) {
             case PLAY -> newScreen = new PlayScreen(gameContext);

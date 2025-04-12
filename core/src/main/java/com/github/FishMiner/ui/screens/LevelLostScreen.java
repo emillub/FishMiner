@@ -14,14 +14,14 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.FishMiner.common.Configuration;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
 public class LevelLostScreen extends AbstractScreen implements IGameScreen {
 
-    public LevelLostScreen(GameContext gameContext) {
+    public LevelLostScreen(IGameContext gameContext) {
         super(gameContext);
         super.screenType = ScreenType.LEVEL_LOST;
     }

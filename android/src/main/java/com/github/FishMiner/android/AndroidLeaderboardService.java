@@ -1,7 +1,7 @@
 package com.github.FishMiner.android;
 
 import com.github.FishMiner.data.ports.out.ILeaderBoardService;
-import com.github.FishMiner.domain.ports.out.LeaderboardCallback;
+import com.github.FishMiner.domain.ports.in.data.LeaderboardCallback;
 import com.github.FishMiner.data.ScoreEntry;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;

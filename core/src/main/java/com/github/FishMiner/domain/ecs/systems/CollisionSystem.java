@@ -12,7 +12,7 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.events.ecsEvents.FishHitEvent;
-import com.github.FishMiner.domain.eventBus.GameEventBus;
+import com.github.FishMiner.domain.GameEventBus;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.github.FishMiner.domain.eventBus;
+package com.github.FishMiner.domain;
 
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ports.in.IGameEvent;

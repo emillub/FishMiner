@@ -1,7 +1,6 @@
 package com.github.FishMiner.domain.managers;
 
 import static com.github.FishMiner.ui.ports.out.ScreenType.PLAY;
-import static com.github.FishMiner.ui.ports.out.ScreenType.TEST;
 
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
@@ -11,11 +10,9 @@ import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent;
-import com.github.FishMiner.domain.factories.playerFactory.SinkerFactory;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.domain.ports.in.IScreenFactory;
-import com.github.FishMiner.ui.factories.ScreenFactory;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
 import java.util.HashMap;
@@ -138,7 +135,7 @@ public class ScreenManager {
      * always create a new PlayScreen for the next level.
      */
     public void startNextLevel() {
-        gameContext.prepareNextLevel();
+        gameContext.createNextLevel();
         cachedScreens.remove(PLAY);
         switchScreenTo(PLAY);
     }

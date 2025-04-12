@@ -1,11 +1,10 @@
-package com.github.FishMiner.ui.events;
+package com.github.FishMiner.ui.events.data;
 
 import com.github.FishMiner.domain.ports.in.IGameEvent;
 
-public class LoginRequestEvent extends DataRequestEvent implements IGameEvent {
-
+public class RegisterUserRequest extends DataRequestEvent implements IGameEvent {
     private boolean handled;
-    public LoginRequestEvent(String email, String password) {
+    public RegisterUserRequest(String email, String password) {
         super(email, password);
         handled = false;
     }

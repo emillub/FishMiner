@@ -18,16 +18,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
 import com.github.FishMiner.domain.World;
-import com.github.FishMiner.domain.eventBus.GameEventBus;
+import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.ecsEvents.HookInputEvent;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
-import com.github.FishMiner.domain.managers.ScreenManager;
+import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
-import com.github.FishMiner.ui.ports.in.IPlayer;
 
 /**
  * PlayScreen handles gameplay, including ECS initialization, rendering, and input.
@@ -43,7 +41,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
     private Table pauseOverlay;
     private boolean overlayVisible = false;
 
-    public PlayScreen(GameContext gameContext) {
+    public PlayScreen(IGameContext gameContext) {
         super(gameContext);
         super.screenType = ScreenType.PLAY;
         world = gameContext.getWorld();
