@@ -66,7 +66,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         cam.update();
         if (!world.isPaused()) {
-            gameContext.getEngine().update(delta);
+            gameContext.update(delta);
         }
         super.stage.act(delta);
         super.stage.draw();

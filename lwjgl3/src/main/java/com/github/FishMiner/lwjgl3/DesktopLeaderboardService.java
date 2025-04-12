@@ -1,6 +1,6 @@
 package com.github.FishMiner.lwjgl3;
 
-import com.github.FishMiner.data.Score;
+import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.data.ports.out.ILeaderBoardService;
 import com.github.FishMiner.domain.ports.out.LeaderboardCallback;
 import com.github.FishMiner.domain.managers.ScreenManager;
@@ -114,7 +114,7 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
 
                 // Parse JSON using org.json
                 JSONArray results = new JSONArray(response.toString());
-                List<Score> scoreList = new ArrayList<>();
+                List<ScoreEntry> scoreEntryList = new ArrayList<>();
 
                 for (int i = 0; i < results.length(); i++) {
                     JSONObject result = results.getJSONObject(i);
@@ -125,10 +125,10 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
                     String username = fields.getJSONObject("username").getString("stringValue");
                     int score = fields.getJSONObject("score").getInt("integerValue");
 
-                    scoreList.add(new Score(username, score));
+                    scoreEntryList.add(new ScoreEntry(username, score));
                 }
 
-                callback.onSuccess(scoreList);
+                callback.onSuccess(scoreEntryList);
 
             } catch (Exception e) {
                 callback.onFailure("Error fetching scores: " + e.getMessage());

@@ -18,6 +18,11 @@ public class StoreSystem extends EntitySystem {
     private ImmutableArray<Entity> upgradeEntities;
     private Entity trader;
 
+    public StoreSystem(Entity trader) {
+        super();
+        this.trader = trader;
+    }
+
     @Override
     public void addedToEngine(Engine engine) {
         // Look up the trader (requires that it has both TraderComponent and TransformComponent).

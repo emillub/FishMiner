@@ -9,5 +9,5 @@ public enum ScreenType {
     LEVEL_COMPLETE,
     LEVEL_LOST,
     SETTINGS,
-    PAUSE
+    TEST
 }

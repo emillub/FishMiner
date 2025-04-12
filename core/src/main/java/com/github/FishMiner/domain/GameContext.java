@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.domain.ecs.components.ScoreComponent;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
 import com.github.FishMiner.domain.ecs.systems.BackgroundRenderSystem;
 import com.github.FishMiner.domain.ecs.systems.CollisionSystem;
@@ -20,6 +21,8 @@ import com.github.FishMiner.domain.ecs.systems.RenderingSystem;
 import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
+import com.github.FishMiner.domain.ecs.systems.StoreSystem;
+import com.github.FishMiner.domain.ecs.systems.TransactionSystem;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
 import com.github.FishMiner.domain.eventBus.GameEventBus;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
@@ -42,6 +45,9 @@ public class GameContext implements IGameContext {
     private final ShapeRenderer renderer;
     private final OrthographicCamera cam;
 
+    private PrepareScreenEvent prepareScreenEvent;
+    private boolean isPrepareScreenPosted = false;
+
     private ChangeScreenEvent sentEvent = null;
 
     public GameContext() {
@@ -53,20 +59,32 @@ public class GameContext implements IGameContext {
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
 
+        // This order is very important
         this.engine = new PooledEngine();
-        addSystemsToEngine(renderer, batch, cam);
+        this.store = initUpgradeStore(engine);
+        addSystemsToEngine(renderer, batch, cam, this.store);
         this.player = initPlayer(engine);
-        this.store = initUpgradeStore(engine);
-        this.store = initUpgradeStore(engine);
         this.world = new World(engine);
+
+        GameEventBus.getInstance().register(world);
 
         initStartLevel(world);
     }
+
+    // Add a flag to prevent repeated postings
+    private boolean prepareScreenPosted = false;
 
     public void update(float delta) {
         if (!world.isPaused()) {
             world.update(delta);
             engine.update(delta);
+        }
+
+        // When timer is 10 seconds or less, post the PrepareScreenEvent only once.
+        if (world.getTimer() <= 10 && !prepareScreenPosted) {
+            prepareScreenPosted = true;
+            prepareScreenEvent = new PrepareScreenEvent(ScreenType.LEVEL_COMPLETE);
+            GameEventBus.getInstance().post(prepareScreenEvent);
         }
 
         if (world.getState() == WorldState.WON) {
@@ -76,14 +94,17 @@ public class GameContext implements IGameContext {
             } else if (sentEvent.isHandled()) {
                 prepareNextLevel();
                 sentEvent = null;
+                prepareScreenPosted = false; // reset for the next level if needed
             }
         } else if (world.getState() == WorldState.LOST) {
             if (sentEvent == null) {
                 sentEvent = new ChangeScreenEvent(ScreenType.LEVEL_LOST);
                 GameEventBus.getInstance().post(sentEvent);
+                isPrepareScreenPosted = true;
             } else if (sentEvent.isHandled()) {
                 GameEventBus.getInstance().post(new PrepareScreenEvent(ScreenType.LEADERBOARD));
                 sentEvent = null;
+                isPrepareScreenPosted = false;
             }
         }
     }
@@ -101,6 +122,13 @@ public class GameContext implements IGameContext {
         this.player = initPlayer(engine);
         initStartLevel(world);
     }
+
+    public void createTestConfig() {
+        player.getPlayerEntity().getComponent(ScoreComponent.class).setScore(99999);
+        LevelConfig config = LevelConfigFactory.generateLevel(10, player.getScore());
+        world.createLevel(config, 1337, 10f);
+    }
+
     private PlayerCharacter initPlayer(PooledEngine engine) {
         Configuration config = Configuration.getInstance();
         return PlayerCharacter.getInstance(engine,
@@ -118,8 +146,9 @@ public class GameContext implements IGameContext {
         world.createLevel(initialConfig, player.getScore());
     }
 
-    private void addSystemsToEngine(ShapeRenderer renderer, SpriteBatch batch, OrthographicCamera cam) {
+    private void addSystemsToEngine(ShapeRenderer renderer, SpriteBatch batch, OrthographicCamera cam, UpgradeStore store) {
         engine.addSystem(new BackgroundRenderSystem(renderer));
+        engine.addSystem(new StoreSystem(store.getTraderEntity()));
         engine.addSystem(new RenderingSystem(batch, cam));
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new MovementSystem());
@@ -139,7 +168,11 @@ public class GameContext implements IGameContext {
         HookInputSystem hookInputSystem = new HookInputSystem();
         engine.addSystem(hookInputSystem);
 
-        addListeners(scoreSystem, fishSystem, hookInputSystem);
+        TransactionSystem transactionSystem = new TransactionSystem();
+        engine.addSystem(transactionSystem);
+
+
+        addListeners(scoreSystem, fishSystem, hookInputSystem, transactionSystem);
 
         if (Configuration.getInstance().isDebugMode()) {
             // toggle Debug Mode in Configuration

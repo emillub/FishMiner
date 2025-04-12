@@ -1,6 +1,7 @@
 package com.github.FishMiner.domain.managers;
 
 import static com.github.FishMiner.ui.ports.out.ScreenType.PLAY;
+import static com.github.FishMiner.ui.ports.out.ScreenType.TEST;
 
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
@@ -8,16 +9,14 @@ import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.GameContext;
 
 import com.github.FishMiner.common.ValidateUtil;
-import com.github.FishMiner.domain.eventBus.GameEventBus;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent;
-import com.github.FishMiner.domain.ports.in.IGameEvent;
+import com.github.FishMiner.domain.factories.playerFactory.SinkerFactory;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.domain.ports.in.IScreenFactory;
-import com.github.FishMiner.ui.events.LoginRequestEvent;
+import com.github.FishMiner.ui.factories.ScreenFactory;
 import com.github.FishMiner.ui.ports.out.ScreenType;
-import com.github.FishMiner.ui.screens.PlayScreen;
 
 import java.util.HashMap;
 
@@ -60,6 +59,11 @@ public class ScreenManager {
         }
     }
 
+    public void ShowTestScreen() {
+        gameContext.createTestConfig();
+        game.setScreen(screenFactory.getScreen(PLAY, gameContext));
+    }
+
     /**
      * Switches to the target screen type.
      *
@@ -67,7 +71,6 @@ public class ScreenManager {
      * For others, reuse a cached instance if available.
      */
     public void switchScreenTo(ScreenType screenType) {
-        // Avoid switching if already on this screen type.
         if (currentScreen != null && currentScreen.getScreenType() == screenType) {
             Logger.getInstance().debug(TAG, "Already on screen: " + screenType);
             return;
@@ -104,14 +107,12 @@ public class ScreenManager {
             }
 
             IGameScreen newScreen = (IGameScreen) screenFactory.getScreen(type, gameContext);
-            GameEventBus.getInstance().register((IGameEventListener<? extends IGameEvent>) newScreen);
             cachedScreens.put(type, (Screen) newScreen);
 
             Logger.getInstance().log(TAG, "New instance for " + type + " prepared and cached.");
         }
         else { // if cachedScreen does not contain screenType
             IGameScreen newScreen = (IGameScreen) screenFactory.getScreen(type, gameContext);
-            GameEventBus.getInstance().register((IGameEventListener<? extends IGameEvent>) newScreen);
             cachedScreens.put(type, (Screen) newScreen);
             Logger.getInstance().log(TAG, "Screen " + type + " was not cached. New instance created and cached.");
         }

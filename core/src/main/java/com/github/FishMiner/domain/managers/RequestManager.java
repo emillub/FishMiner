@@ -3,8 +3,10 @@ package com.github.FishMiner.domain.managers;
 import com.github.FishMiner.domain.ports.out.FirebaseAuthCallback;
 import com.github.FishMiner.domain.eventBus.GameEventBus;
 import com.github.FishMiner.domain.events.dataEvents.AuthResponseEvent;
-import com.github.FishMiner.domain.handlers.ILoginHandler;
-import com.github.FishMiner.domain.handlers.IUserRegistrationHandler;
+import com.github.FishMiner.domain.ports.out.ILeaderboardFetcher;
+import com.github.FishMiner.domain.ports.out.ILeaderboardPoster;
+import com.github.FishMiner.domain.ports.out.ILoginHandler;
+import com.github.FishMiner.domain.ports.out.IUserRegistrationHandler;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.ui.events.LoginRequestEvent;
 import com.github.FishMiner.ui.events.RegisterUserRequest;
@@ -13,7 +15,10 @@ import com.github.FishMiner.ui.ports.in.IRequestManager;
 public class RequestManager implements IRequestManager {
     private final ILoginHandler loginHandler;
     private final IUserRegistrationHandler registerHandler;
-    // add other handlers here e.g. ILeaderboardFetcher
+
+    // TODO:  add other handlers here
+    //private final ILeaderboardFetcher fetchLeaderboardHandler;
+    //private final ILeaderboardPoster fetchLeaderboardPoster;
 
     public RequestManager(
         ILoginHandler loginHandler,
@@ -56,6 +61,7 @@ public class RequestManager implements IRequestManager {
         registerHandler.register(email, password, new FirebaseAuthCallback() {
             @Override
             public void onSuccess() {
+                GameEventBus.getInstance().post(new LoginRequestEvent(email, password));
                 GameEventBus.getInstance().post(new AuthResponseEvent(email, true));
             }
 

@@ -8,16 +8,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.github.FishMiner.common.Configuration;
 
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.domain.eventBus.GameEventBus;
+import com.github.FishMiner.domain.events.dataEvents.AuthResponseEvent;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.ScoreEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
+import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
 import java.util.Locale;
 
-public class LevelCompleteScreen extends AbstractScreen implements IGameEventListener<ScoreEvent> {
+public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
     private float score;
     private float transitionTimer = 0f;
     private boolean sentScreenRequest;
@@ -26,6 +29,7 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameEventLis
         super(gameContext);
         screenType = ScreenType.LEVEL_COMPLETE;
         sentScreenRequest = false;
+        GameEventBus.getInstance().register(getScoreEventListener());
     }
 
     @Override
@@ -86,13 +90,20 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameEventLis
         shapeRenderer.end();
     }
 
-    @Override
-    public void onEvent(ScoreEvent event) {
-        score = event.getScore();
-    }
-
-    @Override
-    public Class<ScoreEvent> getEventType() {
-        return ScoreEvent.class;
+    /**
+     * Returns an event listener for login/registration responses.
+     */
+    public IGameEventListener<ScoreEvent> getScoreEventListener() {
+        return new IGameEventListener<ScoreEvent>() {
+            @Override
+            public void onEvent(ScoreEvent event) {
+                if (event.isHandled()) return;
+                score = event.getScore();
+            }
+            @Override
+            public Class<ScoreEvent> getEventType() {
+                return ScoreEvent.class;
+            }
+        };
     }
 }

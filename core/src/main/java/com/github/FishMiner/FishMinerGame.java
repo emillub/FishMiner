@@ -52,6 +52,7 @@ public class FishMinerGame extends Game {
         GameEventBus.getInstance().register(requestManager.getRegistrationRequestListener());
         GameEventBus.getInstance().register(screenManager.getChangeScreenEvent());
         GameEventBus.getInstance().register(screenManager.getPrepareScreenEvent());
+        GameEventBus.getInstance().register(musicManager);
 
         screenManager.switchScreenTo(MENU);
     }

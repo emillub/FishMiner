@@ -2,7 +2,7 @@ package com.github.FishMiner.data.handlers;
 
 import com.github.FishMiner.domain.ports.out.FirebaseAuthCallback;
 import com.github.FishMiner.data.ports.out.IAuthService;
-import com.github.FishMiner.domain.handlers.ILoginHandler;
+import com.github.FishMiner.domain.ports.out.ILoginHandler;
 
 public class LoginHandler implements ILoginHandler {
     private final IAuthService authService;

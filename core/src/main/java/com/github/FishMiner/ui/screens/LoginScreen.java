@@ -26,6 +26,7 @@ public class LoginScreen extends AbstractScreen implements IGameScreen {
     public LoginScreen(GameContext gameContext) {
         super(gameContext);
         screenType = ScreenType.LOGIN;
+        GameEventBus.getInstance().register(getAuthResponseListener());
     }
 
     @Override
@@ -113,6 +114,7 @@ public class LoginScreen extends AbstractScreen implements IGameScreen {
                 if (event.isHandled()) return;
                 if (event.wasSuccessful()) {
                     event.getEmail();
+                    Gdx.app.postRunnable(() -> statusLabel.setText("Registered Successful. User: " + event.getEmail()));
                 } else {
                     String errorMessage = event.getError();
                     Logger.getInstance().error(TAG, "Registration failed: " + errorMessage);

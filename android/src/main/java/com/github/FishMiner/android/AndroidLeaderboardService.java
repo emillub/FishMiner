@@ -2,7 +2,7 @@ package com.github.FishMiner.android;
 
 import com.github.FishMiner.data.ports.out.ILeaderBoardService;
 import com.github.FishMiner.domain.ports.out.LeaderboardCallback;
-import com.github.FishMiner.data.Score;
+import com.github.FishMiner.data.ScoreEntry;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AndroidLeaderBoardAPI implements ILeaderBoardService {
+public class AndroidLeaderboardService implements ILeaderBoardService {
     private final FirebaseFirestore db;
 
-    public AndroidLeaderBoardAPI() {
+    public AndroidLeaderboardService() {
         db = FirebaseFirestore.getInstance();
     }
 
@@ -27,15 +27,15 @@ public class AndroidLeaderBoardAPI implements ILeaderBoardService {
             .get()
             .addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    List<Score> scores = new ArrayList<>();
+                    List<ScoreEntry> scoreEntries = new ArrayList<>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String username = document.getString("username");
                         Long scoreValue = document.getLong("score");
                         if (username != null && scoreValue != null) {
-                            scores.add(new Score(username, scoreValue.intValue()));
+                            scoreEntries.add(new ScoreEntry(username, scoreValue.intValue()));
                         }
                     }
-                    callback.onSuccess(scores);
+                    callback.onSuccess(scoreEntries);
                 } else {
                     callback.onFailure(task.getException().getMessage());
                 }

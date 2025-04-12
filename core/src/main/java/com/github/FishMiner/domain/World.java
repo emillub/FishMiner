@@ -20,6 +20,7 @@ public class World implements IGameEventListener<ScoreEvent> {
     private int levelNumber = 1;
     private int targetScore = 0;
     private float timer = 60f;
+    private boolean finalScorePosted = false;
     public World(PooledEngine engine) {
         this.engine = engine;
         this.factory = new OceanEntityFactory(engine);
@@ -69,14 +70,19 @@ public class World implements IGameEventListener<ScoreEvent> {
     }
 
     protected void update(float deltaTime) {
-        if (state == WorldState.PAUSED){return;}
-
+        if (state == WorldState.PAUSED) {
+            return;
+        }
         if (state == WorldState.RUNNING) {
             timer -= deltaTime;
-            if (timer <= 0) {
+            if (timer <= 0 && !finalScorePosted) {
                 timer = 0;
-                ScoreEvent removeTargetScoreEvent = new ScoreEvent(-targetScore);
+                finalScorePosted = true;
+                int nextScore = score - targetScore;
+                ScoreEvent removeTargetScoreEvent = new ScoreEvent(nextScore);
                 GameEventBus.getInstance().post(removeTargetScoreEvent);
+
+                // Determine win or loss based on the result of the ScoreEvent and current score.
                 if (removeTargetScoreEvent.isHandled() && score > 0) {
                     state = WorldState.WON;
                     Logger.getInstance().log(TAG, "Level completed: " + levelNumber);

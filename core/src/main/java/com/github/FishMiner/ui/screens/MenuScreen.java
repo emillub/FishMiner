@@ -61,7 +61,7 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         testButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // TODO: add a new test map or change this to tutorial
+                ScreenManager.getInstance().ShowTestScreen();
             }
         });
 

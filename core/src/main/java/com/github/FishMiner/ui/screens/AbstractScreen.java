@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.GameContext;
+import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
 /**
@@ -20,14 +21,14 @@ import com.github.FishMiner.ui.ports.out.ScreenType;
  */
 public abstract class AbstractScreen implements Screen {
     protected ScreenType screenType;
-    protected GameContext gameContext;
+    protected IGameContext gameContext;
     protected ShapeRenderer shapeRenderer;
     protected OrthographicCamera cam;
     protected SpriteBatch batch;
     protected BitmapFont font;
     protected Stage stage;
     protected Skin skin;
-    public AbstractScreen(GameContext gameContext) {
+    public AbstractScreen(IGameContext gameContext) {
         this.gameContext = gameContext;
         stage = new Stage(new FitViewport(
             Configuration.getInstance().getScreenWidth(),

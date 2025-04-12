@@ -18,7 +18,7 @@ public class AndroidLauncher extends AndroidApplication {
         configuration.useImmersiveMode = true; // Recommended, but not required.
 
         AndroidAuthService firebaseHandlerAndroid = new AndroidAuthService();
-        AndroidLeaderBoardAPI leaderboardHandler = new AndroidLeaderBoardAPI();
+        AndroidLeaderboardService leaderboardHandler = new AndroidLeaderboardService();
         initialize(new FishMinerGame(firebaseHandlerAndroid, leaderboardHandler), configuration);
     }
 }

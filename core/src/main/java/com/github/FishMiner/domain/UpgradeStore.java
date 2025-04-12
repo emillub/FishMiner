@@ -53,4 +53,8 @@ public class UpgradeStore {
     public void update(float deltaTime) {
         engine.update(deltaTime);
     }
+
+    public Entity getTraderEntity() {
+        return this.trader;
+    }
 }

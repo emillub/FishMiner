@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.FishMinerGame;
-import com.github.FishMiner.data.Score;
+import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.data.ports.out.ILeaderBoardService;
 import com.github.FishMiner.data.ports.out.IAuthService;
 import com.github.FishMiner.domain.GameContext;
@@ -86,8 +86,8 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
         ILeaderBoardService leaderboard = game.getLeaderBoardService();
         leaderboard.getTopScores(new LeaderboardCallback() {
             @Override
-            public void onSuccess(List<Score> topScores) {
-                Gdx.app.postRunnable(() -> updateLeaderboardUI(topScores));
+            public void onSuccess(List<ScoreEntry> topScoreEntries) {
+                Gdx.app.postRunnable(() -> updateLeaderboardUI(topScoreEntries));
             }
 
             @Override
@@ -100,10 +100,10 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
         });
     }
 
-    private void updateLeaderboardUI(List<Score> scores) {
+    private void updateLeaderboardUI(List<ScoreEntry> scoreEntries) {
         scoreTable.clear();
         int place = 1;
-        for (Score entry : scores) {
+        for (ScoreEntry entry : scoreEntries) {
             String placeLabel = place + ".";
             Label placeNumber = new Label(placeLabel, skin);
 
@@ -132,7 +132,7 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
             int score = Integer.parseInt(scoreText);
             leaderboard.submitScore(username, score, new LeaderboardCallback() {
                 @Override
-                public void onSuccess(List<Score> scores) {
+                public void onSuccess(List<ScoreEntry> scoreEntries) {
                     Gdx.app.postRunnable(() -> {
                         statusLabel.setText("Score submitted!");
                         scoreField.setText("");
