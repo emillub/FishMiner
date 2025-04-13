@@ -1,5 +1,7 @@
 package com.github.FishMiner.domain.ports.out;
 
+import com.github.FishMiner.domain.ports.in.data.LeaderboardCallback;
+
 public interface ILeaderboardFetcher {
-    // todo: make this
+    void fetchLeaderboard(LeaderboardCallback callback);
 }
