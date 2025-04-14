@@ -1,18 +1,31 @@
 package com.github.FishMiner.domain.managers;
 
+import com.github.FishMiner.data.ScoreEntry;
+import com.github.FishMiner.domain.events.data.LeaderboardResponseEvent;
 import com.github.FishMiner.domain.ports.in.data.FirebaseAuthCallback;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.data.AuthResponseEvent;
+import com.github.FishMiner.domain.ports.in.data.LeaderboardCallback;
+import com.github.FishMiner.domain.ports.out.ILeaderboardFetcher;
+import com.github.FishMiner.domain.ports.out.ILeaderboardPoster;
 import com.github.FishMiner.domain.ports.out.ILoginHandler;
 import com.github.FishMiner.domain.ports.out.IUserRegistrationHandler;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
+import com.github.FishMiner.ui.events.data.LeaderboardFetchRequestEvent;
+import com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent;
 import com.github.FishMiner.ui.events.data.LoginRequestEvent;
 import com.github.FishMiner.ui.events.data.RegisterUserRequest;
 import com.github.FishMiner.ui.ports.in.IRequestManager;
 
+import java.util.List;
+
 public class RequestManager implements IRequestManager {
     private final ILoginHandler loginHandler;
     private final IUserRegistrationHandler registerHandler;
+
+    private final ILeaderboardFetcher leaderboardFetcher;
+    private final ILeaderboardPoster leaderboardPoster;
+
 
     // TODO:  add other handlers here
     //private final ILeaderboardFetcher fetchLeaderboardHandler;
@@ -20,11 +33,16 @@ public class RequestManager implements IRequestManager {
 
     public RequestManager(
         ILoginHandler loginHandler,
-        IUserRegistrationHandler registerHandler
+        IUserRegistrationHandler registerHandler,
+        ILeaderboardFetcher leaderboardFetcher,
+        ILeaderboardPoster leaderboardPoster
     ) {
         this.loginHandler = loginHandler;
         this.registerHandler = registerHandler;
+        this.leaderboardFetcher = leaderboardFetcher;
+        this.leaderboardPoster = leaderboardPoster;
     }
+
 
     /**
      * Processes a login request. Sends @LoginResponseEvent to GameEventBus with either:
@@ -70,6 +88,40 @@ public class RequestManager implements IRequestManager {
         });
     }
 
+    private void handleLeaderboardFetchRequest() {
+        leaderboardFetcher.fetchLeaderboard(new LeaderboardCallback() {
+            @Override
+            public void onSuccess(List<ScoreEntry> topScores) {
+                if (topScores != null) {
+                    GameEventBus.getInstance().post(new LeaderboardResponseEvent(topScores));
+                } else {
+                    System.out.println("Warning: leaderboardService.getTopScores returned null.");
+                    GameEventBus.getInstance().post(new LeaderboardResponseEvent("Score list was null."));
+                }            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                GameEventBus.getInstance().post(new LeaderboardResponseEvent(errorMessage));
+            }
+        });
+    }
+
+    private void handleLeaderboardPostRequest(ScoreEntry entry) {
+        leaderboardPoster.postScore(entry, new LeaderboardCallback() {
+            @Override
+            public void onSuccess(List<ScoreEntry> updatedScores) {
+                GameEventBus.getInstance().post(new LeaderboardResponseEvent(updatedScores));
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                GameEventBus.getInstance().post(new LeaderboardResponseEvent(errorMessage));
+            }
+        });
+    }
+
+
+
     /**
      * Returns an event listener for Login requests.
      */
@@ -102,5 +154,34 @@ public class RequestManager implements IRequestManager {
             }
         };
     }
+
+    public IGameEventListener<LeaderboardFetchRequestEvent> getLeaderboardFetchRequestListener() {
+        return new IGameEventListener<>() {
+            @Override
+            public void onEvent(LeaderboardFetchRequestEvent event) {
+                handleLeaderboardFetchRequest();
+            }
+
+            @Override
+            public Class<LeaderboardFetchRequestEvent> getEventType() {
+                return LeaderboardFetchRequestEvent.class;
+            }
+        };
+    }
+    public IGameEventListener<LeaderboardPostRequestEvent> getLeaderboardPostRequestListener() {
+        return new IGameEventListener<>() {
+            @Override
+            public void onEvent(LeaderboardPostRequestEvent event) {
+                handleLeaderboardPostRequest(event.getScoreEntry());
+            }
+
+            @Override
+            public Class<LeaderboardPostRequestEvent> getEventType() {
+                return LeaderboardPostRequestEvent.class;
+            }
+        };
+    }
+
+
 
 }

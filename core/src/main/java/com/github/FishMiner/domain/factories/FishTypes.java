@@ -1,9 +1,9 @@
 package com.github.FishMiner.domain.factories;
 
 public enum FishTypes implements IEntityType {
-    PINK_FISH("PINK_SQUARE.png", 9, 2, new int[]{5, 6}, 8, 10),
+    PINK_FISH("PINK_FISH.png", 9, 2, new int[]{5, 6}, 8, 10),
     BLUE_SHARK("shark_9cols_3rows.png", 9, 3, new int[]{4, 5}, 7, 9),
-    YELLOW_BLUE_FISH("YELLOW_BLUE_FISH.png", 9, 1, new int[]{3, 4}, 6, 8, 0.6f),
+    YELLOW_BLUE_FISH("YELLOW_BLUE_FISH_NEW.png", 9, 2, new int[]{3, 4}, 6, 8, 0.6f),
     GREEN_FISH("green_fish.png", 9, 2, new int[]{2, 3}, 5, 6),
     CLOWN_FISH("clownfish_9cols_3rows.png", 9, 3, new int[]{1, 2, 3}, 4, 5),
     GRAY_ORANGE_FISH("GRAY_ORANGE_FISH.png", 9, 2, new int[]{1, 2}, 3, 4);

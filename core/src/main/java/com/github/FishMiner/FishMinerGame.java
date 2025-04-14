@@ -5,6 +5,8 @@ import static com.github.FishMiner.ui.ports.out.ScreenType.MENU;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.audio.Music;
 import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.data.handlers.LeaderboardFetcher;
+import com.github.FishMiner.data.handlers.LeaderboardPoster;
 import com.github.FishMiner.data.handlers.LoginHandler;
 import com.github.FishMiner.data.handlers.UserRegistrationHandler;
 import com.github.FishMiner.data.ports.out.IAuthService;
@@ -34,10 +36,13 @@ public class FishMinerGame extends Game {
     public void create() {
         Configuration.getInstance().updateConfiguration();
 
-        RequestManager requestManager =  new RequestManager(
+        requestManager = new RequestManager(
             new LoginHandler(authService),
-            new UserRegistrationHandler(authService)
+            new UserRegistrationHandler(authService),
+            new LeaderboardFetcher(leaderBoardService), // we’ll make this class next
+            new LeaderboardPoster(leaderBoardService)   // and this one too
         );
+
 
         MusicManager musicManager = new MusicManager();
         musicManager.applyVolume(Configuration.getInstance().getMusicVolume());
@@ -49,6 +54,8 @@ public class FishMinerGame extends Game {
 
         GameEventBus.getInstance().register(requestManager.getLoginRequestListener());
         GameEventBus.getInstance().register(requestManager.getRegistrationRequestListener());
+        GameEventBus.getInstance().register(requestManager.getLeaderboardFetchRequestListener());
+        GameEventBus.getInstance().register(requestManager.getLeaderboardPostRequestListener());
         GameEventBus.getInstance().register(screenManager.getChangeScreenEvent());
         GameEventBus.getInstance().register(screenManager.getPrepareScreenEvent());
         GameEventBus.getInstance().register(musicManager);
