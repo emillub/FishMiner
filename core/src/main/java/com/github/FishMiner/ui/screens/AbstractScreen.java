@@ -28,13 +28,13 @@ public abstract class AbstractScreen implements Screen {
     protected BitmapFont font;
     protected Stage stage;
     protected Skin skin;
+
     public AbstractScreen(IGameContext gameContext) {
         this.gameContext = gameContext;
-        stage = new Stage(new FitViewport(
-            Configuration.getInstance().getScreenWidth(),
-            Configuration.getInstance().getScreenHeight()
-        ));
-        skin = Configuration.getInstance().getUiSkin();
+        Configuration config = Configuration.getInstance();
+
+        stage = new Stage(new FitViewport(config.getScreenWidth(), config.getScreenHeight()));
+        skin = config.getUiSkin();
         Gdx.input.setInputProcessor(stage);
 
         this.batch = gameContext.getBatch();
@@ -42,8 +42,6 @@ public abstract class AbstractScreen implements Screen {
         this.cam = gameContext.getCam();
         this.font = new BitmapFont();
         font.setColor(Color.BLACK);
-
-        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -53,23 +51,23 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height);
+        stage.getViewport().update(width, height, true);
         Configuration.getInstance().updateConfiguration();
     }
 
     @Override
     public void pause() {
-        // Default
+        // Default implementation
     }
 
     @Override
     public void resume() {
-        // Default
+        // Default implementation
     }
 
     @Override
     public void hide() {
-        // Default
+        // Default implementation
     }
 
     @Override
@@ -85,5 +83,27 @@ public abstract class AbstractScreen implements Screen {
 
     public ScreenType getScreenType() {
         return screenType;
+    }
+
+    protected void drawBackground() {
+        Configuration config = Configuration.getInstance();
+        int levels = config.getDepthLevels();
+        int levelHeight = config.getOceanHeight() / levels;
+        int screenWidth = Gdx.graphics.getWidth();
+        int screenHeight = Gdx.graphics.getHeight();
+        int oceanHeight = config.getOceanHeight();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for (int i = 0; i < levels; i++) {
+            float blend = i / (float) levels;
+            shapeRenderer.setColor(0f, 0f, 0.2f + blend * 0.5f, 1f);
+            shapeRenderer.rect(0, i * levelHeight, screenWidth, levelHeight);
+        }
+
+        shapeRenderer.setColor(0.5f, 0.8f, 1f, 1f);
+        shapeRenderer.rect(0, oceanHeight, screenWidth, screenHeight - oceanHeight);
+
+        shapeRenderer.end();
     }
 }

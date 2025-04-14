@@ -3,10 +3,15 @@ package com.github.FishMiner.ui.screens;
 import static com.github.FishMiner.domain.events.soundEvents.MusicEvent.MusicCommand.PLAY_BACKGROUND;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
@@ -30,7 +35,6 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
 
         Table rootTable = new Table();
         rootTable.setFillParent(true);
-        rootTable.setDebug(true);
         stage.addActor(rootTable);
 
         TextButton settingsButton = new TextButton("Settings", skin);
@@ -73,20 +77,27 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
             }
         });
 
-        rootTable.add(loginButton).expand().fillX().fill().fillY();
+        Label titleLabel = new Label("FishMiner", skin);
+        titleLabel.setColor(com.badlogic.gdx.graphics.Color.BLACK);
+        titleLabel.setFontScale(4f);
+        rootTable.add(titleLabel).pad(80).expand().center();
         rootTable.row();
-        rootTable.add(playButton).expand().fillX().fill().fillY();
+        rootTable.add(playButton).width(Gdx.graphics.getWidth() / 2f).expand().fillY();
         rootTable.row();
-        rootTable.add(settingsButton).expand().fillX().fill().fillY();
+
+        rootTable.add(loginButton).width(Gdx.graphics.getWidth() / 2f).expand().fillY();
         rootTable.row();
-        rootTable.add(testButton).expand().fillX().fill().fillY();
+        rootTable.add(settingsButton).width(Gdx.graphics.getWidth() / 2f).expand().fillY();
         rootTable.row();
-        rootTable.add(leaderboardButton).expand().fillX().fill().fillY();
+        rootTable.add(testButton).width(Gdx.graphics.getWidth() / 2f).expand().fillY();
+        rootTable.row();
+        rootTable.add(leaderboardButton).width(Gdx.graphics.getWidth() / 2f).expand().fillY();
     }
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0f, 0f, 0f, 1f);
+        ScreenUtils.clear(0, 0, 0, 1);
+        super.drawBackground();
         stage.act(delta);
         stage.draw();
     }

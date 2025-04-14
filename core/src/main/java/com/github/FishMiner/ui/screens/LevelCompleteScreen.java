@@ -50,7 +50,7 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        drawBackground();
+        super.drawBackground();
         super.stage.act(delta);
         super.stage.draw();
 
@@ -62,30 +62,6 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
             GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.UPGRADE));
             sentScreenRequest = true;
         }
-    }
-
-    private void drawBackground() {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        int levels = Configuration.getInstance().getDepthLevels();
-        int levelHeight = Configuration.getInstance().getOceanHeight() / levels;
-
-        for (int i = 0; i < levels; i++) {
-            float blend = i / (float) levels;
-            shapeRenderer.setColor(0f, 0f, 0.2f + blend * 0.5f, 1f);
-            shapeRenderer.rect(0, i * levelHeight, Gdx.graphics.getWidth(), levelHeight);
-        }
-
-        // Sky (top part)
-        shapeRenderer.setColor(0.5f, 0.8f, 1f, 1f);
-        shapeRenderer.rect(
-            0,
-            Configuration.getInstance().getOceanHeight(),
-            Gdx.graphics.getWidth(),
-            Gdx.graphics.getHeight() - Configuration.getInstance().getOceanHeight()
-        );
-
-        shapeRenderer.end();
     }
 
     /**

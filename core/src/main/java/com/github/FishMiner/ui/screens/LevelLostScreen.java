@@ -76,38 +76,10 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        drawBackground();
+        super.drawBackground();
 
         stage.act(delta);
         stage.draw();
-    }
-
-    private void drawBackground() {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        // Draw ocean background
-        shapeRenderer.setColor(0.5f, 0.8f, 1f, 1f);
-        shapeRenderer.rect(
-            0,
-            Configuration.getInstance().getOceanHeight(),
-            Configuration.getInstance().getScreenWidth(),
-            Configuration.getInstance().getScreenHeight() - Configuration.getInstance().getOceanHeight()
-        );
-
-        int levels = Configuration.getInstance().getDepthLevels();
-        int levelHeight = Configuration.getInstance().getOceanHeight() / levels;
-        for (int i = 0; i < levels; i++) {
-            float shade = 0.2f + (i * 0.15f);
-            shapeRenderer.setColor(0f, 0f, shade, 1f);
-            shapeRenderer.rect(
-                0,
-                i * levelHeight,
-                Configuration.getInstance().getScreenWidth(),
-                levelHeight
-            );
-        }
-
-        shapeRenderer.end();
     }
 
     @Override
