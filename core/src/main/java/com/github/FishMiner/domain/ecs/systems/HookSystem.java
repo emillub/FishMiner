@@ -47,7 +47,7 @@ public class HookSystem extends IteratingSystem {
         TransformComponent hookPos = pm.get(entity);
         RotationComponent hookRot = rm.get(entity);
         VelocityComponent hookVel = vm.get(entity);
-        StateComponent hookState = sm.get(entity);
+        StateComponent<HookStates> hookState = sm.get(entity);
         BoundsComponent hookBounds = bm.get(entity);
         AttachmentComponent hookAttachment = am.get(entity);
 
@@ -77,6 +77,8 @@ public class HookSystem extends IteratingSystem {
             float dx = posX - hook.anchorPoint.x;
             float dy = posY - hook.anchorPoint.y;
             hookRot.angle = MathUtils.atan2(dy, dx) * MathUtils.radiansToDegrees + 90;
+
+            updateReelState(reelEntity, HookStates.SWINGING); // 🔁 keep reel static
         }
 
         float lineLength = (reel != null) ? reel.lineLength : 100f;
@@ -85,10 +87,13 @@ public class HookSystem extends IteratingSystem {
         if (hookState.state == HookStates.FIRE) {
             if (hookPos.pos.dst(hook.anchorPoint) >= lineLength || hook.attachedFishableEntity != null) {
                 hookState.changeState(HookStates.REELING);
+                updateReelState(reelEntity, HookStates.REELING);
             } else {
                 hookVel.velocity.set(hook.sinkerWeight, hook.sinkerWeight).setAngleDeg(hookRot.angle - 90);
                 hookVel.velocity.scl(returnSpeed);
                 hookBounds.bounds.setPosition(hookPos.pos.x, hookPos.pos.y);
+
+                updateReelState(reelEntity, HookStates.FIRE); // 🔁 animate while firing down
             }
         }
 
@@ -97,15 +102,30 @@ public class HookSystem extends IteratingSystem {
                 hookVel.velocity.set(hook.sinkerWeight, hook.sinkerWeight)
                     .setAngleDeg(hookRot.angle - 90)
                     .scl(-returnSpeed);
+
+                updateReelState(reelEntity, HookStates.REELING); // 🔁 animate reel while reeling
             } else {
                 hookState.changeState(HookStates.RETURNED);
+                updateReelState(reelEntity, HookStates.RETURNED); // 🔁 animate returned state
             }
         }
 
         if (hookState.state == HookStates.RETURNED) {
             if (!hook.hasAttachedEntity()) {
                 hookState.changeState(HookStates.SWINGING);
+                updateReelState(reelEntity, HookStates.SWINGING); // ⏸️ back to idle
             }
+        }
+    }
+
+    private void updateReelState(Entity reelEntity, HookStates newHookState) {
+        if (reelEntity == null) return;
+
+        StateComponent<HookStates> reelState = reelEntity.getComponent(StateComponent.class);
+        if (reelState == null) return;
+
+        if (reelState.state != newHookState) {
+            reelState.changeState(newHookState);
         }
     }
 }

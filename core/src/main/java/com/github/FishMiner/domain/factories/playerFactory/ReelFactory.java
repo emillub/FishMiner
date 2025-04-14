@@ -48,7 +48,8 @@ public class ReelFactory {
         stateComponent.changeState(HookStates.SWINGING);
 
         animationComponent.addAnimation(HookStates.REELING.getAnimationKey(), textureComponent, 0, Animation.PlayMode.LOOP);
-        animationComponent.addSingleFrameAnimation(HookStates.FIRE.getAnimationKey(), textureComponent, 0, 0);
+        animationComponent.addAnimation(HookStates.FIRE.getAnimationKey(), textureComponent, 0, Animation.PlayMode.LOOP);
+        animationComponent.addAnimation(HookStates.RETURNED.getAnimationKey(), textureComponent, 0, Animation.PlayMode.LOOP);
         animationComponent.addSingleFrameAnimation(HookStates.SWINGING.getAnimationKey(), textureComponent, 0, 0);
         animationComponent.setCurrentAnimation(HookStates.SWINGING.getAnimationKey());
 
