@@ -9,6 +9,7 @@ import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.PlayerComponent;
 import com.github.FishMiner.domain.ecs.components.ReelComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
@@ -64,22 +65,15 @@ public class HookSystem extends IteratingSystem {
         AttachmentComponent hookAttachment = am.get(entity);
 
         Entity player = hookAttachment.getParent();
-        ReelComponent reel = null;
+        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+        Entity reelEntity = playerComponent.getReel();
+        ReelComponent reel = (reelEntity != null) ? reelMapper.get(reelEntity) : null;
 
-        // Search for the ReelComponent attached to the same player
-        for (Entity e : getEngine().getEntitiesFor(Family.all(ReelComponent.class, AttachmentComponent.class).get())) {
-            AttachmentComponent attachment = am.get(e);
-            if (attachment.getParent() == player) {
-                reel = reelMapper.get(e);
-                break;
-            }
-        }
 
         if (!initialized) {
             initialPosition = hook.anchorPoint.y - hook.swingOffset;
             initialized = true;
         }
-
 
         ValidateUtil.validateMultipleNotNull(
             hookPos, "Hook Position cannot be null",
