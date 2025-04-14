@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -23,6 +25,8 @@ import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
 import com.github.FishMiner.domain.World;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.ecsEvents.HookInputEvent;
+import com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent;
+import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
@@ -55,6 +59,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
 
         setupInput();
         setupPauseUI();
+        GameEventBus.getInstance().register(displayScoreListener);
         GameEventBus.getInstance().post(new MusicEvent(PLAY_GAME));
     }
 
@@ -63,14 +68,18 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         cam.update();
+
         if (!world.isPaused()) {
             gameContext.update(delta);
         }
         super.stage.act(delta);
-        super.stage.draw();
+
         gameContext.update(delta);
         updateScoreTimeOverlay(batch);
+
+        super.stage.draw();
     }
+
 
     private void setupInput() {
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -160,6 +169,45 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         stage.addActor(pauseOverlay);
     }
 
+    private final IGameEventListener<DisplayScoreValueEvent> displayScoreListener =
+        new IGameEventListener<DisplayScoreValueEvent>() {
+            @Override
+            public void onEvent(DisplayScoreValueEvent event) {
+                float value = event.value;
+
+                // Create the label style
+                Label.LabelStyle style = new Label.LabelStyle();
+                style.font = skin.getFont("default");
+                style.fontColor = value >= 0 ? new Color(0f, 0.6f, 0f, 1f) : new Color(0.7f, 0f, 0f, 1f);
+
+                String prefix = value >= 0 ? "+" : "-";
+                String displayValue = prefix + Math.abs((int) value);
+
+                Label scoreLabel = new Label(displayValue, style);
+                scoreLabel.setFontScale(1.5f);
+                Vector2 screenCoords = stage.getViewport().project(new Vector2(event.x, event.y));
+                Vector2 stageCoords = stage.screenToStageCoordinates(screenCoords);
+                scoreLabel.setPosition(stageCoords.x + 100, stageCoords.y + 450);
+                scoreLabel.addAction(Actions.sequence(
+                    Actions.parallel(
+                        Actions.moveBy(0, 50, 1f),
+                        Actions.fadeOut(1f)
+                    ),
+                    Actions.removeActor()
+                ));
+
+                stage.addActor(scoreLabel);
+                event.setHandled();
+            }
+
+
+            @Override
+            public Class<DisplayScoreValueEvent> getEventType() {
+                return DisplayScoreValueEvent.class;
+            }
+        };
+
+
 
     /**
      * Updates the display for score and time remaining. Must be rendered after everything else.
@@ -175,6 +223,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
 
     @Override
     public void dispose() {
+        GameEventBus.getInstance().unregister(displayScoreListener);
         super.dispose();
         batch.dispose();
         font.dispose();

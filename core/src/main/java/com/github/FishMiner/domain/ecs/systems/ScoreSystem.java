@@ -17,6 +17,7 @@ import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.ScoreEvent;
 import com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
+import com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent;
 
 public class ScoreSystem extends EntitySystem implements IGameEventListener<FishCapturedEvent> {
     private final static String TAG = "ScoreSystem";
@@ -109,6 +110,11 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
                         float scoreDifference = (sharkComp == null) ? fishComp.getValue() : fishComp.getValue() * sharkComp.getDamage();
                         scoreComp.setScore(scoreDifference);
                         GameEventBus.getInstance().post(new ScoreEvent(scoreComp.getScore()));
+                        GameEventBus.getInstance().post(new DisplayScoreValueEvent(
+                            scoreDifference,
+                            fishPos.pos.x,
+                            fishPos.pos.y
+                        ));
                         entry.scoreSent = true;
                         getEngine().removeEntity(fishedEntity);
                     } catch (IllegalArgumentException e) {
