@@ -2,13 +2,16 @@ package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
 import com.github.FishMiner.common.Logger;
+import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 
 public class ReelComponent implements Component {
     private static final String TAG = "ReelComponent";
     public String name = "";
     public int price;
-    public float lineLength = 1f;
-    public float returnSpeed = 1f;
+    int[] interval = DomainUtils.getDepthIntervalFor(4);
+    public float lineLength = interval[1];
+    public float returnSpeed = 100f;
+
 
     public void setName(String name) {
         this.name = name;

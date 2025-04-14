@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 
 import com.badlogic.gdx.math.Vector3;
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
@@ -21,6 +22,7 @@ import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.components.*;
 
 import com.github.FishMiner.common.ValidateUtil;
+import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 import com.github.FishMiner.domain.factories.ReelTypes;
 import com.github.FishMiner.domain.states.HookStates;
 
@@ -142,22 +144,31 @@ public class PlayerFactory {
     }
     private static Entity createReelEntity(PooledEngine engine, Entity player) {
         TransformComponent playerPos = player.getComponent(TransformComponent.class);
-        Entity reel = ReelFactory.createEntity(engine, BASIC_REEL);
+        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
 
-        int posX = (int) playerPos.pos.x;
-        int posY = (int) playerPos.pos.y;
-        int posZ = (int) playerPos.pos.z;
+        // Use the BASIC_REEL enum to get depth level and return speed
+        ReelTypes reelType = BASIC_REEL;
+        float anchorY = playerComponent.hookAnchorPoint.y;
 
-        TransformComponent reelPos = reel.getComponent(TransformComponent.class);
-        reelPos.pos = new Vector3(posX, posY, posZ - 1);
+        // Create the reel entity and fetch its component
+        Entity reel = ReelFactory.createEntity(engine, reelType);
+        ReelComponent reelComponent = reel.getComponent(ReelComponent.class);
 
+        // Override the lineLength using anchorY and depth level from the ReelType
+        int[] interval = DomainUtils.getDepthIntervalFor(reelType.getLengthLevel());
+        reelComponent.lineLength = anchorY - interval[1];
+
+        // Optional: Log it if you're debugging
+         Logger.getInstance().log("PlayerFactory", "Reel lineLength set to: " + reelComponent.lineLength + "Reel length is at depth: " + reelType.getLengthLevel());
+
+        // Position the reel relative to the player
         AttachmentComponent reelAttachment = reel.getComponent(AttachmentComponent.class);
         reelAttachment.offset.x = -0.9f;
         reelAttachment.offset.y = -0.7f;
         reelAttachment.setParentEntity(player);
-
         return reel;
     }
+
 
     public static Entity getPlayer() {
         ValidateUtil.validateNotNull(player, TAG + " -> player");

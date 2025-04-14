@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.domain.ecs.components.StoreUIComponent;
 import com.github.FishMiner.domain.ecs.components.TraderComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
@@ -28,7 +29,7 @@ public class StoreSystem extends EntitySystem {
         // Look up the trader (requires that it has both TraderComponent and TransformComponent).
         trader = engine.getEntitiesFor(Family.all(TraderComponent.class, TransformComponent.class).get()).first();
         // All upgrade entities, which also have a TransformComponent.
-        upgradeEntities = engine.getEntitiesFor(Family.all(UpgradeComponent.class, TransformComponent.class).get());
+        upgradeEntities = engine.getEntitiesFor(Family.all(StoreUIComponent.class, TransformComponent.class).get());
     }
 
     @Override

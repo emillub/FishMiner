@@ -4,44 +4,37 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.states.IState;
 
 @SuppressWarnings("unchecked")
 public class AnimationSystem extends IteratingSystem {
-    private static final String TAG = "AnimationSystem";
 
-    private ComponentMapper<AnimationComponent> am = ComponentMapper.getFor(AnimationComponent.class);
-    private ComponentMapper<StateComponent> sm = ComponentMapper.getFor(StateComponent.class);
+    private final ComponentMapper<AnimationComponent> animationMapper = ComponentMapper.getFor(AnimationComponent.class);
+    private final ComponentMapper<StateComponent> stateMapper = ComponentMapper.getFor(StateComponent.class);
 
     public AnimationSystem() {
-        super(Family.all(AnimationComponent.class).get());
+        super(Family.all(StateComponent.class, AnimationComponent.class).get());
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void processEntity(Entity entity, float deltaTime) {
-        AnimationComponent animationComponent = am.get(entity);
-        //StateComponent stateComponent = sm.get(entity);
-        StateComponent<? extends IState> stateComponent = (StateComponent<? extends IState>) sm.get(entity);
+        AnimationComponent animationComponent = animationMapper.get(entity);
+        StateComponent<? extends IState> stateComponent = (StateComponent<? extends IState>) stateMapper.get(entity);
 
-        if (animationComponent != null && stateComponent != null) {
-            // Get animation key from the current state
-            String currentStateAnimKey = stateComponent.state.getAnimationKey();
+        if (animationComponent == null || stateComponent == null) return;
 
-            animationComponent.timer += deltaTime;
+        IState currentState = stateComponent.getState();
+        if (currentState == null) return;
 
-            // Change animation if different from current
-            if (!animationComponent.getCurrentAnimationKey().equals(currentStateAnimKey)) {
-                if (!animationComponent.animations.containsKey(currentStateAnimKey)) {
-                    Logger.getInstance().error(TAG, "Tried to set animation with incorrect/missing key");
-                }
-                animationComponent.setCurrentAnimation(currentStateAnimKey);
-            }
-        } else if (animationComponent != null) {
-            animationComponent.timer += deltaTime;
+        String newAnimKey = currentState.getAnimationKey();
+        animationComponent.timer += deltaTime;
+
+        if (!newAnimKey.equals(animationComponent.getCurrentAnimationKey())) {
+            if (!animationComponent.animations.containsKey(newAnimKey)) return;
+
+            animationComponent.setCurrentAnimation(newAnimKey);
         }
     }
 }

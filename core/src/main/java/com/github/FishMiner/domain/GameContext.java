@@ -65,6 +65,12 @@ public class GameContext implements IGameContext {
         this.player = initPlayer(engine);
         this.world = new World(engine);
 
+        System.out.println("[GameContext] Systems added in order:");
+        for (EntitySystem sys : engine.getSystems()) {
+            System.out.println("  - " + sys.getClass().getSimpleName());
+        }
+
+
         GameEventBus.getInstance().register(world);
 
         initStartLevel(world);
