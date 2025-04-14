@@ -55,6 +55,7 @@ public class ReelFactory {
         reelComponent.returnSpeed = returnSpeed;
         reelComponent.lineLength = DomainUtils.getLengthDepthFor(depthLevel, textureComponent.getFrameHeight());
 
+
         stateComponent.changeState(HookStates.SWINGING);
 
         animationComponent.addAnimation(HookStates.SWINGING.getAnimationKey(), textureComponent, 0);

@@ -9,6 +9,7 @@ import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.ReelComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
@@ -28,6 +29,7 @@ import com.github.FishMiner.domain.states.HookStates;
  */
 public class HookSystem extends IteratingSystem {
     private static final String TAG = "HookSystem";
+    private boolean initialized = false;
     private ComponentMapper<HookComponent> hm = ComponentMapper.getFor(HookComponent.class);
     private ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
@@ -35,6 +37,7 @@ public class HookSystem extends IteratingSystem {
     private ComponentMapper<StateComponent> sm = ComponentMapper.getFor(StateComponent.class);
     private ComponentMapper<BoundsComponent> bm = ComponentMapper.getFor(BoundsComponent.class);
     private ComponentMapper<AttachmentComponent> am = ComponentMapper.getFor(AttachmentComponent.class);
+    private ComponentMapper<ReelComponent> reelMapper = ComponentMapper.getFor(ReelComponent.class);
 
     private float initialPosition;
     private float time; // time accumulator to drive the swinging oscillation
@@ -58,9 +61,23 @@ public class HookSystem extends IteratingSystem {
         VelocityComponent hookVel = vm.get(entity);
         StateComponent hookState = sm.get(entity);
         BoundsComponent hookBounds = bm.get(entity);
+        AttachmentComponent hookAttachment = am.get(entity);
 
-        if (initialPosition == 0) {
+        Entity player = hookAttachment.getParent();
+        ReelComponent reel = null;
+
+        // Search for the ReelComponent attached to the same player
+        for (Entity e : getEngine().getEntitiesFor(Family.all(ReelComponent.class, AttachmentComponent.class).get())) {
+            AttachmentComponent attachment = am.get(e);
+            if (attachment.getParent() == player) {
+                reel = reelMapper.get(e);
+                break;
+            }
+        }
+
+        if (!initialized) {
             initialPosition = hook.anchorPoint.y - hook.swingOffset;
+            initialized = true;
         }
 
 
@@ -90,19 +107,19 @@ public class HookSystem extends IteratingSystem {
             hookRot.angle = MathUtils.atan2(dy, dx) * MathUtils.radiansToDegrees + 90;
 
         }
-
+        float lineLength = (reel != null) ? reel.lineLength : 100f;
+        float returnSpeed = (reel != null) ? reel.returnSpeed : 100f;
 
         if (hookState.state == HookStates.FIRE) {
-
             // Check if the hook has reached or exceeded the reel length OR if a fish is attached.
-            if (hookPos.pos.dst(hook.anchorPoint) >= hook.reelLength || hook.attachedFishableEntity != null) {
+            if (hookPos.pos.dst(hook.anchorPoint) >= lineLength || hook.attachedFishableEntity != null) {
                 hookState.changeState(HookStates.REELING);
                 if (hook.hasAttachedEntity()) {
-                  Logger.getInstance().log(TAG, "Hoos has attached entity: " + hook.attachedFishableEntity.toString());
+                  Logger.getInstance().log(TAG, "Hook has attached entity: " + hook.attachedFishableEntity.toString());
                 }
             } else {
                 hookVel.velocity.set(hook.sinkerWeight, hook.sinkerWeight).setAngleDeg(hookRot.angle - 90);
-                hookVel.velocity.scl(100.0f);
+                hookVel.velocity.scl(returnSpeed);
                 hookBounds.bounds.setPosition(hookPos.pos.x, hookPos.pos.y);
             }
         }
@@ -111,7 +128,7 @@ public class HookSystem extends IteratingSystem {
         if (hookState.state == HookStates.REELING) {
             if (hookPos.pos.y < initialPosition) {
                 // Set the velocity to be reversed so the hook returns to its initial position.
-                hookVel.velocity.set(hook.sinkerWeight, hook.sinkerWeight).setAngleDeg(hookRot.angle - 90).scl(-100.0f);
+                hookVel.velocity.set(hook.sinkerWeight, hook.sinkerWeight).setAngleDeg(hookRot.angle - 90).scl(-returnSpeed);
 
                 // Optionally, multiply by a speed factor if needed.
             } else {
@@ -125,5 +142,7 @@ public class HookSystem extends IteratingSystem {
             }
 
         }
+        Logger.getInstance().debug(TAG, "Line length: " + lineLength + ", Return speed: " + returnSpeed);
+
     }
 }
