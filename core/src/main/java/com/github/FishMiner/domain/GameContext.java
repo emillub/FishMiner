@@ -18,6 +18,7 @@ import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
 import com.github.FishMiner.domain.ecs.systems.HookSystem;
 import com.github.FishMiner.domain.ecs.systems.MovementSystem;
 import com.github.FishMiner.domain.ecs.systems.PhysicalSystem;
+import com.github.FishMiner.domain.ecs.systems.ReelAnimationSystem;
 import com.github.FishMiner.domain.ecs.systems.RenderingSystem;
 import com.github.FishMiner.domain.ecs.systems.RotationSystem;
 import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
@@ -64,6 +65,12 @@ public class GameContext implements IGameContext {
         addSystemsToEngine(renderer, batch, cam, this.store);
         this.player = initPlayer(engine);
         this.world = new World(engine);
+
+        System.out.println("[GameContext] Systems added in order:");
+        for (EntitySystem sys : engine.getSystems()) {
+            System.out.println("  - " + sys.getClass().getSimpleName());
+        }
+
 
         GameEventBus.getInstance().register(world);
 
@@ -156,6 +163,7 @@ public class GameContext implements IGameContext {
         engine.addSystem(new StoreSystem(store.getTraderEntity()));
         engine.addSystem(new RenderingSystem(batch, cam));
         engine.addSystem(new AnimationSystem());
+        engine.addSystem(new ReelAnimationSystem());
         engine.addSystem(new MovementSystem());
         engine.addSystem(new HookSystem());
         engine.addSystem(new PhysicalSystem());

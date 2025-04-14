@@ -109,6 +109,7 @@ public class FishFactory {
         animationComponent.addAnimation(FishableObjectStates.FISHABLE.getAnimationKey(), textureComponent, 0);
         animationComponent.addAnimation(FishableObjectStates.HOOKED.getAnimationKey(), textureComponent, 0, Animation.PlayMode.NORMAL);
         animationComponent.addAnimation(FishableObjectStates.REELING.getAnimationKey(), textureComponent, 0);
+        animationComponent.addAnimation(FishableObjectStates.CAPTURED.getAnimationKey(), textureComponent, 0);
         animationComponent.setCurrentAnimation(FishableObjectStates.FISHABLE.getAnimationKey());
 
         fish.add(transformComponent);

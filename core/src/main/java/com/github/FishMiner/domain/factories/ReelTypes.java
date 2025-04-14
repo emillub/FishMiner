@@ -1,7 +1,7 @@
 package com.github.FishMiner.domain.factories;
 
 public enum ReelTypes {
-    BASIC_REEL("BASIC_REEL.png", "BasicReel", 8, 1, 100.0f, 5, 0);
+    BASIC_REEL("BASIC_REEL.png", "BasicReel", 8, 1, 80.0f, 5, 0);
     //LONG_REEL("LONG_REEL.png", "LongReel", 1, 1, 4.5f, 6, 10),
     //FAST_REEL("FAST_REEL.png", "FastReel", 1, 1, 7.5f, 4, 15),
     //ADVANCED_REEL("ADVANCED_REEL.png", "AdvancedReel", 1, 1, 10.0f, 6, 20);

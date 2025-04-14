@@ -162,14 +162,10 @@ public class PlayerFactory {
          Logger.getInstance().log("PlayerFactory", "Reel lineLength set to: " + reelComponent.lineLength + "Reel length is at depth: " + reelType.getLengthLevel());
 
         // Position the reel relative to the player
-        TransformComponent reelPos = reel.getComponent(TransformComponent.class);
-        reelPos.pos = new Vector3(playerPos.pos.x, playerPos.pos.y, playerPos.pos.z - 1);
-
         AttachmentComponent reelAttachment = reel.getComponent(AttachmentComponent.class);
         reelAttachment.offset.x = -0.9f;
         reelAttachment.offset.y = -0.7f;
         reelAttachment.setParentEntity(player);
-
         return reel;
     }
 
