@@ -17,7 +17,7 @@ public class Configuration {
     private static float scaleY;
     private boolean soundEnabled = true;
     private float musicVolume = 1f;
-    private final Skin uiSkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+    private final Skin uiSkin = new Skin(Gdx.files.internal("ui/fishminerSkin.json"));
 
     private Configuration() {
         scaleX = SCREEN_WIDTH / RESOLUTION_X;
