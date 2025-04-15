@@ -216,6 +216,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
      */
     private void updateScoreTimeOverlay(SpriteBatch batch) {
         batch.begin();
+        font.draw(batch, "Level: " + world.getLevel(), 10, Gdx.graphics.getHeight() * 0.92f);
         font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() * 0.95f);
         font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() * 0.98f);
         batch.end();
