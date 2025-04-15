@@ -32,6 +32,7 @@ public class SinkerFactory {
 
         if (price == 0) {
             upgradeComponent.setUpgraded(true);
+            upgradeComponent.setPrice(0);
         } else {
             upgradeComponent.setType(sinker);
             upgradeComponent.setPrice(price);
@@ -48,6 +49,7 @@ public class SinkerFactory {
         sinker.add(attachmentComponent);
         sinker.add(transformComponent);
         sinker.add(weightComponent);
+        sinker.add(sinkerComponent);
 
         return sinker;
     }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.ecsEvents.TransactionEvent;
@@ -64,6 +65,8 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
                 productName = product.getComponent(SinkerComponent.class).name;
             } else if (product.getComponent(ReelComponent.class) != null) {
                 productName = product.getComponent(ReelComponent.class).getName();
+            } else if (product.getComponent(HookComponent.class) != null) {
+                productName = product.getComponent(HookComponent.class).getName();
             }
             // Get the cost from the UpgradeComponent.
             productPrice = product.getComponent(UpgradeComponent.class).getPrice();

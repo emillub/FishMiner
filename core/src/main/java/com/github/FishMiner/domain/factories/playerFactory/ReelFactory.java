@@ -55,6 +55,7 @@ public class ReelFactory {
 
         if (price <= 0) {
             upgradeComponent.setUpgraded(true);
+            upgradeComponent.setPrice(0);
         } else {
             upgradeComponent.setType(reel);
             upgradeComponent.setPrice(price);

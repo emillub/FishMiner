@@ -23,6 +23,7 @@ import com.github.FishMiner.domain.ecs.components.*;
 
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ecs.utils.DomainUtils;
+import com.github.FishMiner.domain.factories.HookTypes;
 import com.github.FishMiner.domain.factories.ReelTypes;
 import com.github.FishMiner.domain.factories.SinkerTypes;
 import com.github.FishMiner.domain.states.HookStates;
@@ -44,7 +45,7 @@ public class PlayerFactory {
         playerComponent.setHook(hookEntity);
         playerComponent.setReel(reelEntity);
 
-        playerEntity.add(playerComponent);
+        //playerEntity.add(playerComponent);
 
         engine.addEntity(playerEntity);
         engine.addEntity(hookEntity);
@@ -138,7 +139,10 @@ public class PlayerFactory {
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
         TransformComponent playerPos = player.getComponent(TransformComponent.class);
 
-        Entity hook = HookFactory.createEntity(engine, (int) playerPos.pos.z, playerComponent.hookAnchorPoint);
+        //Entity hook = HookFactory.createEntity(engine, HookTypes.BASIC_HOOK, (int) playerPos.pos.z, playerComponent.hookAnchorPoint);
+        InventoryComponent inventory = player.getComponent(InventoryComponent.class);
+        HookTypes equippedType = HookTypes.valueOf(inventory.getEquippedHookName().toUpperCase());
+        Entity hook = HookFactory.createEntity(engine, equippedType, (int) playerPos.pos.z, playerComponent.hookAnchorPoint, player);
 
         AttachmentComponent hookAttachment = hook.getComponent(AttachmentComponent.class);
         hookAttachment.setParentEntity(player);

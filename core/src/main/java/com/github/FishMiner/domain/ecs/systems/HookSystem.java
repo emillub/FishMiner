@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
@@ -54,8 +55,21 @@ public class HookSystem extends IteratingSystem {
         BoundsComponent hookBounds = bm.get(entity);
         AttachmentComponent hookAttachment = am.get(entity);
 
+        if (hookAttachment == null) {
+            Logger.getInstance().error("HookSystem", "Missing AttachmentComponent on hook entity!");
+            return;
+        }
+
+
         Entity player = hookAttachment.getParent();
-        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+        if (player == null || !pm.has(player)) {
+            System.err.println("[HookSystem] ERROR: Player entity is missing PlayerComponent.");
+            return;
+        }        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+        if (playerComponent == null) {
+            Logger.getInstance().error("HookSystem", "Player entity is missing PlayerComponent.");
+            return;
+        }
         Entity reelEntity = playerComponent.getReel();
         ReelComponent reel = (reelEntity != null) ? reelMapper.get(reelEntity) : null;
 
