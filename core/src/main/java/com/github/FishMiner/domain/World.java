@@ -49,6 +49,8 @@ public class World implements IGameEventListener<ScoreEvent> {
         timer = (customTimer != null) ? customTimer : 60f;
         score = startingScore;
         state = WorldState.RUNNING;
+
+        finalScorePosted = false;
     }
 
     public void setState(WorldState newState) {
