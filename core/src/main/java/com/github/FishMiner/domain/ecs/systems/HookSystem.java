@@ -15,6 +15,7 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
+import com.github.FishMiner.domain.ecs.components.WeightComponent;
 import com.github.FishMiner.domain.states.HookStates;
 
 public class HookSystem extends IteratingSystem {
@@ -27,6 +28,8 @@ public class HookSystem extends IteratingSystem {
     private final ComponentMapper<BoundsComponent> bm = ComponentMapper.getFor(BoundsComponent.class);
     private final ComponentMapper<AttachmentComponent> am = ComponentMapper.getFor(AttachmentComponent.class);
     private final ComponentMapper<ReelComponent> reelMapper = ComponentMapper.getFor(ReelComponent.class);
+    private final ComponentMapper<WeightComponent> wm = ComponentMapper.getFor(WeightComponent.class);
+
 
     private float initialPosition;
     private float time;
@@ -67,6 +70,22 @@ public class HookSystem extends IteratingSystem {
             hookVel, "Hook Velocity cannot be null"
         );
 
+        // Find sinker entity attached to the hook
+        Entity sinkerEntity = null;
+        for (Entity possibleSinker : getEngine().getEntities()) {
+            AttachmentComponent att = am.get(possibleSinker);
+            if (att != null && att.getParent() == entity) {  // entity is the hook
+                sinkerEntity = possibleSinker;
+                break;
+            }
+        }
+        float sinkerWeight = 1.0f; // default
+        if (sinkerEntity != null && wm.has(sinkerEntity)) {
+            sinkerWeight = wm.get(sinkerEntity).weight;
+        }
+
+
+
         if (hookState.state == HookStates.SWINGING) {
             hook.swingAngle = hook.swingAmplitude * MathUtils.sin(time);
             float offset = 80.0f;
@@ -78,7 +97,7 @@ public class HookSystem extends IteratingSystem {
             float dy = posY - hook.anchorPoint.y;
             hookRot.angle = MathUtils.atan2(dy, dx) * MathUtils.radiansToDegrees + 90;
 
-            updateReelState(reelEntity, HookStates.SWINGING); // 🔁 keep reel static
+            updateReelState(reelEntity, HookStates.SWINGING);
         }
 
         float lineLength = (reel != null) ? reel.lineLength : 100f;
@@ -89,7 +108,7 @@ public class HookSystem extends IteratingSystem {
                 hookState.changeState(HookStates.REELING);
                 updateReelState(reelEntity, HookStates.REELING);
             } else {
-                hookVel.velocity.set(hook.sinkerWeight, hook.sinkerWeight).setAngleDeg(hookRot.angle - 90);
+                hookVel.velocity.set(sinkerWeight, sinkerWeight).setAngleDeg(hookRot.angle - 90);
                 hookVel.velocity.scl(returnSpeed);
                 hookBounds.bounds.setPosition(hookPos.pos.x, hookPos.pos.y);
 
@@ -99,21 +118,21 @@ public class HookSystem extends IteratingSystem {
 
         if (hookState.state == HookStates.REELING) {
             if (hookPos.pos.y < initialPosition) {
-                hookVel.velocity.set(hook.sinkerWeight, hook.sinkerWeight)
+                hookVel.velocity.set(sinkerWeight, sinkerWeight)
                     .setAngleDeg(hookRot.angle - 90)
                     .scl(-returnSpeed);
 
-                updateReelState(reelEntity, HookStates.REELING); // 🔁 animate reel while reeling
+                updateReelState(reelEntity, HookStates.REELING);
             } else {
                 hookState.changeState(HookStates.RETURNED);
-                updateReelState(reelEntity, HookStates.RETURNED); // 🔁 animate returned state
+                updateReelState(reelEntity, HookStates.RETURNED);
             }
         }
 
         if (hookState.state == HookStates.RETURNED) {
             if (!hook.hasAttachedEntity()) {
                 hookState.changeState(HookStates.SWINGING);
-                updateReelState(reelEntity, HookStates.SWINGING); // ⏸️ back to idle
+                updateReelState(reelEntity, HookStates.SWINGING);
             }
         }
     }
