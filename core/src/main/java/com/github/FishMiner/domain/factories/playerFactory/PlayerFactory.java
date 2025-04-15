@@ -24,6 +24,7 @@ import com.github.FishMiner.domain.ecs.components.*;
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 import com.github.FishMiner.domain.factories.ReelTypes;
+import com.github.FishMiner.domain.factories.SinkerTypes;
 import com.github.FishMiner.domain.states.HookStates;
 
 public class PlayerFactory {
@@ -37,7 +38,7 @@ public class PlayerFactory {
         Entity playerEntity = createPlayerEntity(engine, posX, posY);
         Entity hookEntity = createHookEntity(engine, playerEntity);
         Entity reelEntity = createReelEntity(engine, playerEntity);
-
+        Entity sinkerEntity = createSinkerEntity(engine, hookEntity);
 
         PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
         playerComponent.setHook(hookEntity);
@@ -48,6 +49,7 @@ public class PlayerFactory {
         engine.addEntity(playerEntity);
         engine.addEntity(hookEntity);
         engine.addEntity(reelEntity);
+        engine.addEntity(sinkerEntity);
         player = playerEntity;
     }
 
@@ -135,6 +137,7 @@ public class PlayerFactory {
     private static Entity createHookEntity(PooledEngine engine, Entity player) {
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
         TransformComponent playerPos = player.getComponent(TransformComponent.class);
+
         Entity hook = HookFactory.createEntity(engine, (int) playerPos.pos.z, playerComponent.hookAnchorPoint);
 
         AttachmentComponent hookAttachment = hook.getComponent(AttachmentComponent.class);
@@ -168,6 +171,18 @@ public class PlayerFactory {
         reelAttachment.setParentEntity(player);
         return reel;
     }
+
+    private static Entity createSinkerEntity(PooledEngine engine, Entity hook) {
+        Entity sinker = SinkerFactory.createEntity(engine, SinkerTypes.HEAVY_SINKER);
+
+        AttachmentComponent sinkerAttachment = engine.createComponent(AttachmentComponent.class);
+        sinkerAttachment.setParentEntity(hook);
+        sinkerAttachment.offset.y = -25f;
+
+        sinker.add(sinkerAttachment);
+        return sinker;
+    }
+
 
 
     public static Entity getPlayer() {
