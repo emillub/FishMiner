@@ -33,7 +33,10 @@ public class HookInputSystem extends EntitySystem implements IGameEventListener<
                 stateComponent.changeState(HookStates.FIRE);
             }
             event.setHandled();
+            System.out.println("[HookInputSystem] Hook state: " + stateComponent.state);
         }
+
+
     }
 
     @Override

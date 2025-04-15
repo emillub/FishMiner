@@ -26,6 +26,7 @@ public class ScreenManager {
     private IGameScreen currentScreen;
     private final HashMap<ScreenType, Screen> cachedScreens = new HashMap<>();
 
+
     private ScreenManager(IScreenFactory screenFactory, FishMinerGame game, GameContext gameContext) {
         ValidateUtil.validateMultipleNotNull(
              screenFactory,   "screenFactory",
@@ -175,4 +176,9 @@ public class ScreenManager {
             }
         };
     }
+
+    public IGameScreen getCurrentScreen() {
+        return currentScreen;
+    }
+
 }
