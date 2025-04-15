@@ -21,11 +21,14 @@ import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.components.*;
 
 import com.github.FishMiner.common.ValidateUtil;
+import com.github.FishMiner.domain.factories.HookTypes;
 import com.github.FishMiner.domain.factories.ReelTypes;
+import com.github.FishMiner.domain.factories.SinkerTypes;
 import com.github.FishMiner.domain.states.HookStates;
 
 public class PlayerFactory {
     private static final String TAG = "PlayerFactory";
+
     private static Entity player;
 
     private PlayerFactory() {
@@ -133,7 +136,7 @@ public class PlayerFactory {
     private static Entity createHookEntity(PooledEngine engine, Entity player) {
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
         TransformComponent playerPos = player.getComponent(TransformComponent.class);
-        Entity hook = HookFactory.createEntity(engine, (int) playerPos.pos.z, playerComponent.hookAnchorPoint);
+        Entity hook = HookFactory.createEntity(engine, HookTypes.SHARP_HOOK, (int) playerPos.pos.z, playerComponent.hookAnchorPoint);
 
         AttachmentComponent hookAttachment = hook.getComponent(AttachmentComponent.class);
         hookAttachment.setParentEntity(player);

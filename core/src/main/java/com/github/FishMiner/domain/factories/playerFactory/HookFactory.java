@@ -12,7 +12,9 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
+import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
+import com.github.FishMiner.domain.factories.HookTypes;
 import com.github.FishMiner.domain.states.HookStates;
 
 /**
@@ -25,7 +27,17 @@ public class HookFactory {
 
     }
 
-    protected static Entity createEntity(PooledEngine engine, int posZ, Vector3 anchorPoint) {
+    public static Entity createEntity(PooledEngine engine, HookTypes type, int posZ, Vector3 anchorPoint) {
+        validateHookType(type);
+
+        String texturePath = type.getTexturePath();
+        String name = type.getName();
+        int cols = type.getFrameCols();
+        int rows = type.getFrameRows();
+        int price = type.getPrice();
+        float scale = type.getScale();
+        float precision = type.getPrecision();
+
         Entity hook = engine.createEntity();
 
         HookComponent hookComponent = engine.createComponent(HookComponent.class);
@@ -36,18 +48,23 @@ public class HookFactory {
         VelocityComponent velocityComponent = engine.createComponent(VelocityComponent.class);
         StateComponent<HookStates> stateComponent = engine.createComponent(StateComponent.class);
         AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
+        UpgradeComponent upgradeComponent = engine.createComponent(UpgradeComponent.class);
 
-        textureComponent.setRegion("hook_1cols_1rows.png");
-        stateComponent.changeState(HookStates.SWINGING);
-        velocityComponent.velocity = new Vector2(0, 0);
+        if (price == 0) {
+            upgradeComponent.setUpgraded(true);
+        } else {
+            upgradeComponent.setType(hook);
+            upgradeComponent.setPrice(price);
+        }
 
-        hookComponent.anchorPoint.set(anchorPoint);
+        textureComponent.setRegion(texturePath, cols, rows);
         transformComponent.pos.z = posZ + 1;
+        transformComponent.scale = new Vector2(scale, scale);
+        hookComponent.anchorPoint.set(anchorPoint);
 
-        boundsComponent.bounds.setPosition(
-            transformComponent.pos.x - boundsComponent.bounds.width * 0.5f,
-            transformComponent.pos.y - boundsComponent.bounds.height * 0.5f
-        );
+
+        velocityComponent.velocity = new Vector2(0, 0);
+        stateComponent.changeState(HookStates.SWINGING);
 
         boundsComponent.bounds.setSize(
             textureComponent.getFrameWidth(),
@@ -62,7 +79,17 @@ public class HookFactory {
         hook.add(stateComponent);
         hook.add(attachmentComponent);
         hook.add(boundsComponent);
+        hook.add(upgradeComponent);
 
         return hook;
+    }
+
+    private static void validateHookType(HookTypes hookType) {
+        if (hookType.getName().isBlank()) {
+            throw new IllegalArgumentException("Hook name cannot be blank");
+        }
+        if (hookType.getTexturePath() == null) {
+            throw new IllegalArgumentException("Texture path cannot be null");
+        }
     }
 }
