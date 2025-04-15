@@ -177,6 +177,7 @@ public class PlayerFactory {
 
         AttachmentComponent sinkerAttachment = engine.createComponent(AttachmentComponent.class);
         sinkerAttachment.setParentEntity(hook);
+        sinkerAttachment.offset.y = -25f;
 
         sinker.add(sinkerAttachment);
         return sinker;
