@@ -11,6 +11,7 @@ public class HookComponent implements Component {
     public float swingAmplitude = 1.0f;
     public Entity attachedFishableEntity;
     public Vector3 offset = new Vector3(0, -2, 1);
+    public String name;
 
     public final int sinkerWeight = 2;
 
@@ -29,4 +30,13 @@ public class HookComponent implements Component {
     public boolean hasAttachedEntity() {
         return attachedFishableEntity != null;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

@@ -65,7 +65,7 @@ public final class ValidateUtil {
      * @throws IllegalArgumentException if check fails
      */
     public static void validatePositiveInt(int arg, String argTag) throws IllegalArgumentException {
-        if (arg <= 0) {
+        if (arg < 0) {
             IllegalArgumentException exception = new IllegalArgumentException(argTag + " cannot be 0 or less. Was: " + arg);
             Logger.getInstance().error(TAG, "validatePositiveInt(): ", exception);
             throw exception;

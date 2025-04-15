@@ -15,6 +15,8 @@ public class InventoryComponent implements Component {
     HashMap<String, Entity> reels = new HashMap<>();
     HashMap<String, Entity> sinkers = new HashMap<>();
     HashMap<String, Entity> hooks = new HashMap<>();
+    private String equippedHookName = "BASIC_HOOK";
+
 
     public void addSinkerToInventory(String name, Entity sinker) {
         if (sinkers.containsKey(name)) {
@@ -37,6 +39,25 @@ public class InventoryComponent implements Component {
             Logger.getInstance().debug(TAG, "Owner already owns this hook");
             return;
         }
-        reels.put(name, hook);
+        hooks.put(name, hook);
     }
+
+    public void equipHook(String hookName) {
+        if (hooks.containsKey(hookName)) {
+            equippedHookName = hookName;
+        }
+    }
+
+    public String getEquippedHookName() {
+        return equippedHookName;
+    }
+
+    public Entity getEquippedHook() {
+        return hooks.get(equippedHookName);
+    }
+
+    public boolean ownsHook(String name) {
+        return hooks.containsKey(name);
+    }
+
 }

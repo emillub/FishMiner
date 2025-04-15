@@ -23,6 +23,8 @@ public class PlayerCharacter implements IPlayer {
         if (instance == null && !isCreated) {
             instance = new PlayerCharacter(engine, posX, posY);
             isCreated = true;
+        } else if(instance == null){
+            throw new IllegalStateException("PlayerCharacter instance is null but marked created.");
         }
         return instance;
     }
