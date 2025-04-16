@@ -6,13 +6,14 @@ import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.factories.FishTypes;
 import com.github.FishMiner.domain.factories.GarbageTypes;
 import com.github.FishMiner.domain.factories.IEntityType;
+import com.github.FishMiner.domain.factories.IOceanEntityFactory;
 import com.github.FishMiner.domain.factories.SharkTypes;
 
 import java.util.LinkedList;
 
 
 
-public class OceanEntityFactory {
+public class OceanEntityFactory implements IOceanEntityFactory {
     private static final String TAG = "OceanEntityFactory";
 
     private final PooledEngine engine;
