@@ -30,8 +30,8 @@ import java.util.List;
 public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
     private Table rootTable;
     private Table scoreTable;
-    private TextField scoreField;
-    private Label statusLabel;
+    //private TextField scoreField;
+    //private Label statusLabel;
 
     private final LeaderboardResponseListener responseListener = new LeaderboardResponseListener();
 
@@ -50,9 +50,17 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
         rootTable.setDebug(true);
         stage.addActor(rootTable);
 
+        fetchTopScores();
 
-        scoreField = new TextField("", skin);
-        scoreField.setMessageText("Enter score");
+        //scoreField = new TextField("", skin);
+        //scoreField.setMessageText("Enter score");
+
+        scoreTable = new Table();
+        Table scoreContainer = new Table();
+        scoreContainer.add(scoreTable).expand().fill();
+
+
+        /*
 
         TextButton submitButton = new TextButton("Submit Score", skin);
         submitButton.addListener(new ChangeListener() {
@@ -62,7 +70,9 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
             }
         });
 
-        fetchTopScores();
+         */
+
+        //fetchTopScores();
 
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
@@ -71,7 +81,13 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
                 GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.MENU));
             }
         });
-        statusLabel = new Label("", skin);
+
+        rootTable.row();
+        rootTable.add(scoreContainer).expand().fill();
+        rootTable.row();
+        rootTable.add(backButton).padTop(20);
+        //statusLabel = new Label("", skin);
+        /*
 
         Table inputTable = new Table();
         inputTable.row().padTop(10);
@@ -92,12 +108,14 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
         rootTable.row();
         rootTable.add(backButton).expand().fillX().fill().fillY();
 
+         */
+
         GameEventBus.getInstance().register(responseListener);
 
     }
 
     private void fetchTopScores() {
-        FishMinerGame game = ScreenManager.getInstance().getGame();
+        //FishMinerGame game = ScreenManager.getInstance().getGame();
         GameEventBus.getInstance().post(new LeaderboardFetchRequestEvent());
     }
 
@@ -124,7 +142,7 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
     }
 
 
-
+/*
 
     private void submitScore() {
         FishMinerGame game = ScreenManager.getInstance().getGame();
@@ -147,6 +165,8 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
             statusLabel.setText("Invalid score format.");
         }
     }
+
+ */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
@@ -162,11 +182,11 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
             Gdx.app.postRunnable(() -> {
                 if (event.isSuccess()) {
                     // Only update if scores exist
-                    List<ScoreEntry> scores = event.getScores();
-                    if (scores != null && !scores.isEmpty()) {
-                        updateLeaderboardUI(scores);
+                    //List<ScoreEntry> scores = event.getScores();
+                    //if (scores != null && !scores.isEmpty()) {
+                        updateLeaderboardUI(event.getScores());
                     }
-
+                /*
                     if (!scoreField.getText().isEmpty()) {
                         statusLabel.setText("Score submitted!");
                         scoreField.setText("");
@@ -179,6 +199,8 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
                 } else {
                     statusLabel.setText("Failed: " + event.getErrorMessage());
                 }
+
+                 */
             });
         }
 

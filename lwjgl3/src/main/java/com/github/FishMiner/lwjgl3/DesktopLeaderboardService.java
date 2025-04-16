@@ -29,16 +29,17 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
                     callback.onFailure("No auth token available. Please log in.");
                     return;
                 }
-
+                //Targeting the document by username (email)
                 String endpoint = "https://firestore.googleapis.com/v1/projects/" +
-                    FIREBASE_PROJECT_ID + "/databases/(default)/documents/LeaderBoard";
+                    FIREBASE_PROJECT_ID + "/databases/(default)/documents/LeaderBoard" + username;
 
                 HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
-                conn.setRequestMethod("POST");
+                conn.setRequestMethod("PATCH");
                 conn.setRequestProperty("Authorization", "Bearer " + idToken);
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setDoOutput(true);
 
+                //Send the updated score
                 String json = "{\n" +
                     "  \"fields\": {\n" +
                     "    \"username\": { \"stringValue\": \"" + username + "\" },\n" +
@@ -72,17 +73,17 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
             try {
                 DesktopAuthService loginAPI = (DesktopAuthService) ScreenManager.getInstance().getGame().getAuthService();
                 String idToken = loginAPI.getIdToken();
-                if (idToken == null) {
-                    callback.onFailure("No auth token. Please log in.");
-                    return;
-                }
 
-                String endpoint = "https://firestore.googleapis.com/v1/projects/fishminer-482a2/databases/(default)/documents:runQuery";
+                String endpoint = "https://firestore.googleapis.com/v1/projects/" +
+                    FIREBASE_PROJECT_ID + "/databases/(default)/documents:runQuery";
 
                 HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Authorization", "Bearer " + idToken);
                 conn.setRequestProperty("Content-Type", "application/json");
+
+                if(idToken != null) {
+                    conn.setRequestProperty("Authorization", "Bearer " + idToken);
+                }
                 conn.setDoOutput(true);
 
                 String query = "{\n" +
@@ -145,5 +146,56 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
         int valueEnd = json.indexOf("\"", valueStart + 2);
         return json.substring(valueStart, valueEnd).replaceAll("\"", "").trim();
     }
+
+    @Override
+    public void getUserScore(String username, LeaderboardCallback callback) {
+        new Thread(() -> {
+            try {
+                DesktopAuthService loginAPI = (DesktopAuthService) ScreenManager.getInstance().getGame().getAuthService();
+                String idToken = loginAPI.getIdToken();
+                if (idToken == null) {
+                    callback.onSuccess(new ArrayList<>());
+                    return;
+                }
+
+                String endpoint = "https://firestore.googleapis.com/v1/projects/" +
+                    FIREBASE_PROJECT_ID + "/databases/(default)/documents/LeaderBoard/" + username;
+
+                HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Authorization", "Bearer " + idToken);
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == 200) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+
+                    JSONObject json = new JSONObject(response.toString());
+                    JSONObject fields = json.getJSONObject("fields");
+
+                    String user = fields.getJSONObject("username").getString("stringValue");
+                    int score = fields.getJSONObject("score").getInt("integerValue");
+
+                    List<ScoreEntry> result = new ArrayList<>();
+                    result.add(new ScoreEntry(user, score));
+                    callback.onSuccess(result);
+
+                } else if (responseCode == 404) {
+                    // bruker finnes ikke
+                    callback.onSuccess(new ArrayList<>());
+                } else {
+                    callback.onFailure("Failed to fetch user score: " + responseCode);
+                }
+
+            } catch (Exception e) {
+                callback.onFailure("Error getting user score: " + e.getMessage());
+            }
+        }).start();
+    }
+
 
 }

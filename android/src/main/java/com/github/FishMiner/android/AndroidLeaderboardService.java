@@ -41,34 +41,55 @@ public class AndroidLeaderboardService implements ILeaderBoardService {
                 }
             });
     }
+
+    @Override
     public void submitScore(String username, int score, LeaderboardCallback callback) {
-        db.collection("LeaderBoard")
-            .whereEqualTo("username", username)
+        System.out.println(">>> [AndroidLeaderboardService] submitScore called for: " + username + " with score: " + score);
+        db.collection("LeaderBoard").document(username)
             .get()
-            .addOnSuccessListener(queryDocumentSnapshots -> {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Long existingScore = document.getLong("score");
-                        if (existingScore != null && score > existingScore) {
-                            db.collection("LeaderBoard").document(document.getId())
-                                .update("score", score)
-                                .addOnSuccessListener(aVoid -> callback.onSuccess(null))
-                                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
-                        } else {
-                            callback.onSuccess(null);
-                        }
+            .addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    Long existingScore = documentSnapshot.getLong("score");
+                    if (existingScore == null || score > existingScore) {
+                        // Update only if the new score is higher
+                        db.collection("LeaderBoard").document(username)
+                            .update("score", score)
+                            .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+                            .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+                    } else {
+                        // No update needed
+                        callback.onSuccess(null);
                     }
                 } else {
+                    // Create new document with username as ID
                     Map<String, Object> scoreEntry = new HashMap<>();
                     scoreEntry.put("username", username);
                     scoreEntry.put("score", score);
 
-                    db.collection("LeaderBoard")
-                        .add(scoreEntry)
-                        .addOnSuccessListener(documentReference -> callback.onSuccess(null))
+                    db.collection("LeaderBoard").document(username)
+                        .set(scoreEntry)
+                        .addOnSuccessListener(aVoid -> callback.onSuccess(null))
                         .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
                 }
             })
             .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
+
+    public void getUserScore(String username, LeaderboardCallback callback) {
+        db.collection("LeaderBoard").document(username)
+            .get()
+            .addOnSuccessListener(document -> {
+                if (document.exists()) {
+                    String name = document.getString("username");
+                    Long score = document.getLong("score");
+                    List<ScoreEntry> result = new ArrayList<>();
+                    result.add(new ScoreEntry(name, score != null ? score.intValue() : 0));
+                    callback.onSuccess(result);
+                } else {
+                    callback.onSuccess(new ArrayList<>());
+                }
+            })
+            .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
 }

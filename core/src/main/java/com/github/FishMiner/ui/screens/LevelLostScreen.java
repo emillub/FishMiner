@@ -14,10 +14,17 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.FishMiner.common.Configuration;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.github.FishMiner.data.ScoreEntry;
+import com.github.FishMiner.domain.GameEventBus;
+import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.domain.session.UserSession;
+import com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.domain.GameContext;
 
 public class LevelLostScreen extends AbstractScreen implements IGameScreen {
 
@@ -53,9 +60,26 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                FishMinerGame game = ScreenManager.getInstance().getGame();
+                String username = game.getAuthService().getCurrentUsername();
+                float score = gameContext.getWorld().getScore();
+
+                if (username != null) {
+                    ScoreEntry entry = new ScoreEntry(username, (int) score);
+                    GameEventBus.getInstance().post(new LeaderboardPostRequestEvent(entry));
+                }
+                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LEADERBOARD));
+            }
+        });
+        /*
+        continueButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
                 ScreenManager.getInstance().switchScreenTo(ScreenType.MENU);
             }
         });
+
+         */
 
         // Create a sub-table to act as the message box
         Table messageBox = new Table(skin);

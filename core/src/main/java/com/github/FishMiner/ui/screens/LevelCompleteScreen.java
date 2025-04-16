@@ -12,8 +12,12 @@ import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.ScoreEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.data.ScoreEntry;
+import com.github.FishMiner.domain.session.UserSession;
+
 
 import java.util.Locale;
 
@@ -59,7 +63,9 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
         }
 
         transitionTimer += delta;
-        if (transitionTimer >= 1.5f && !sentScreenRequest) {
+        // seconds before switching to UpgradeScreen
+        float delayBeforeNextScreen = 1.5f;
+        if (transitionTimer >= delayBeforeNextScreen && !sentScreenRequest) {
             GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.UPGRADE));
             sentScreenRequest = true;
         }

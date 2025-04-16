@@ -4,6 +4,7 @@ import static com.github.FishMiner.domain.events.soundEvents.MusicEvent.MusicCom
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -15,6 +16,8 @@ import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.domain.session.UserSession;
+
 
 
 public class MenuScreen extends AbstractScreen implements IGameScreen {
@@ -40,13 +43,21 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
                 ScreenManager.getInstance().switchScreenTo(ScreenType.SETTINGS);
             }
         });
-        TextButton loginButton = new TextButton("Login", skin);
-        loginButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().switchScreenTo(ScreenType.LOGIN);
-            }
-        });
+
+        if (UserSession.isLoggedIn()) {
+            Label loggedInLabel = new Label("Logged in as: " + UserSession.getCurrentUserEmail(), skin);
+            rootTable.add(loggedInLabel).padBottom(40).row();
+        } else{
+            TextButton loginButton = new TextButton("Login", skin);
+            loginButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    ScreenManager.getInstance().switchScreenTo(ScreenType.LOGIN);
+                }
+            });
+            rootTable.add(loginButton).expand().fillX().fill().fillY();
+            rootTable.row();
+        }
 
         TextButton playButton = new TextButton("Play", skin);
         playButton.addListener(new ChangeListener() {
@@ -73,8 +84,6 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
             }
         });
 
-        rootTable.add(loginButton).expand().fillX().fill().fillY();
-        rootTable.row();
         rootTable.add(playButton).expand().fillX().fill().fillY();
         rootTable.row();
         rootTable.add(settingsButton).expand().fillX().fill().fillY();
