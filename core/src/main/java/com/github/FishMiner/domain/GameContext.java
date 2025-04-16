@@ -97,7 +97,6 @@ public class GameContext implements IGameContext {
                 sentEvent = new ChangeScreenEvent(ScreenType.LEVEL_COMPLETE);
                 GameEventBus.getInstance().post(sentEvent);
             } else if (sentEvent.isHandled()) {
-                createNextLevel();
                 sentEvent = null;
                 prepareScreenPosted = false;
             }

@@ -11,14 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.domain.GameContext;
+import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
-/**
- * AbstractScreen provides a common basis for all screens.
- * It initializes a Stage, loads the shared Skin, and sets up an InputMultiplexer.
- */
 public abstract class AbstractScreen implements Screen {
     protected ScreenType screenType;
     protected IGameContext gameContext;
@@ -28,54 +24,58 @@ public abstract class AbstractScreen implements Screen {
     protected BitmapFont font;
     protected Stage stage;
     protected Skin skin;
+
+    private boolean initialized = false;
+
     public AbstractScreen(IGameContext gameContext) {
         this.gameContext = gameContext;
-        stage = new Stage(new FitViewport(
-            Configuration.getInstance().getScreenWidth(),
-            Configuration.getInstance().getScreenHeight()
-        ));
-        skin = Configuration.getInstance().getUiSkin();
-        Gdx.input.setInputProcessor(stage);
-
         this.batch = gameContext.getBatch();
         this.shapeRenderer = gameContext.getRenderer();
         this.cam = gameContext.getCam();
         this.font = new BitmapFont();
         font.setColor(Color.BLACK);
+    }
 
-        Gdx.input.setInputProcessor(stage);
+    protected void initializeStageIfNeeded() {
+        if (!initialized) {
+            stage = new Stage(new FitViewport(
+                Configuration.getInstance().getScreenWidth(),
+                Configuration.getInstance().getScreenHeight()
+            ));
+            skin = Configuration.getInstance().getUiSkin();
+            initialized = true;
+        }
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        initializeStageIfNeeded();
+        if (ScreenManager.getInstance().getCurrentScreen() == this) {
+            Gdx.input.setInputProcessor(stage);
+        }
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height);
+        if (stage != null) {
+            stage.getViewport().update(width, height);
+        }
         Configuration.getInstance().updateConfiguration();
     }
 
     @Override
-    public void pause() {
-        // Default
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-        // Default
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-        // Default
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
-        stage.dispose();
-        skin.dispose();
+        if (stage != null) stage.dispose();
+        if (skin != null) skin.dispose();
     }
 
     protected void updateCamera() {

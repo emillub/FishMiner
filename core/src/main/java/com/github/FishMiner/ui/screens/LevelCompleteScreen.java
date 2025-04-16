@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.github.FishMiner.common.Configuration;
-
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.ScoreEvent;
@@ -33,17 +32,19 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
     @Override
     public void show() {
         super.show();
-        float finalScore = gameContext.getWorld().getScore();
-        String winMessage = String.format(Locale.US, "You won with %.0f points. Good job!", finalScore);
-        Label winLabel = new Label(winMessage, super.skin);
-        winLabel.setFontScale(2f);
-        winLabel.setAlignment(Align.center);
+        if (stage.getActors().size == 0) {
+            float finalScore = gameContext.getWorld().getScore();
+            String winMessage = String.format(Locale.US, "You won with %.0f points. Good job!", finalScore);
+            Label winLabel = new Label(winMessage, skin);
+            winLabel.setFontScale(2f);
+            winLabel.setAlignment(Align.center);
 
-        Table table = new Table();
-        table.setFillParent(true);
-        table.center();
-        super.stage.addActor(table);
-        table.add(winLabel).center().padTop(20);
+            Table table = new Table();
+            table.setFillParent(true);
+            table.center();
+            stage.addActor(table);
+            table.add(winLabel).center().padTop(20);
+        }
     }
 
     @Override
@@ -51,14 +52,14 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         drawBackground();
-        super.stage.act(delta);
-        super.stage.draw();
 
-        // After delay, go to UpgradeScreen
+        if (stage != null) {
+            stage.act(delta);
+            stage.draw();
+        }
+
         transitionTimer += delta;
-        // seconds before switching to UpgradeScreen
-        float delayBeforeNextScreen = 1.5f;
-        if (transitionTimer >= delayBeforeNextScreen && !sentScreenRequest) {
+        if (transitionTimer >= 1.5f && !sentScreenRequest) {
             GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.UPGRADE));
             sentScreenRequest = true;
         }
@@ -76,7 +77,6 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
             shapeRenderer.rect(0, i * levelHeight, Gdx.graphics.getWidth(), levelHeight);
         }
 
-        // Sky (top part)
         shapeRenderer.setColor(0.5f, 0.8f, 1f, 1f);
         shapeRenderer.rect(
             0,
@@ -88,9 +88,6 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
         shapeRenderer.end();
     }
 
-    /**
-     * Returns an event listener for login/registration responses.
-     */
     public IGameEventListener<ScoreEvent> getScoreEventListener() {
         return new IGameEventListener<ScoreEvent>() {
             @Override
@@ -98,6 +95,7 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
                 if (event.isHandled()) return;
                 score = event.getScore();
             }
+
             @Override
             public Class<ScoreEvent> getEventType() {
                 return ScoreEvent.class;
