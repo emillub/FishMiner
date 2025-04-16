@@ -81,6 +81,15 @@ public final class ValidateUtil {
     //    }
     //}
 
+    public static void validateRange(float arg, float min, float max, String argTag) throws IllegalArgumentException {
+        if (arg < min || arg > max) {
+            IllegalArgumentException exception = new IllegalArgumentException(
+                    argTag + " must be between " + min + " and " + max + ". Was: " + arg);
+            Logger.getInstance().error(TAG, "validateRange(): ", exception);
+            throw exception;
+        }
+    }
+
     public static void validatePositiveFloat(float arg, String argTag) throws IllegalArgumentException {
         if (arg <= 0) {
             IllegalArgumentException exception = new IllegalArgumentException(argTag + " cannot be 0 or less.");

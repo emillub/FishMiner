@@ -1,8 +1,10 @@
 package com.github.FishMiner.domain.managers;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
@@ -10,9 +12,12 @@ import com.github.FishMiner.domain.ports.in.IGameEventListener;
 public class MusicManager implements IGameEventListener<MusicEvent> {
     private final Music backgroundMusic;
     private final Music playMusic;
+    private float previousVolume = Configuration.getInstance().getMusicVolume();
     private Music currentlyPlaying;
 
-    public MusicManager() {
+    private static MusicManager instance;
+
+    private MusicManager() {
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("StartMusic.ogg"));
         playMusic = Gdx.audio.newMusic(Gdx.files.internal("TownTheme.ogg"));
         ValidateUtil.validateMultipleNotNull(
@@ -23,51 +28,78 @@ public class MusicManager implements IGameEventListener<MusicEvent> {
         backgroundMusic.setLooping(true);
         playMusic.setLooping(true);
 
-        float volume = Configuration.getInstance().getMusicVolume();
-        backgroundMusic.setVolume(volume);
-        playMusic.setVolume(volume);
+        backgroundMusic.setVolume(Configuration.getInstance().getMusicVolume());
+        playMusic.setVolume(Configuration.getInstance().getMusicVolume());
+    }
+
+    public static MusicManager getInstance() {
+        if (instance == null) {
+            synchronized (MusicManager.class) {
+                if (instance == null) {
+                    instance = new MusicManager();
+                }
+            }
+        }
+        return instance;
     }
 
     public void applyVolume(float volume) {
+        ValidateUtil.validateNotNull(volume, "Volume");
+        ValidateUtil.validateRange(volume, 0f, 1f, "Volume");
+        Configuration.getInstance().setMusicVolume(volume);
         backgroundMusic.setVolume(volume);
         playMusic.setVolume(volume);
-        if (volume <= 0f) {
-            stopAll();
-        } else if (currentlyPlaying != null && !currentlyPlaying.isPlaying()) {
-            currentlyPlaying.play();
-        }
     }
 
-    public void applyVolume() {
-        float volume = Configuration.getInstance().getMusicVolume();
-        this.applyVolume(volume);
+    private void switchMusic(Music newMusic) {
+        if (newMusic == currentlyPlaying) {
+            Logger.getInstance().debug("MusicManager", "Already playing: " + newMusic);
+            return;
+        }
+        boolean lastSongPlaying = currentlyPlaying != null && currentlyPlaying.isPlaying();
+        if (lastSongPlaying) {
+            currentlyPlaying.stop();
+        }
+        currentlyPlaying = newMusic;
+        currentlyPlaying.setVolume(previousVolume);
+        currentlyPlaying.play();
+        Logger.getInstance().debug("MusicManager", "Switching music to: " + newMusic);
     }
 
     public void playBackground() {
-        if (currentlyPlaying != backgroundMusic) {
-            backgroundMusic.play();
-            playMusic.stop();
-            currentlyPlaying = backgroundMusic;
-        }
+        switchMusic(backgroundMusic);
     }
 
     public void playGame() {
-        if (currentlyPlaying != playMusic) {
-            playMusic.play();
-            backgroundMusic.stop();
-            currentlyPlaying = playMusic;
+        switchMusic(playMusic);
+    }
+
+    private void mute() {
+        if (currentlyPlaying != null) {
+            previousVolume = Configuration.getInstance().getMusicVolume();
+            if (previousVolume > 0f) {
+                Configuration.getInstance().setMusicVolume(0f);
+                currentlyPlaying.setVolume(0f);
+                Logger.getInstance().debug("MusicManager", "Music muted.");
+            }
         }
     }
 
-    public void stopAll() {
-        if (currentlyPlaying.isPlaying()) {
-            currentlyPlaying.stop();
+    private void unMute() {
+        if (currentlyPlaying != null) {
+            float volumeToRestore = previousVolume > 0f ? previousVolume : Configuration.DEFAULT_MUSIC_VOLUME;
+            Configuration.getInstance().setMusicVolume(volumeToRestore);
+            currentlyPlaying.setVolume(volumeToRestore);
+            Logger.getInstance().debug("MusicManager", "Music unmuted. Restored volume: " + volumeToRestore);
         }
     }
 
-    public void resumeCurrentlyPlaying() {
-        if (currentlyPlaying != null && !currentlyPlaying.isPlaying()) {
-            currentlyPlaying.play();
+    private void toggleMute() {
+        Logger.getInstance().debug("MusicManager", "Toggling mute: " + Configuration.getInstance().isMusicEnabled());
+        if (Configuration.getInstance().isMusicEnabled()) {
+            mute();
+        } else {
+            unMute();
         }
     }
 
@@ -78,9 +110,8 @@ public class MusicManager implements IGameEventListener<MusicEvent> {
         switch (event.getCommand()) {
             case PLAY_BACKGROUND -> playBackground();
             case PLAY_GAME       -> playGame();
-            case ADJUST_VOLUME   -> applyVolume();
-            case STOP_ALL        -> stopAll();
-            case RESUME          -> resumeCurrentlyPlaying();
+            case ADJUST_VOLUME -> applyVolume(event.getVolume());
+            case TOGGLE_MUTE -> toggleMute();
 
         }
         event.setHandled();

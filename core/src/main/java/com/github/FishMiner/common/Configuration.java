@@ -15,9 +15,12 @@ public class Configuration {
     private static final float RESOLUTION_Y = 1600f;
     private static float scaleX;
     private static float scaleY;
-    private boolean soundEnabled = true;
-    private float musicVolume = 1f;
     private final Skin uiSkin = new Skin(Gdx.files.internal("ui/fishminerSkin.json"));
+
+    // User settings
+    public final static float DEFAULT_MUSIC_VOLUME = 0.5f;
+    private boolean isSoundEnabled = true;
+    private float musicVolume = DEFAULT_MUSIC_VOLUME;
 
     private Configuration() {
         scaleX = SCREEN_WIDTH / RESOLUTION_X;
@@ -26,7 +29,7 @@ public class Configuration {
 
     public static Configuration getInstance() {
         if (instance == null) {
-            return new Configuration();
+            instance = new Configuration();
         }
         return instance;
     }
@@ -88,21 +91,24 @@ public class Configuration {
         return false;
     }
 
-
     public boolean isSoundEnabled() {
-        return soundEnabled;
+        return isSoundEnabled;
     }
 
-    public void setSoundEnabled(boolean enabled) {
-        this.soundEnabled = enabled;
+    public void setSoundEnabled(boolean soundEnabled) {
+        isSoundEnabled = soundEnabled;
+    }
+
+    public boolean isMusicEnabled() {
+        return musicVolume > 0f;
     }
 
     public float getMusicVolume() {
         return musicVolume;
     }
 
-    public void setMusicVolume(float volume) {
-        this.musicVolume = volume;
+    public void setMusicVolume(float musicVolume) {
+        this.musicVolume = musicVolume;
     }
 
 }

@@ -7,9 +7,8 @@ public class MusicEvent implements IGameEvent {
     public enum MusicCommand {
         PLAY_BACKGROUND,
         PLAY_GAME,
-        STOP_ALL,
-        ADJUST_VOLUME,
-        RESUME
+                ADJUST_VOLUME,
+                TOGGLE_MUTE,
     }
 
     private boolean handled;
@@ -28,6 +27,10 @@ public class MusicEvent implements IGameEvent {
 
     public void setVolume(float volume) {
         this.volume = volume;
+    }
+
+    public float getVolume() {
+        return volume;
     }
 
     @Override
