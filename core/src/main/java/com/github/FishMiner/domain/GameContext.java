@@ -53,7 +53,7 @@ public class GameContext implements IGameContext {
     private final ShapeRenderer renderer;
     private final OrthographicCamera cam;
     private ScreenManager screenManager;
-
+    private int currentLevel;
     public GameContext() {
         int worldWidth = Configuration.getInstance().getScreenWidth();
         int worldHeight = Configuration.getInstance().getScreenHeight();
@@ -70,11 +70,12 @@ public class GameContext implements IGameContext {
         this.player = initPlayer(engine);
         this.world = new World(engine);
 
+        this.currentLevel = 1;
+
         System.out.println("[GameContext] Systems added in order:");
         for (EntitySystem sys : engine.getSystems()) {
             System.out.println("  - " + sys.getClass().getSimpleName());
         }
-
 
         GameEventBus.getInstance().register(world);
         initStartLevel(world);
@@ -102,14 +103,15 @@ public class GameContext implements IGameContext {
             engine.getSystem(SpawningQueueSystem.class).setProcessing(runWorld);
             engine.getSystem(UpgradeSystem.class).setProcessing(runWorld);
             world.update(delta);
+        } else if (currentScreen == UPGRADE) {
+            boolean renderStore = screenManager.getCurrentScreenType() == UPGRADE;
+            engine.getSystem(StoreSystem.class).setProcessing(renderStore);
+            engine.getSystem(TransactionSystem.class).setProcessing(renderStore);
+            upgradeStore.update(delta);
         }
-
-        boolean renderStore = screenManager.getCurrentScreenType() == UPGRADE;
-        upgradeStore.update(delta);
-        engine.getSystem(StoreSystem.class).setProcessing(renderStore);
-        engine.getSystem(TransactionSystem.class).setProcessing(renderStore);
-
         engine.update(delta);
+
+
     }
 
     public void createNextLevel() {

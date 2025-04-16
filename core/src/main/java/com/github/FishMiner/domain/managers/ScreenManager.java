@@ -1,5 +1,6 @@
 package com.github.FishMiner.domain.managers;
 
+import static com.github.FishMiner.ui.ports.out.ScreenType.MENU;
 import static com.github.FishMiner.ui.ports.out.ScreenType.PLAY;
 
 import com.badlogic.gdx.Screen;
@@ -80,6 +81,7 @@ public class ScreenManager {
         IGameScreen newScreen;
         if (screenType == PLAY) {
             // Always create a new instance for gameplay because each level requires a fresh PlayScreen.
+            gameContext.createNextLevel();
             newScreen = (IGameScreen) screenFactory.getScreen(screenType, gameContext);
             Logger.getInstance().log(TAG, "Switching to new PLAY screen: " + newScreen);
         } else {
@@ -94,28 +96,6 @@ public class ScreenManager {
         }
         currentScreen = newScreen;
         game.setScreen((Screen) newScreen);
-    }
-
-    /**
-     * Replaces the Screen in cache if that screen is not the currentScreen,
-     * and registers that Screen to the GameEventBus.
-     */
-    public void prepareNewScreen(ScreenType screenType) {
-        Logger.getInstance().log(TAG, "Prepare screen called on: " + screenType);
-        if (cachedScreens.containsKey(screenType)) {
-            Screen cached = cachedScreens.get(screenType);
-            if (currentScreen != null && cached == currentScreen) {
-                Logger.getInstance().debug(TAG, "Cannot prepare a new instance for " + screenType + " because it is currently active.");
-                return;
-            }
-            IGameScreen newScreen = (IGameScreen) screenFactory.getScreen(screenType, gameContext);
-            cachedScreens.put(screenType, (Screen) newScreen);
-            Logger.getInstance().log(TAG, "New instance for " + screenType + " prepared and cached.");
-        } else {
-            IGameScreen newScreen = (IGameScreen) screenFactory.getScreen(screenType, gameContext);
-            cachedScreens.put(screenType, (Screen) newScreen);
-            Logger.getInstance().log(TAG, "Screen " + screenType + " was not cached. New instance created and cached.");
-        }
     }
 
     public FishMinerGame getGame() {
@@ -154,24 +134,6 @@ public class ScreenManager {
             @Override
             public Class<ChangeScreenEvent> getEventType() {
                 return ChangeScreenEvent.class;
-            }
-        };
-    }
-
-    /**
-     * Returns an event listener for prepare new screen events.
-     */
-    public IGameEventListener<PrepareScreenEvent> getPrepareScreenEvent() {
-        return new IGameEventListener<PrepareScreenEvent>() {
-            @Override
-            public void onEvent(PrepareScreenEvent event) {
-                if (event.isHandled()) return;
-                prepareNewScreen(event.getScreenType());
-                event.setHandled();
-            }
-            @Override
-            public Class<PrepareScreenEvent> getEventType() {
-                return PrepareScreenEvent.class;
             }
         };
     }
