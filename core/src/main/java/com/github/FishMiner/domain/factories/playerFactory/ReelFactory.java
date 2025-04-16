@@ -8,7 +8,7 @@ import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ecs.components.*;
 import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 import com.github.FishMiner.domain.factories.ReelTypes;
-import com.github.FishMiner.domain.states.HookStates;
+import com.github.FishMiner.domain.states.FishingRodState;
 
 public class ReelFactory {
     private static final String TAG = "ReelFactory";
@@ -30,7 +30,7 @@ public class ReelFactory {
 
         ReelComponent reelComponent = engine.createComponent(ReelComponent.class);
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
-        StateComponent<HookStates> stateComponent = engine.createComponent(StateComponent.class);
+        StateComponent<FishingRodState> stateComponent = engine.createComponent(StateComponent.class);
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
         AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
@@ -45,13 +45,13 @@ public class ReelFactory {
         reelComponent.returnSpeed = returnSpeed;
         reelComponent.lineLength = DomainUtils.getLengthDepthFor(depthLevel, textureComponent.getFrameHeight());
 
-        stateComponent.changeState(HookStates.SWINGING);
+        stateComponent.changeState(FishingRodState.SWINGING);
 
-        animationComponent.addAnimation(HookStates.REELING.getAnimationKey(), textureComponent, 0, Animation.PlayMode.LOOP);
-        animationComponent.addAnimation(HookStates.FIRE.getAnimationKey(), textureComponent, 0, Animation.PlayMode.LOOP);
-        animationComponent.addAnimation(HookStates.RETURNED.getAnimationKey(), textureComponent, 0, Animation.PlayMode.LOOP);
-        animationComponent.addSingleFrameAnimation(HookStates.SWINGING.getAnimationKey(), textureComponent, 0, 0);
-        animationComponent.setCurrentAnimation(HookStates.SWINGING.getAnimationKey());
+        animationComponent.addAnimation(FishingRodState.REELING.getAnimationKey(), textureComponent, 0, Animation.PlayMode.LOOP);
+        animationComponent.addAnimation(FishingRodState.FIRE.getAnimationKey(), textureComponent, 0, Animation.PlayMode.LOOP);
+        animationComponent.addAnimation(FishingRodState.RETURNED.getAnimationKey(), textureComponent, 0, Animation.PlayMode.LOOP);
+        animationComponent.addSingleFrameAnimation(FishingRodState.SWINGING.getAnimationKey(), textureComponent, 0, 0);
+        animationComponent.setCurrentAnimation(FishingRodState.SWINGING.getAnimationKey());
 
         if (price <= 0) {
             upgradeComponent.setUpgraded(true);

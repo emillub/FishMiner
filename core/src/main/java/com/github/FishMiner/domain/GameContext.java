@@ -1,6 +1,10 @@
 package com.github.FishMiner.domain;
 
 
+import static com.github.FishMiner.domain.states.WorldState.PAUSED;
+import static com.github.FishMiner.ui.ports.out.ScreenType.PLAY;
+import static com.github.FishMiner.ui.ports.out.ScreenType.UPGRADE;
+
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -8,11 +12,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.common.Logger;
+import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ecs.components.ScoreComponent;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
 import com.github.FishMiner.domain.ecs.systems.AttachmentSystem;
 import com.github.FishMiner.domain.ecs.systems.BackgroundRenderSystem;
 import com.github.FishMiner.domain.ecs.systems.CollisionSystem;
+import com.github.FishMiner.domain.ecs.systems.FishingRodSystem;
 import com.github.FishMiner.domain.ecs.systems.FishingSystem;
 import com.github.FishMiner.domain.ecs.systems.HookInputSystem;
 import com.github.FishMiner.domain.ecs.systems.HookSystem;
@@ -24,30 +31,28 @@ import com.github.FishMiner.domain.ecs.systems.ScoreSystem;
 import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.ecs.systems.StoreSystem;
 import com.github.FishMiner.domain.ecs.systems.TransactionSystem;
+import com.github.FishMiner.domain.ecs.systems.UpgradeSystem;
 import com.github.FishMiner.domain.ecs.systems.test.DebugRenderingSystem;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
-import com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent;
 import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.level.LevelConfigFactory;
+import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.domain.states.WorldState;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 import com.github.FishMiner.ui.ports.in.IPlayer;
 
 public class GameContext implements IGameContext {
+    private static final String TAG = "GameContext";
     private final PooledEngine engine;
-    private UpgradeStore store;
+    private UpgradeStore upgradeStore;
     private PlayerCharacter player;
     private final World world;
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
     private final OrthographicCamera cam;
-    private boolean isPrepareScreenPosted = false;
-    private PrepareScreenEvent prepareScreenEvent;
-
-    private ChangeScreenEvent sentEvent = null;
+    private ScreenManager screenManager;
 
     public GameContext() {
         int worldWidth = Configuration.getInstance().getScreenWidth();
@@ -60,8 +65,8 @@ public class GameContext implements IGameContext {
 
         // This order is very important
         this.engine = new PooledEngine();
-        this.store = initUpgradeStore(engine);
-        addSystemsToEngine(renderer, batch, cam, this.store);
+        this.upgradeStore = initUpgradeStore(engine);
+        addSystemsToEngine(renderer, batch, cam, this.upgradeStore);
         this.player = initPlayer(engine);
         this.world = new World(engine);
 
@@ -72,69 +77,47 @@ public class GameContext implements IGameContext {
 
 
         GameEventBus.getInstance().register(world);
-
         initStartLevel(world);
     }
 
-    // Add a flag to prevent repeated postings
-    private boolean prepareScreenPosted = false;
+    public void setScreenManager(ScreenManager screenManager) {
+        ValidateUtil.validateNotNull(screenManager, TAG + "-> screenManager");
+        this.screenManager = screenManager;
+    }
 
     public void update(float delta) {
-        if (!world.isPaused()) {
+        ScreenType currentScreen = screenManager.getCurrentScreenType();
+        ValidateUtil.validateNotNull(this.screenManager,  TAG + "-> screenManager");
+        if (currentScreen == PLAY) {
+            boolean runWorld = !world.isPaused();
+            engine.getSystem(AnimationSystem.class).setProcessing(runWorld);
+            engine.getSystem(AttachmentSystem.class).setProcessing(runWorld);
+            engine.getSystem(CollisionSystem.class).setProcessing(runWorld);
+            engine.getSystem(FishingRodSystem.class).setProcessing(runWorld);
+            engine.getSystem(FishingSystem.class).setProcessing(runWorld);
+            engine.getSystem(HookInputSystem.class).setProcessing(runWorld);
+            engine.getSystem(MovementSystem.class).setProcessing(runWorld);
+            engine.getSystem(PhysicalSystem.class).setProcessing(runWorld);
+            engine.getSystem(RotationSystem.class).setProcessing(runWorld);
+            engine.getSystem(SpawningQueueSystem.class).setProcessing(runWorld);
+            engine.getSystem(UpgradeSystem.class).setProcessing(runWorld);
             world.update(delta);
-            engine.update(delta);
         }
 
-        // When timer is 10 seconds or less, post the PrepareScreenEvent only once.
-        if (world.getTimer() <= 10 && !prepareScreenPosted) {
-            prepareScreenPosted = true;
-            prepareScreenEvent = new PrepareScreenEvent(ScreenType.LEVEL_COMPLETE);
-            GameEventBus.getInstance().post(prepareScreenEvent);
-        }
+        boolean renderStore = screenManager.getCurrentScreenType() == UPGRADE;
+        upgradeStore.update(delta);
+        engine.getSystem(StoreSystem.class).setProcessing(renderStore);
+        engine.getSystem(TransactionSystem.class).setProcessing(renderStore);
 
-        if (world.getState() == WorldState.WON) {
-            if (sentEvent == null) {
-                sentEvent = new ChangeScreenEvent(ScreenType.LEVEL_COMPLETE);
-                GameEventBus.getInstance().post(sentEvent);
-            } else if (sentEvent.isHandled()) {
-                createNextLevel();
-                sentEvent = null;
-                prepareScreenPosted = false;
-            }
-        } else if (world.getState() == WorldState.LOST) {
-            if (sentEvent == null) {
-                sentEvent = new ChangeScreenEvent(ScreenType.LEVEL_LOST);
-                GameEventBus.getInstance().post(sentEvent);
-                isPrepareScreenPosted = true;
-            } else if (sentEvent.isHandled()) {
-                GameEventBus.getInstance().post(new PrepareScreenEvent(ScreenType.LEADERBOARD));
-                sentEvent = null;
-                isPrepareScreenPosted = false;
-            }
-        }
+        engine.update(delta);
     }
 
     public void createNextLevel() {
         world.nextLevel(player.getScore());
     }
 
-    /**
-     * When the game is lost this method removes all the existing entities from engine.
-     * It then creates new ones, adds them to the engine and assigns them to this.player.
-     * Then a new the World creates reuses the PlayScreen with Level 1
-     */
-    public void resetContext() {
-        engine.removeEntity(player.getSinker());
-        engine.removeEntity(player.getHook());
-        engine.removeEntity(player.getReel());
-        engine.removeEntity(player.getPlayerEntity());
-
-        this.player = initPlayer(engine);
-        initStartLevel(world);
-    }
-
     public void createTestConfig() {
-        player.getPlayerEntity().getComponent(ScoreComponent.class).setScore(99999);
+        player.getPlayerEntity().getComponent(ScoreComponent.class).setScore(9999);
         LevelConfig config = LevelConfigFactory.generateLevel(10, player.getScore());
         world.createLevel(config, 1337, 10f);
     }
@@ -160,31 +143,38 @@ public class GameContext implements IGameContext {
         engine.addSystem(new BackgroundRenderSystem(renderer));
         engine.addSystem(new AttachmentSystem());
         engine.addSystem(new StoreSystem(store.getTraderEntity()));
+        engine.addSystem(new HookSystem());
+        engine.addSystem(new FishingRodSystem());
         engine.addSystem(new RenderingSystem(batch, cam));
         engine.addSystem(new AnimationSystem());
-        engine.addSystem(new MovementSystem());
-        engine.addSystem(new HookSystem());
-        engine.addSystem(new PhysicalSystem());
-        engine.addSystem(new CollisionSystem());
-        engine.addSystem(new SpawningQueueSystem());
-        engine.addSystem(new RotationSystem());
-        // not ready yet:
 
-        // Register systems that are also listeners
+        HookInputSystem hookInputSystem = new HookInputSystem();
+        engine.addSystem(hookInputSystem);
+
+        engine.addSystem(new UpgradeSystem());
+
         ScoreSystem scoreSystem = new ScoreSystem();
         engine.addSystem(scoreSystem);
 
         FishingSystem fishSystem = new FishingSystem();
         engine.addSystem(fishSystem);
 
-        HookInputSystem hookInputSystem = new HookInputSystem();
-        engine.addSystem(hookInputSystem);
+        engine.addSystem(new MovementSystem());
+        engine.addSystem(new PhysicalSystem());
+        engine.addSystem(new CollisionSystem());
+        engine.addSystem(new SpawningQueueSystem());
+        engine.addSystem(new RotationSystem());
+
+        // Register systems that are also listeners
 
         TransactionSystem transactionSystem = new TransactionSystem();
         engine.addSystem(transactionSystem);
 
 
-        addListeners(scoreSystem, fishSystem, hookInputSystem, transactionSystem);
+        addListeners(
+            scoreSystem,
+            fishSystem,
+            hookInputSystem);
 
         if (Configuration.getInstance().isDebugMode()) {
             // toggle Debug Mode in Configuration
@@ -228,7 +218,7 @@ public class GameContext implements IGameContext {
         return (IPlayer) player;
     }
     public UpgradeStore getUpgradeStore() {
-        return store;
+        return upgradeStore;
     }
 
 

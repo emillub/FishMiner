@@ -1,5 +1,7 @@
 package com.github.FishMiner.ui.screens;
 
+import static com.github.FishMiner.ui.ports.out.ScreenType.MENU;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,6 +16,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.FishMiner.common.Configuration;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.github.FishMiner.domain.GameEventBus;
+import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.ui.ports.out.IGameContext;
@@ -53,7 +57,7 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreenTo(ScreenType.MENU);
+                GameEventBus.getInstance().post(new ChangeScreenEvent(MENU));
             }
         });
 

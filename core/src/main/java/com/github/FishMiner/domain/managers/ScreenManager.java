@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.GameContext;
-
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent;
@@ -28,13 +27,18 @@ public class ScreenManager {
 
     private ScreenManager(IScreenFactory screenFactory, FishMinerGame game, GameContext gameContext) {
         ValidateUtil.validateMultipleNotNull(
-             screenFactory,   "screenFactory",
-                    game,            "fishMinerGame",
-                    gameContext,     "gameContext"
+            screenFactory, "screenFactory",
+            game, "fishMinerGame",
+            gameContext, "gameContext"
         );
         this.gameContext = gameContext;
         this.screenFactory = screenFactory;
         this.game = game;
+        gameContext.setScreenManager(this);
+    }
+
+    public ScreenType getCurrentScreenType() {
+        return currentScreen.getScreenType();
     }
 
     public static ScreenManager getInstance(IScreenFactory screenFactory, FishMinerGame game) {
@@ -75,14 +79,17 @@ public class ScreenManager {
 
         IGameScreen newScreen;
         if (screenType == PLAY) {
-            // Always create a new instance for gameplay, as each level needs a new PlayScreen.
+            // Always create a new instance for gameplay because each level requires a fresh PlayScreen.
             newScreen = (IGameScreen) screenFactory.getScreen(screenType, gameContext);
+            Logger.getInstance().log(TAG, "Switching to new PLAY screen: " + newScreen);
         } else {
             if (cachedScreens.containsKey(screenType)) {
                 newScreen = (IGameScreen) cachedScreens.get(screenType);
+                Logger.getInstance().log(TAG, "Cached screen contained " + screenType + ".");
             } else {
                 newScreen = (IGameScreen) screenFactory.getScreen(screenType, gameContext);
                 cachedScreens.put(screenType, (Screen) newScreen);
+                Logger.getInstance().log(TAG, "Cached screens did not contain " + screenType + " so a new instance was added.");
             }
         }
         currentScreen = newScreen;
@@ -91,27 +98,23 @@ public class ScreenManager {
 
     /**
      * Replaces the Screen in cache if that screen is not the currentScreen,
-     * and registers that Screen to the GameEventBus
-     * @param type ScreenType name of a screen
+     * and registers that Screen to the GameEventBus.
      */
-    public void prepareNewScreen(ScreenType type) {
-        if (cachedScreens.containsKey(type)) {
-            Screen cached = cachedScreens.get(type);
-
+    public void prepareNewScreen(ScreenType screenType) {
+        Logger.getInstance().log(TAG, "Prepare screen called on: " + screenType);
+        if (cachedScreens.containsKey(screenType)) {
+            Screen cached = cachedScreens.get(screenType);
             if (currentScreen != null && cached == currentScreen) {
-                Logger.getInstance().debug(TAG, "Cannot prepare a new instance for " + type + " because it is currently active.");
+                Logger.getInstance().debug(TAG, "Cannot prepare a new instance for " + screenType + " because it is currently active.");
                 return;
             }
-
-            IGameScreen newScreen = (IGameScreen) screenFactory.getScreen(type, gameContext);
-            cachedScreens.put(type, (Screen) newScreen);
-
-            Logger.getInstance().log(TAG, "New instance for " + type + " prepared and cached.");
-        }
-        else { // if cachedScreen does not contain screenType
-            IGameScreen newScreen = (IGameScreen) screenFactory.getScreen(type, gameContext);
-            cachedScreens.put(type, (Screen) newScreen);
-            Logger.getInstance().log(TAG, "Screen " + type + " was not cached. New instance created and cached.");
+            IGameScreen newScreen = (IGameScreen) screenFactory.getScreen(screenType, gameContext);
+            cachedScreens.put(screenType, (Screen) newScreen);
+            Logger.getInstance().log(TAG, "New instance for " + screenType + " prepared and cached.");
+        } else {
+            IGameScreen newScreen = (IGameScreen) screenFactory.getScreen(screenType, gameContext);
+            cachedScreens.put(screenType, (Screen) newScreen);
+            Logger.getInstance().log(TAG, "Screen " + screenType + " was not cached. New instance created and cached.");
         }
     }
 
@@ -120,14 +123,11 @@ public class ScreenManager {
     }
 
     /**
-     * Start a new game from scratch. This resets the GameContext
-     * and clears any cached PlayScreen.
+     * Start a new game from scratch. This resets the GameContext and clears any cached PlayScreen.
      */
-    public void startNewGame() {
-        gameContext.resetContext();
+    public void clearCache() {
         // Remove any cached instance of the PLAY screen.
         cachedScreens.remove(ScreenType.PLAY);
-        switchScreenTo(PLAY);
     }
 
     /**
@@ -135,7 +135,7 @@ public class ScreenManager {
      * always create a new PlayScreen for the next level.
      */
     public void startNextLevel() {
-        gameContext.createNextLevel();
+        Logger.getInstance().log(TAG, "startNextLevel was called.");
         cachedScreens.remove(PLAY);
         switchScreenTo(PLAY);
     }
@@ -143,7 +143,7 @@ public class ScreenManager {
     /**
      * Returns an event listener for change screen events.
      */
-    public IGameEventListener<ChangeScreenEvent> getChangeScreenEvent() {
+    public IGameEventListener<ChangeScreenEvent> getChangeScreenListener() {
         return new IGameEventListener<ChangeScreenEvent>() {
             @Override
             public void onEvent(ChangeScreenEvent event) {

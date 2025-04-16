@@ -1,6 +1,7 @@
 package com.github.FishMiner.domain.states;
 
 public enum FishableObjectStates implements IState {
+    UNFISHABLE("UNFISHABLE"),
     FISHABLE("FISHABLE"),
     HOOKED("HOOKED"),
     REELING("REELING"),

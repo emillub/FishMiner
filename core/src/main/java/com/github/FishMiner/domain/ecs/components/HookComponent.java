@@ -9,7 +9,7 @@ import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 public class HookComponent implements Component {
     public float swingAngle = 0.5f;
     public float swingAmplitude = 1.0f;
-    public Entity attachedFishableEntity;
+    private Entity attachedFishableEntity;
     public Vector3 offset = new Vector3(0, -2, 1);
 
     public final int sinkerWeight = 2;
@@ -29,4 +29,5 @@ public class HookComponent implements Component {
     public boolean hasAttachedEntity() {
         return attachedFishableEntity != null;
     }
+    public Entity getAttachedEntity() { return attachedFishableEntity; }
 }

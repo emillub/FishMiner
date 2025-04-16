@@ -9,6 +9,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.common.Logger;
+import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.FishableComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
@@ -21,7 +22,7 @@ import com.github.FishMiner.domain.events.ecsEvents.FishHitEvent;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.states.FishableObjectStates;
-import com.github.FishMiner.domain.states.HookStates;
+import com.github.FishMiner.domain.states.FishingRodState;
 
 public class FishingSystem extends EntitySystem implements IGameEventListener<FishHitEvent> {
     public static final String TAG = "FishingSystem";
@@ -59,11 +60,11 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
 
         // Process the fish attached to the hook, if any.
         if (hook.hasAttachedEntity()) {
-            StateComponent<HookStates> hookState = hookEntity.getComponent(StateComponent.class);
+            StateComponent<FishingRodState> hookState = hookEntity.getComponent(StateComponent.class);
             TransformComponent hookPos = posMapper.get(hookEntity);
             AttachmentComponent hookParent = attachmentMapper.get(hookEntity);
 
-            Entity fishEntity = hook.attachedFishableEntity;
+            Entity fishEntity = hook.getAttachedEntity();
             StateComponent<FishableObjectStates> fishState = stateMapper.get(fishEntity);
             TransformComponent fishPos = posMapper.get(fishEntity);
             RotationComponent fishRot = rotMapper.get(fishEntity);
@@ -74,7 +75,7 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
 
 
             // 2. If the hook is REELING, update the fish's position relative to the hook.
-            if (hookState.state == HookStates.REELING) {
+            if (hookState.state == FishingRodState.REELING) {
                 Vector3 rotatedOffset = new Vector3(hook.offset)
                     .rotate(new Vector3(0, 0, 1), hook.swingAngle * MathUtils.radiansToDegrees);
 
@@ -86,7 +87,7 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
             }
 
             // 3. When the hook is RETURNED
-            if (hookState.state == HookStates.RETURNED) {
+            if (hookState.state == FishingRodState.RETURNED) {
                 if (fishComp != null) {
                     fishState.changeState(FishableObjectStates.CAPTURED);
                     Logger.getInstance().debug(TAG, "FishState was changed to CAPTURED");
@@ -96,7 +97,7 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
                 } else {
                     fishState.changeState(FishableObjectStates.ATTACKING);
                 }
-                hook.attachedFishableEntity = null;
+                hook.detachEntity();
             }
         }
     }
@@ -107,20 +108,14 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
         if (event.isHandled()) {
             return;
         }
-        if (hookEntity == null) {
-            ImmutableArray<Entity> hooks = getEngine().getEntitiesFor(
-                Family.all(HookComponent.class, TransformComponent.class).get()
-            );
-            if (hooks.size() > 0) {
-                hookEntity = hooks.first();
-            }
-        }
+        ValidateUtil.validateNotNull(event.getSource(), TAG + "-> event.getSource() (hookEntity)");
+        hookEntity = event.getSource();
 
         // When a FishHitEvent is received, attach the fish to the hook if none is attached.
         if (hookEntity != null) {
             HookComponent hook = hookMapper.get(hookEntity);
-            if (hook.attachedFishableEntity == null) {
-                hook.attachedFishableEntity = event.getTarget();
+            if (hook.hasAttachedEntity()) {
+                hook.attachEntity(event.getTarget());
                 StateComponent<FishableObjectStates> fishState = stateMapper.get(event.getTarget());
                 fishState.changeState(FishableObjectStates.HOOKED);
                 event.setHandled();

@@ -9,13 +9,13 @@ import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
-import com.github.FishMiner.domain.ecs.components.PlayerComponent;
+import com.github.FishMiner.domain.ecs.components.FishingRodComponent;
 import com.github.FishMiner.domain.ecs.components.ReelComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.states.HookStates;
+import com.github.FishMiner.domain.states.FishingRodState;
 
 public class HookSystem extends IteratingSystem {
     private boolean initialized = false;
@@ -47,13 +47,13 @@ public class HookSystem extends IteratingSystem {
         TransformComponent hookPos = pm.get(entity);
         RotationComponent hookRot = rm.get(entity);
         VelocityComponent hookVel = vm.get(entity);
-        StateComponent<HookStates> hookState = sm.get(entity);
+        StateComponent<FishingRodState> hookState = sm.get(entity);
         BoundsComponent hookBounds = bm.get(entity);
         AttachmentComponent hookAttachment = am.get(entity);
 
         Entity player = hookAttachment.getParent();
-        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
-        Entity reelEntity = playerComponent.getReel();
+        FishingRodComponent fishingRodComponent = player.getComponent(FishingRodComponent.class);
+        Entity reelEntity = fishingRodComponent.getReel();
         ReelComponent reel = (reelEntity != null) ? reelMapper.get(reelEntity) : null;
 
         if (!initialized) {
@@ -67,7 +67,7 @@ public class HookSystem extends IteratingSystem {
             hookVel, "Hook Velocity cannot be null"
         );
 
-        if (hookState.state == HookStates.SWINGING) {
+        if (hookState.state == FishingRodState.SWINGING) {
             hook.swingAngle = hook.swingAmplitude * MathUtils.sin(time);
             float offset = 80.0f;
             float posX = hook.anchorPoint.x + offset * MathUtils.sin(hook.swingAngle);
@@ -78,50 +78,50 @@ public class HookSystem extends IteratingSystem {
             float dy = posY - hook.anchorPoint.y;
             hookRot.angle = MathUtils.atan2(dy, dx) * MathUtils.radiansToDegrees + 90;
 
-            updateReelState(reelEntity, HookStates.SWINGING); // 🔁 keep reel static
+            updateReelState(reelEntity, FishingRodState.SWINGING); // 🔁 keep reel static
         }
 
         float lineLength = (reel != null) ? reel.lineLength : 100f;
         float returnSpeed = (reel != null) ? reel.returnSpeed : 100f;
 
-        if (hookState.state == HookStates.FIRE) {
-            if (hookPos.pos.dst(hook.anchorPoint) >= lineLength || hook.attachedFishableEntity != null) {
-                hookState.changeState(HookStates.REELING);
-                updateReelState(reelEntity, HookStates.REELING);
+        if (hookState.state == FishingRodState.FIRE) {
+            if (hookPos.pos.dst(hook.anchorPoint) >= lineLength || hook.hasAttachedEntity()) {
+                hookState.changeState(FishingRodState.REELING);
+                updateReelState(reelEntity, FishingRodState.REELING);
             } else {
                 hookVel.velocity.set(hook.sinkerWeight, hook.sinkerWeight).setAngleDeg(hookRot.angle - 90);
                 hookVel.velocity.scl(returnSpeed);
                 hookBounds.bounds.setPosition(hookPos.pos.x, hookPos.pos.y);
 
-                updateReelState(reelEntity, HookStates.FIRE); // 🔁 animate while firing down
+                updateReelState(reelEntity, FishingRodState.FIRE); // 🔁 animate while firing down
             }
         }
 
-        if (hookState.state == HookStates.REELING) {
+        if (hookState.state == FishingRodState.REELING) {
             if (hookPos.pos.y < initialPosition) {
                 hookVel.velocity.set(hook.sinkerWeight, hook.sinkerWeight)
                     .setAngleDeg(hookRot.angle - 90)
                     .scl(-returnSpeed);
 
-                updateReelState(reelEntity, HookStates.REELING); // 🔁 animate reel while reeling
+                updateReelState(reelEntity, FishingRodState.REELING); // 🔁 animate reel while reeling
             } else {
-                hookState.changeState(HookStates.RETURNED);
-                updateReelState(reelEntity, HookStates.RETURNED); // 🔁 animate returned state
+                hookState.changeState(FishingRodState.RETURNED);
+                updateReelState(reelEntity, FishingRodState.RETURNED); // 🔁 animate returned state
             }
         }
 
-        if (hookState.state == HookStates.RETURNED) {
+        if (hookState.state == FishingRodState.RETURNED) {
             if (!hook.hasAttachedEntity()) {
-                hookState.changeState(HookStates.SWINGING);
-                updateReelState(reelEntity, HookStates.SWINGING); // ⏸️ back to idle
+                hookState.changeState(FishingRodState.SWINGING);
+                updateReelState(reelEntity, FishingRodState.SWINGING); // ⏸️ back to idle
             }
         }
     }
 
-    private void updateReelState(Entity reelEntity, HookStates newHookState) {
+    private void updateReelState(Entity reelEntity, FishingRodState newHookState) {
         if (reelEntity == null) return;
 
-        StateComponent<HookStates> reelState = reelEntity.getComponent(StateComponent.class);
+        StateComponent<FishingRodState> reelState = reelEntity.getComponent(StateComponent.class);
         if (reelState == null) return;
 
         if (reelState.state != newHookState) {

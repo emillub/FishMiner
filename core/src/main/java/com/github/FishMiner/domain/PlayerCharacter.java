@@ -2,8 +2,7 @@ package com.github.FishMiner.domain;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.github.FishMiner.domain.ecs.components.InventoryComponent;
-import com.github.FishMiner.domain.ecs.components.PlayerComponent;
+import com.github.FishMiner.domain.ecs.components.FishingRodComponent;
 import com.github.FishMiner.domain.ecs.components.ScoreComponent;
 import com.github.FishMiner.domain.factories.playerFactory.PlayerFactory;
 import com.github.FishMiner.common.ValidateUtil;
@@ -32,19 +31,27 @@ public class PlayerCharacter implements IPlayer {
     }
 
     public Entity getHook() {
-        return playerEntity.getComponent(PlayerComponent.class).getHook();
+        return playerEntity.getComponent(FishingRodComponent.class).getHook();
     }
     public Entity getSinker() {
-        return playerEntity.getComponent(PlayerComponent.class).getSinker();
+        return playerEntity.getComponent(FishingRodComponent.class).getSinker();
     }
 
     public Entity getReel() {
-        return playerEntity.getComponent(PlayerComponent.class).getReel();
+        return playerEntity.getComponent(FishingRodComponent.class).getReel();
     }
 
     @Override
     public int getScore() {
         return (int) playerEntity.getComponent(ScoreComponent.class).getScore();
+    }
+
+    public void updateEndOfRoundScore(float remainingScore) {
+        ValidateUtil.validateNegativeFloat(remainingScore, "remainingScore");
+        float postiveRemainingScore = -remainingScore;
+        playerEntity
+            .getComponent(ScoreComponent.class)
+            .setScore((float) postiveRemainingScore);
     }
 
 

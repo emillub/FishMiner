@@ -8,6 +8,7 @@ import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
+import com.github.FishMiner.domain.ecs.components.WeightComponent;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 
 
@@ -16,6 +17,7 @@ public class MovementSystem extends IteratingSystem {
     private ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
     private ComponentMapper<StateComponent> sm = ComponentMapper.getFor(StateComponent.class);
+    private ComponentMapper<WeightComponent> wm = ComponentMapper.getFor(WeightComponent.class);
 
     public MovementSystem() {
         super(Family.all(TransformComponent.class, VelocityComponent.class).get());
@@ -27,10 +29,9 @@ public class MovementSystem extends IteratingSystem {
         VelocityComponent velocity = vm.get(entity);
 
         if (position != null && velocity != null) {
-            position.pos.x += velocity.velocity.x * deltaTime;
-            position.pos.y += velocity.velocity.y * deltaTime;
+            position.pos.x += (velocity.velocity.x) * deltaTime;
+            position.pos.y += (velocity.velocity.y) * deltaTime;
         }
-
         StateComponent fishState = sm.get(entity);
         if (fishState != null && position != null && fishState.getState().equals(FishableObjectStates.FISHABLE)) {
             position.rotation = 0f;

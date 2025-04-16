@@ -1,6 +1,8 @@
 package com.github.FishMiner;
 
 import static com.github.FishMiner.ui.ports.out.ScreenType.MENU;
+import static com.github.FishMiner.ui.ports.out.ScreenType.PLAY;
+import static com.github.FishMiner.ui.ports.out.ScreenType.TEST;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.audio.Music;
@@ -43,7 +45,6 @@ public class FishMinerGame extends Game {
             new LeaderboardPoster(leaderBoardService)   // and this one too
         );
 
-
         MusicManager musicManager = new MusicManager();
         musicManager.applyVolume(Configuration.getInstance().getMusicVolume());
 
@@ -56,8 +57,8 @@ public class FishMinerGame extends Game {
         GameEventBus.getInstance().register(requestManager.getRegistrationRequestListener());
         GameEventBus.getInstance().register(requestManager.getLeaderboardFetchRequestListener());
         GameEventBus.getInstance().register(requestManager.getLeaderboardPostRequestListener());
-        GameEventBus.getInstance().register(screenManager.getChangeScreenEvent());
         GameEventBus.getInstance().register(screenManager.getPrepareScreenEvent());
+        GameEventBus.getInstance().register(screenManager.getChangeScreenListener());
         GameEventBus.getInstance().register(musicManager);
 
         screenManager.switchScreenTo(MENU);

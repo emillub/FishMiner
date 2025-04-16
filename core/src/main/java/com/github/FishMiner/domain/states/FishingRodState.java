@@ -1,6 +1,6 @@
 package com.github.FishMiner.domain.states;
 
-public enum HookStates implements IState {
+public enum FishingRodState implements IState {
     SWINGING("swinging"),
     FIRE("fire"),
     REELING("reeling"),
@@ -8,7 +8,7 @@ public enum HookStates implements IState {
 
     private final String animationKey;
 
-    HookStates(String animationKey) {
+    FishingRodState(String animationKey) {
         this.animationKey = animationKey;
     }
 

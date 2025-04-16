@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.github.FishMiner.common.Configuration;
 
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.ScoreEvent;
@@ -19,6 +20,7 @@ import com.github.FishMiner.ui.ports.out.ScreenType;
 import java.util.Locale;
 
 public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
+    private static final String TAG = "LevelCompleteScreen";
     private float score;
     private float transitionTimer = 0f;
     private boolean sentScreenRequest;
@@ -33,8 +35,8 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
     @Override
     public void show() {
         super.show();
-        float finalScore = gameContext.getWorld().getScore();
-        String winMessage = String.format(Locale.US, "You won with %.0f points. Good job!", finalScore);
+        // if the event does not work correctly, use this -> float finalScore = gameContext.getScore();
+        String winMessage = String.format(Locale.US, "You won with %.0f points. Good job!", score);
         Label winLabel = new Label(winMessage, super.skin);
         winLabel.setFontScale(2f);
         winLabel.setAlignment(Align.center);
@@ -96,6 +98,7 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
             @Override
             public void onEvent(ScoreEvent event) {
                 if (event.isHandled()) return;
+                Logger.getInstance().log(TAG, "Score updated. Prev Score: " + score + ". Current Score: " + event.getScore());
                 score = event.getScore();
             }
             @Override

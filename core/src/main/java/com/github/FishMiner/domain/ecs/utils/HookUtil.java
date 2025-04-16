@@ -7,8 +7,10 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.FishableComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.SinkerComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
+import com.github.FishMiner.domain.ecs.components.WeightComponent;
 
 
 public final class HookUtil {
@@ -35,4 +37,25 @@ public final class HookUtil {
         }
         return hook;
     }
+
+
+    /**
+     * Calculates the fire speed for the hook.
+     */
+    public static float calculateFireSpeed(float hookBaseSpeed, SinkerComponent sinkerComp) {
+        // If a sinker is installed, use its weight as a bonus; otherwise, default bonus is 20f.
+        float bonusSpeed = (sinkerComp != null) ? sinkerComp.weight : 20f;
+        return hookBaseSpeed + bonusSpeed;
+    }
+
+    /**
+     * Calculates the return speed by reducing the base return speed by the weight of the fish,
+     * ensuring a minimum return speed.
+     */
+    public static float calculateReturnSpeed(float baseReturnSpeed, WeightComponent fishWeightComp) {
+        // The minimum return speed is set to 20f.
+        return Math.max(baseReturnSpeed - fishWeightComp.weight, 20f);
+    }
+
+
 }

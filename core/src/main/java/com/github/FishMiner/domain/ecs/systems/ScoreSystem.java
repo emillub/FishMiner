@@ -108,7 +108,7 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
 
                         SharkComponent sharkComp = sharkCompMapper.get(fishedEntity);
                         float scoreDifference = (sharkComp == null) ? fishComp.getValue() : fishComp.getValue() * sharkComp.getDamage();
-                        scoreComp.setScore(scoreDifference);
+                        scoreComp.addScore(scoreDifference);
                         GameEventBus.getInstance().post(new ScoreEvent(scoreComp.getScore()));
                         GameEventBus.getInstance().post(new DisplayScoreValueEvent(
                             scoreDifference,

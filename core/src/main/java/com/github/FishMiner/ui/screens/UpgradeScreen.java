@@ -23,11 +23,15 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     private final List<Entity> upgradeProducts;
     private final IPlayer player;
     private final UpgradeStore upgradeStore;
+    private int score;
+    private int level;
 
     public UpgradeScreen(IGameContext gameContext) {
         super(gameContext);
         screenType = ScreenType.UPGRADE;
         player = gameContext.getPlayer();
+        score = (int) gameContext.getWorld().getScore();
+        level = gameContext.getWorld().getLevel();
         // Retrieve the upgrade store from GameContext (which now holds an instance of UpgradeStore)
         this.upgradeStore = gameContext.getUpgradeStore();
         this.upgradeProducts = upgradeStore.getUpgradeProducts();
@@ -43,7 +47,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
         Table table = new Table();
         table.setFillParent(true);
         table.top().padTop(40);
-        table.setBackground(skin.newDrawable("white", 0.6f, 0.85f, 1f, 0.8f));
+        //table.setBackground(skin.newDrawable("white", 0.6f, 0.85f, 1f, 0.8f));
         stage.addActor(table);
 
         Label title = new Label("Upgrade Store", skin);
@@ -71,21 +75,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
             Label itemLabel = new Label(productName + " (" + productPrice + ")", skin);
             itemLabel.setFontScale(1.1f);
 
-            final TextButton buyButton = new TextButton("Buy", skin);
-            buyButton.pad(6);
-
-            // When the buy button is pressed, create and post a TransactionEvent.
-            String finalProductName = productName;
-            buyButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    // Assuming the player provides its underlying entity via getEntity()
-                    TransactionEvent txEvent = new TransactionEvent(player.getPlayerEntity(), product);
-                    GameEventBus.getInstance().post(txEvent);
-                    buyButton.setDisabled(true);
-                    buyButton.setText(finalProductName + " (Processing)");
-                }
-            });
+            final TextButton buyButton = getTextButton(product, productName);
 
             Table itemRow = new Table();
             itemRow.add(itemLabel).left().expandX().padRight(15);
@@ -94,7 +84,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
             table.add(itemRow).padBottom(20).fillX().width(400).row();
         }
 
-        TextButton continueButton = new TextButton("Continue", skin);
+        TextButton continueButton = new TextButton("Proceed to level " + level, skin);
         continueButton.getLabel().setFontScale(1.3f);
 
         continueButton.addListener(new ChangeListener() {
@@ -110,11 +100,32 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
         table.add(continueButton).padTop(40).width(240).height(70).colspan(2).center().row();
     }
 
+    private TextButton getTextButton(Entity product, String productName) {
+        final TextButton buyButton = new TextButton("Buy", skin);
+        buyButton.pad(6);
+
+        // When the buy button is pressed, create and post a TransactionEvent.
+        String finalProductName = productName;
+        buyButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                // Assuming the player provides its underlying entity via getEntity()
+                if (event.isHandled()) return;
+                TransactionEvent txEvent = new TransactionEvent(player.getPlayerEntity(), product);
+                GameEventBus.getInstance().post(txEvent);
+                buyButton.setDisabled(true);
+                buyButton.setText(finalProductName + " (Processing)");
+            }
+        });
+        return buyButton;
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
+        gameContext.update(delta);
     }
 }

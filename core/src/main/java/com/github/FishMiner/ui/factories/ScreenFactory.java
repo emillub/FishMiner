@@ -32,6 +32,7 @@ public class ScreenFactory implements IScreenFactory {
             case LEVEL_LOST -> newScreen = new LevelLostScreen(gameContext);
             case SETTINGS -> newScreen = new SettingScreen(gameContext);
             case UPGRADE -> newScreen = new UpgradeScreen(gameContext);
+            case TEST -> newScreen = new PlayScreen(gameContext);
             default ->
                 throw new IllegalArgumentException(TAG + "No screen exists for type: " + type);
         };

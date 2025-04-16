@@ -7,13 +7,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.BoundsComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
-import com.github.FishMiner.domain.ecs.components.PlayerComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.states.HookStates;
+import com.github.FishMiner.domain.ecs.components.WeightComponent;
+import com.github.FishMiner.domain.states.FishingRodState;
 
 /**
  * This is not used any longer. Only needed for testing, so do not use it otherwise.
@@ -34,11 +34,13 @@ public class HookFactory {
         BoundsComponent boundsComponent = engine.createComponent(BoundsComponent.class);
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
         VelocityComponent velocityComponent = engine.createComponent(VelocityComponent.class);
-        StateComponent<HookStates> stateComponent = engine.createComponent(StateComponent.class);
+        StateComponent<FishingRodState> stateComponent = engine.createComponent(StateComponent.class);
         AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
+        WeightComponent weightComponent = engine.createComponent(WeightComponent.class);
 
         textureComponent.setRegion("hook_1cols_1rows.png");
-        stateComponent.changeState(HookStates.SWINGING);
+        stateComponent.changeState(FishingRodState.SWINGING);
+        weightComponent.weight = 100f;
         velocityComponent.velocity = new Vector2(0, 0);
 
         hookComponent.anchorPoint.set(anchorPoint);
@@ -55,6 +57,7 @@ public class HookFactory {
         );
 
         hook.add(textureComponent);
+        hook.add(weightComponent);
         hook.add(hookComponent);
         hook.add(transformComponent);
         hook.add(rotationComponent);

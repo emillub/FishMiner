@@ -28,6 +28,7 @@ public abstract class AbstractScreen implements Screen {
     protected BitmapFont font;
     protected Stage stage;
     protected Skin skin;
+
     public AbstractScreen(IGameContext gameContext) {
         this.gameContext = gameContext;
         stage = new Stage(new FitViewport(
@@ -49,6 +50,7 @@ public abstract class AbstractScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        cam.update();
     }
 
     @Override

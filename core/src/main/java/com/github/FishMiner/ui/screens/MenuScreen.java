@@ -1,6 +1,7 @@
 package com.github.FishMiner.ui.screens;
 
 import static com.github.FishMiner.domain.events.soundEvents.MusicEvent.MusicCommand.PLAY_BACKGROUND;
+import static com.github.FishMiner.ui.ports.out.ScreenType.PLAY;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -52,7 +53,8 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.PLAY));
+                //ScreenManager.getInstance().switchScreenTo(ScreenType.PLAY);
+                GameEventBus.getInstance().post(new ChangeScreenEvent(PLAY));
             }
         });
 

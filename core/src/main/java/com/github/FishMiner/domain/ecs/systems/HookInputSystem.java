@@ -7,7 +7,7 @@ import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.events.ecsEvents.HookInputEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.domain.states.HookStates;
+import com.github.FishMiner.domain.states.FishingRodState;
 
 public class HookInputSystem extends EntitySystem implements IGameEventListener<HookInputEvent> {
     private static final String TAG = "HookInputSystem";
@@ -27,10 +27,10 @@ public class HookInputSystem extends EntitySystem implements IGameEventListener<
         if (!event.isHandled()) {
             Entity hookEntity = event.getTarget();
             ValidateUtil.validateNotNull(hookEntity,  TAG + " -> hookEntity");
-            StateComponent<HookStates> stateComponent =  hookEntity.getComponent(StateComponent.class);
+            StateComponent<FishingRodState> stateComponent =  hookEntity.getComponent(StateComponent.class);
             ValidateUtil.validateNotNull(stateComponent, TAG + " -> StateComponent");
-            if (stateComponent.state == HookStates.SWINGING) {
-                stateComponent.changeState(HookStates.FIRE);
+            if (stateComponent.state == FishingRodState.SWINGING) {
+                stateComponent.changeState(FishingRodState.FIRE);
             }
             event.setHandled();
         }

@@ -2,7 +2,6 @@ package com.github.FishMiner.ui.screens;
 
 import static com.github.FishMiner.domain.events.soundEvents.MusicEvent.MusicCommand.PLAY_GAME;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
@@ -35,7 +34,7 @@ import com.github.FishMiner.ui.ports.out.ScreenType;
  * PlayScreen handles gameplay, including ECS initialization, rendering, and input.
  * It also provides a full-width control window with a Menu button to open an overlay.
  */
-public class PlayScreen extends AbstractScreen implements IGameScreen {
+public class TestScreen extends AbstractScreen implements IGameScreen {
     private static final String TAG = "PlayScreen";
     private static final float OVERLAY_ALPHA = 0.6f;
     private static final int BUTTON_WIDTH = 200;
@@ -45,7 +44,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
     private Table pauseOverlay;
     private boolean overlayVisible = false;
 
-    public PlayScreen(IGameContext gameContext) {
+    public TestScreen(IGameContext gameContext) {
         super(gameContext);
         super.screenType = ScreenType.PLAY;
         world = gameContext.getWorld();
@@ -69,7 +68,9 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         cam.update();
 
-
+        if (!world.isPaused()) {
+            gameContext.update(delta);
+        }
         super.stage.act(delta);
         super.stage.draw();
         gameContext.update(delta);

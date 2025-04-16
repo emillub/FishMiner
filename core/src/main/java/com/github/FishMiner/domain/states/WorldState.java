@@ -4,5 +4,5 @@ public enum WorldState {
     RUNNING,
     PAUSED,
     WON,
-    LOST
+    LOST,
 }

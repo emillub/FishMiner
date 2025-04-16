@@ -35,8 +35,10 @@ public class RotationSystem extends IteratingSystem {
 
         if (hookTrans != null && hook != null && state != null) {
             if (hook.hasAttachedEntity()) {
-                TransformComponent attachEntityPos = pm.get(hook.attachedFishableEntity);
-                StateComponent fishState = sm.get(hook.attachedFishableEntity);
+                Entity attachedFishableEntity = hook.getAttachedEntity();
+                TransformComponent attachEntityPos = pm.get(attachedFishableEntity);
+                StateComponent fishState = sm.get(attachedFishableEntity);
+
                 float targetAngle = getRotationAngle(hook.anchorPoint, attachEntityPos.pos);
                 if (fishState.getState().equals(FishableObjectStates.HOOKED)) {
                     attachEntityPos.rotation = MathUtils.lerpAngleDeg(

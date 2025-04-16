@@ -12,7 +12,7 @@ import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ecs.components.InventoryComponent;
-import com.github.FishMiner.domain.ecs.components.PlayerComponent;
+import com.github.FishMiner.domain.ecs.components.FishingRodComponent;
 import com.github.FishMiner.domain.ecs.components.ReelComponent;
 import com.github.FishMiner.domain.ecs.components.ScoreComponent;
 import com.github.FishMiner.domain.ecs.components.SinkerComponent;
@@ -30,7 +30,7 @@ public class TransactionSystem extends EntitySystem implements IGameEventListene
     ComponentMapper<TraderComponent> tm = ComponentMapper.getFor(TraderComponent.class);
     ComponentMapper<StateComponent> stm = ComponentMapper.getFor(StateComponent.class);
     ComponentMapper<ScoreComponent> scm = ComponentMapper.getFor(ScoreComponent.class);
-    ComponentMapper<PlayerComponent> pm = ComponentMapper.getFor(PlayerComponent.class);
+    ComponentMapper<FishingRodComponent> pm = ComponentMapper.getFor(FishingRodComponent.class);
     ComponentMapper<TransformComponent> transMapper = ComponentMapper.getFor(TransformComponent.class);
     ComponentMapper<UpgradeComponent> upgradeMapper = ComponentMapper.getFor(UpgradeComponent.class);
     ComponentMapper<InventoryComponent> invMapper = ComponentMapper.getFor(InventoryComponent.class);
@@ -104,7 +104,7 @@ public class TransactionSystem extends EntitySystem implements IGameEventListene
 
             // Finalize the transaction when flight animation is complete.
             if (entry.flyTime >= FLY_DURATION && !entry.transactionCompleted) {
-                PlayerComponent player = pm.get(playerEntity);
+                FishingRodComponent player = pm.get(playerEntity);
                 InventoryComponent playerInventory = invMapper.get(playerEntity);
                 ValidateUtil.validateNotNull(player, "player");
 

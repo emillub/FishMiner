@@ -5,7 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.common.Logger;
 
-public class PlayerComponent implements Component {
+public class FishingRodComponent implements Component {
     private static final String TAG = "PlayerComponent";
     private Entity hook;
     private Entity reel;

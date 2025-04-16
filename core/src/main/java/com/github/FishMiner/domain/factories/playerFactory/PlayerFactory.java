@@ -4,27 +4,20 @@ import static com.github.FishMiner.domain.factories.ReelTypes.BASIC_REEL;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.math.Vector2;
 
 import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
-import com.github.FishMiner.domain.ecs.components.BoundsComponent;
-import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.InventoryComponent;
-import com.github.FishMiner.domain.ecs.components.PlayerComponent;
+import com.github.FishMiner.domain.ecs.components.FishingRodComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
-import com.github.FishMiner.domain.ecs.components.RotationComponent;
-import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
-import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 
 import com.github.FishMiner.domain.ecs.components.*;
 
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 import com.github.FishMiner.domain.factories.ReelTypes;
-import com.github.FishMiner.domain.states.HookStates;
 
 public class PlayerFactory {
     private static final String TAG = "PlayerFactory";
@@ -39,11 +32,11 @@ public class PlayerFactory {
         Entity reelEntity = createReelEntity(engine, playerEntity);
 
 
-        PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
-        playerComponent.setHook(hookEntity);
-        playerComponent.setReel(reelEntity);
+        FishingRodComponent fishingRodComponent = playerEntity.getComponent(FishingRodComponent.class);
+        fishingRodComponent.setHook(hookEntity);
+        fishingRodComponent.setReel(reelEntity);
 
-        playerEntity.add(playerComponent);
+        playerEntity.add(fishingRodComponent);
 
         engine.addEntity(playerEntity);
         engine.addEntity(hookEntity);
@@ -56,7 +49,7 @@ public class PlayerFactory {
 
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
         TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
-        PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
+        FishingRodComponent fishingRodComponent = engine.createComponent(FishingRodComponent.class);
         ScoreComponent scoreComponent = engine.createComponent(ScoreComponent.class);
         InventoryComponent inventoryComponent = engine.createComponent(InventoryComponent.class);
 
@@ -65,13 +58,13 @@ public class PlayerFactory {
         transformComponent.pos.y = posY + textureComponent.getFrameHeight() * 0.3f;
         transformComponent.pos.z = 1;
 
-        playerComponent.hookAnchorPoint.x = transformComponent.pos.x + textureComponent.getFrameWidth() * 0.5f;
-        playerComponent.hookAnchorPoint.y = transformComponent.pos.y + textureComponent.getFrameHeight() * 0.5f;
-        playerComponent.hookAnchorPoint.z = transformComponent.pos.z + 1;
+        fishingRodComponent.hookAnchorPoint.x = transformComponent.pos.x + textureComponent.getFrameWidth() * 0.5f;
+        fishingRodComponent.hookAnchorPoint.y = transformComponent.pos.y + textureComponent.getFrameHeight() * 0.5f;
+        fishingRodComponent.hookAnchorPoint.z = transformComponent.pos.z + 1;
 
         player.add(transformComponent);
         player.add(textureComponent);
-        player.add(playerComponent);
+        player.add(fishingRodComponent);
         player.add(scoreComponent);
         player.add(inventoryComponent);
 
@@ -133,22 +126,23 @@ public class PlayerFactory {
     //}
 
     private static Entity createHookEntity(PooledEngine engine, Entity player) {
-        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+        FishingRodComponent fishingRodComponent = player.getComponent(FishingRodComponent.class);
         TransformComponent playerPos = player.getComponent(TransformComponent.class);
-        Entity hook = HookFactory.createEntity(engine, (int) playerPos.pos.z, playerComponent.hookAnchorPoint);
+        Entity hook = HookFactory.createEntity(engine, (int) playerPos.pos.z, fishingRodComponent.hookAnchorPoint);
 
         AttachmentComponent hookAttachment = hook.getComponent(AttachmentComponent.class);
         hookAttachment.setParentEntity(player);
+        hookAttachment.offset = new Vector3(1, 80f, 1);
 
         return hook;
     }
     private static Entity createReelEntity(PooledEngine engine, Entity player) {
         TransformComponent playerPos = player.getComponent(TransformComponent.class);
-        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+        FishingRodComponent fishingRodComponent = player.getComponent(FishingRodComponent.class);
 
         // Use the BASIC_REEL enum to get depth level and return speed
         ReelTypes reelType = BASIC_REEL;
-        float anchorY = playerComponent.hookAnchorPoint.y;
+        float anchorY = fishingRodComponent.hookAnchorPoint.y;
 
         // Create the reel entity and fetch its component
         Entity reel = ReelFactory.createEntity(engine, reelType);

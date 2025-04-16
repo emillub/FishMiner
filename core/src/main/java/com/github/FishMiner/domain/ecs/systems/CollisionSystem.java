@@ -20,7 +20,7 @@ import java.util.Set;
 import com.badlogic.ashley.core.EntitySystem;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.states.FishableObjectStates;
-import com.github.FishMiner.domain.states.HookStates;
+import com.github.FishMiner.domain.states.FishingRodState;
 
 
 public class CollisionSystem extends EntitySystem {
@@ -70,31 +70,30 @@ public class CollisionSystem extends EntitySystem {
             }
         }
         HookComponent hook = hookMapper.get(hookEntity);
-        StateComponent<HookStates> hookState = hookEntity.getComponent(StateComponent.class);
+        StateComponent<FishingRodState> hookState = hookEntity.getComponent(StateComponent.class);
         TransformComponent hookPos = posMapper.get(hookEntity);
         BoundsComponent hookBounds = hookEntity.getComponent(BoundsComponent.class);
 
         // --- Collision Detection ---
         // If the hook is in FIRE state and no fish is attached, check for collisions.
-        if (hookState.state == HookStates.FIRE && hook.attachedFishableEntity == null) {
+        if (hookState.state == FishingRodState.FIRE && !hook.hasAttachedEntity()) {
             // Get all current fish entities; this will include dynamically spawned ones.
             ImmutableArray<Entity> fishEntities = getEngine().getEntitiesFor(fishFamily);
-            for (Entity fish : fishEntities) {
-                StateComponent<FishableObjectStates> fishState = fish.getComponent(StateComponent.class);
+            for (Entity fishableEntity : fishEntities) {
+                StateComponent<FishableObjectStates> fishState = fishableEntity.getComponent(StateComponent.class);
                 // Only consider fish that are available to be hooked.
                 if (fishState.getState() != FishableObjectStates.FISHABLE) {
                     continue;
                 }
-                BoundsComponent fishBounds = fish.getComponent(BoundsComponent.class);
+                BoundsComponent fishBounds = fishableEntity.getComponent(BoundsComponent.class);
                 // Use your helper method for collision detection.
                 if (hookBounds.overlaps(fishBounds)) {
-                    System.out.println("HOOK OVERLAPS FISH! Attaching fish " + fish);
                     // Attach the fish to the hook and update states.
-                    hook.attachedFishableEntity = fish;
+                    hook.attachEntity(fishableEntity);
                     fishState.changeState(FishableObjectStates.HOOKED);
-                    hookState.changeState(HookStates.REELING);
+                    hookState.changeState(FishingRodState.REELING);
                     // Optionally post an event.
-                    FishHitEvent event = new FishHitEvent(fish);
+                    FishHitEvent event = new FishHitEvent(fishableEntity);
                     event.setSource(hookEntity);
                     GameEventBus.getInstance().post(event);
                     break; // attach only one fish at a time
