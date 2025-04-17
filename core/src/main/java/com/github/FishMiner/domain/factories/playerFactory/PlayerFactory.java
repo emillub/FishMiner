@@ -28,6 +28,7 @@ public class PlayerFactory {
         PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
         playerComponent.setHook(hookEntity);
         playerComponent.setReel(reelEntity);
+//        playerComponent.setSinker(sinkerEntity);
 
         engine.addEntity(playerEntity);
         engine.addEntity(hookEntity);

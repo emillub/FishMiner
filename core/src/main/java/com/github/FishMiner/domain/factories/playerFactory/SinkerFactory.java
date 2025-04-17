@@ -1,6 +1,5 @@
 package com.github.FishMiner.domain.factories.playerFactory;
 
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
@@ -30,6 +29,7 @@ public class SinkerFactory {
         WeightComponent weightComponent = engine.createComponent(WeightComponent.class);
         UpgradeComponent upgradeComponent = engine.createComponent(UpgradeComponent.class);
 
+        // Upgrade logic
         if (price == 0) {
             upgradeComponent.setUpgraded(true);
             upgradeComponent.setPrice(0);
@@ -38,9 +38,13 @@ public class SinkerFactory {
             upgradeComponent.setPrice(price);
         }
 
+        // Basic visuals and config
         textureComponent.setRegion(texturePath);
         transformComponent.scale = new Vector2(scale, scale);
-        transformComponent.pos.z = 1;
+
+        // ✅ Set a safe default position to avoid spawning on the boat
+        transformComponent.pos.set(-100f, -100f, 1f); // Place off-screen until attached
+
         sinkerComponent.name = name;
         weightComponent.weight = weight;
 
@@ -56,7 +60,7 @@ public class SinkerFactory {
 
     protected static Entity createEntity(PooledEngine engine, SinkerTypes type) {
         validateSinkerType(type);
-        String path =  type.getTexturePath();
+        String path = type.getTexturePath();
         String name = type.getName();
         float weight = type.getWeight();
         int price = type.getPrice();
@@ -68,7 +72,7 @@ public class SinkerFactory {
     private static void validateSinkerType(SinkerTypes sinkerType) {
         if (sinkerType.getName().isBlank()) {
             IllegalArgumentException exception = new IllegalArgumentException("Sinker name cannot be blank");
-            Logger.getInstance().error(TAG, "woops, add name the the SinkerType", exception);
+            Logger.getInstance().error(TAG, "woops, add name to the SinkerType", exception);
             throw exception;
         }
         ValidateUtil.validateNotNull(sinkerType.getTexturePath(), "sinkerType");
@@ -76,5 +80,3 @@ public class SinkerFactory {
         ValidateUtil.validatePositiveFloat(sinkerType.getScale(), "sinkerType.getScale()");
     }
 }
-
-

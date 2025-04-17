@@ -91,7 +91,7 @@ public class FishFactory {
 
         // Start Y: based on depth
         float startY = DomainUtils.getRandomDepthFor(depthLevel, fishComponent.height);
-        transformComponent.pos = new Vector3(startX, startY, 0);
+        transformComponent.pos.set(startX, startY, 0);
         transformComponent.scale.set(scale, scale);
         velocityComponent.velocity.x = DomainUtils.getFishDirectionX(movesRight, speed);
 
