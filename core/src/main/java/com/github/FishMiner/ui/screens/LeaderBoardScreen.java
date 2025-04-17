@@ -3,6 +3,7 @@ package com.github.FishMiner.ui.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -30,8 +31,6 @@ import java.util.List;
 public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
     private Table rootTable;
     private Table scoreTable;
-    private TextField scoreField;
-    private Label statusLabel;
 
     private final LeaderboardResponseListener responseListener = new LeaderboardResponseListener();
 
@@ -47,69 +46,65 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
 
         rootTable = new Table();
         rootTable.setFillParent(true);
-        rootTable.setDebug(true);
+        //rootTable.setDebug(true);
         stage.addActor(rootTable);
 
+        Label titleLabel = new Label("Top Scores", skin);
+        titleLabel.setFontScale(2f);
 
-        scoreField = new TextField("", skin);
-        scoreField.setMessageText("Enter score");
-
-        TextButton submitButton = new TextButton("Submit Score", skin);
-        submitButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                submitScore();
-            }
-        });
+        rootTable.add(titleLabel).padBottom(30).row();
 
         fetchTopScores();
 
-        TextButton backButton = new TextButton("Back", skin);
+        scoreTable = new Table();
+
+        ScrollPane scrollPane = new ScrollPane(scoreTable, skin);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false);
+
+        Table scoreContainer = new Table();
+        scoreContainer.add(scrollPane).expand().fill();
+
+        TextButton backButton = new TextButton("Back to Menu", skin);
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.MENU));
+                Gdx.app.postRunnable(() -> {
+                    ScreenManager.getInstance().prepareNewScreen(ScreenType.MENU);
+                    ScreenManager.getInstance().switchScreenTo(ScreenType.MENU);
+                });
             }
         });
-        statusLabel = new Label("", skin);
 
-        Table inputTable = new Table();
-        inputTable.row().padTop(10);
-        inputTable.add(new Label("Score:", skin)).padRight(10);
-        inputTable.add(scoreField).width(150);
-        inputTable.row().padTop(10);
-        inputTable.add(submitButton).colspan(2).center();
-        inputTable.row().padTop(10);
-        inputTable.add(statusLabel).colspan(2).center();
+        Table contentTable = new Table();
+        contentTable.add(scrollPane).expandX().fillX().height(400).padBottom(20).row();
+        contentTable.add(backButton).width(250).height(60).padBottom(10).center();
 
-        scoreTable = new Table();
-        Table scoreContainer = new Table();
-        scoreContainer.add(scoreTable).expand().fillX().fill().fillY();
-        rootTable.row();
-        rootTable.add(scoreContainer).expand().fillX().fill().fillY();
-        rootTable.row();
-        rootTable.add(inputTable).expand().fillX().fill().fillY();
-        rootTable.row();
-        rootTable.add(backButton).expand().fillX().fill().fillY();
-
+        rootTable.top().padTop(50);
+        rootTable.add(titleLabel).padBottom(20).row();
+        rootTable.add(contentTable).expand().center();
         GameEventBus.getInstance().register(responseListener);
 
     }
 
     private void fetchTopScores() {
-        FishMinerGame game = ScreenManager.getInstance().getGame();
         GameEventBus.getInstance().post(new LeaderboardFetchRequestEvent());
     }
 
     private void updateLeaderboardUI(List<ScoreEntry> scoreEntries) {
         // Remove all rows from the scoreTable (including layout)
-        scoreTable.clearChildren(); // ✅ This removes ALL content correctly
+        scoreTable.clearChildren();
 
         if (scoreEntries == null || scoreEntries.isEmpty()) {
             scoreTable.add(new Label("No scores found", skin)).center();
         } else {
             int place = 1;
             for (ScoreEntry entry : scoreEntries) {
+                if (entry == null){
+                    scoreTable.row().height(30);
+                    scoreTable.add(new Label("", skin)).colspan(3).padTop(10).padBottom(10);
+                    continue;
+                }
                 String placeLabel = place + ".";
                 Label placeNumber = new Label(placeLabel, skin);
 
@@ -123,32 +118,9 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
         }
     }
 
-
-
-
-    private void submitScore() {
-        FishMinerGame game = ScreenManager.getInstance().getGame();
-        IAuthService login = game.getAuthService();
-
-        String username = login.getCurrentUsername();
-        String scoreText = scoreField.getText();
-
-        if (username == null || scoreText.isEmpty()) {
-            statusLabel.setText("You're not logged in or score is empty.");
-            return;
-        }
-
-        try {
-            int score = Integer.parseInt(scoreText);
-            ScoreEntry entry = new ScoreEntry(username, score);
-            GameEventBus.getInstance().post(new LeaderboardPostRequestEvent(entry));
-
-        } catch (NumberFormatException e) {
-            statusLabel.setText("Invalid score format.");
-        }
-    }
     @Override
     public void render(float delta) {
+        System.out.println("[DEBUG] LeaderboardScreen render() called");
         ScreenUtils.clear(0f, 0f, 0f, 1f);
         stage.act(delta);
         stage.draw();
@@ -161,24 +133,8 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
             event.setHandled();
             Gdx.app.postRunnable(() -> {
                 if (event.isSuccess()) {
-                    // Only update if scores exist
-                    List<ScoreEntry> scores = event.getScores();
-                    if (scores != null && !scores.isEmpty()) {
-                        updateLeaderboardUI(scores);
+                        updateLeaderboardUI(event.getScores());
                     }
-
-                    if (!scoreField.getText().isEmpty()) {
-                        statusLabel.setText("Score submitted!");
-                        scoreField.setText("");
-
-                        GameEventBus.getInstance().post(new LeaderboardFetchRequestEvent());
-                    } else {
-                        statusLabel.setText("");
-                    }
-
-                } else {
-                    statusLabel.setText("Failed: " + event.getErrorMessage());
-                }
             });
         }
 

@@ -13,13 +13,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
 import com.github.FishMiner.domain.World;
@@ -28,6 +31,8 @@ import com.github.FishMiner.domain.events.ecsEvents.HookInputEvent;
 import com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.domain.session.UserSession;
+import com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
@@ -44,6 +49,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
     private TextButton pauseButton;
     private Table pauseOverlay;
     private boolean overlayVisible = false;
+    private boolean scoreSubmitted = false;
 
     public PlayScreen(IGameContext gameContext) {
         super(gameContext);
@@ -72,6 +78,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         if (!world.isPaused()) {
             gameContext.update(delta);
         }
+
         super.stage.act(delta);
 
         gameContext.update(delta);
@@ -155,9 +162,16 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         // Quit button
         TextButton quitButton = new TextButton("Quit", redStyle);
         quitButton.pad(10);
-        quitButton.addListener(new ClickListener() {
+        quitButton.addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void changed(ChangeEvent event, Actor actor) {
+                float score = gameContext.getWorld().getScore();
+
+                if (UserSession.isLoggedIn() && score > 0) {
+                    ScoreEntry entry = new ScoreEntry(UserSession.getCurrentUserEmail(), (int) score);
+                    GameEventBus.getInstance().post(new LeaderboardPostRequestEvent(entry));
+                }
+
                 GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.MENU));
             }
         });
@@ -221,6 +235,21 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() * 0.98f);
         batch.end();
     }
+
+    private void submitFinalScoreAndGoToLeaderboard() {
+        if (scoreSubmitted) return; // Avoid resubmitting multiple times
+        scoreSubmitted = true;
+
+        int score = (int) world.getScore();
+
+        if (UserSession.isLoggedIn()) {
+            ScoreEntry entry = new ScoreEntry(UserSession.getCurrentUserEmail(), score);
+            GameEventBus.getInstance().post(new LeaderboardPostRequestEvent(entry));
+        }
+
+        GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LEADERBOARD));
+    }
+
 
     @Override
     public void dispose() {

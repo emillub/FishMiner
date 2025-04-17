@@ -1,0 +1,47 @@
+Game Log Started: 2025-04-16 15:49:57
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.ScoreSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.FishingSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.FishHitEvent
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.HookInputSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.HookInputEvent
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.TransactionSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.TransactionEvent
+2025-04-16 15:49:57 [PlayerFactory] Reel lineLength set to: 636.0Reel length is at depth: 5
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.World. Type: class com.github.FishMiner.domain.events.ScoreEvent
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$5. Type: class com.github.FishMiner.ui.events.data.LoginRequestEvent
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$6. Type: class com.github.FishMiner.ui.events.data.RegisterUserRequest
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$7. Type: class com.github.FishMiner.ui.events.data.LeaderboardFetchRequestEvent
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$8. Type: class com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.ScreenManager$1. Type: class com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.ScreenManager$2. Type: class com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent
+2025-04-16 15:49:57 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.MusicManager. Type: class com.github.FishMiner.domain.events.soundEvents.MusicEvent
+2025-04-16 15:49:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
+2025-04-16 15:50:04 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.LoginScreen$4. Type: class com.github.FishMiner.domain.events.data.AuthResponseEvent
+2025-04-16 15:50:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.ui.events.data.LoginRequestEvent to listener: com.github.FishMiner.domain.managers.RequestManager$5
+2025-04-16 15:50:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.data.AuthResponseEvent to listener: com.github.FishMiner.ui.screens.LoginScreen$4
+2025-04-16 15:50:15 [ScreenManager] New instance for MENU prepared and cached.
+2025-04-16 15:50:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
+2025-04-16 15:50:16 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
+2025-04-16 15:50:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
+2025-04-16 15:50:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
+2025-04-16 15:50:16 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
+2025-04-16 15:50:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-16 15:50:21 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-16 15:50:24 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-16 15:50:27 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-16 15:50:28 [FishingSystem] FishHitEvent arrived
+2025-04-16 15:50:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-16 15:50:28 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-16 15:50:28 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@4afcd809 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@49c7b90e
+2025-04-16 15:50:28 [FishCapturedEvent] Event is set as handled
+2025-04-16 15:50:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-16 15:50:28 [ScoreEvent] DEBUG: Score increase: 40.0
+2025-04-16 15:50:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-16 15:50:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-16 15:50:41 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.LevelCompleteScreen$1. Type: class com.github.FishMiner.domain.events.ScoreEvent
+2025-04-16 15:50:41 [ScreenManager] Screen LEVEL_COMPLETE was not cached. New instance created and cached.
+2025-04-16 15:50:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$2
+2025-04-16 15:50:46 [World] Game over. Levels completed: 1
+2025-04-16 15:50:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
+2025-04-16 15:50:46 [ScreenManager] Screen LEADERBOARD was not cached. New instance created and cached.
+2025-04-16 15:50:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$2
+2025-04-16 15:50:48 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.LevelLostScreen$2$1. Type: class com.github.FishMiner.domain.events.data.LeaderboardResponseEvent
+2025-04-16 15:50:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent to listener: com.github.FishMiner.domain.managers.RequestManager$8
+2025-04-16 15:50:48 [GameEventBus] Listener unregistered: com.github.FishMiner.ui.screens.LevelLostScreen$2$1
