@@ -1,6 +1,7 @@
 package com.github.FishMiner.domain;
 
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -122,14 +123,22 @@ public class GameContext implements IGameContext {
      * It then creates new ones, adds them to the engine and assigns them to this.player.
      * Then a new the World creates reuses the PlayScreen with Level 1
      */
-    public void resetContext() {
-        engine.removeEntity(player.getSinker());
-        engine.removeEntity(player.getHook());
-        engine.removeEntity(player.getReel());
-        engine.removeEntity(player.getPlayerEntity());
+    public void resetGame() {
+        if (player != null) {
+            safelyRemove(player.getSinker());
+            safelyRemove(player.getHook());
+            safelyRemove(player.getReel());
+            safelyRemove(player.getPlayerEntity());
+        }
 
         this.player = initPlayer(engine);
         initStartLevel(world);
+    }
+
+    private void safelyRemove(Entity entity) {
+        if (entity != null) {
+            engine.removeEntity(entity);
+        }
     }
 
     public void createTestConfig() {
@@ -140,11 +149,12 @@ public class GameContext implements IGameContext {
 
     private PlayerCharacter initPlayer(PooledEngine engine) {
         Configuration config = Configuration.getInstance();
-        return PlayerCharacter.getInstance(engine,
+        return new PlayerCharacter(engine,
             (int) (config.getScreenWidth() * 0.5f),
             (int) (config.getScreenHeight() * config.getOceanHeightPercentage())
         );
     }
+
 
     private UpgradeStore initUpgradeStore(PooledEngine engine) {
         return UpgradeStore.getInstance(engine);
