@@ -43,6 +43,8 @@ public class SpawningQueueSystem extends EntitySystem {
     private final float LEVEL_DURATION = 60f;
 
     public void configureFromLevel(LevelConfig config) {
+        clearPreviousEntities();
+
         this.initialFishCount = config.getInitialFishCount();
         this.plannedFish = config.getPlannedFish();
 
@@ -52,6 +54,7 @@ public class SpawningQueueSystem extends EntitySystem {
         this.spawnInterval = LEVEL_DURATION / Math.max(plannedFish.size(), 1); // avoid divide by zero
         this.initialSpawnDone = false;
         this.numGarbage = config.getNumGarbage();
+        Logger.getInstance().log(TAG, "Configuring spawning system with " + config.getPlannedFish().size() + " planned fish");
 
     }
 
@@ -137,4 +140,21 @@ public class SpawningQueueSystem extends EntitySystem {
         Entity fishableEntity = factory.createEntity(type);
         engine.addEntity(fishableEntity);
     }
+
+    private void clearPreviousEntities() {
+        List<Entity> toRemove = new ArrayList<>();
+
+        for (Entity entity : engine.getEntities()) {
+            if (entity.getComponent(FishableComponent.class) != null) {
+                toRemove.add(entity);
+            }
+        }
+
+        for (Entity entity : toRemove) {
+            engine.removeEntity(entity);
+        }
+
+        Logger.getInstance().log(TAG, "Removed " + toRemove.size() + " fishable entities from previous level.");
+    }
+
 }

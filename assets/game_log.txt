@@ -1,917 +1,227 @@
-Game Log Started: 2025-04-17 16:28:07
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.ScoreSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.FishingSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.FishHitEvent
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.HookInputSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.HookInputEvent
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.TransactionSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.TransactionEvent
-2025-04-17 16:28:07 [PlayerFactory] Reel lineLength set to: 504.0Reel length is at depth: 5
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.World. Type: class com.github.FishMiner.domain.events.ScoreEvent
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$5. Type: class com.github.FishMiner.ui.events.data.LoginRequestEvent
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$6. Type: class com.github.FishMiner.ui.events.data.RegisterUserRequest
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$7. Type: class com.github.FishMiner.ui.events.data.LeaderboardFetchRequestEvent
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$8. Type: class com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.ScreenManager$1. Type: class com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.ScreenManager$2. Type: class com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent
-2025-04-17 16:28:07 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.MusicManager. Type: class com.github.FishMiner.domain.events.soundEvents.MusicEvent
-2025-04-17 16:28:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:28:09 [PlayerFactory] Reel lineLength set to: 504.0Reel length is at depth: 5
-2025-04-17 16:28:09 [PlayerComponent] Hook was replaced
-2025-04-17 16:28:09 [PlayerComponent] Reel was replaced
-2025-04-17 16:28:09 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
-2025-04-17 16:28:09 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
-2025-04-17 16:28:09 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:28:11 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:12 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:13 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:13 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@22f59fa
-2025-04-17 16:28:13 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:13 [ScoreEvent] DEBUG: Score increase: 60.0
-2025-04-17 16:28:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:14 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:14 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:14 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@79defdc
-2025-04-17 16:28:14 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:15 [ScoreEvent] DEBUG: Score increase: 100.0
-2025-04-17 16:28:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:28:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:28:17 [PlayerFactory] Reel lineLength set to: 504.0Reel length is at depth: 5
-2025-04-17 16:28:17 [PlayerComponent] Hook was replaced
-2025-04-17 16:28:17 [PlayerComponent] Reel was replaced
-2025-04-17 16:28:17 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
-2025-04-17 16:28:17 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
-2025-04-17 16:28:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:28:19 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:19 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:19 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:19 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:19 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@78fa769e
-2025-04-17 16:28:19 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:19 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:20 [ScoreEvent] DEBUG: Score increase: 60.0
-2025-04-17 16:28:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:21 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:22 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:22 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:22 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@6e6d5d29
-2025-04-17 16:28:22 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:23 [ScoreEvent] DEBUG: Score increase: 120.0
-2025-04-17 16:28:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:23 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:24 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:24 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@5c530d1e
-2025-04-17 16:28:24 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:24 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:24 [ScoreEvent] DEBUG: Score increase: 140.0
-2025-04-17 16:28:24 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:24 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:24 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:25 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:27 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:27 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:27 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:27 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@5286c33a
-2025-04-17 16:28:27 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:27 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:27 [ScoreEvent] DEBUG: Score increase: 200.0
-2025-04-17 16:28:27 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:27 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:27 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:30 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:33 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:34 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:34 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@1f6d27cc
-2025-04-17 16:28:34 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:34 [ScoreEvent] DEBUG: Score increase: 290.0
-2025-04-17 16:28:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:38 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:39 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:41 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:41 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:41 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@38f116f6
-2025-04-17 16:28:41 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:42 [ScoreEvent] DEBUG: Score increase: 350.0
-2025-04-17 16:28:42 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:42 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:42 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:42 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:42 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.LevelCompleteScreen$1. Type: class com.github.FishMiner.domain.events.ScoreEvent
-2025-04-17 16:28:42 [ScreenManager] Screen LEVEL_COMPLETE was not cached. New instance created and cached.
-2025-04-17 16:28:42 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$2
-2025-04-17 16:28:42 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:42 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:43 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:43 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@6c25e6c4
-2025-04-17 16:28:43 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:43 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:43 [ScoreEvent] DEBUG: Score increase: 440.0
-2025-04-17 16:28:43 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:43 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:28:43 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:43 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:44 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:44 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:44 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:44 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:44 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@5ddcc487
-2025-04-17 16:28:44 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:44 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:45 [ScoreEvent] DEBUG: Score increase: 480.0
-2025-04-17 16:28:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:28:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:47 [World] Level completed: 1
-2025-04-17 16:28:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:28:49 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:28:50 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
-2025-04-17 16:28:50 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:28:50 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
-2025-04-17 16:28:51 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:52 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:28:54 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:28:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:28:55 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:28:55 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@1faf386c
-2025-04-17 16:28:55 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:28:55 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:28:55 [ScoreEvent] DEBUG: Score increase: 540.0
-2025-04-17 16:28:55 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:28:55 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:28:55 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:55 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:55 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:28:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:28:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:28:58 [PlayerFactory] Reel lineLength set to: 504.0Reel length is at depth: 5
-2025-04-17 16:28:58 [PlayerComponent] Hook was replaced
-2025-04-17 16:28:58 [PlayerComponent] Reel was replaced
-2025-04-17 16:28:58 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
-2025-04-17 16:28:58 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
-2025-04-17 16:28:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:28:59 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:01 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:01 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:01 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:01 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:01 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@1e98b788
-2025-04-17 16:29:01 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:01 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:02 [ScoreEvent] DEBUG: Score increase: 20.0
-2025-04-17 16:29:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:03 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:05 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:05 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:05 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@42f3156d
-2025-04-17 16:29:05 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:06 [ScoreEvent] DEBUG: Score increase: 40.0
-2025-04-17 16:29:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:08 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:08 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:08 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@78fa769e
-2025-04-17 16:29:08 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:09 [ScoreEvent] DEBUG: Score increase: 60.0
-2025-04-17 16:29:09 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:09 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:09 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:09 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:09 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:09 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:11 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:11 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:11 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:12 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:12 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@6e6d5d29
-2025-04-17 16:29:12 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:12 [ScoreEvent] DEBUG: Score increase: 150.0
-2025-04-17 16:29:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:14 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:15 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:15 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@5b8572df
-2025-04-17 16:29:15 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:15 [ScoreEvent] DEBUG: Score increase: 190.0
-2025-04-17 16:29:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:16 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:16 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:16 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@4e3f2908
-2025-04-17 16:29:16 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:17 [ScoreEvent] DEBUG: Score increase: 210.0
-2025-04-17 16:29:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:18 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:18 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:18 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@6c25e6c4
-2025-04-17 16:29:18 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:18 [ScoreEvent] DEBUG: Score increase: 230.0
-2025-04-17 16:29:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:19 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:19 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:19 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:19 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:19 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@6e6d5d29
-2025-04-17 16:29:19 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:19 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:20 [ScoreEvent] DEBUG: Score increase: 290.0
-2025-04-17 16:29:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:21 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:21 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:21 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:21 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:21 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@5286c33a
-2025-04-17 16:29:21 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:21 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:22 [ScoreEvent] DEBUG: Score increase: 350.0
-2025-04-17 16:29:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:22 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:23 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:23 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@794eeaf8
-2025-04-17 16:29:23 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:23 [ScoreEvent] DEBUG: Score increase: 440.0
-2025-04-17 16:29:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:24 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:25 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:26 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:26 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:26 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@1e98b788
-2025-04-17 16:29:26 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:26 [ScoreEvent] DEBUG: Score increase: 530.0
-2025-04-17 16:29:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:27 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:27 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:27 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:27 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:27 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@78fa769e
-2025-04-17 16:29:27 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:27 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:28 [ScoreEvent] DEBUG: Score increase: 590.0
-2025-04-17 16:29:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:28 [World] Level completed: 1
-2025-04-17 16:29:28 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.LevelCompleteScreen$1. Type: class com.github.FishMiner.domain.events.ScoreEvent
-2025-04-17 16:29:28 [ScreenManager] New instance for LEVEL_COMPLETE prepared and cached.
-2025-04-17 16:29:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$2
-2025-04-17 16:29:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:29:30 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:29:31 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
-2025-04-17 16:29:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:29:31 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
-2025-04-17 16:29:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:33 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:33 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:33 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@1faf386c
-2025-04-17 16:29:33 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:33 [ScoreEvent] DEBUG: Score increase: 650.0
-2025-04-17 16:29:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:36 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:36 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:36 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@794eeaf8
-2025-04-17 16:29:36 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:36 [ScoreEvent] DEBUG: Score increase: 670.0
-2025-04-17 16:29:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:38 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:39 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:39 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:39 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:39 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@1f6d27cc
-2025-04-17 16:29:39 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:39 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:40 [ScoreEvent] DEBUG: Score increase: 730.0
-2025-04-17 16:29:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:40 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:41 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:41 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@629b780f
-2025-04-17 16:29:41 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:41 [ScoreEvent] DEBUG: Score increase: 770.0
-2025-04-17 16:29:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:41 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:42 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:43 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:45 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:45 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:45 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@78fa769e
-2025-04-17 16:29:45 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:46 [ScoreEvent] DEBUG: Score increase: 830.0
-2025-04-17 16:29:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:46 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:46 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:47 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:47 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@5f8d4b51
-2025-04-17 16:29:47 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:47 [ScoreEvent] DEBUG: Score increase: 850.0
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:47 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:48 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:48 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@629b780f
-2025-04-17 16:29:48 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:48 [ScoreEvent] DEBUG: Score increase: 870.0
-2025-04-17 16:29:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:50 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:51 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:53 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:53 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:53 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:53 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:53 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@4debbf0
-2025-04-17 16:29:53 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:53 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:54 [ScoreEvent] DEBUG: Score increase: 930.0
-2025-04-17 16:29:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:56 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:56 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:56 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:56 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:56 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@4e3f2908
-2025-04-17 16:29:56 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:56 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:57 [ScoreEvent] DEBUG: Score increase: 970.0
-2025-04-17 16:29:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:58 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:58 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:58 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@42f3156d
-2025-04-17 16:29:58 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:29:58 [ScoreEvent] DEBUG: Score increase: 1010.0
-2025-04-17 16:29:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:29:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:29:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:29:59 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:29:59 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:29:59 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:29:59 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:29:59 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@1f6d27cc
-2025-04-17 16:29:59 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:29:59 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:00 [ScoreEvent] DEBUG: Score increase: 1100.0
-2025-04-17 16:30:00 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:00 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:00 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:00 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:00 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:00 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:00 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:00 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:00 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:00 [World] Level completed: 2
-2025-04-17 16:30:01 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.LevelCompleteScreen$1. Type: class com.github.FishMiner.domain.events.ScoreEvent
-2025-04-17 16:30:01 [ScreenManager] New instance for LEVEL_COMPLETE prepared and cached.
-2025-04-17 16:30:01 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$2
-2025-04-17 16:30:01 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:30:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:30:03 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
-2025-04-17 16:30:03 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:30:03 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
-2025-04-17 16:30:03 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:03 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:03 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:03 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@4debbf0
-2025-04-17 16:30:03 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:03 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:04 [ScoreEvent] DEBUG: Score increase: 1190.0
-2025-04-17 16:30:04 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:04 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:04 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:04 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:04 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:04 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:04 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:04 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:04 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:04 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:05 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:05 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:05 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@5f8d4b51
-2025-04-17 16:30:05 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:06 [ScoreEvent] DEBUG: Score increase: 1250.0
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:06 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:07 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:07 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@dbed7fd
-2025-04-17 16:30:07 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:07 [ScoreEvent] DEBUG: Score increase: 1340.0
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:07 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:08 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:08 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@4e3f2908
-2025-04-17 16:30:08 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:08 [ScoreEvent] DEBUG: Score increase: 1360.0
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:09 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:09 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:09 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:10 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:10 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@42f3156d
-2025-04-17 16:30:10 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:10 [ScoreEvent] DEBUG: Score increase: 1420.0
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:11 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:11 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:11 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:11 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:11 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@1faf386c
-2025-04-17 16:30:11 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:11 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:12 [ScoreEvent] DEBUG: Score increase: 1510.0
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:12 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:13 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:13 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@5b8572df
-2025-04-17 16:30:13 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:13 [ScoreEvent] DEBUG: Score increase: 1600.0
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:16 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:16 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:16 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@794eeaf8
-2025-04-17 16:30:16 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:16 [ScoreEvent] DEBUG: Score increase: 1660.0
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:17 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:17 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:17 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@4debbf0
-2025-04-17 16:30:17 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:18 [ScoreEvent] DEBUG: Score increase: 1750.0
-2025-04-17 16:30:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:19 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:19 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:19 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:19 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:19 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@4e3f2908
-2025-04-17 16:30:19 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:19 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:20 [ScoreEvent] DEBUG: Score increase: 1810.0
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:20 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:22 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:22 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:22 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@1f6d27cc
-2025-04-17 16:30:22 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:23 [ScoreEvent] DEBUG: Score increase: 1900.0
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:25 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:28 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.LevelCompleteScreen$1. Type: class com.github.FishMiner.domain.events.ScoreEvent
-2025-04-17 16:30:28 [ScreenManager] New instance for LEVEL_COMPLETE prepared and cached.
-2025-04-17 16:30:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$2
-2025-04-17 16:30:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:29 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:30:31 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:30:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:30:32 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:30:32 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@5f8d4b51
-2025-04-17 16:30:32 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:30:32 [ScoreEvent] DEBUG: Score increase: 1960.0
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:30:33 [World] Level completed: 3
-2025-04-17 16:30:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:30:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:30:35 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
-2025-04-17 16:30:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:30:35 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
-2025-04-17 16:31:05 [World] Game over. Levels completed: 4
-2025-04-17 16:31:05 [ScreenManager] Screen LEADERBOARD was not cached. New instance created and cached.
-2025-04-17 16:31:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$2
-2025-04-17 16:31:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent to listener: com.github.FishMiner.domain.managers.RequestManager$8
-2025-04-17 16:31:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:31:05 [ScreenManager] New instance for LEADERBOARD prepared and cached.
-2025-04-17 16:31:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$2
-2025-04-17 16:31:05 [GameEventBus] DEBUG: No listeners registered for event: com.github.FishMiner.domain.events.data.LeaderboardResponseEvent
-2025-04-17 16:31:21 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.ui.events.data.LeaderboardFetchRequestEvent to listener: com.github.FishMiner.domain.managers.RequestManager$7
-2025-04-17 16:31:21 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.LeaderBoardScreen$LeaderboardResponseListener. Type: class com.github.FishMiner.domain.events.data.LeaderboardResponseEvent
-2025-04-17 16:31:21 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
-2025-04-17 16:31:23 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.data.LeaderboardResponseEvent to listener: com.github.FishMiner.ui.screens.LeaderBoardScreen$LeaderboardResponseListener
-2025-04-17 16:31:28 [ScreenManager] New instance for MENU prepared and cached.
-2025-04-17 16:31:28 [GameEventBus] Listener unregistered: com.github.FishMiner.ui.screens.LeaderBoardScreen$LeaderboardResponseListener
-2025-04-17 16:31:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:31:29 [PlayerFactory] Reel lineLength set to: 504.0Reel length is at depth: 5
-2025-04-17 16:31:29 [PlayerComponent] Hook was replaced
-2025-04-17 16:31:29 [PlayerComponent] Reel was replaced
-2025-04-17 16:31:29 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
-2025-04-17 16:31:29 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
-2025-04-17 16:31:29 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
-2025-04-17 16:31:30 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:31:30 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:31:30 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:31:31 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:31:31 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@5fb4870b
-2025-04-17 16:31:31 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:31:31 [ScoreEvent] DEBUG: Score increase: 20.0
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:31:32 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:31:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:31:32 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:31:32 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@4e8036bb
-2025-04-17 16:31:32 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:31:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:31:33 [ScoreEvent] DEBUG: Score increase: 40.0
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:31:33 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:31:33 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:31:33 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@714ab3a1
-2025-04-17 16:31:33 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:31:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:31:34 [ScoreEvent] DEBUG: Score increase: 60.0
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:31:35 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:31:35 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:31:35 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@67954442
-2025-04-17 16:31:35 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:31:35 [ScoreEvent] DEBUG: Score increase: 120.0
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
-2025-04-17 16:31:36 [FishingSystem] FishHitEvent arrived
-2025-04-17 16:31:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
-2025-04-17 16:31:37 [FishingSystem] DEBUG: FishState was changed to CAPTURED
-2025-04-17 16:31:37 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@207bf6d8
-2025-04-17 16:31:37 [FishCapturedEvent] Event is set as handled
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
-2025-04-17 16:31:37 [ScoreEvent] DEBUG: Score increase: 180.0
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
-2025-04-17 16:31:37 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+Game Log Started: 2025-04-17 16:52:06
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.ScoreSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.FishingSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.FishHitEvent
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.HookInputSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.HookInputEvent
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.ecs.systems.TransactionSystem. Type: class com.github.FishMiner.domain.events.ecsEvents.TransactionEvent
+2025-04-17 16:52:06 [PlayerFactory] Reel lineLength set to: 504.0Reel length is at depth: 5
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.World. Type: class com.github.FishMiner.domain.events.ScoreEvent
+2025-04-17 16:52:06 [SpawningQueueSystem] Removed 0 fishable entities from previous level.
+2025-04-17 16:52:06 [SpawningQueueSystem] Configuring spawning system with 12 planned fish
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$5. Type: class com.github.FishMiner.ui.events.data.LoginRequestEvent
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$6. Type: class com.github.FishMiner.ui.events.data.RegisterUserRequest
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$7. Type: class com.github.FishMiner.ui.events.data.LeaderboardFetchRequestEvent
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.RequestManager$8. Type: class com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.ScreenManager$1. Type: class com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.ScreenManager$2. Type: class com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent
+2025-04-17 16:52:06 [GameEventBus] Listener registered: com.github.FishMiner.domain.managers.MusicManager. Type: class com.github.FishMiner.domain.events.soundEvents.MusicEvent
+2025-04-17 16:52:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
+2025-04-17 16:52:08 [PlayerFactory] Reel lineLength set to: 504.0Reel length is at depth: 5
+2025-04-17 16:52:08 [PlayerComponent] Hook was replaced
+2025-04-17 16:52:08 [PlayerComponent] Reel was replaced
+2025-04-17 16:52:08 [SpawningQueueSystem] Removed 0 fishable entities from previous level.
+2025-04-17 16:52:08 [SpawningQueueSystem] Configuring spawning system with 12 planned fish
+2025-04-17 16:52:08 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
+2025-04-17 16:52:08 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
+2025-04-17 16:52:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
+2025-04-17 16:52:09 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:11 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:11 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:52:11 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:52:11 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:52:11 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@79defdc
+2025-04-17 16:52:11 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:52:11 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:52:12 [ScoreEvent] DEBUG: Score increase: 60.0
+2025-04-17 16:52:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:52:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:14 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:52:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:52:15 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:52:15 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@2c78324b
+2025-04-17 16:52:15 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:52:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:52:15 [ScoreEvent] DEBUG: Score increase: 100.0
+2025-04-17 16:52:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:52:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:16 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:17 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:52:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:52:18 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:52:18 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@22f59fa
+2025-04-17 16:52:18 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:52:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:52:18 [ScoreEvent] DEBUG: Score increase: 160.0
+2025-04-17 16:52:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:52:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:19 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:21 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:21 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:52:21 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:52:21 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:52:21 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@6f7923a5
+2025-04-17 16:52:21 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:52:21 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:52:22 [ScoreEvent] DEBUG: Score increase: 250.0
+2025-04-17 16:52:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:52:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:22 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:24 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:25 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:25 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:52:25 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:52:26 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:52:26 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@16612a51
+2025-04-17 16:52:26 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:52:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:52:26 [ScoreEvent] DEBUG: Score increase: 270.0
+2025-04-17 16:52:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:52:26 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:27 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:28 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:30 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:30 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:52:30 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:52:31 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:52:31 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@2c78324b
+2025-04-17 16:52:31 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:52:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:52:31 [ScoreEvent] DEBUG: Score increase: 330.0
+2025-04-17 16:52:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:52:31 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:32 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:33 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.LevelCompleteScreen$1. Type: class com.github.FishMiner.domain.events.ScoreEvent
+2025-04-17 16:52:33 [ScreenManager] Screen LEVEL_COMPLETE was not cached. New instance created and cached.
+2025-04-17 16:52:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$2
+2025-04-17 16:52:33 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:34 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:52:34 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:52:35 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:52:35 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@22f59fa
+2025-04-17 16:52:35 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:52:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:52:35 [ScoreEvent] DEBUG: Score increase: 370.0
+2025-04-17 16:52:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:52:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
+2025-04-17 16:52:35 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:36 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:38 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:38 [World] Level completed: 1
+2025-04-17 16:52:38 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
+2025-04-17 16:52:39 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
+2025-04-17 16:52:40 [SpawningQueueSystem] Removed 5 fishable entities from previous level.
+2025-04-17 16:52:40 [SpawningQueueSystem] Configuring spawning system with 14 planned fish
+2025-04-17 16:52:40 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
+2025-04-17 16:52:40 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
+2025-04-17 16:52:40 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
+2025-04-17 16:52:42 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:43 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:44 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:45 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:52:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:52:45 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:52:45 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@6f7923a5
+2025-04-17 16:52:45 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:52:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:52:45 [ScoreEvent] DEBUG: Score increase: 410.0
+2025-04-17 16:52:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:52:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
+2025-04-17 16:52:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:45 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:47 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:52:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:52:47 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:52:47 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@54e041a4
+2025-04-17 16:52:47 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:52:47 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:52:48 [ScoreEvent] DEBUG: Score increase: 450.0
+2025-04-17 16:52:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:52:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
+2025-04-17 16:52:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:48 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:50 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:51 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:52 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:54 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:56 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:57 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:58 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:52:59 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:52:59 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:52:59 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:52:59 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@17fede14
+2025-04-17 16:52:59 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:52:59 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:52:59 [ScoreEvent] DEBUG: Score increase: 490.0
+2025-04-17 16:52:59 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:52:59 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
+2025-04-17 16:52:59 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:52:59 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:53:00 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:53:01 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:53:01 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:53:01 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:53:01 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@78fa769e
+2025-04-17 16:53:01 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:53:01 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:53:02 [ScoreEvent] DEBUG: Score increase: 550.0
+2025-04-17 16:53:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:53:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
+2025-04-17 16:53:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:53:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:53:02 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:53:05 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:53:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:53:06 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:53:06 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:53:07 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:53:07 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@16612a51
+2025-04-17 16:53:07 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:53:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:53:07 [ScoreEvent] DEBUG: Score increase: 590.0
+2025-04-17 16:53:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:53:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
+2025-04-17 16:53:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:53:07 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:53:08 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:53:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:53:10 [World] Level completed: 2
+2025-04-17 16:53:10 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.LevelCompleteScreen$1. Type: class com.github.FishMiner.domain.events.ScoreEvent
+2025-04-17 16:53:10 [ScreenManager] New instance for LEVEL_COMPLETE prepared and cached.
+2025-04-17 16:53:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$2
+2025-04-17 16:53:10 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
+2025-04-17 16:53:12 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
+2025-04-17 16:53:13 [SpawningQueueSystem] Removed 9 fishable entities from previous level.
+2025-04-17 16:53:13 [SpawningQueueSystem] Configuring spawning system with 16 planned fish
+2025-04-17 16:53:13 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
+2025-04-17 16:53:13 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
+2025-04-17 16:53:13 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
+2025-04-17 16:53:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.HookInputEvent to listener: com.github.FishMiner.domain.ecs.systems.HookInputSystem
+2025-04-17 16:53:14 [FishingSystem] FishHitEvent arrived
+2025-04-17 16:53:14 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishHitEvent to listener: com.github.FishMiner.domain.ecs.systems.FishingSystem
+2025-04-17 16:53:15 [FishingSystem] DEBUG: FishState was changed to CAPTURED
+2025-04-17 16:53:15 [FishCapturedEvent] com.badlogic.ashley.core.PooledEngine$PooledEntity@2892d68 captured fish: com.badlogic.ashley.core.PooledEngine$PooledEntity@54e041a4
+2025-04-17 16:53:15 [FishCapturedEvent] Event is set as handled
+2025-04-17 16:53:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent to listener: com.github.FishMiner.domain.ecs.systems.ScoreSystem
+2025-04-17 16:53:15 [ScoreEvent] DEBUG: Score increase: 650.0
+2025-04-17 16:53:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.domain.World
+2025-04-17 16:53:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
+2025-04-17 16:53:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.ScoreEvent to listener: com.github.FishMiner.ui.screens.LevelCompleteScreen$1
+2025-04-17 16:53:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:53:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:53:15 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent to listener: com.github.FishMiner.ui.screens.PlayScreen$5
+2025-04-17 16:53:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager
+2025-04-17 16:53:17 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent to listener: com.github.FishMiner.domain.managers.ScreenManager$1
+2025-04-17 16:53:18 [PlayerFactory] Reel lineLength set to: 504.0Reel length is at depth: 5
+2025-04-17 16:53:18 [PlayerComponent] Hook was replaced
+2025-04-17 16:53:18 [PlayerComponent] Reel was replaced
+2025-04-17 16:53:18 [SpawningQueueSystem] Removed 6 fishable entities from previous level.
+2025-04-17 16:53:18 [SpawningQueueSystem] Configuring spawning system with 12 planned fish
+2025-04-17 16:53:18 [SpawningQueueSystem] Spawned 6 initial fish and 0 static garbage.
+2025-04-17 16:53:18 [GameEventBus] Listener registered: com.github.FishMiner.ui.screens.PlayScreen$5. Type: class com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent
+2025-04-17 16:53:18 [GameEventBus] DEBUG: Dispatching event: com.github.FishMiner.domain.events.soundEvents.MusicEvent to listener: com.github.FishMiner.domain.managers.MusicManager

@@ -40,6 +40,8 @@ public class World implements IGameEventListener<ScoreEvent> {
     }
 
     public void createLevel(LevelConfig config, int startingScore, Float customTimer) {
+        System.out.println("[DEBUG] World.createLevel() called — level " + levelNumber);
+
         this.targetScore = config.getTargetScore();
 
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
