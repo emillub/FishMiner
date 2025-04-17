@@ -22,18 +22,16 @@ import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.states.FishableObjectStates;
 import com.github.FishMiner.domain.states.HookStates;
 
-
 public class CollisionSystem extends EntitySystem {
 
-    Engine engine;
-    private ComponentMapper<HookComponent> hookMapper = ComponentMapper.getFor(HookComponent.class);
-    private ComponentMapper<TransformComponent> posMapper = ComponentMapper.getFor(TransformComponent.class);
-    private ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
-    private ComponentMapper<StateComponent> stateMapper = ComponentMapper.getFor(StateComponent.class);
-    private ComponentMapper<FishableComponent> fishMapper = ComponentMapper.getFor(FishableComponent.class);
+    private Engine engine;
+    private final ComponentMapper<HookComponent> hookMapper = ComponentMapper.getFor(HookComponent.class);
+    private final ComponentMapper<TransformComponent> posMapper = ComponentMapper.getFor(TransformComponent.class);
+    private final ComponentMapper<RotationComponent> rotMapper = ComponentMapper.getFor(RotationComponent.class);
+    private final ComponentMapper<StateComponent> stateMapper = ComponentMapper.getFor(StateComponent.class);
+    private final ComponentMapper<FishableComponent> fishMapper = ComponentMapper.getFor(FishableComponent.class);
 
     private final Set<Entity> caughtFish = new HashSet<>(); // A set to track fish that have already triggered a hit event.
-    private Entity hookEntity;
 
     private final Family fishFamily = Family.all(
         BoundsComponent.class,
@@ -46,61 +44,50 @@ public class CollisionSystem extends EntitySystem {
     private final Family hookFamily = Family.all(
         HookComponent.class,
         BoundsComponent.class,
-        TransformComponent.class
+        TransformComponent.class,
+        StateComponent.class
     ).get();
 
     @Override
     public void addedToEngine(Engine engine) {
         this.engine = engine;
-        ImmutableArray<Entity> hooks = engine.getEntitiesFor(hookFamily);
-        if (hooks.size() > 0) {
-            hookEntity = hooks.first();
-        }
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void update(float deltaTime) {
-        if (hookEntity == null) {
-            ImmutableArray<Entity> hooks = getEngine().getEntitiesFor(hookFamily);
-            if (hooks.size() > 0) {
-                hookEntity = hooks.first();
-            } else {
-                throw new IllegalStateException("Hook cannot be null");
-            }
-        }
+        ImmutableArray<Entity> hooks = engine.getEntitiesFor(hookFamily);
+        if (hooks.size() == 0) return;
+
+        Entity hookEntity = hooks.first(); // always get the latest
         HookComponent hook = hookMapper.get(hookEntity);
-        StateComponent<HookStates> hookState = hookEntity.getComponent(StateComponent.class);
+        StateComponent<HookStates> hookState = stateMapper.get(hookEntity);
         TransformComponent hookPos = posMapper.get(hookEntity);
         BoundsComponent hookBounds = hookEntity.getComponent(BoundsComponent.class);
 
+        if (hook == null || hookState == null || hookBounds == null) return;
+
         // --- Collision Detection ---
-        // If the hook is in FIRE state and no fish is attached, check for collisions.
         if (hookState.state == HookStates.FIRE && hook.attachedFishableEntity == null) {
-            // Get all current fish entities; this will include dynamically spawned ones.
-            ImmutableArray<Entity> fishEntities = getEngine().getEntitiesFor(fishFamily);
+            ImmutableArray<Entity> fishEntities = engine.getEntitiesFor(fishFamily);
             for (Entity fish : fishEntities) {
-                StateComponent<FishableObjectStates> fishState = fish.getComponent(StateComponent.class);
-                // Only consider fish that are available to be hooked.
-                if (fishState.getState() != FishableObjectStates.FISHABLE) {
+                StateComponent<FishableObjectStates> fishState = stateMapper.get(fish);
+                if (fishState == null || fishState.getState() != FishableObjectStates.FISHABLE) {
                     continue;
                 }
                 BoundsComponent fishBounds = fish.getComponent(BoundsComponent.class);
-                // Use your helper method for collision detection.
-                if (hookBounds.overlaps(fishBounds)) {
+                if (fishBounds != null && hookBounds.overlaps(fishBounds)) {
                     System.out.println("HOOK OVERLAPS FISH! Attaching fish " + fish);
-                    // Attach the fish to the hook and update states.
                     hook.attachedFishableEntity = fish;
                     fishState.changeState(FishableObjectStates.HOOKED);
                     hookState.changeState(HookStates.REELING);
-                    // Optionally post an event.
+
                     FishHitEvent event = new FishHitEvent(fish);
                     event.setSource(hookEntity);
                     GameEventBus.getInstance().post(event);
-                    break; // attach only one fish at a time
+                    break;
                 }
             }
         }
-
     }
 }
