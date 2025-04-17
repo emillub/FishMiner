@@ -26,22 +26,49 @@ public class FishMinerGame extends Game {
     private Music backgroundMusic;
     private Music playMusic;
 
+    /*
+
     public FishMinerGame(IAuthService authService, ILeaderBoardService leaderboard) {
         this.authService = authService;
         this.leaderBoardService = leaderboard;
 
     }
 
+     */
+
+    public FishMinerGame(IAuthService authService, ILeaderBoardService leaderboard) {
+        this(authService, leaderboard, null); // fallback
+    }
+
+    public FishMinerGame(IAuthService authService, ILeaderBoardService leaderboard, RequestManager requestManager) {
+        this.authService = authService;
+        this.leaderBoardService = leaderboard;
+        this.requestManager = requestManager;
+    }
+
     @Override
     public void create() {
+        System.out.println("[DEBUG] FishMinerGame create() started");
         Configuration.getInstance().updateConfiguration();
 
-        requestManager = new RequestManager(
+        RequestManager managerToUse = (requestManager != null)
+            ? requestManager
+            : new RequestManager(
+            new LoginHandler(authService),
+            new UserRegistrationHandler(authService),
+            new LeaderboardFetcher(leaderBoardService),
+            new LeaderboardPoster(leaderBoardService)
+        );
+
+        /*
+         requestManager = new RequestManager(
             new LoginHandler(authService),
             new UserRegistrationHandler(authService),
             new LeaderboardFetcher(leaderBoardService), // we’ll make this class next
             new LeaderboardPoster(leaderBoardService)   // and this one too
         );
+
+         */
 
 
         MusicManager musicManager = new MusicManager();
@@ -52,10 +79,10 @@ public class FishMinerGame extends Game {
         ScreenManager screenManager = ScreenManager.getInstance(screenFactory, this);
 
 
-        GameEventBus.getInstance().register(requestManager.getLoginRequestListener());
-        GameEventBus.getInstance().register(requestManager.getRegistrationRequestListener());
-        GameEventBus.getInstance().register(requestManager.getLeaderboardFetchRequestListener());
-        GameEventBus.getInstance().register(requestManager.getLeaderboardPostRequestListener());
+        GameEventBus.getInstance().register(managerToUse.getLoginRequestListener());
+        GameEventBus.getInstance().register(managerToUse.getRegistrationRequestListener());
+        GameEventBus.getInstance().register(managerToUse.getLeaderboardFetchRequestListener());
+        GameEventBus.getInstance().register(managerToUse.getLeaderboardPostRequestListener());
         GameEventBus.getInstance().register(screenManager.getChangeScreenEvent());
         GameEventBus.getInstance().register(screenManager.getPrepareScreenEvent());
         GameEventBus.getInstance().register(musicManager);

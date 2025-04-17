@@ -1,9 +1,13 @@
 package com.github.FishMiner.lwjgl3;
 
+import com.badlogic.gdx.Gdx;
 import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.data.ports.out.ILeaderBoardService;
 import com.github.FishMiner.domain.ports.in.data.LeaderboardCallback;
 import com.github.FishMiner.domain.managers.ScreenManager;
+import com.github.FishMiner.domain.ports.out.ILeaderboardFetcher;
+import com.github.FishMiner.domain.ports.out.ILeaderboardPoster;
+import java.net.URLEncoder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DesktopLeaderboardService implements ILeaderBoardService {
+public class DesktopLeaderboardService implements ILeaderBoardService, ILeaderboardFetcher, ILeaderboardPoster {
 
     private final String FIREBASE_PROJECT_ID = "fishminer-482a2";
 
@@ -25,25 +29,27 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
             try {
                 DesktopAuthService loginAPI = (DesktopAuthService) ScreenManager.getInstance().getGame().getAuthService();
                 String idToken = loginAPI.getIdToken();
+
                 if (idToken == null) {
-                    callback.onFailure("No auth token available. Please log in.");
+                    Gdx.app.postRunnable(() -> callback.onFailure("No auth token available. Please log in."));
                     return;
                 }
-                //Targeting the document by username (email)
+
+                String safeDocId = username;
                 String endpoint = "https://firestore.googleapis.com/v1/projects/" +
-                    FIREBASE_PROJECT_ID + "/databases/(default)/documents/LeaderBoard" + username;
+                    FIREBASE_PROJECT_ID + "/databases/(default)/documents/LeaderBoard/" + safeDocId;
 
                 HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
-                conn.setRequestMethod("PATCH");
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("X-HTTP-Method-Override", "PATCH");
                 conn.setRequestProperty("Authorization", "Bearer " + idToken);
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setDoOutput(true);
 
-                //Send the updated score
                 String json = "{\n" +
                     "  \"fields\": {\n" +
                     "    \"username\": { \"stringValue\": \"" + username + "\" },\n" +
-                    "    \"score\": { \"integerValue\": \"" + score + "\" }\n" +
+                    "    \"score\": { \"integerValue\": " + score + " }\n" +
                     "  }\n" +
                     "}";
 
@@ -51,21 +57,33 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
                     os.write(json.getBytes(StandardCharsets.UTF_8));
                 }
 
-                int responseCode = conn.getResponseCode();
+                int responseCode;
+                try {
+                    responseCode = conn.getResponseCode();
+                } catch (IOException ioException) {
+                    Gdx.app.postRunnable(() -> callback.onFailure("IOException on response: " + ioException.getMessage()));
+                    return;
+                }
+
                 if (responseCode == 200) {
                     callback.onSuccess(null);
                 } else {
                     InputStream errorStream = conn.getErrorStream();
-                    String errorMsg = new BufferedReader(new InputStreamReader(errorStream))
-                        .lines().reduce("", (acc, line) -> acc + line + "\n");
-                    callback.onFailure("Error: " + errorMsg);
+                    if (errorStream != null) {
+                        String errorMsg = new BufferedReader(new InputStreamReader(errorStream))
+                            .lines().reduce("", (acc, line) -> acc + line + "\n");
+                        callback.onFailure("Error: " + errorMsg);
+                    } else {
+                        callback.onFailure("Unknown error. No error stream. Code: " + responseCode);
+                    }
                 }
 
             } catch (Exception e) {
-                callback.onFailure(e.getMessage());
+                Gdx.app.postRunnable(() -> callback.onFailure("Exception: " + e.getMessage()));
             }
         }).start();
     }
+
 
     @Override
     public void getTopScores(LeaderboardCallback callback) {
@@ -109,7 +127,7 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
                 }
 
                 if (responseCode != 200) {
-                    callback.onFailure("Failed to fetch scores: " + response.toString());
+                    Gdx.app.postRunnable(() -> callback.onFailure("Failed to fetch scores: " + response.toString()));
                     return;
                 }
 
@@ -129,10 +147,10 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
                     scoreEntryList.add(new ScoreEntry(username, score));
                 }
 
-                callback.onSuccess(scoreEntryList);
+                Gdx.app.postRunnable(() -> callback.onSuccess(scoreEntryList));
 
             } catch (Exception e) {
-                callback.onFailure("Error fetching scores: " + e.getMessage());
+                Gdx.app.postRunnable(() -> callback.onFailure("Error fetching scores: " + e.getMessage()));
             }
         }).start();
     }
@@ -154,12 +172,13 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
                 DesktopAuthService loginAPI = (DesktopAuthService) ScreenManager.getInstance().getGame().getAuthService();
                 String idToken = loginAPI.getIdToken();
                 if (idToken == null) {
-                    callback.onSuccess(new ArrayList<>());
+                    Gdx.app.postRunnable(() -> callback.onSuccess(new ArrayList<>()));
                     return;
                 }
 
+                String safeDocId = username;
                 String endpoint = "https://firestore.googleapis.com/v1/projects/" +
-                    FIREBASE_PROJECT_ID + "/databases/(default)/documents/LeaderBoard/" + username;
+                    FIREBASE_PROJECT_ID + "/databases/(default)/documents/LeaderBoard/" + safeDocId;
 
                 HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
                 conn.setRequestMethod("GET");
@@ -182,20 +201,28 @@ public class DesktopLeaderboardService implements ILeaderBoardService {
 
                     List<ScoreEntry> result = new ArrayList<>();
                     result.add(new ScoreEntry(user, score));
-                    callback.onSuccess(result);
 
+                    Gdx.app.postRunnable(() -> callback.onSuccess(result));
                 } else if (responseCode == 404) {
-                    // bruker finnes ikke
-                    callback.onSuccess(new ArrayList<>());
+                    Gdx.app.postRunnable(() -> callback.onSuccess(new ArrayList<>()));
                 } else {
-                    callback.onFailure("Failed to fetch user score: " + responseCode);
+                    Gdx.app.postRunnable(() -> callback.onFailure("Failed to fetch user score: " + responseCode));
                 }
 
             } catch (Exception e) {
-                callback.onFailure("Error getting user score: " + e.getMessage());
+                Gdx.app.postRunnable(() -> callback.onFailure("Error getting user score: " + e.getMessage()));
             }
         }).start();
     }
 
 
+    @Override
+    public void fetchLeaderboard(LeaderboardCallback callback) {
+        getTopScores(callback);
+    }
+
+    @Override
+    public void postScore(ScoreEntry entry, LeaderboardCallback callback) {
+        submitScore(entry.username(), entry.score(), callback);
+    }
 }
