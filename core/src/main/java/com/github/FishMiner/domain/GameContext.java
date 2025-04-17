@@ -131,14 +131,35 @@ public class GameContext implements IGameContext {
             safelyRemove(player.getPlayerEntity());
         }
 
+        resetWorld();
+
         this.player = initPlayer(engine);
+
+        // Reset score
+        ScoreComponent scoreComponent = player.getPlayerEntity().getComponent(ScoreComponent.class);
+        if (scoreComponent != null) {
+            scoreComponent.setScore(0);
+        }
+
+
+        // Start from level 1
         initStartLevel(world);
+        engine.update(0f); // make sure ECS is in sync
     }
+
 
     private void safelyRemove(Entity entity) {
         if (entity != null) {
             engine.removeEntity(entity);
         }
+    }
+
+    private void resetWorld() {
+        world.setState(WorldState.RUNNING);
+        world.setLevelNumber(1);   // You'll need to expose this setter
+        world.setScore(0);         // Same here
+        world.setFinalScorePosted(false);
+        world.setLevelCompleted(false);
     }
 
     public void createTestConfig() {
@@ -161,9 +182,10 @@ public class GameContext implements IGameContext {
     }
 
     private void initStartLevel(World world) {
-        LevelConfig initialConfig = LevelConfigFactory.generateLevel(1, player.getScore());
-        world.createLevel(initialConfig, player.getScore());
+        LevelConfig initialConfig = LevelConfigFactory.generateLevel(1, 0); // ← zero score
+        world.createLevel(initialConfig, 0);                                // ← zero score
     }
+
 
     private void addSystemsToEngine(ShapeRenderer renderer, SpriteBatch batch, OrthographicCamera cam, UpgradeStore store) {
         engine.addSystem(new BackgroundRenderSystem(renderer));
