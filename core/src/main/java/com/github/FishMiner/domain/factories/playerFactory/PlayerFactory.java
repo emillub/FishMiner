@@ -5,49 +5,39 @@ import static com.github.FishMiner.domain.factories.ReelTypes.BASIC_REEL;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
-
-import com.badlogic.gdx.math.Vector3;
-import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
-import com.github.FishMiner.domain.ecs.components.BoundsComponent;
-import com.github.FishMiner.domain.ecs.components.HookComponent;
-import com.github.FishMiner.domain.ecs.components.InventoryComponent;
-import com.github.FishMiner.domain.ecs.components.PlayerComponent;
-import com.github.FishMiner.domain.ecs.components.TransformComponent;
-import com.github.FishMiner.domain.ecs.components.RotationComponent;
-import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.ecs.components.TextureComponent;
-import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.*;
-
 import com.github.FishMiner.common.ValidateUtil;
+import com.github.FishMiner.domain.ecs.utils.DomainUtils;
+import com.github.FishMiner.domain.factories.HookTypes;
 import com.github.FishMiner.domain.factories.ReelTypes;
+import com.github.FishMiner.domain.factories.SinkerTypes;
 import com.github.FishMiner.domain.states.HookStates;
 
 public class PlayerFactory {
     private static final String TAG = "PlayerFactory";
-    private static Entity player;
 
-    private PlayerFactory() {
-    }
+    private PlayerFactory() {}
 
-    public static void addNewPlayerCharacterTo(PooledEngine engine, int posX, int posY) {
+    public static Entity addNewPlayerCharacterTo(PooledEngine engine, int posX, int posY) {
         Entity playerEntity = createPlayerEntity(engine, posX, posY);
         Entity hookEntity = createHookEntity(engine, playerEntity);
         Entity reelEntity = createReelEntity(engine, playerEntity);
-
+        Entity sinkerEntity = createSinkerEntity(engine, hookEntity);
 
         PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
         playerComponent.setHook(hookEntity);
         playerComponent.setReel(reelEntity);
-
-        playerEntity.add(playerComponent);
+        playerComponent.setSinker(sinkerEntity);
 
         engine.addEntity(playerEntity);
         engine.addEntity(hookEntity);
         engine.addEntity(reelEntity);
-        player = playerEntity;
+        engine.addEntity(sinkerEntity);
+
+        return playerEntity;
     }
+
 
     private static Entity createPlayerEntity(PooledEngine engine, int posX, int posY) {
         Entity player = engine.createEntity();
@@ -76,80 +66,34 @@ public class PlayerFactory {
         return player;
     }
 
-    /**
-     * Note that we attempt to not set the position (transformComp) here.
-     * Ideally, this should be done with the AttachmentComponent
-     * Must be attached to a player entity
-     * @return A hook Entity
-     */
-    //@SuppressWarnings("unchecked")
-    //private static Entity createHookEntity(PooledEngine engine, Entity player) {
-    //    Entity hook = engine.createEntity();
-//
-    //    HookComponent hookComponent = engine.createComponent(HookComponent.class);
-    //    TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
-    //    RotationComponent rotationComponent = engine.createComponent(RotationComponent.class);
-    //    BoundsComponent boundsComponent = engine.createComponent(BoundsComponent.class);
-    //    TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
-    //    VelocityComponent velocityComponent = engine.createComponent(VelocityComponent.class);
-    //    StateComponent<HookStates> stateComponent = engine.createComponent(StateComponent.class);
-    //    AttachmentComponent attachmentComponent = engine.createComponent(AttachmentComponent.class);
-//
-    //    textureComponent.setRegion("hook_1cols_1rows.png");
-//
-//
-    //    stateComponent.changeState(HookStates.SWINGING);
-    //    velocityComponent.velocity = new Vector2(0, 0);
-//
-    //    attachmentComponent.setParentEntity(player);
-    //    PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
-    //    TransformComponent playerPos = player.getComponent(TransformComponent.class);
-//
-    //    hookComponent.anchorPoint.set(playerComponent.hookAnchorPoint);
-    //    transformComponent.pos.z = playerPos.pos.z + 1;
-//
-    //    boundsComponent.bounds.setPosition(
-    //        transformComponent.pos.x - boundsComponent.bounds.width * 0.5f,
-    //        transformComponent.pos.y - boundsComponent.bounds.height * 0.5f
-    //    );
-//
-    //    boundsComponent.bounds.setSize(
-    //        textureComponent.getFrameWidth(),
-    //        textureComponent.getFrameHeight()
-    //    );
-//
-    //    hook.add(textureComponent);
-    //    hook.add(hookComponent);
-    //    hook.add(transformComponent);
-    //    hook.add(rotationComponent);
-    //    hook.add(velocityComponent);
-    //    hook.add(stateComponent);
-    //    hook.add(attachmentComponent);
-    //    hook.add(boundsComponent);
-//
-    //    return hook;
-    //}
-
     private static Entity createHookEntity(PooledEngine engine, Entity player) {
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
         TransformComponent playerPos = player.getComponent(TransformComponent.class);
-        Entity hook = HookFactory.createEntity(engine, (int) playerPos.pos.z, playerComponent.hookAnchorPoint);
+        InventoryComponent inventory = player.getComponent(InventoryComponent.class);
+
+        HookTypes equippedType = HookTypes.valueOf(inventory.getEquippedHookName().toUpperCase());
+        Entity hook = HookFactory.createEntity(engine, equippedType, (int) playerPos.pos.z, playerComponent.hookAnchorPoint, player);
 
         AttachmentComponent hookAttachment = hook.getComponent(AttachmentComponent.class);
         hookAttachment.setParentEntity(player);
 
         return hook;
     }
+
     private static Entity createReelEntity(PooledEngine engine, Entity player) {
         TransformComponent playerPos = player.getComponent(TransformComponent.class);
-        Entity reel = ReelFactory.createEntity(engine, BASIC_REEL);
+        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
 
-        int posX = (int) playerPos.pos.x;
-        int posY = (int) playerPos.pos.y;
-        int posZ = (int) playerPos.pos.z;
+        ReelTypes reelType = BASIC_REEL;
+        float anchorY = playerComponent.hookAnchorPoint.y;
 
-        TransformComponent reelPos = reel.getComponent(TransformComponent.class);
-        reelPos.pos = new Vector3(posX, posY, posZ - 1);
+        Entity reel = ReelFactory.createEntity(engine, reelType);
+        ReelComponent reelComponent = reel.getComponent(ReelComponent.class);
+
+        int[] interval = DomainUtils.getDepthIntervalFor(reelType.getLengthLevel());
+        reelComponent.lineLength = anchorY - interval[1];
+
+        Logger.getInstance().log("PlayerFactory", "Reel lineLength set to: " + reelComponent.lineLength + "Reel length is at depth: " + reelType.getLengthLevel());
 
         AttachmentComponent reelAttachment = reel.getComponent(AttachmentComponent.class);
         reelAttachment.offset.x = -0.9f;
@@ -159,8 +103,12 @@ public class PlayerFactory {
         return reel;
     }
 
-    public static Entity getPlayer() {
-        ValidateUtil.validateNotNull(player, TAG + " -> player");
-        return player;
+    private static Entity createSinkerEntity(PooledEngine engine, Entity hook) {
+        Entity sinker = SinkerFactory.createEntity(engine, SinkerTypes.HEAVY_SINKER);
+        AttachmentComponent sinkerAttachment = engine.createComponent(AttachmentComponent.class);
+        sinkerAttachment.setParentEntity(hook);
+        sinkerAttachment.offset.y = -25f;
+        sinker.add(sinkerAttachment);
+        return sinker;
     }
 }

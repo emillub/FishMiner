@@ -12,13 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
-/**
- * AbstractScreen provides a common basis for all screens.
- * It initializes a Stage, loads the shared Skin, and sets up an InputMultiplexer.
- */
 public abstract class AbstractScreen implements Screen {
     protected ScreenType screenType;
     protected IGameContext gameContext;
@@ -29,14 +26,10 @@ public abstract class AbstractScreen implements Screen {
     protected Stage stage;
     protected Skin skin;
 
+    private boolean initialized = false;
+
     public AbstractScreen(IGameContext gameContext) {
         this.gameContext = gameContext;
-        Configuration config = Configuration.getInstance();
-
-        stage = new Stage(new FitViewport(config.getScreenWidth(), config.getScreenHeight()));
-        skin = Assets.getUiskin();
-        Gdx.input.setInputProcessor(stage);
-
         this.batch = gameContext.getBatch();
         this.shapeRenderer = gameContext.getRenderer();
         this.cam = gameContext.getCam();
@@ -44,36 +37,46 @@ public abstract class AbstractScreen implements Screen {
         font.setColor(Color.BLACK);
     }
 
+    protected void initializeStageIfNeeded() {
+        if (!initialized) {
+            stage = new Stage(new FitViewport(
+                Configuration.getInstance().getScreenWidth(),
+                Configuration.getInstance().getScreenHeight()
+            ));
+            skin = Assets.getUiskin();
+            initialized = true;
+        }
+    }
+
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        initializeStageIfNeeded();
+        if (ScreenManager.getInstance().getCurrentScreen() == this) {
+            Gdx.input.setInputProcessor(stage);
+        }
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        if (stage != null) {
+            stage.getViewport().update(width, height);
+        }
         Configuration.getInstance().updateConfiguration();
     }
 
     @Override
-    public void pause() {
-        // Default implementation
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-        // Default implementation
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-        // Default implementation
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
-        stage.dispose();
-        skin.dispose();
+        if (stage != null) stage.dispose();
+        if (skin != null) skin.dispose();
     }
 
     protected void updateCamera() {

@@ -21,19 +21,21 @@ public class AttachmentSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         AttachmentComponent attachment = attachmentMapper.get(entity);
         TransformComponent childTransform = transformMapper.get(entity);
-        if (attachment.getParent() == null) {
-            return; // Nothing to attach to.
-        }
+
+        if (attachment.getParent() == null) return;
+
         TransformComponent parentTransform = transformMapper.get(attachment.getParent());
-        if (parentTransform == null) {
-            return; // Parent does not have a transform.
-        }
-        // Update child's position relative to parent's position plus the offset.
-        Vector3 newPos = new Vector3(
-            parentTransform.pos.x + attachment.offset.x,
-            parentTransform.pos.y + attachment.offset.y,
-            parentTransform.pos.z + attachment.offset.z
-        ).add(attachment.offset);
-        childTransform.pos.set(newPos);
+        if (parentTransform == null) return;
+
+        System.out.println("[DEBUG] AttachmentSystem moved entity " + entity +
+            " to parent " + attachment.getParent() +
+            " with offset " + attachment.offset +
+            " → new position: " + parentTransform.pos.cpy().add(attachment.offset));
+
+
+        // Update child's position relative to parent
+        childTransform.pos.set(parentTransform.pos).add(attachment.offset);
     }
+
+
 }

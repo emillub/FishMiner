@@ -11,20 +11,10 @@ import com.github.FishMiner.ui.ports.in.IPlayer;
 
 public class PlayerCharacter implements IPlayer {
     private final Entity playerEntity;
-    private static PlayerCharacter instance;
-    private static boolean isCreated = false;
-    public PlayerCharacter(PooledEngine engine, int posX, int posY) {
-        PlayerFactory.addNewPlayerCharacterTo(engine, posX, posY);
-        playerEntity = PlayerFactory.getPlayer();
-        ValidateUtil.validateNotNull(playerEntity, "PlayerCharacter -> playerEntity");
-    }
 
-    public static PlayerCharacter getInstance(PooledEngine engine,int posX, int posY) {
-        if (instance == null && !isCreated) {
-            instance = new PlayerCharacter(engine, posX, posY);
-            isCreated = true;
-        }
-        return instance;
+    public PlayerCharacter(PooledEngine engine, int posX, int posY) {
+        this.playerEntity = PlayerFactory.addNewPlayerCharacterTo(engine, posX, posY);
+        ValidateUtil.validateNotNull(playerEntity, "PlayerCharacter -> playerEntity");
     }
 
     public Entity getPlayerEntity() {
@@ -34,6 +24,7 @@ public class PlayerCharacter implements IPlayer {
     public Entity getHook() {
         return playerEntity.getComponent(PlayerComponent.class).getHook();
     }
+
     public Entity getSinker() {
         return playerEntity.getComponent(PlayerComponent.class).getSinker();
     }
@@ -46,6 +37,4 @@ public class PlayerCharacter implements IPlayer {
     public int getScore() {
         return (int) playerEntity.getComponent(ScoreComponent.class).getScore();
     }
-
-
 }

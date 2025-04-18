@@ -20,6 +20,8 @@ public class World implements IGameEventListener<ScoreEvent> {
     private int targetScore = 0;
     private float timer = 60f;
     private boolean finalScorePosted = false;
+    private boolean levelCompleted = false;
+
     public World(PooledEngine engine) {
         this.engine = engine;
         this.factory = new OceanEntityFactory(engine);
@@ -28,6 +30,7 @@ public class World implements IGameEventListener<ScoreEvent> {
 
     public void createLevel(LevelConfig config, int startingScore) {
         this.createLevel(config, startingScore, 60f);
+
     }
 
     protected void nextLevel(int playerScore) {
@@ -37,6 +40,8 @@ public class World implements IGameEventListener<ScoreEvent> {
     }
 
     public void createLevel(LevelConfig config, int startingScore, Float customTimer) {
+        System.out.println("[DEBUG] World.createLevel() called — level " + levelNumber);
+
         this.targetScore = config.getTargetScore();
 
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
@@ -49,6 +54,10 @@ public class World implements IGameEventListener<ScoreEvent> {
         timer = (customTimer != null) ? customTimer : 60f;
         score = startingScore;
         state = WorldState.RUNNING;
+
+        finalScorePosted = false;
+        levelCompleted = false;
+
     }
 
     public void setState(WorldState newState) {
@@ -72,17 +81,15 @@ public class World implements IGameEventListener<ScoreEvent> {
         if (state == WorldState.PAUSED) {
             return;
         }
+
         if (state == WorldState.RUNNING) {
             timer -= deltaTime;
-            if (timer <= 0 && !finalScorePosted) {
-                timer = 0;
-                finalScorePosted = true;
-                int nextScore = score - targetScore;
-                ScoreEvent removeTargetScoreEvent = new ScoreEvent(nextScore);
-                GameEventBus.getInstance().post(removeTargetScoreEvent);
 
-                // Determine win or loss based on the result of the ScoreEvent and current score.
-                if (removeTargetScoreEvent.isHandled() && score > 0) {
+            if (timer <= 0 && !finalScorePosted) {
+                timer = 0f;
+                finalScorePosted = true;
+
+                if (score >= targetScore) {
                     state = WorldState.WON;
                     Logger.getInstance().log(TAG, "Level completed: " + levelNumber);
                 } else {
@@ -92,6 +99,7 @@ public class World implements IGameEventListener<ScoreEvent> {
             }
         }
     }
+
 
     public float getTimer() {
         return timer;
@@ -119,19 +127,38 @@ public class World implements IGameEventListener<ScoreEvent> {
             Logger.getInstance().debug(TAG, "Received and denied a handled event");
             return;
         }
+
         int newScore = (int) event.getScore();
-        if (score > newScore) {
+        if (newScore < score) {
+            score = 0;
+        } else {
             score = newScore;
-            // TODO: display green text with score increase in PlayScreen
-        } else if (score < newScore) {
-            score = newScore;
-            // TODO: display red text with score decrease in PlayScreen
         }
+
         event.setHandled();
     }
+
+
 
     @Override
     public Class<ScoreEvent> getEventType() {
         return ScoreEvent.class;
     }
+
+    public void setLevelNumber(int levelNumber) {
+        this.levelNumber = levelNumber;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setFinalScorePosted(boolean value) {
+        this.finalScorePosted = value;
+    }
+
+    public void setLevelCompleted(boolean value) {
+        this.levelCompleted = value;
+    }
+
 }

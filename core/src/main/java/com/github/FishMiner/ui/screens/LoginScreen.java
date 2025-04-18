@@ -13,6 +13,7 @@ import com.github.FishMiner.domain.events.data.AuthResponseEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.domain.session.UserSession;
 import com.github.FishMiner.ui.events.data.LoginRequestEvent;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
@@ -24,6 +25,7 @@ public class LoginScreen extends AbstractScreen implements IGameScreen {
     private TextField emailField;
     private TextField passwordField;
     private Label statusLabel;
+    private boolean isRegistering;
 
     public LoginScreen(IGameContext gameContext) {
         super(gameContext);
@@ -84,6 +86,7 @@ public class LoginScreen extends AbstractScreen implements IGameScreen {
         loginButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                isRegistering = false;
                 String email = emailField.getText();
                 String password = passwordField.getText();
                 GameEventBus.getInstance().post(new LoginRequestEvent(email, password));
@@ -94,6 +97,7 @@ public class LoginScreen extends AbstractScreen implements IGameScreen {
         registerButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                isRegistering = true;
                 String email = emailField.getText();
                 String password = passwordField.getText();
 
@@ -115,8 +119,11 @@ public class LoginScreen extends AbstractScreen implements IGameScreen {
             public void onEvent(AuthResponseEvent event) {
                 if (event.isHandled()) return;
                 if (event.wasSuccessful()) {
-                    event.getEmail();
-                    Gdx.app.postRunnable(() -> statusLabel.setText("Registered Successful. User: " + event.getEmail()));
+                    Gdx.app.postRunnable(() -> {
+                        UserSession.login(event.getEmail()); //set login
+                        ScreenManager.getInstance().prepareNewScreen(ScreenType.MENU); //refresh the screen
+                        ScreenManager.getInstance().switchScreenTo(ScreenType.MENU);
+                    });
                 } else {
                     String errorMessage = event.getError();
                     Logger.getInstance().error(TAG, "Registration failed: " + errorMessage);

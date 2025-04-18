@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.common.ValidateUtil;
+import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.domain.ecs.components.PlayerComponent;
 import com.github.FishMiner.domain.ecs.components.ReelComponent;
@@ -140,7 +141,23 @@ public class TransactionSystem extends EntitySystem implements IGameEventListene
                     entry.transactionCompleted = true;
                     upgrade.setUpgraded(true);
                 }
-                // todo: add hook here
+                // Hook upgrades
+                else if (upgradeEntity.getComponent(HookComponent.class) != null) {
+                    Entity currentlyEquipped = player.getHook();
+                    HookComponent currentHookComp = currentlyEquipped.getComponent(HookComponent.class);
+                    playerInventory.addHooksToInventory(currentHookComp.getName(), currentlyEquipped);
+
+                    player.setHook(upgradeEntity);
+                    playerInventory.equipHook(upgradeEntity.getComponent(HookComponent.class).getName());
+
+                    TraderComponent traderComp = tm.get(trader);
+                    if (traderComp != null) {
+                        traderComp.getProducts().remove(upgradeEntity);
+                    }
+                    entry.transactionCompleted = true;
+                    upgrade.setUpgraded(true);
+                }
+
 
                 transactionQueue.removeIndex(i--); // Remove the entry and adjust the loop.
             }

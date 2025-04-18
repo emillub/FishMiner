@@ -43,6 +43,8 @@ public class SpawningQueueSystem extends EntitySystem {
     private final float LEVEL_DURATION = 60f;
 
     public void configureFromLevel(LevelConfig config) {
+        clearPreviousEntities();
+
         this.initialFishCount = config.getInitialFishCount();
         this.plannedFish = config.getPlannedFish();
 
@@ -52,6 +54,7 @@ public class SpawningQueueSystem extends EntitySystem {
         this.spawnInterval = LEVEL_DURATION / Math.max(plannedFish.size(), 1); // avoid divide by zero
         this.initialSpawnDone = false;
         this.numGarbage = config.getNumGarbage();
+        Logger.getInstance().log(TAG, "Configuring spawning system with " + config.getPlannedFish().size() + " planned fish");
 
     }
 
@@ -100,6 +103,7 @@ public class SpawningQueueSystem extends EntitySystem {
                 transform.pos.x = MathUtils.random(minX, maxX);
             }
 
+
             engine.addEntity(fishableEntity);
             spawnedCount++;
         }
@@ -127,6 +131,7 @@ public class SpawningQueueSystem extends EntitySystem {
     }
 
     private void spawnNextFishableEntity() {
+
         if (spawnedCount < plannedFish.size()) {
             spawnFishableEntity(plannedFish.get(spawnedCount));
             spawnedCount++;
@@ -135,6 +140,28 @@ public class SpawningQueueSystem extends EntitySystem {
 
     private void spawnFishableEntity(IEntityType type) {
         Entity fishableEntity = factory.createEntity(type);
+        TransformComponent transform = fishableEntity.getComponent(TransformComponent.class);
+        if (transform != null) {
+            System.out.println("[DEBUG] Fish spawned: " + type + " at position " + transform.pos);
+        }
+
         engine.addEntity(fishableEntity);
     }
+
+    private void clearPreviousEntities() {
+        List<Entity> toRemove = new ArrayList<>();
+
+        for (Entity entity : engine.getEntities()) {
+            if (entity.getComponent(FishableComponent.class) != null) {
+                toRemove.add(entity);
+            }
+        }
+
+        for (Entity entity : toRemove) {
+            engine.removeEntity(entity);
+        }
+
+        Logger.getInstance().log(TAG, "Removed " + toRemove.size() + " fishable entities from previous level.");
+    }
+
 }

@@ -16,7 +16,7 @@ public class Assets {
 
     private final static Skin uiSkin = new Skin(Gdx.files.internal("ui/skin/fishminerSkin.json"));
     private final static String BUTTONS_PATH = "ui/icons/";
-    private final static BitmapFont DEFAULT_FONT = uiSkin.getFont("default");
+    public final static BitmapFont DEFAULT_FONT = uiSkin.getFont("default");
     public final static BitmapFont TITLE_FONT = uiSkin.getFont("title");
 
     public static Color BLACK = uiSkin.getColor("black");

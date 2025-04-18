@@ -15,10 +15,19 @@ import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.github.FishMiner.data.ScoreEntry;
+import com.github.FishMiner.domain.GameEventBus;
+import com.github.FishMiner.domain.events.data.LeaderboardResponseEvent;
+import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
+import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.domain.session.UserSession;
+import com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.domain.GameContext;
 
 public class LevelLostScreen extends AbstractScreen implements IGameScreen {
 
@@ -26,6 +35,7 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
         super(gameContext);
         super.screenType = ScreenType.LEVEL_LOST;
     }
+
 
     @Override
     public void show() {
@@ -40,6 +50,16 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
 
         skin = Assets.getUiskin();
 
+        //Post score once when screen is shown
+        FishMinerGame game = ScreenManager.getInstance().getGame();
+        String username = game.getAuthService().getCurrentUsername();
+        float score = gameContext.getWorld().getScore();
+
+        if (username != null) {
+            ScoreEntry entry = new ScoreEntry(username, (int) score);
+            GameEventBus.getInstance().post(new LeaderboardPostRequestEvent(entry));
+        }
+
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -50,27 +70,69 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
         Label messageLabel = new Label("You lost, start over!", skin);
         messageLabel.setFontScale(1.2f);
 
-        TextButton continueButton = new TextButton("Back to menu", skin);
-        continueButton.addListener(new ClickListener() {
+
+        TextButton backToMenuButton = new TextButton("Back to menu", skin);
+        TextButton seeLeaderboardButton = new TextButton("See Leaderboard", skin);
+
+        backToMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ScreenManager.getInstance().switchScreenTo(ScreenType.MENU);
+                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.MENU));
+            }
+        });
+
+        seeLeaderboardButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.postRunnable(() -> {
+                    GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LEADERBOARD));
+                    /*
+                    FishMinerGame game = ScreenManager.getInstance().getGame();
+                    String username = game.getAuthService().getCurrentUsername();
+                    float score = gameContext.getWorld().getScore();
+
+                    System.out.println("[DEBUG] Submitting score from LevelLostScreen: " + score);
+
+                    if (username != null) {
+                        ScoreEntry entry = new ScoreEntry(username, (int) score);
+                        GameEventBus.getInstance().register(new IGameEventListener<LeaderboardResponseEvent>() {
+                            @Override
+                            public void onEvent(LeaderboardResponseEvent event) {
+                                Gdx.app.postRunnable(() -> {
+                                    GameEventBus.getInstance().unregister(this);
+                                    GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LEADERBOARD));
+                                });
+                            }
+
+
+                            @Override
+                            public Class<LeaderboardResponseEvent> getEventType() {
+                                return LeaderboardResponseEvent.class;
+                            }
+                        });
+
+                        GameEventBus.getInstance().post(new LeaderboardPostRequestEvent(entry));
+                    }
+
+                     */
+                });
             }
         });
 
         // Create a sub-table to act as the message box
         Table messageBox = new Table(skin);
-        messageBox.setBackground("window"); // You can customize this style in the skin
+        messageBox.setBackground("window");
         messageBox.pad(20).defaults().pad(10);
 
         messageBox.add(messageLabel).row();
-        messageBox.add(continueButton).width(200).height(60);
+        messageBox.add(seeLeaderboardButton).width(200).height(60).padBottom(10).row();
+        messageBox.add(backToMenuButton).width(200).height(60);
+
 
         table.center().top().padTop(Gdx.graphics.getHeight() * 0.25f);
         table.add(titleLabel).padBottom(50).row();
         table.add(messageBox).center();
     }
-
 
     @Override
     public void render(float delta) {
@@ -81,6 +143,7 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
 
         stage.act(delta);
         stage.draw();
+
     }
 
     @Override

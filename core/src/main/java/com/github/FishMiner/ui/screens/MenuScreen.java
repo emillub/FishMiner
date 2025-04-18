@@ -30,6 +30,8 @@ import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.domain.session.UserSession;
+
 
 
 public class MenuScreen extends AbstractScreen implements IGameScreen {
@@ -53,21 +55,24 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
                         Assets.ButtonEnum.MUTED, Assets.ButtonEnum.SOUND,
                         () -> {
                                 GameEventBus.getInstance().post(new MusicEvent(MusicEvent.MusicCommand.TOGGLE_MUTE));
-                        });
+                });
 
-        TextButton playButtonText = ButtonFactory.createTextButton("PLAY",
-                        Configuration.getInstance().getSmallFontScale(), skin, () -> {
-                                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.PLAY));
+        Table rootTable = new Table();
+        rootTable.setFillParent(true);
+        rootTable.setDebug(true);
+        stage.addActor(rootTable);
+
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.getInstance().switchScreenTo(ScreenType.SETTINGS);
+            }
         });
 
-        TextButton loginButton = ButtonFactory.createTextButton("LOGIN",
-                        Configuration.getInstance().getSmallFontScale(), skin, () -> {
-                                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LOGIN));
-        });
 
         LabelStyle labelStyle = new LabelStyle(Assets.TITLE_FONT, Assets.DARK_BROWN);
         Label titleLabel = new Label("Fish Miner", labelStyle);
-        titleLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+        titleLabel.setFontScale(Configuration.getInstance().getMediumFontScale());
 
         Table topSectionTable = new Table();
         topSectionTable.setFillParent(true);
@@ -86,11 +91,26 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         middleSection.setFillParent(true);
         middleSection.center();
 
+        TextButton playButtonText = ButtonFactory.createTextButton("PLAY",
+                Configuration.getInstance().getMediumFontScale(), skin, () -> {
+                    GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.PLAY));
+                });
         middleSection.add(playButtonText).size(playButtonText.getWidth(), playButtonText.getHeight())
-                        .padBottom(Configuration.getInstance().getSmallPadding()).top();
+                .padBottom(Configuration.getInstance().getSmallPadding()).top();
         middleSection.row().expandX();
-        middleSection.add(loginButton).size(loginButton.getWidth(), loginButton.getHeight())
-                        .padBottom(Configuration.getInstance().getSmallPadding());
+
+        if (UserSession.isLoggedIn()) {
+            Label loggedInLabel = new Label("Logged in as: " + UserSession.getCurrentUserEmail(), skin);
+            loggedInLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+            middleSection.add(loggedInLabel).center();
+        } else {
+            TextButton loginButton = ButtonFactory.createTextButton("LOGIN",
+                    Configuration.getInstance().getMediumFontScale(), skin, () -> {
+                        GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LOGIN));
+                    });
+            middleSection.add(loginButton).size(loginButton.getWidth(), loginButton.getHeight())
+                    .padBottom(Configuration.getInstance().getSmallPadding());
+        }
         stage.addActor(middleSection);
 
         Table bottomSectionTable = new Table();

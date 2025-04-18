@@ -87,12 +87,47 @@ public class AnimationComponent implements Component {
     }
 
     /**
+     * Adds an animation that only contains a single frame.
+     *
+     * @param key              The state key (e.g., "SWINGING", "FIRE").
+     * @param textureComponent The texture component to pull the frame from.
+     * @param stateRow         The row index in the sprite sheet.
+     * @param frameCol         The column index (frame) to extract.
+     */
+    public void addSingleFrameAnimation(String key, TextureComponent textureComponent, int stateRow, int frameCol) {
+        TextureRegion region = textureComponent.getRegion();
+        int FRAME_COLS = textureComponent.getFrameCols();
+        int FRAME_ROWS = textureComponent.getFrameRows();
+
+        TextureRegion[][] tmp = TextureRegion.split(
+            region.getTexture(),
+            region.getRegionWidth() / FRAME_COLS,
+            region.getRegionHeight() / FRAME_ROWS
+        );
+
+        TextureRegion[] singleFrame = new TextureRegion[] { tmp[stateRow][frameCol] };
+        Animation<TextureRegion> animation = new Animation<>(Float.MAX_VALUE, singleFrame); // No actual animation
+        animation.setPlayMode(Animation.PlayMode.NORMAL);
+
+        animations.put(key, animation);
+        if (currentAnimation == null) {
+            currentAnimation = animation;
+            currentAnimationKey = key;
+        }
+    }
+
+
+    /**
      * Sets the current animation of the component to the animation associated with the provided key.
      * Also resets the animation timer to start the animation from the beginning.
      *
      * @param key A String representing the state of the animation to be set as current.
      */
+
     public void setCurrentAnimation(String key) {
+        if (!animations.containsKey(key)) {
+            System.err.println("[AnimationComponent] ERROR: Missing animation for key: " + key);
+        }
         if (animations.containsKey(key)) {
             currentAnimation = animations.get(key);
             currentAnimationKey = key;

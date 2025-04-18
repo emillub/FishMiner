@@ -3,6 +3,7 @@ package com.github.FishMiner.lwjgl3;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.domain.managers.RequestManager;
 
 
 /** Launches the desktop (LWJGL3) application. */
@@ -16,7 +17,16 @@ public class Lwjgl3Launcher {
     private static Lwjgl3Application createApplication() {
         DesktopAuthService desktopAuthService = new DesktopAuthService();
         DesktopLeaderboardService desktopLeaderboardService = new DesktopLeaderboardService();
-        return new Lwjgl3Application(new FishMinerGame(desktopAuthService, desktopLeaderboardService), getDefaultConfiguration());
+
+        RequestManager manager = new RequestManager(
+            desktopAuthService,
+            desktopAuthService,
+            desktopLeaderboardService,
+            desktopLeaderboardService
+        );
+
+        FishMinerGame game = new FishMinerGame(desktopAuthService, desktopLeaderboardService, manager);
+        return new Lwjgl3Application(game, getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {

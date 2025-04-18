@@ -26,6 +26,7 @@ public class ScreenManager {
     private IGameScreen currentScreen;
     private final HashMap<ScreenType, Screen> cachedScreens = new HashMap<>();
 
+
     private ScreenManager(IScreenFactory screenFactory, FishMinerGame game, GameContext gameContext) {
         ValidateUtil.validateMultipleNotNull(
              screenFactory,   "screenFactory",
@@ -124,7 +125,8 @@ public class ScreenManager {
      * and clears any cached PlayScreen.
      */
     public void startNewGame() {
-        gameContext.resetContext();
+        gameContext.resetGame();
+        gameContext.getEngine().update(0f); // ✅ Force update to re-sync entities
         // Remove any cached instance of the PLAY screen.
         cachedScreens.remove(ScreenType.PLAY);
         switchScreenTo(PLAY);
@@ -175,4 +177,9 @@ public class ScreenManager {
             }
         };
     }
+
+    public IGameScreen getCurrentScreen() {
+        return currentScreen;
+    }
+
 }

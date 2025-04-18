@@ -24,8 +24,8 @@ public class Configuration {
     private static float scaleX;
     private static float scaleY;
     private static float largeFontScale;
-    private static float smallFontScale;
     private static float mediumFontScale;
+    private static float smallFontScale;
 
     // User settings
     public final static float DEFAULT_MUSIC_VOLUME = 0f;
@@ -33,16 +33,7 @@ public class Configuration {
     private float musicVolume = DEFAULT_MUSIC_VOLUME;
 
     private Configuration() {
-        scaleX = SCREEN_WIDTH / RESOLUTION_X;
-        scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
-        iconWidth = RESOLUTION_X / 10 * scaleX;
-        smallPadding = RESOLUTION_X / 20 * scaleX;
-        mediumPadding = RESOLUTION_X / 10 * scaleX;
-        largePadding = RESOLUTION_X / 5 * scaleX;
-
-        largeFontScale = RESOLUTION_X / 200 * scaleX;
-        mediumFontScale = RESOLUTION_X / 250 * scaleX;
-        smallFontScale = RESOLUTION_X / 300 * scaleX;
+        updateConfiguration();
     }
 
     public static Configuration getInstance() {
@@ -75,10 +66,9 @@ public class Configuration {
         smallPadding = RESOLUTION_X / 20 * scaleX;
         mediumPadding = RESOLUTION_X / 10 * scaleX;
         largePadding = RESOLUTION_X / 5 * scaleX;
-
         largeFontScale = RESOLUTION_X / 150 * scaleX;
-        mediumFontScale = RESOLUTION_X / 250 * scaleX;
-        smallFontScale = RESOLUTION_X / 300 * scaleX;
+        mediumFontScale = RESOLUTION_X / 300 * scaleX;
+        smallFontScale = RESOLUTION_X / 500 * scaleX;
     }
 
 
@@ -155,10 +145,10 @@ public class Configuration {
         return largeFontScale;
     }
 
+
     public float getMediumFontScale() {
         return mediumFontScale;
     }
-
     public float getSmallFontScale() {
         return smallFontScale;
     }

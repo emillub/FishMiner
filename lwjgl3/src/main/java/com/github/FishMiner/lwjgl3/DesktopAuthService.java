@@ -1,7 +1,10 @@
 package com.github.FishMiner.lwjgl3;
 
+import com.badlogic.gdx.Gdx;
 import com.github.FishMiner.data.ports.out.IAuthService;
 import com.github.FishMiner.domain.ports.in.data.FirebaseAuthCallback;
+import com.github.FishMiner.domain.ports.out.ILoginHandler;
+import com.github.FishMiner.domain.ports.out.IUserRegistrationHandler;
 
 import org.json.JSONObject;
 
@@ -10,7 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class DesktopAuthService implements IAuthService {
+public class DesktopAuthService implements IAuthService, ILoginHandler, IUserRegistrationHandler {
 
     private final String API_KEY = "AIzaSyAvXR0t2vP72YM3Dg0wRh9RMYXigUvkElY" ;
     private String currentUsername = null;
@@ -62,14 +65,14 @@ public class DesktopAuthService implements IAuthService {
                 if (responseCode == 200) {
                     currentUsername = jsonResponse.getString("email");
                     idToken = jsonResponse.getString("idToken"); //Store the token
-                    callback.onSuccess();
+                    Gdx.app.postRunnable(callback::onSuccess);
                 } else {
                     String errorMessage = jsonResponse.getJSONObject("error").getString("message");
-                    callback.onFailure(errorMessage);
+                    Gdx.app.postRunnable(() -> callback.onFailure(errorMessage));
                 }
 
             } catch (Exception e) {
-                callback.onFailure(e.getMessage());
+                Gdx.app.postRunnable(() -> callback.onFailure(e.getMessage()));
             }
         }).start();
     }

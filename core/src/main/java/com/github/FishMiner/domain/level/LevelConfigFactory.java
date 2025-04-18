@@ -10,7 +10,7 @@ import java.util.*;
 public class LevelConfigFactory {
 
     public static LevelConfig generateLevel(int levelNumber, int previousScore) {
-        int baseTargetScore = 300;
+        int baseTargetScore = 200;
         int initialFishCount = 6;
         int totalFishCount = Math.min(30, 10 + levelNumber * 2);
         int targetScore = Math.max(baseTargetScore + (levelNumber - 1) * 30, previousScore + 20);
@@ -39,7 +39,7 @@ public class LevelConfigFactory {
             numGarbage = 0;
         }
 
-        List<IEntityType> plannedFish = generatePlannedFish(targetScore, totalFishCount, spawnChances);
+        List<IEntityType> plannedFish = generatePlannedFish(levelNumber, targetScore, totalFishCount, spawnChances);
 
         return new LevelConfig(
             targetScore,
@@ -52,7 +52,7 @@ public class LevelConfigFactory {
         );
     }
 
-    private static List<IEntityType> generatePlannedFish(int targetScore, int totalFishCount, Map<IEntityType, Float> spawnWeights) {
+    private static List<IEntityType> generatePlannedFish(int levelNumber, int targetScore, int totalFishCount, Map<IEntityType, Float> spawnWeights) {
         List<IEntityType> planned = new ArrayList<>();
         Random random = new Random();
 
@@ -83,7 +83,7 @@ public class LevelConfigFactory {
             planned.add(FishTypes.GRAY_ORANGE_FISH);
         }
 
-        System.out.println("Planned " + planned.size() + " fish, total value: " + currentValue + ", target: " + targetScore);
+        System.out.println("Level " + levelNumber + " | Planned " + planned.size() + " fish | Total Value: " + currentValue + " | Target: " + targetScore);
         return planned;
     }
 
