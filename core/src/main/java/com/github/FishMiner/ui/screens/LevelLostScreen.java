@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -37,7 +38,7 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        skin = Configuration.getInstance().getUiSkin();
+        skin = Assets.getUiskin();
 
         Table table = new Table();
         table.setFillParent(true);

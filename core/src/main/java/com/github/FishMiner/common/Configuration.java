@@ -13,18 +13,36 @@ public class Configuration {
     public static final int OCEAN_DEPTH_LEVELS = 6;
     private static final float RESOLUTION_X = 900f;
     private static final float RESOLUTION_Y = 1600f;
+
+    // UI scaling
+    private static float iconWidth;
+
+    private static float smallPadding;
+    private static float mediumPadding;
+    private static float largePadding;
+
     private static float scaleX;
     private static float scaleY;
-    private final Skin uiSkin = new Skin(Gdx.files.internal("ui/fishminerSkin.json"));
+    private static float largeFontScale;
+    private static float smallFontScale;
+    private static float mediumFontScale;
 
     // User settings
-    public final static float DEFAULT_MUSIC_VOLUME = 0.5f;
+    public final static float DEFAULT_MUSIC_VOLUME = 0f;
     private boolean isSoundEnabled = true;
     private float musicVolume = DEFAULT_MUSIC_VOLUME;
 
     private Configuration() {
         scaleX = SCREEN_WIDTH / RESOLUTION_X;
         scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
+        iconWidth = RESOLUTION_X / 10 * scaleX;
+        smallPadding = RESOLUTION_X / 20 * scaleX;
+        mediumPadding = RESOLUTION_X / 10 * scaleX;
+        largePadding = RESOLUTION_X / 5 * scaleX;
+
+        largeFontScale = RESOLUTION_X / 200 * scaleX;
+        mediumFontScale = RESOLUTION_X / 250 * scaleX;
+        smallFontScale = RESOLUTION_X / 300 * scaleX;
     }
 
     public static Configuration getInstance() {
@@ -51,6 +69,16 @@ public class Configuration {
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
         scaleX = SCREEN_WIDTH / RESOLUTION_X;
         scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
+        scaleX = SCREEN_WIDTH / RESOLUTION_X;
+        scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
+        iconWidth = RESOLUTION_X / 10 * scaleX;
+        smallPadding = RESOLUTION_X / 20 * scaleX;
+        mediumPadding = RESOLUTION_X / 10 * scaleX;
+        largePadding = RESOLUTION_X / 5 * scaleX;
+
+        largeFontScale = RESOLUTION_X / 150 * scaleX;
+        mediumFontScale = RESOLUTION_X / 250 * scaleX;
+        smallFontScale = RESOLUTION_X / 300 * scaleX;
     }
 
 
@@ -83,10 +111,6 @@ public class Configuration {
         return OCEAN_DEPTH_LEVELS;
     }
 
-    public Skin getUiSkin() {
-        return uiSkin;
-    }
-
     public boolean isDebugMode() {
         return false;
     }
@@ -109,6 +133,34 @@ public class Configuration {
 
     public void setMusicVolume(float musicVolume) {
         this.musicVolume = musicVolume;
+    }
+
+    public float getIconWidth() {
+        return iconWidth;
+    }
+
+    public float getSmallPadding() {
+        return smallPadding;
+    }
+
+    public float getMediumPadding() {
+        return mediumPadding;
+    }
+
+    public float getLargePadding() {
+        return largePadding;
+    }
+
+    public float getLargeFontScale() {
+        return largeFontScale;
+    }
+
+    public float getMediumFontScale() {
+        return mediumFontScale;
+    }
+
+    public float getSmallFontScale() {
+        return smallFontScale;
     }
 
 }

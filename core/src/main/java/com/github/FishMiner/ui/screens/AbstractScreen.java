@@ -10,8 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
@@ -34,7 +34,7 @@ public abstract class AbstractScreen implements Screen {
         Configuration config = Configuration.getInstance();
 
         stage = new Stage(new FitViewport(config.getScreenWidth(), config.getScreenHeight()));
-        skin = config.getUiSkin();
+        skin = Assets.getUiskin();
         Gdx.input.setInputProcessor(stage);
 
         this.batch = gameContext.getBatch();
@@ -86,12 +86,11 @@ public abstract class AbstractScreen implements Screen {
     }
 
     protected void drawBackground() {
-        Configuration config = Configuration.getInstance();
-        int levels = config.getDepthLevels();
-        int levelHeight = config.getOceanHeight() / levels;
-        int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
-        int oceanHeight = config.getOceanHeight();
+        int levels = Configuration.getInstance().getDepthLevels();
+        int levelHeight = Configuration.getInstance().getOceanHeight() / levels;
+        int screenWidth = (int) stage.getViewport().getWorldWidth();
+        int screenHeight = (int) stage.getViewport().getWorldHeight();
+        int oceanHeight = Configuration.getInstance().getOceanHeight();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 

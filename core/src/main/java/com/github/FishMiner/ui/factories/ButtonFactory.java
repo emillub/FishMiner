@@ -5,10 +5,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.github.FishMiner.common.Assets;
+import com.github.FishMiner.common.Configuration;
 
 public class ButtonFactory {
 
@@ -66,5 +70,49 @@ public class ButtonFactory {
         });
 
         return toggleButton;
+    }
+
+    public static ImageTextButton createImageTextButton(String text, float fontScale, Skin skin,
+            Runnable onClickAction) {
+        ImageTextButton button = new ImageTextButton(text, skin);
+        button.getLabel().setFontScale(fontScale);
+
+        float scaledWidth = button.getLabel().getPrefWidth() * fontScale;
+        float scaledHeight = button.getLabel().getPrefHeight() * fontScale;
+
+        button.setSize(scaledWidth, scaledHeight);
+
+        float buttonScaleHeight = scaledHeight / button.getPrefHeight();
+        button.getStyle().pressedOffsetY = -16 * buttonScaleHeight;
+
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                onClickAction.run();
+            }
+        });
+        return button;
+    }
+
+    public static TextButton createTextButton(String text, float fontScale, Skin skin,
+            Runnable onClickAction) {
+        TextButton button = new TextButton(text, skin);
+        button.getLabel().setFontScale(fontScale);
+
+        float scaledWidth = button.getLabel().getPrefWidth() * fontScale;
+        float scaledHeight = button.getLabel().getPrefHeight() * fontScale;
+
+        button.setSize(scaledWidth, scaledHeight);
+
+        float buttonScaleHeight = scaledHeight / button.getPrefHeight();
+        button.getStyle().pressedOffsetY = -16 * buttonScaleHeight;
+
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                onClickAction.run();
+            }
+        });
+        return button;
     }
 }

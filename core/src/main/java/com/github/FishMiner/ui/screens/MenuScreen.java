@@ -1,23 +1,33 @@
 package com.github.FishMiner.ui.screens;
 
-import static com.github.FishMiner.domain.events.soundEvents.MusicEvent.MusicCommand.PLAY_BACKGROUND;
 
+import java.io.ObjectInputFilter.Config;
+
+import org.w3c.dom.Text;
+
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.github.FishMiner.common.Assets;
+import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
+import com.github.FishMiner.domain.events.soundEvents.MusicEvent.MusicCommand;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
@@ -31,72 +41,69 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
     public void show() {
         super.show();
         Gdx.input.setInputProcessor(stage);
-        GameEventBus.getInstance().post(new MusicEvent(PLAY_BACKGROUND));
+        GameEventBus.getInstance().post(new MusicEvent(MusicCommand.PLAY_BACKGROUND));
 
-        Table rootTable = new Table();
-        rootTable.setFillParent(true);
-        stage.addActor(rootTable);
+        ImageButton settingsButton = ButtonFactory.createImageButton(Assets.ButtonEnum.SETTINGS,
+                        () -> ScreenManager.getInstance().switchScreenTo(ScreenType.SETTINGS));
 
-        TextButton settingsButton = new TextButton("Settings", skin);
-        settingsButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().switchScreenTo(ScreenType.SETTINGS);
-            }
-        });
-        TextButton loginButton = new TextButton("Login", skin);
-        loginButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().switchScreenTo(ScreenType.LOGIN);
-            }
+        ImageButton leaderboardButton = ButtonFactory.createImageButton(Assets.ButtonEnum.LEADERBOARD,
+                        () -> GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LEADERBOARD)));
+
+        ImageButton soundButton = ButtonFactory.createToggleButton(Configuration.getInstance().isMusicEnabled(),
+                        Assets.ButtonEnum.MUTED, Assets.ButtonEnum.SOUND,
+                        () -> {
+                                GameEventBus.getInstance().post(new MusicEvent(MusicEvent.MusicCommand.TOGGLE_MUTE));
+                        });
+
+        TextButton playButtonText = ButtonFactory.createTextButton("PLAY",
+                        Configuration.getInstance().getSmallFontScale(), skin, () -> {
+                                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.PLAY));
         });
 
-        TextButton playButton = new TextButton("Play", skin);
-        playButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.PLAY));
-            }
+        TextButton loginButton = ButtonFactory.createTextButton("LOGIN",
+                        Configuration.getInstance().getSmallFontScale(), skin, () -> {
+                                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LOGIN));
         });
 
-        //TO TEST
-        TextButton testButton = new TextButton("TEST LEVEL 50", skin);
-        testButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().ShowTestScreen();
-            }
-        });
+        LabelStyle labelStyle = new LabelStyle(Assets.TITLE_FONT, Assets.DARK_BROWN);
+        Label titleLabel = new Label("Fish Miner", labelStyle);
+        titleLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
 
-        TextButton leaderboardButton = new TextButton("Leaderboard", skin);
-        leaderboardButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LEADERBOARD));
-            }
-        });
+        Table topSectionTable = new Table();
+        topSectionTable.setFillParent(true);
+        topSectionTable.top();
 
-        Label titleLabel = new Label("FishMiner", skin);
-        titleLabel.setColor(com.badlogic.gdx.graphics.Color.BLACK);
-        titleLabel.setFontScale(4f);
-        rootTable.add(titleLabel).pad(80).expand().center();
-        rootTable.row();
-        rootTable.add(playButton).width(Gdx.graphics.getWidth() / 2f).expand().fillY();
-        rootTable.row();
+        titleLabel.setPosition(
+                        Configuration.getInstance().getScreenWidth() / 2
+                                        - titleLabel.getWidth() * titleLabel.getFontScaleX() / 2,
+                        Configuration.getInstance().getScreenHeight()
+                                        * Configuration.getInstance().getOceanHeightPercentage() +
+                                        titleLabel.getHeight() * titleLabel.getFontScaleY() / 2);
 
-        rootTable.add(loginButton).width(Gdx.graphics.getWidth() / 2f).expand().fillY();
-        rootTable.row();
-        rootTable.add(settingsButton).width(Gdx.graphics.getWidth() / 2f).expand().fillY();
-        rootTable.row();
-        rootTable.add(testButton).width(Gdx.graphics.getWidth() / 2f).expand().fillY();
-        rootTable.row();
-        rootTable.add(leaderboardButton).width(Gdx.graphics.getWidth() / 2f).expand().fillY();
+        stage.addActor(titleLabel);
+
+        Table middleSection = new Table();
+        middleSection.setFillParent(true);
+        middleSection.center();
+
+        middleSection.add(playButtonText).size(playButtonText.getWidth(), playButtonText.getHeight())
+                        .padBottom(Configuration.getInstance().getSmallPadding()).top();
+        middleSection.row().expandX();
+        middleSection.add(loginButton).size(loginButton.getWidth(), loginButton.getHeight())
+                        .padBottom(Configuration.getInstance().getSmallPadding());
+        stage.addActor(middleSection);
+
+        Table bottomSectionTable = new Table();
+        bottomSectionTable.bottom();
+        bottomSectionTable.setFillParent(true);
+        bottomSectionTable.add(soundButton).size(Configuration.getInstance().getIconWidth())
+                        .padBottom(Configuration.getInstance().getLargePadding()).center();
+        stage.addActor(bottomSectionTable);
     }
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1);
+            ScreenUtils.clear(Assets.BLACK);
         super.drawBackground();
         stage.act(delta);
         stage.draw();
