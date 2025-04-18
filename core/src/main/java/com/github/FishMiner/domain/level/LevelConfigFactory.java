@@ -10,10 +10,12 @@ import java.util.*;
 public class LevelConfigFactory {
 
     public static LevelConfig generateLevel(int levelNumber, int previousScore) {
-        int baseTargetScore = 200;
+        int baseTargetScore = 100;
         int initialFishCount = 6;
         int totalFishCount = Math.min(30, 10 + levelNumber * 2);
-        int targetScore = Math.max(baseTargetScore + (levelNumber - 1) * 30, previousScore + 20);
+        int increment = (int) (previousScore * 0.6f); // 70% of the previous score
+        int targetScore = Math.max(baseTargetScore + (levelNumber - 1) * 40, previousScore + increment);
+
         float spawnInterval = 0f;
         int numGarbage = levelNumber;
 
