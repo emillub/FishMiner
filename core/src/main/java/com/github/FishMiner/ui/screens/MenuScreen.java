@@ -63,7 +63,7 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.PLAY));
+                ScreenManager.getInstance().startNewGame();
             }
         });
 

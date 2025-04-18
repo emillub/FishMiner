@@ -1,6 +1,7 @@
 package com.github.FishMiner.domain;
 
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -122,14 +123,43 @@ public class GameContext implements IGameContext {
      * It then creates new ones, adds them to the engine and assigns them to this.player.
      * Then a new the World creates reuses the PlayScreen with Level 1
      */
-    public void resetContext() {
-        engine.removeEntity(player.getSinker());
-        engine.removeEntity(player.getHook());
-        engine.removeEntity(player.getReel());
-        engine.removeEntity(player.getPlayerEntity());
+    public void resetGame() {
+        if (player != null) {
+            safelyRemove(player.getSinker());
+            safelyRemove(player.getHook());
+            safelyRemove(player.getReel());
+            safelyRemove(player.getPlayerEntity());
+        }
+
+        resetWorld();
 
         this.player = initPlayer(engine);
+
+        // Reset score
+        ScoreComponent scoreComponent = player.getPlayerEntity().getComponent(ScoreComponent.class);
+        if (scoreComponent != null) {
+            scoreComponent.setScore(0);
+        }
+
+
+        // Start from level 1
         initStartLevel(world);
+        engine.update(0f); // make sure ECS is in sync
+    }
+
+
+    private void safelyRemove(Entity entity) {
+        if (entity != null) {
+            engine.removeEntity(entity);
+        }
+    }
+
+    private void resetWorld() {
+        world.setState(WorldState.RUNNING);
+        world.setLevelNumber(1);   // You'll need to expose this setter
+        world.setScore(0);         // Same here
+        world.setFinalScorePosted(false);
+        world.setLevelCompleted(false);
     }
 
     public void createTestConfig() {
@@ -140,20 +170,22 @@ public class GameContext implements IGameContext {
 
     private PlayerCharacter initPlayer(PooledEngine engine) {
         Configuration config = Configuration.getInstance();
-        return PlayerCharacter.getInstance(engine,
+        return new PlayerCharacter(engine,
             (int) (config.getScreenWidth() * 0.5f),
             (int) (config.getScreenHeight() * config.getOceanHeightPercentage())
         );
     }
+
 
     private UpgradeStore initUpgradeStore(PooledEngine engine) {
         return UpgradeStore.getInstance(engine);
     }
 
     private void initStartLevel(World world) {
-        LevelConfig initialConfig = LevelConfigFactory.generateLevel(1, player.getScore());
-        world.createLevel(initialConfig, player.getScore());
+        LevelConfig initialConfig = LevelConfigFactory.generateLevel(1, 0); // ← zero score
+        world.createLevel(initialConfig, 0);                                // ← zero score
     }
+
 
     private void addSystemsToEngine(ShapeRenderer renderer, SpriteBatch batch, OrthographicCamera cam, UpgradeStore store) {
         engine.addSystem(new BackgroundRenderSystem(renderer));

@@ -40,6 +40,8 @@ public class World implements IGameEventListener<ScoreEvent> {
     }
 
     public void createLevel(LevelConfig config, int startingScore, Float customTimer) {
+        System.out.println("[DEBUG] World.createLevel() called — level " + levelNumber);
+
         this.targetScore = config.getTargetScore();
 
         SpawningQueueSystem spawningSystem = engine.getSystem(SpawningQueueSystem.class);
@@ -127,7 +129,9 @@ public class World implements IGameEventListener<ScoreEvent> {
         }
 
         int newScore = (int) event.getScore();
-        if (score != newScore) {
+        if (newScore < score) {
+            score = 0;
+        } else {
             score = newScore;
         }
 
@@ -140,4 +144,21 @@ public class World implements IGameEventListener<ScoreEvent> {
     public Class<ScoreEvent> getEventType() {
         return ScoreEvent.class;
     }
+
+    public void setLevelNumber(int levelNumber) {
+        this.levelNumber = levelNumber;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setFinalScorePosted(boolean value) {
+        this.finalScorePosted = value;
+    }
+
+    public void setLevelCompleted(boolean value) {
+        this.levelCompleted = value;
+    }
+
 }

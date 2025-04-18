@@ -125,7 +125,8 @@ public class ScreenManager {
      * and clears any cached PlayScreen.
      */
     public void startNewGame() {
-        gameContext.resetContext();
+        gameContext.resetGame();
+        gameContext.getEngine().update(0f); // ✅ Force update to re-sync entities
         // Remove any cached instance of the PLAY screen.
         cachedScreens.remove(ScreenType.PLAY);
         switchScreenTo(PLAY);
