@@ -61,7 +61,7 @@ public class MusicManager implements IGameEventListener<MusicEvent> {
             currentlyPlaying.stop();
         }
         currentlyPlaying = newMusic;
-        currentlyPlaying.setVolume(previousVolume);
+        currentlyPlaying.setVolume(Configuration.getInstance().getMusicVolume());
         currentlyPlaying.play();
         Logger.getInstance().debug("MusicManager", "Switching music to: " + newMusic);
     }
