@@ -15,17 +15,24 @@ public class Configuration {
     private static final float RESOLUTION_Y = 1600f;
 
     // UI scaling
-    private static float iconWidth;
+    private float quarterScreenWidth;
+    private float quarterScreenHeight;
 
-    private static float smallPadding;
-    private static float mediumPadding;
-    private static float largePadding;
+    private float bigIconWidth;
+    private float mediumIconWidth;
+    private float smallIconWidth;
 
-    private static float scaleX;
-    private static float scaleY;
-    private static float largeFontScale;
-    private static float mediumFontScale;
-    private static float smallFontScale;
+    private float smallPadding;
+    private float mediumPadding;
+    private float largePadding;
+
+    private float scaleX;
+    private float scaleY;
+    private float largeFontScale;
+    private float mediumFontScale;
+    private float smallFontScale;
+
+    private float titleScale;
 
     // User settings
     public final static float DEFAULT_MUSIC_VOLUME = 0f;
@@ -62,13 +69,23 @@ public class Configuration {
         scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
         scaleX = SCREEN_WIDTH / RESOLUTION_X;
         scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
-        iconWidth = RESOLUTION_X / 10 * scaleX;
-        smallPadding = RESOLUTION_X / 20 * scaleX;
-        mediumPadding = RESOLUTION_X / 10 * scaleX;
+
+        quarterScreenWidth = SCREEN_WIDTH / 4f;
+        quarterScreenHeight = SCREEN_HEIGHT / 4f;
+
+        bigIconWidth = RESOLUTION_X / 10 * scaleX;
+        mediumIconWidth = RESOLUTION_X / 12 * scaleX;
+        smallIconWidth = RESOLUTION_X / 15 * scaleX;
+
+        smallPadding = RESOLUTION_X / 40 * scaleX;
+        mediumPadding = RESOLUTION_X / 25 * scaleX;
         largePadding = RESOLUTION_X / 5 * scaleX;
-        largeFontScale = RESOLUTION_X / 150 * scaleX;
-        mediumFontScale = RESOLUTION_X / 300 * scaleX;
+
+        largeFontScale = RESOLUTION_X / 300 * scaleX;
+        mediumFontScale = RESOLUTION_X / 400 * scaleX;
         smallFontScale = RESOLUTION_X / 500 * scaleX;
+
+        titleScale = RESOLUTION_X / 800 * scaleX;
     }
 
 
@@ -125,8 +142,24 @@ public class Configuration {
         this.musicVolume = musicVolume;
     }
 
-    public float getIconWidth() {
-        return iconWidth;
+    public float getBigIconWidth() {
+        return bigIconWidth;
+    }
+
+    public float getMediumIconWidth() {
+        return mediumIconWidth;
+    }
+
+    public float getSmallIconWidth() {
+        return smallIconWidth;
+    }
+
+    public float getQuarterScreenHeight() {
+        return quarterScreenHeight;
+    }
+
+    public float getQuarterScreenWidth() {
+        return quarterScreenWidth;
     }
 
     public float getSmallPadding() {
@@ -153,4 +186,7 @@ public class Configuration {
         return smallFontScale;
     }
 
+    public float getTitleScale() {
+        return titleScale;
+    }
 }

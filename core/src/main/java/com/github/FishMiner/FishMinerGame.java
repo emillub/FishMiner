@@ -60,6 +60,9 @@ public class FishMinerGame extends Game {
             }
         }
 
+        Assets.getInstance().loadAsset(Assets.PLAYER_TEXTURE, Texture.class);
+        Assets.getInstance().loadAsset(Assets.TITLE_PATH, Texture.class);
+
         RequestManager managerToUse = (requestManager != null)
             ? requestManager
             : new RequestManager(

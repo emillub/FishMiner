@@ -14,9 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.GameEventBus;
+import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
@@ -30,10 +32,11 @@ public class SettingScreen extends AbstractScreen implements IGameScreen {
     @Override
     public void show() {
         super.show();
-        stage.clear(); // Clear the stage to avoid adding duplicate actors
         Table rootTable = new Table();
         rootTable.setFillParent(true);
         stage.addActor(rootTable);
+
+        float menuWidth = Configuration.getInstance().getQuarterScreenWidth();
 
         // Title Label
         Label titleLabel = new Label("Settings", skin);
@@ -56,21 +59,16 @@ public class SettingScreen extends AbstractScreen implements IGameScreen {
                 GameEventBus.getInstance().post(musicEvent);
             }
         });
-        rootTable.add(volumeSlider).width(200).pad(10);
+        rootTable.add(volumeSlider).width(menuWidth);
         rootTable.row();
 
-        TextButton backButton = new TextButton("Back to Menu", skin);
-        backButton.getLabel().setColor(Color.WHITE);
-        backButton.setColor(Color.BLACK);
-        backButton.getLabel().setFontScale(2f);
+        TextButton backButton = ButtonFactory.createTextButton("Back to Menu",
+                ButtonFactory.ButtonSize.MEDIUM, () -> {
+                    GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.MENU));
+                });
 
-        backButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().switchScreenTo(ScreenType.MENU);
-            }
-        });
-        rootTable.add(backButton).pad(10);
+        rootTable.add(backButton).size(backButton.getWidth(), backButton.getHeight())
+                .pad(Configuration.getInstance().getSmallPadding());
     }
 
     @Override

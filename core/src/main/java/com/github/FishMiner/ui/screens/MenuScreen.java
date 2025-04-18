@@ -7,6 +7,7 @@ import org.w3c.dom.Text;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -47,8 +48,7 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
 
         ImageButton settingsButton = ButtonFactory.createImageButton(Assets.ButtonEnum.SETTINGS,
                 () -> {
-                    System.out.println(this.stage);
-                    ScreenManager.getInstance().switchScreenTo(ScreenType.SETTINGS);
+                    GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.SETTINGS));
                 });
 
         ImageButton leaderboardButton = ButtonFactory.createImageButton(Assets.ButtonEnum.LEADERBOARD,
@@ -73,33 +73,25 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         });
 
 
-        LabelStyle labelStyle = new LabelStyle(Assets.TITLE_FONT, Assets.DARK_BROWN);
-        Label titleLabel = new Label("Fish Miner", labelStyle);
-        titleLabel.setFontScale(Configuration.getInstance().getMediumFontScale());
+        Image titleImage = new Image(Assets.getInstance().getAsset(Assets.TITLE_PATH, Texture.class));
+        titleImage.setScale(Configuration.getInstance().getTitleScale());
+        titleImage.setPosition(
+                (Configuration.getInstance().getScreenWidth() - titleImage.getWidth() * titleImage.getScaleX()) / 2,
+                (Configuration.getInstance().getScreenHeight() * Configuration.getInstance().getOceanHeightPercentage()
+                        - titleImage.getHeight() * titleImage.getScaleY() / 2) - 16);
 
-        Table topSectionTable = new Table();
-        topSectionTable.setFillParent(true);
-        topSectionTable.top();
-
-        titleLabel.setPosition(
-                        Configuration.getInstance().getScreenWidth() / 2
-                                        - titleLabel.getWidth() * titleLabel.getFontScaleX() / 2,
-                        Configuration.getInstance().getScreenHeight()
-                                        * Configuration.getInstance().getOceanHeightPercentage() +
-                                        titleLabel.getHeight() * titleLabel.getFontScaleY() / 2);
-
-        stage.addActor(titleLabel);
+        stage.addActor(titleImage);
 
         Table middleSection = new Table();
         middleSection.setFillParent(true);
-        middleSection.center();
+        middleSection.center().padTop(Configuration.getInstance().getLargePadding());
 
-        TextButton playButtonText = ButtonFactory.createTextButton("PLAY",
-                Configuration.getInstance().getMediumFontScale(), skin, () -> {
+        TextButton playButtonText = ButtonFactory.createTextButton("PLAY", ButtonFactory.ButtonSize.LARGE, () -> {
                     GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.PLAY));
                 });
         middleSection.add(playButtonText).size(playButtonText.getWidth(), playButtonText.getHeight())
-                .padBottom(Configuration.getInstance().getSmallPadding()).top();
+                .padBottom(Configuration.getInstance().getMediumPadding())
+                .padTop(Configuration.getInstance().getMediumPadding()).top();
         middleSection.row().expandX();
 
         if (UserSession.isLoggedIn()) {
@@ -107,8 +99,7 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
             loggedInLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
             middleSection.add(loggedInLabel).center();
         } else {
-            TextButton loginButton = ButtonFactory.createTextButton("LOGIN",
-                    Configuration.getInstance().getMediumFontScale(), skin, () -> {
+            TextButton loginButton = ButtonFactory.createTextButton("LOGIN", ButtonFactory.ButtonSize.LARGE, () -> {
                         GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LOGIN));
                     });
             middleSection.add(loginButton).size(loginButton.getWidth(), loginButton.getHeight())
@@ -117,28 +108,21 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         stage.addActor(middleSection);
 
         Table bottomSectionTable = new Table();
-        bottomSectionTable.bottom();
+        bottomSectionTable.bottom().padBottom(Configuration.getInstance().getLargePadding());
         bottomSectionTable.setFillParent(true);
-        bottomSectionTable.add(soundButton).size(Configuration.getInstance().getIconWidth())
-                        .padBottom(Configuration.getInstance().getLargePadding()).center();
-        bottomSectionTable.add(settingsButton).size(Configuration.getInstance().getIconWidth())
-                .padBottom(Configuration.getInstance().getLargePadding()).center();
-        bottomSectionTable.add(leaderboardButton).size(Configuration.getInstance().getIconWidth())
-                .padBottom(Configuration.getInstance().getLargePadding()).center();
+        bottomSectionTable.add(soundButton).size(Configuration.getInstance().getBigIconWidth()).center()
+                .padRight(Configuration.getInstance().getSmallPadding());
+        bottomSectionTable.add(settingsButton).size(Configuration.getInstance().getBigIconWidth()).center()
+                .padRight(Configuration.getInstance().getSmallPadding());
+        bottomSectionTable.add(leaderboardButton).size(Configuration.getInstance().getBigIconWidth()).center();
         stage.addActor(bottomSectionTable);
     }
 
     @Override
     public void render(float delta) {
-            ScreenUtils.clear(Assets.BLACK);
+        ScreenUtils.clear(Assets.BLACK);
         super.drawBackground();
         stage.act(delta);
         stage.draw();
-    }
-
-    @Override
-    public void hide() {
-        super.hide();
-        stage.clear();
     }
 }

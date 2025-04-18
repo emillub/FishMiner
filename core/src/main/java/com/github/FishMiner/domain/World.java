@@ -29,7 +29,7 @@ public class World implements IGameEventListener<ScoreEvent> {
     }
 
     public void createLevel(LevelConfig config, int startingScore) {
-        this.createLevel(config, startingScore, 60f);
+        this.createLevel(config, startingScore, 15f);
 
     }
 
@@ -111,10 +111,18 @@ public class World implements IGameEventListener<ScoreEvent> {
 
     public void togglePause() {
         if (state == WorldState.PAUSED) {
-            state = WorldState.RUNNING;
+            resume();
         } else if (state == WorldState.RUNNING) {
-            state = WorldState.PAUSED;
+            pause();
         }
+    }
+
+    public void pause() {
+        state = WorldState.PAUSED;
+    }
+
+    public void resume() {
+        state = WorldState.RUNNING;
     }
 
     public int getLevel() {

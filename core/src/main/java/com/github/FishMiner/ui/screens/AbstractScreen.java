@@ -71,7 +71,9 @@ public abstract class AbstractScreen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {}
+    public void hide() {
+        stage.clear();
+    }
 
     @Override
     public void dispose() {

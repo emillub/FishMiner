@@ -19,11 +19,15 @@ public class Assets {
     public final static BitmapFont DEFAULT_FONT = uiSkin.getFont("default");
     public final static BitmapFont TITLE_FONT = uiSkin.getFont("title");
 
+    public static Color TITLE_COLOR = Color.valueOf("5D4037"); // A warm brownish-gray color that complements brown well
     public static Color BLACK = uiSkin.getColor("black");
     public static Color WHITE = uiSkin.getColor("white");
     public static Color LIGHT_BROWN = uiSkin.getColor("maintext");
     public static Color DARK_BROWN = uiSkin.getColor("darkbrown");
-    public static Color BACKGROUND_COLOR = Color.valueOf("83AECE");
+    public static Color BACKGROUND_COLOR = Color.valueOf("A1D6F6");
+
+    public static String PLAYER_TEXTURE = "fisherman.png";
+    public static String TITLE_PATH = "ui/title.png";
 
     private Assets() {
         // Private constructor to prevent instantiation

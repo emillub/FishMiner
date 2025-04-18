@@ -2,12 +2,10 @@ package com.github.FishMiner.ui.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.ecsEvents.TransactionEvent;
 import com.github.FishMiner.domain.ecs.components.SinkerComponent;
@@ -15,6 +13,7 @@ import com.github.FishMiner.domain.ecs.components.ReelComponent;
 import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
 import com.github.FishMiner.domain.UpgradeStore;
 import com.github.FishMiner.domain.managers.ScreenManager;
+import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.ports.in.IPlayer;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
@@ -44,7 +43,6 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
         Table table = new Table();
         table.setFillParent(true);
         table.top().padTop(40);
-        table.setBackground(skin.newDrawable("white", 0.6f, 0.85f, 1f, 0.8f));
         stage.addActor(table);
 
         Label title = new Label("Upgrade Store", skin);
@@ -73,50 +71,39 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
 
             Label itemLabel = new Label(productName + " (" + productPrice + ")", skin);
             itemLabel.setFontScale(1.1f);
+            String finalProductName = productName;
 
-            final TextButton buyButton = new TextButton("Buy", skin);
-            buyButton.pad(6);
+            // Use ButtonFactory to create the buy button.
+            final TextButton buyButton = ButtonFactory.createTextButton("Buy",
+                    ButtonFactory.ButtonSize.SMALL, () -> {
+                        TransactionEvent txEvent = new TransactionEvent(player.getPlayerEntity(), product);
+                        GameEventBus.getInstance().post(txEvent);
+                    });
 
             // When the buy button is pressed, create and post a TransactionEvent.
-            String finalProductName = productName;
-            buyButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    // Assuming the player provides its underlying entity via getEntity()
-                    TransactionEvent txEvent = new TransactionEvent(player.getPlayerEntity(), product);
-                    GameEventBus.getInstance().post(txEvent);
-                    buyButton.setDisabled(true);
-                    buyButton.setText(finalProductName + " (Processing)");
-                }
-            });
 
             Table itemRow = new Table();
             itemRow.add(itemLabel).left().expandX().padRight(15);
-            itemRow.add(buyButton).right();
+            itemRow.add(buyButton).size(buyButton.getWidth() + Configuration.getInstance().getSmallPadding(),
+                    Configuration.getInstance().getSmallPadding()).padLeft(15);
 
             table.add(itemRow).padBottom(20).fillX().width(400).row();
         }
 
-        TextButton continueButton = new TextButton("Continue", skin);
-        continueButton.getLabel().setFontScale(1.3f);
-
-        continueButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                // Optionally hide the upgrade trader when continuing.
-                upgradeStore.setRenderTrader(false);
-                System.out.println("🎮 Continue to next level.");
-                ScreenManager.getInstance().startNextLevel();
-            }
-        });
+        TextButton continueButton = ButtonFactory.createTextButton("Continue",
+                ButtonFactory.ButtonSize.SMALL, () -> {
+                    // Optionally hide the upgrade trader when continuing.
+                    upgradeStore.setRenderTrader(false);
+                    ScreenManager.getInstance().startNextLevel();
+                });
 
         table.add(continueButton).padTop(40).width(240).height(70).colspan(2).center().row();
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+        super.drawBackground();
         stage.act(delta);
         stage.draw();
     }

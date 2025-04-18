@@ -1,5 +1,7 @@
 package com.github.FishMiner.ui.factories;
 
+import java.io.ObjectInputFilter.Config;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,6 +17,11 @@ import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
 
 public class ButtonFactory {
+    public static enum ButtonSize {
+        SMALL,
+        MEDIUM,
+        LARGE
+    }
 
     public static ImageButton createImageButton(Assets.ButtonEnum buttonEnum, Runnable onClickAction) {
         ImageButton button = new ImageButton(
@@ -72,9 +79,23 @@ public class ButtonFactory {
         return toggleButton;
     }
 
-    public static ImageTextButton createImageTextButton(String text, float fontScale, Skin skin,
+    public static ImageTextButton createImageTextButton(String text, ButtonSize size,
             Runnable onClickAction) {
-        ImageTextButton button = new ImageTextButton(text, skin);
+        float fontScale = 1f;
+
+        switch (size) {
+            case SMALL:
+                fontScale = Configuration.getInstance().getSmallFontScale();
+                break;
+            case MEDIUM:
+                fontScale = Configuration.getInstance().getMediumFontScale();
+                break;
+            case LARGE:
+                fontScale = Configuration.getInstance().getLargeFontScale();
+                break;
+        }
+
+        ImageTextButton button = new ImageTextButton(text, Assets.getUiskin());
         button.getLabel().setFontScale(fontScale);
 
         float scaledWidth = button.getLabel().getPrefWidth() * fontScale;
@@ -94,13 +115,27 @@ public class ButtonFactory {
         return button;
     }
 
-    public static TextButton createTextButton(String text, float fontScale, Skin skin,
-            Runnable onClickAction) {
-        TextButton button = new TextButton(text, skin);
+    public static TextButton createTextButton(String text, ButtonSize size,
+                    Runnable onClickAction) {
+        float fontScale = 1f;
+        switch (size) {
+            case SMALL:
+                fontScale = Configuration.getInstance().getSmallFontScale();
+                break;
+            case MEDIUM:
+                fontScale = Configuration.getInstance().getMediumFontScale();
+                break;
+            case LARGE:
+                fontScale = Configuration.getInstance().getLargeFontScale();
+                break;
+        }
+
+        TextButton button = new TextButton(text, Assets.getUiskin());
         button.getLabel().setFontScale(fontScale);
 
         float scaledWidth = button.getLabel().getPrefWidth() * fontScale;
-        float scaledHeight = button.getLabel().getPrefHeight() * fontScale;
+        float scaledHeight = button.getLabel().getPrefHeight() * fontScale
+                + Configuration.getInstance().getSmallPadding();
 
         button.setSize(scaledWidth, scaledHeight);
 

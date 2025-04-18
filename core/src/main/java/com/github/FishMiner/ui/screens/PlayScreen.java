@@ -16,12 +16,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
+import com.github.FishMiner.common.Assets;
+import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
@@ -33,6 +37,7 @@ import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.domain.session.UserSession;
 import com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent;
+import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
@@ -43,12 +48,8 @@ import com.github.FishMiner.ui.ports.out.ScreenType;
 public class PlayScreen extends AbstractScreen implements IGameScreen {
     private static final String TAG = "PlayScreen";
     private static final float OVERLAY_ALPHA = 0.6f;
-    private static final int BUTTON_WIDTH = 200;
-    private static final int BUTTON_HEIGHT = 60;
     private World world;
-    private TextButton pauseButton;
     private Table pauseOverlay;
-    private boolean overlayVisible = false;
     private boolean scoreSubmitted = false;
 
     public PlayScreen(IGameContext gameContext) {
@@ -61,8 +62,9 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
     @Override
     public void show() {
         super.show();
-        stage.clear();
-
+        if (world.isPaused()) {
+            world.resume();
+        }
         setupInput();
         setupPauseUI();
         GameEventBus.getInstance().register(displayScoreListener);
@@ -75,8 +77,9 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         cam.update();
 
-        if (!world.isPaused()) {
-            gameContext.update(delta);
+        gameContext.update(delta);
+        if (world.isPaused()) {
+            super.drawBackground();
         }
 
         super.stage.act(delta);
@@ -107,79 +110,68 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
     }
 
     private void setupPauseUI() {
-        // === Pause Button (icon only) ===
-        Texture pauseTexture = new Texture(Gdx.files.internal("pause-button.png"));
-        TextureRegionDrawable pauseDrawable = new TextureRegionDrawable(new TextureRegion(pauseTexture));
-
-        TextButton.TextButtonStyle pauseStyle = new TextButton.TextButtonStyle();
-        pauseStyle.up = pauseDrawable;
-        pauseStyle.down = pauseDrawable;
-        pauseStyle.over = null;
-        pauseStyle.font = new BitmapFont();
-
-        pauseButton = new TextButton("", pauseStyle);
-        pauseButton.setSize(48, 48);
-        pauseButton.setPosition(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 60);
-        pauseButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                world.togglePause();
-                overlayVisible = world.isPaused();
-                pauseOverlay.setVisible(overlayVisible);
-                pauseButton.setVisible(!overlayVisible);
-            }
-        });
         // === Pause Overlay ===
         pauseOverlay = new Table();
         pauseOverlay.setFillParent(true);
         pauseOverlay.setVisible(false);
-        pauseOverlay.setBackground(skin.newDrawable("white", 0, 0, 0, 0.6f));
-        pauseOverlay.center();
 
-        // Red button background
-        TextureRegionDrawable redDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("Red-Button.png")));
+        // Create a faded white background
+        Table background = new Table();
+        background.setFillParent(true);
+        background.setColor(Color.WHITE); // Set the color to white
+        background.getColor().a = OVERLAY_ALPHA; // Set transparency
 
-        // Text button style for overlay
-        TextButton.TextButtonStyle redStyle = new TextButton.TextButtonStyle();
-        redStyle.up = redDrawable;
-        redStyle.down = redDrawable;
-        redStyle.font = super.skin.getFont("default");
-        redStyle.fontColor = Color.WHITE;
+        stage.addActor(background); // Add the background first so it appears behind other elements
 
-        // Resume button
-        TextButton resumeButton = new TextButton("Resume", redStyle);
-        resumeButton.pad(10);
-        resumeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+        ImageButton pauseButton = ButtonFactory.createToggleButton(world.isPaused(), Assets.ButtonEnum.PAUSE,
+                Assets.ButtonEnum.PLAY,
+                () -> {
                 world.togglePause();
-                overlayVisible = false;
-                pauseOverlay.setVisible(false);
-                pauseButton.setVisible(true);
-            }
-        });
+                    pauseOverlay.setVisible(world.isPaused());
+                });
+        float buttonWidth = Configuration.getInstance().getMediumIconWidth();
+        pauseButton.getImage().setScaling(Scaling.fit);
+        pauseButton.setPosition(Gdx.graphics.getWidth() - buttonWidth - Configuration.getInstance().getSmallPadding(),
+                Gdx.graphics.getHeight() - buttonWidth - Configuration.getInstance().getSmallPadding());
+        pauseButton.setSize(buttonWidth, buttonWidth);
+
+        ImageButton soundButton = ButtonFactory.createToggleButton(Configuration.getInstance().isMusicEnabled(),
+                Assets.ButtonEnum.MUTED, Assets.ButtonEnum.SOUND,
+                () -> {
+                    GameEventBus.getInstance().post(new MusicEvent(MusicEvent.MusicCommand.TOGGLE_MUTE));
+                });
+        soundButton.setPosition(
+                Gdx.graphics.getWidth() - buttonWidth * 2 - Configuration.getInstance().getSmallPadding()
+                        - Configuration.getInstance().getSmallPadding(),
+                Gdx.graphics.getHeight() - buttonWidth - Configuration.getInstance().getSmallPadding());
+        soundButton.setSize(buttonWidth, buttonWidth);
+
+        stage.addActor(pauseOverlay); // Add the pause overlay after the background
+        stage.addActor(pauseButton);
+        stage.addActor(soundButton);
 
         // Quit button
-        TextButton quitButton = new TextButton("Quit", redStyle);
-        quitButton.pad(10);
-        quitButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                float score = gameContext.getWorld().getScore();
-
-                if (UserSession.isLoggedIn() && score > 0) {
-                    ScoreEntry entry = new ScoreEntry(UserSession.getCurrentUserEmail(), (int) score);
-                    GameEventBus.getInstance().post(new LeaderboardPostRequestEvent(entry));
-                }
-
-                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.MENU));
-            }
+        TextButton continueButton = ButtonFactory.createTextButton("Continue", ButtonFactory.ButtonSize.MEDIUM, () -> {
+            world.togglePause();
+            pauseOverlay.setVisible(world.isPaused());
         });
 
-        pauseOverlay.add(resumeButton).width(200).height(60).pad(20).row();
-        pauseOverlay.add(quitButton).width(200).height(60).pad(10);
+        TextButton quitButton = ButtonFactory.createTextButton("Quit", ButtonFactory.ButtonSize.MEDIUM, () -> {
+            float score = gameContext.getWorld().getScore();
+            if (UserSession.isLoggedIn() && score > 0) {
+                ScoreEntry entry = new ScoreEntry(UserSession.getCurrentUserEmail(), (int) score);
+                GameEventBus.getInstance().post(new LeaderboardPostRequestEvent(entry));
+            }
 
-        stage.addActor(pauseButton);
+            GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.MENU));
+        });
+
+        pauseOverlay.add(continueButton).size(continueButton.getWidth(),
+                continueButton.getHeight()).padBottom(Configuration.getInstance().getSmallPadding()).row();
+
+        pauseOverlay.add(quitButton).size(quitButton.getWidth(),
+                quitButton.getHeight());
+
         stage.addActor(pauseOverlay);
     }
 
