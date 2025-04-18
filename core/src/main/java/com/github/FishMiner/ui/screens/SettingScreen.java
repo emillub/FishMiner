@@ -29,7 +29,7 @@ public class SettingScreen extends AbstractScreen implements IGameScreen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        super.show();
         stage.clear(); // Clear the stage to avoid adding duplicate actors
         Table rootTable = new Table();
         rootTable.setFillParent(true);

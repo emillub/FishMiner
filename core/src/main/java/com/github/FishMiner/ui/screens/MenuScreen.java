@@ -46,7 +46,10 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         GameEventBus.getInstance().post(new MusicEvent(MusicCommand.PLAY_BACKGROUND));
 
         ImageButton settingsButton = ButtonFactory.createImageButton(Assets.ButtonEnum.SETTINGS,
-                        () -> ScreenManager.getInstance().switchScreenTo(ScreenType.SETTINGS));
+                () -> {
+                    System.out.println(this.stage);
+                    ScreenManager.getInstance().switchScreenTo(ScreenType.SETTINGS);
+                });
 
         ImageButton leaderboardButton = ButtonFactory.createImageButton(Assets.ButtonEnum.LEADERBOARD,
                         () -> GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LEADERBOARD)));
@@ -118,6 +121,10 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         bottomSectionTable.setFillParent(true);
         bottomSectionTable.add(soundButton).size(Configuration.getInstance().getIconWidth())
                         .padBottom(Configuration.getInstance().getLargePadding()).center();
+        bottomSectionTable.add(settingsButton).size(Configuration.getInstance().getIconWidth())
+                .padBottom(Configuration.getInstance().getLargePadding()).center();
+        bottomSectionTable.add(leaderboardButton).size(Configuration.getInstance().getIconWidth())
+                .padBottom(Configuration.getInstance().getLargePadding()).center();
         stage.addActor(bottomSectionTable);
     }
 
