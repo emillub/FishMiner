@@ -103,6 +103,7 @@ public class SpawningQueueSystem extends EntitySystem {
                 transform.pos.x = MathUtils.random(minX, maxX);
             }
 
+
             engine.addEntity(fishableEntity);
             spawnedCount++;
         }
@@ -130,6 +131,7 @@ public class SpawningQueueSystem extends EntitySystem {
     }
 
     private void spawnNextFishableEntity() {
+
         if (spawnedCount < plannedFish.size()) {
             spawnFishableEntity(plannedFish.get(spawnedCount));
             spawnedCount++;
@@ -138,6 +140,11 @@ public class SpawningQueueSystem extends EntitySystem {
 
     private void spawnFishableEntity(IEntityType type) {
         Entity fishableEntity = factory.createEntity(type);
+        TransformComponent transform = fishableEntity.getComponent(TransformComponent.class);
+        if (transform != null) {
+            System.out.println("[DEBUG] Fish spawned: " + type + " at position " + transform.pos);
+        }
+
         engine.addEntity(fishableEntity);
     }
 

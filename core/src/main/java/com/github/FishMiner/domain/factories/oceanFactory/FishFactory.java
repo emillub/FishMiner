@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
@@ -92,6 +91,7 @@ public class FishFactory {
         // Start Y: based on depth
         float startY = DomainUtils.getRandomDepthFor(depthLevel, fishComponent.height);
         transformComponent.pos.set(startX, startY, 0);
+        System.out.println("[DEBUG] Fish spawned at: " + transformComponent.pos);
         transformComponent.scale.set(scale, scale);
         velocityComponent.velocity.x = DomainUtils.getFishDirectionX(movesRight, speed);
 
@@ -116,7 +116,7 @@ public class FishFactory {
         fish.add(textureComponent);
         fish.add(velocityComponent);
         fish.add(boundsComponent);
-        fish.add(attachmentComponent);
+//        fish.add(attachmentComponent);
         fish.add(stateComponent);
         fish.add(animationComponent);
         fish.add(weightComponent);

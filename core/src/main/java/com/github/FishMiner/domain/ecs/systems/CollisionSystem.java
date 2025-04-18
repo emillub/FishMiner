@@ -77,7 +77,9 @@ public class CollisionSystem extends EntitySystem {
                 }
                 BoundsComponent fishBounds = fish.getComponent(BoundsComponent.class);
                 if (fishBounds != null && hookBounds.overlaps(fishBounds)) {
-                    System.out.println("HOOK OVERLAPS FISH! Attaching fish " + fish);
+                    TransformComponent fishTransform = fish.getComponent(TransformComponent.class);
+                    System.out.println("[DEBUG] HOOK OVERLAPS FISH! " + fish + " at pos " + fishTransform.pos);
+
                     hook.attachedFishableEntity = fish;
                     fishState.changeState(FishableObjectStates.HOOKED);
                     hookState.changeState(HookStates.REELING);
