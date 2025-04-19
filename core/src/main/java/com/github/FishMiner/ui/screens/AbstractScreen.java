@@ -4,12 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.ui.ports.out.IGameContext;
@@ -42,7 +45,7 @@ public abstract class AbstractScreen implements Screen {
                 Configuration.getInstance().getScreenWidth(),
                 Configuration.getInstance().getScreenHeight()
             ));
-            skin = Configuration.getInstance().getUiSkin();
+            skin = Assets.getUiskin();
             initialized = true;
         }
     }
@@ -57,10 +60,10 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        Configuration.getInstance().updateConfiguration();
         if (stage != null) {
             stage.getViewport().update(width, height);
         }
-        Configuration.getInstance().updateConfiguration();
     }
 
     @Override
@@ -70,7 +73,9 @@ public abstract class AbstractScreen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {}
+    public void hide() {
+        stage.clear();
+    }
 
     @Override
     public void dispose() {
@@ -85,5 +90,36 @@ public abstract class AbstractScreen implements Screen {
 
     public ScreenType getScreenType() {
         return screenType;
+    }
+
+    protected void drawBackground() {
+        int levels = Configuration.getInstance().getDepthLevels();
+        int levelHeight = Configuration.getInstance().getOceanHeight() / levels;
+        int screenWidth = (int) stage.getViewport().getWorldWidth();
+        int screenHeight = (int) stage.getViewport().getWorldHeight();
+        int oceanHeight = Configuration.getInstance().getOceanHeight();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for (int i = 0; i < levels; i++) {
+            float blend = i / (float) levels;
+            shapeRenderer.setColor(0f, 0f, 0.2f + blend * 0.5f, 1f);
+            shapeRenderer.rect(0, i * levelHeight, screenWidth, levelHeight);
+        }
+
+        shapeRenderer.setColor(0.5f, 0.8f, 1f, 1f);
+        shapeRenderer.rect(0, oceanHeight, screenWidth, screenHeight - oceanHeight);
+
+        shapeRenderer.end();
+    }
+
+    protected Image getTitleImage() {
+        Image titleImage = new Image(Assets.getInstance().getAsset(Assets.TITLE_PATH, Texture.class));
+        titleImage.setScale(Configuration.getInstance().getTitleScale());
+        titleImage.setPosition(
+                (Configuration.getInstance().getScreenWidth() - titleImage.getWidth() * titleImage.getScaleX()) / 2,
+                (Configuration.getInstance().getScreenHeight() * Configuration.getInstance().getOceanHeightPercentage()
+                        - titleImage.getHeight() * titleImage.getScaleY() / 2) - 16);
+        return titleImage;
     }
 }

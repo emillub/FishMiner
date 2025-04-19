@@ -3,29 +3,42 @@ package com.github.FishMiner.ui.screens;
 import static com.github.FishMiner.ui.ports.out.ScreenType.LOGIN;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.github.FishMiner.common.Assets;
+import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.data.AuthResponseEvent;
+import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.domain.session.UserSession;
 import com.github.FishMiner.ui.events.data.LoginRequestEvent;
+import com.github.FishMiner.ui.events.data.RegisterUserRequest;
+import com.github.FishMiner.ui.factories.ButtonFactory;
+import com.github.FishMiner.ui.factories.ButtonFactory.ButtonSize;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
-import com.github.FishMiner.ui.events.data.RegisterUserRequest;
-
 
 public class LoginScreen extends AbstractScreen implements IGameScreen {
     private static final String TAG = "LoginScreen";
     private TextField emailField;
     private TextField passwordField;
+    private TextField confirmPasswordField;
     private Label statusLabel;
-    private boolean isRegistering;
+    private Label titleLabel;
+    private TextButton submitButton;
+    private Label toggleLink;
+    private Table dynamicContainer;
+    private boolean isLoginMode = true;
 
     public LoginScreen(IGameContext gameContext) {
         super(gameContext);
@@ -38,99 +51,140 @@ public class LoginScreen extends AbstractScreen implements IGameScreen {
         super.show();
         Gdx.input.setInputProcessor(stage);
 
-
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
-        Label titleLabel = new Label("Login", skin);
-        titleLabel.setFontScale(2f);
+        initializeUIElements();
+
+        table.add(titleLabel).padBottom(Configuration.getInstance().getLargePadding()).row();
+        table.add(emailField).width(Configuration.getInstance().getScreenWidth() / 2)
+                .height(emailField.getStyle().font.getData().lineHeight
+                        + Configuration.getInstance().getMediumPadding())
+                .padBottom(Configuration.getInstance().getMediumPadding()).row();
+        table.add(passwordField).width(Configuration.getInstance().getScreenWidth() / 2)
+                .padBottom(Configuration.getInstance().getMediumPadding()).row();
+        table.add(dynamicContainer).row();
+
+        TextButton backButton = ButtonFactory.createTextButton("Back", ButtonSize.MEDIUM, () -> {
+            GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.MENU));
+        });
+        table.add(backButton).size(backButton.getWidth(), backButton.getHeight())
+                .padTop(Configuration.getInstance().getMediumPadding()).row();
+
+        renderLoginLayout(); // Initial layout
+    }
+
+    private void initializeUIElements() {
+        titleLabel = new Label("LOGIN", skin);
+        titleLabel.setFontScale(Configuration.getInstance().getLargeFontScale());
 
         emailField = new TextField("", skin);
         emailField.setMessageText("Email");
-        emailField.getStyle().font.getData().setScale(1.5f);
+        emailField.getStyle().font.getData().setScale(Configuration.getInstance().getSmallFontScale());
 
         passwordField = new TextField("", skin);
         passwordField.setMessageText("Password");
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
-        passwordField.getStyle().font.getData().setScale(1.5f);
+        passwordField.getStyle().font.getData().setScale(Configuration.getInstance().getSmallFontScale());
 
-        TextButton loginButton = new TextButton("Login", skin);
-        loginButton.getLabel().setFontScale(1.5f);
-
-        TextButton registerButton = new TextButton("Register", skin);
-        registerButton.getLabel().setFontScale(1.5f);
-
-        TextButton backButton = new TextButton("Back", skin);
-        backButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.getInstance().switchScreenTo(ScreenType.MENU);
-            }
-        });
+        confirmPasswordField = new TextField("", skin);
+        confirmPasswordField.setMessageText("Confirm Password");
+        confirmPasswordField.setPasswordMode(true);
+        confirmPasswordField.setPasswordCharacter('*');
+        confirmPasswordField.getStyle().font.getData().setScale(Configuration.getInstance().getSmallFontScale());
+        confirmPasswordField.setVisible(false);
 
         statusLabel = new Label("", skin);
-        statusLabel.setFontScale(1.2f);
+        statusLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
 
-        // Add everything in correct order
-        table.add(titleLabel).padBottom(40).row();
-        table.add(emailField).width(500).height(80).padBottom(20).row();
-        table.add(passwordField).width(500).height(80).padBottom(30).row();
-        table.add(loginButton).width(400).height(100).padBottom(20).row();
-        table.add(registerButton).width(400).height(100).padBottom(20).row();
-        table.add(statusLabel).padTop(20).row();
-        table.add(backButton).width(400).height(100).padBottom(20).row();
+        submitButton = ButtonFactory.createTextButton("Login", ButtonSize.MEDIUM, () -> {
+            String email = emailField.getText();
+            String password = passwordField.getText();
+            String confirmPassword = confirmPasswordField.getText();
 
-        // --- Listeners ---
-        loginButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                isRegistering = false;
-                String email = emailField.getText();
-                String password = passwordField.getText();
-                GameEventBus.getInstance().post(new LoginRequestEvent(email, password));
-
+            if (email.isEmpty() || password.isEmpty() || (!isLoginMode && confirmPassword.isEmpty())) {
+                statusLabel.setText("Please fill in all fields.");
+                return;
             }
-        });
 
-        registerButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                isRegistering = true;
-                String email = emailField.getText();
-                String password = passwordField.getText();
+            if (!isLoginMode && !password.equals(confirmPassword)) {
+                statusLabel.setText("Passwords do not match.");
+                return;
+            }
 
-                if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
-                    statusLabel.setText("Please enter both email and password.");
-                    return; // Don't proceed to Firebase
-                }
+            if (isLoginMode) {
+                GameEventBus.getInstance().post(new LoginRequestEvent(email, password));
+            } else {
                 GameEventBus.getInstance().post(new RegisterUserRequest(email, password));
             }
         });
+
+        toggleLink = new Label("Don't have an account? Register", skin);
+        toggleLink.setColor(Color.LIGHT_GRAY);
+        toggleLink.setFontScale(Configuration.getInstance().getSmallFontScale());
+        toggleLink.setTouchable(Touchable.enabled);
+        toggleLink.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Toggle link clicked");
+                isLoginMode = !isLoginMode;
+                renderLoginLayout();
+            }
+        });
+
+        dynamicContainer = new Table();
     }
 
-    /**
-     * Returns an event listener for login/registration responses.
-     */
+    private void renderLoginLayout() {
+        titleLabel.setText(isLoginMode ? "LOGIN" : "REGISTER");
+        submitButton.setText(isLoginMode ? "Login" : "Register");
+        toggleLink.setText(isLoginMode
+                ? "Don't have an account? Register"
+                : "Already have an account? Log in");
+        statusLabel.setText("");
+
+        confirmPasswordField.setVisible(!isLoginMode);
+
+        dynamicContainer.clear();
+        if (!isLoginMode) {
+            dynamicContainer.add(confirmPasswordField).width(Configuration.getInstance().getScreenWidth() / 2)
+                    .padBottom(Configuration.getInstance().getMediumPadding()).row();
+        }
+        dynamicContainer.add(toggleLink).padBottom(Configuration.getInstance().getSmallPadding()).row();
+        dynamicContainer.add(statusLabel).padTop(Configuration.getInstance().getSmallPadding()).row();
+        dynamicContainer.add(submitButton).size(200, 50).padTop(Configuration.getInstance().getSmallPadding()).row();
+    }
+
     public IGameEventListener<AuthResponseEvent> getAuthResponseListener() {
         return new IGameEventListener<AuthResponseEvent>() {
             @Override
             public void onEvent(AuthResponseEvent event) {
                 if (event.isHandled()) return;
+
                 if (event.wasSuccessful()) {
                     Gdx.app.postRunnable(() -> {
-                        UserSession.login(event.getEmail()); //set login
-                        ScreenManager.getInstance().prepareNewScreen(ScreenType.MENU); //refresh the screen
+                        UserSession.login(event.getEmail());
+                        ScreenManager.getInstance().prepareNewScreen(ScreenType.MENU);
                         ScreenManager.getInstance().switchScreenTo(ScreenType.MENU);
                     });
                 } else {
                     String errorMessage = event.getError();
-                    Logger.getInstance().error(TAG, "Registration failed: " + errorMessage);
-                    Gdx.app.postRunnable(() -> statusLabel.setText("Registration failed: " + errorMessage));
+                    Logger.getInstance().error(TAG, "Authentication failed: " + errorMessage);
 
+                    Gdx.app.postRunnable(() -> {
+                        if (isLoginMode && errorMessage.contains("no user")) {
+                            isLoginMode = false;
+                            renderLoginLayout();
+                            statusLabel.setText("No account found. Please register.");
+                        } else {
+                            statusLabel.setText("Error: " + errorMessage);
+                        }
+                    });
                 }
             }
+
             @Override
             public Class<AuthResponseEvent> getEventType() {
                 return AuthResponseEvent.class;
@@ -138,10 +192,10 @@ public class LoginScreen extends AbstractScreen implements IGameScreen {
         };
     }
 
-
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
+        super.drawBackground();
         stage.act(delta);
         stage.draw();
     }
