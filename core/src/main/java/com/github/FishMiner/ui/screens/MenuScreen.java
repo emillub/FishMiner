@@ -84,9 +84,16 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         middleSection.row().expandX();
 
         if (UserSession.isLoggedIn()) {
+            TextButton logoutButton = ButtonFactory.createTextButton("LOGOUT", ButtonFactory.ButtonSize.MEDIUM, () -> {
+                UserSession.logout();
+                GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.MENU));
+            });
+            middleSection.add(logoutButton).size(logoutButton.getWidth(), logoutButton.getHeight())
+                    .padBottom(Configuration.getInstance().getSmallPadding()).row();
             Label loggedInLabel = new Label("Logged in as: " + UserSession.getCurrentUserEmail(), skin);
             loggedInLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
             middleSection.add(loggedInLabel).center();
+            ;
         } else {
             TextButton loginButton = ButtonFactory.createTextButton("LOGIN", ButtonFactory.ButtonSize.MEDIUM, () -> {
                         GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LOGIN));
