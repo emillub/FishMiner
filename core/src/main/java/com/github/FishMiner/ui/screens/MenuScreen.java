@@ -60,10 +60,6 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
                                 GameEventBus.getInstance().post(new MusicEvent(MusicEvent.MusicCommand.TOGGLE_MUTE));
                 });
 
-        Table rootTable = new Table();
-        rootTable.setFillParent(true);
-        rootTable.setDebug(true);
-        stage.addActor(rootTable);
 
         settingsButton.addListener(new ChangeListener() {
             @Override
@@ -73,14 +69,7 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         });
 
 
-        Image titleImage = new Image(Assets.getInstance().getAsset(Assets.TITLE_PATH, Texture.class));
-        titleImage.setScale(Configuration.getInstance().getTitleScale());
-        titleImage.setPosition(
-                (Configuration.getInstance().getScreenWidth() - titleImage.getWidth() * titleImage.getScaleX()) / 2,
-                (Configuration.getInstance().getScreenHeight() * Configuration.getInstance().getOceanHeightPercentage()
-                        - titleImage.getHeight() * titleImage.getScaleY() / 2) - 16);
-
-        stage.addActor(titleImage);
+        stage.addActor(super.getTitleImage());
 
         Table middleSection = new Table();
         middleSection.setFillParent(true);

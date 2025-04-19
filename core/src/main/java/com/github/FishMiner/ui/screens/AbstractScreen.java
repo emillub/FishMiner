@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.github.FishMiner.common.Assets;
@@ -58,10 +60,10 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        Configuration.getInstance().updateConfiguration();
         if (stage != null) {
             stage.getViewport().update(width, height);
         }
-        Configuration.getInstance().updateConfiguration();
     }
 
     @Override
@@ -109,5 +111,15 @@ public abstract class AbstractScreen implements Screen {
         shapeRenderer.rect(0, oceanHeight, screenWidth, screenHeight - oceanHeight);
 
         shapeRenderer.end();
+    }
+
+    protected Image getTitleImage() {
+        Image titleImage = new Image(Assets.getInstance().getAsset(Assets.TITLE_PATH, Texture.class));
+        titleImage.setScale(Configuration.getInstance().getTitleScale());
+        titleImage.setPosition(
+                (Configuration.getInstance().getScreenWidth() - titleImage.getWidth() * titleImage.getScaleX()) / 2,
+                (Configuration.getInstance().getScreenHeight() * Configuration.getInstance().getOceanHeightPercentage()
+                        - titleImage.getHeight() * titleImage.getScaleY() / 2) - 16);
+        return titleImage;
     }
 }
