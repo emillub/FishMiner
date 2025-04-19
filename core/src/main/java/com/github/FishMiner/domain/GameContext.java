@@ -131,7 +131,7 @@ public class GameContext implements IGameContext {
             safelyRemove(player.getPlayerEntity());
         }
 
-        resetWorld();
+        world.resetGame();
 
         this.player = initPlayer(engine);
 
@@ -152,14 +152,6 @@ public class GameContext implements IGameContext {
         if (entity != null) {
             engine.removeEntity(entity);
         }
-    }
-
-    private void resetWorld() {
-        world.setState(WorldState.RUNNING);
-        world.setLevelNumber(1);   // You'll need to expose this setter
-        world.setScore(0);         // Same here
-        world.setFinalScorePosted(false);
-        world.setLevelCompleted(false);
     }
 
     public void createTestConfig() {

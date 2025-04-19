@@ -1,5 +1,7 @@
 package com.github.FishMiner.domain.managers;
 
+import static com.github.FishMiner.ui.ports.out.ScreenType.LEVEL_LOST;
+import static com.github.FishMiner.ui.ports.out.ScreenType.MENU;
 import static com.github.FishMiner.ui.ports.out.ScreenType.PLAY;
 
 import com.badlogic.gdx.Screen;
@@ -79,6 +81,10 @@ public class ScreenManager {
             // Always create a new instance for gameplay, as each level needs a new PlayScreen.
             newScreen = (IGameScreen) screenFactory.getScreen(screenType, gameContext);
         } else {
+            if (screenType == MENU && currentScreen != null && currentScreen.getScreenType() == LEVEL_LOST) {
+                resetGame();
+            }
+
             if (cachedScreens.containsKey(screenType)) {
                 newScreen = (IGameScreen) cachedScreens.get(screenType);
             } else {
@@ -124,12 +130,9 @@ public class ScreenManager {
      * Start a new game from scratch. This resets the GameContext
      * and clears any cached PlayScreen.
      */
-    public void startNewGame() {
+    private void resetGame() {
         gameContext.resetGame();
-        gameContext.getEngine().update(0f); // ✅ Force update to re-sync entities
-        // Remove any cached instance of the PLAY screen.
-        cachedScreens.remove(ScreenType.PLAY);
-        switchScreenTo(PLAY);
+        gameContext.getEngine().update(0f);
     }
 
     /**

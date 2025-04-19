@@ -38,17 +38,8 @@ public class World implements IGameEventListener<ScoreEvent> {
         LevelConfig levelConfig = LevelConfigFactory.generateLevel(levelNumber,playerScore);
         createLevel(levelConfig, playerScore);
     }
-    /*
-    protected void nextLevel(int playerScore) {
-        levelNumber++;
-        LevelConfig levelConfig = LevelConfigFactory.generateLevel(levelNumber, playerScore);
-        createLevel(levelConfig, playerScore);
-    }
-
-     */
 
     public void createLevel(LevelConfig config, int startingScore, Float customTimer) {
-        System.out.println("[DEBUG] World.createLevel() called — level " + levelNumber);
 
         this.targetScore = config.getTargetScore();
 
@@ -175,6 +166,16 @@ public class World implements IGameEventListener<ScoreEvent> {
 
     public void setLevelCompleted(boolean value) {
         this.levelCompleted = value;
+    }
+
+    public void resetGame() {
+        this.levelNumber = 1;
+        this.score = 0;
+        this.targetScore = 0;
+        this.timer = 60f;
+        this.finalScorePosted = false;
+        this.levelCompleted = false;
+        this.state = WorldState.RUNNING;
     }
 
 }
