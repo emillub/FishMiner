@@ -82,7 +82,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
             Label itemLabel = new Label(productName + " (" + productPrice + ")", skin);
             itemLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
             Table itemRow = new Table();
-            itemRow.add(itemLabel).left().expandX().padRight(smallerPadding);
+            itemRow.add(itemLabel).left().expandX().pad(smallerPadding);
 
             boolean canAfford = gameContext.getWorld().getScore() >= productPrice;
             boolean isPurchased = false;
@@ -116,9 +116,9 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
                     .expandX()
                     .fillX()
                     .top()
-                    .padBottom(Configuration.getInstance().getSmallPadding())
-                    .padLeft(smallerPadding)
-                    .padRight(smallerPadding)
+                    .padTop(smallerPadding)
+                    .padLeft(Configuration.getInstance().getSmallPadding())
+                    .padRight(Configuration.getInstance().getSmallPadding())
                     .row();
         }
 
