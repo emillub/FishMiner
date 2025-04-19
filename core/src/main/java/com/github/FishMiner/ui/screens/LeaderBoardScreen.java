@@ -1,28 +1,22 @@
 package com.github.FishMiner.ui.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.common.Assets;
+import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.data.ScoreEntry;
-import com.github.FishMiner.data.ports.out.ILeaderBoardService;
-import com.github.FishMiner.data.ports.out.IAuthService;
-import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.data.LeaderboardResponseEvent;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.domain.ports.in.data.LeaderboardCallback;
-import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.ui.events.data.LeaderboardFetchRequestEvent;
-import com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent;
+import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
@@ -43,46 +37,47 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
     @Override
     public void show() {
         super.show();
+        fetchTopScores();
 
         rootTable = new Table();
         rootTable.setFillParent(true);
         //rootTable.setDebug(true);
         stage.addActor(rootTable);
 
-        Label titleLabel = new Label("Top Scores", skin);
-        titleLabel.setFontScale(2f);
+        Label titleLabel = new Label("Leaderboard", skin);
+        titleLabel.setFontScale(Configuration.getInstance().getLargeFontScale());
+        titleLabel.setColor(Assets.DARK_BROWN);
+        rootTable.add(titleLabel).expandX().top().padTop(Configuration.getInstance().getLargePadding())
+                .padBottom(Configuration.getInstance().getLargePadding()).row();
 
-        rootTable.add(titleLabel).padBottom(30).row();
-
-        fetchTopScores();
 
         scoreTable = new Table();
 
         ScrollPane scrollPane = new ScrollPane(scoreTable, skin);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
-
-        Table scoreContainer = new Table();
-        scoreContainer.add(scrollPane).expand().fill();
-
-        TextButton backButton = new TextButton("Back to Menu", skin);
-        backButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.postRunnable(() -> {
-                    ScreenManager.getInstance().prepareNewScreen(ScreenType.MENU);
-                    ScreenManager.getInstance().switchScreenTo(ScreenType.MENU);
-                });
+        scrollPane.setStyle(new ScrollPane.ScrollPaneStyle(scrollPane.getStyle()) {
+            {
+                background = skin.newDrawable("white", new Color(0, 0, 0, 0.2f)); // Transparent white background
             }
         });
 
-        Table contentTable = new Table();
-        contentTable.add(scrollPane).expandX().fillX().height(400).padBottom(20).row();
-        contentTable.add(backButton).width(250).height(60).padBottom(10).center();
+        rootTable.add(scrollPane)
+                .expand()
+                .fill()
+                .row();
 
-        rootTable.top().padTop(50);
-        rootTable.add(titleLabel).padBottom(20).row();
-        rootTable.add(contentTable).expand().center();
+        TextButton backButton = ButtonFactory.createTextButton("Back to Menu", ButtonFactory.ButtonSize.MEDIUM, () -> {
+            GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.MENU));
+        });
+        rootTable.add(backButton)
+                .expandX()
+                .bottom()
+                .padTop(Configuration.getInstance().getLargePadding())
+                .padBottom(Configuration.getInstance().getLargePadding())
+                .width(backButton.getWidth())
+                .height(backButton.getHeight());
+
         GameEventBus.getInstance().register(responseListener);
 
     }
@@ -101,17 +96,24 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
             int place = 1;
             for (ScoreEntry entry : scoreEntries) {
                 if (entry == null){
-                    scoreTable.row().height(30);
-                    scoreTable.add(new Label("", skin)).colspan(3).padTop(10).padBottom(10);
+                    scoreTable.row();
                     continue;
                 }
                 String placeLabel = place + ".";
                 Label placeNumber = new Label(placeLabel, skin);
+                float smallerPadding = Configuration.getInstance().getSmallPadding() / 2;
+                placeNumber.setFontScale(Configuration.getInstance().getSmallFontScale());
 
-                scoreTable.row().height(50);
-                scoreTable.add(placeNumber).left().pad(5).width(40);
-                scoreTable.add(new Label(entry.username(), skin)).left().pad(5);
-                scoreTable.add(new Label(String.valueOf(entry.score()), skin)).right().pad(5);
+                scoreTable.row();
+                scoreTable.add(placeNumber).left().padRight(smallerPadding);
+
+                Label usernameLabel = new Label(entry.username(), skin);
+                usernameLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+                scoreTable.add(usernameLabel).left().pad(smallerPadding);
+
+                Label scoreLabel = new Label(String.valueOf(entry.score()), skin);
+                scoreLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+                scoreTable.add(scoreLabel).right().pad(smallerPadding);
 
                 place++;
             }
@@ -122,6 +124,7 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
     public void render(float delta) {
         System.out.println("[DEBUG] LeaderboardScreen render() called");
         ScreenUtils.clear(0f, 0f, 0f, 1f);
+        super.drawBackground();
         stage.act(delta);
         stage.draw();
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.ScoreEvent;
@@ -31,19 +32,18 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
     @Override
     public void show() {
         super.show();
-        if (stage.getActors().size == 0) {
-            float finalScore = gameContext.getWorld().getScore();
-            String winMessage = String.format(Locale.US, "You won with %.0f points. Good job!", finalScore);
-            Label winLabel = new Label(winMessage, skin);
-            winLabel.setFontScale(2f);
-            winLabel.setAlignment(Align.center);
+        float finalScore = gameContext.getWorld().getScore();
+        String winMessage = String.format(Locale.US, "You won with %.0f points. Good job!", finalScore);
+        Label winLabel = new Label(winMessage, skin);
+        winLabel.setFontScale(Configuration.getInstance().getMediumFontScale());
+        winLabel.setWrap(true);
+        winLabel.setAlignment(Align.center);
 
-            Table table = new Table();
-            table.setFillParent(true);
-            table.center();
-            stage.addActor(table);
-            table.add(winLabel).center().padTop(20);
-        }
+        Table table = new Table();
+        table.setFillParent(true);
+        table.center();
+        stage.addActor(table);
+        table.add(winLabel).expandX().fillX().center();
     }
 
     @Override
@@ -53,9 +53,6 @@ public class LevelCompleteScreen extends AbstractScreen implements IGameScreen {
         super.drawBackground();
         super.stage.act(delta);
         super.stage.draw();
-
-        // After delay, go to UpgradeScreen
-        drawBackground();
 
         if (stage != null) {
             stage.act(delta);

@@ -2,21 +2,18 @@ package com.github.FishMiner.ui.screens;
 
 import static com.github.FishMiner.domain.events.soundEvents.MusicEvent.MusicCommand.ADJUST_VOLUME;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
-import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.ports.out.IGameContext;
@@ -73,7 +70,7 @@ public class SettingScreen extends AbstractScreen implements IGameScreen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0f, 0f, 0f, 1f);
+        ScreenUtils.clear(Assets.BLACK);
         super.drawBackground();
         stage.act(delta);
         stage.draw();

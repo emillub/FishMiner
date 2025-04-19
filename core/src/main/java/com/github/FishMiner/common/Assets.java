@@ -26,6 +26,9 @@ public class Assets {
     public static Color DARK_BROWN = uiSkin.getColor("darkbrown");
     public static Color BACKGROUND_COLOR = Color.valueOf("A1D6F6");
 
+    public static Color POSITIVE_GREEN = new Color(0.5f, 1f, 0.5f, 1f);
+    public static Color NEGATIVE_RED = new Color(0.7f, 0f, 0f, 1f);
+
     public static String PLAYER_TEXTURE = "fisherman.png";
     public static String TITLE_PATH = "ui/title.png";
 

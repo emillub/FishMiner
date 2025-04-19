@@ -29,7 +29,7 @@ public class World implements IGameEventListener<ScoreEvent> {
     }
 
     public void createLevel(LevelConfig config, int startingScore) {
-        this.createLevel(config, startingScore, 15f);
+        this.createLevel(config, startingScore, 60f);
 
     }
 
