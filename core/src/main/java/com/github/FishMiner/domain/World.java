@@ -35,9 +35,17 @@ public class World implements IGameEventListener<ScoreEvent> {
 
     protected void nextLevel(int playerScore) {
         levelNumber++;
+        LevelConfig levelConfig = LevelConfigFactory.generateLevel(levelNumber,playerScore);
+        createLevel(levelConfig, playerScore);
+    }
+    /*
+    protected void nextLevel(int playerScore) {
+        levelNumber++;
         LevelConfig levelConfig = LevelConfigFactory.generateLevel(levelNumber, playerScore);
         createLevel(levelConfig, playerScore);
     }
+
+     */
 
     public void createLevel(LevelConfig config, int startingScore, Float customTimer) {
         System.out.println("[DEBUG] World.createLevel() called — level " + levelNumber);
