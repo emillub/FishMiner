@@ -90,7 +90,7 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
                     GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.PLAY));
                 });
         middleSection.add(playButtonText).size(playButtonText.getWidth(), playButtonText.getHeight())
-                .padBottom(Configuration.getInstance().getMediumPadding())
+                .padBottom(Configuration.getInstance().getSmallPadding())
                 .padTop(Configuration.getInstance().getMediumPadding()).top();
         middleSection.row().expandX();
 
@@ -99,7 +99,7 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
             loggedInLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
             middleSection.add(loggedInLabel).center();
         } else {
-            TextButton loginButton = ButtonFactory.createTextButton("LOGIN", ButtonFactory.ButtonSize.LARGE, () -> {
+            TextButton loginButton = ButtonFactory.createTextButton("LOGIN", ButtonFactory.ButtonSize.MEDIUM, () -> {
                         GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LOGIN));
                     });
             middleSection.add(loginButton).size(loginButton.getWidth(), loginButton.getHeight())
