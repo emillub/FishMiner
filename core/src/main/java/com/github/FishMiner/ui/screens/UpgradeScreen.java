@@ -19,6 +19,8 @@ import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.ports.in.IPlayer;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
+
+import java.io.ObjectInputFilter.Config;
 import java.util.List;
 
 public class UpgradeScreen extends AbstractScreen implements IGameScreen {
@@ -78,7 +80,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
             productPrice = product.getComponent(UpgradeComponent.class).getPrice();
 
             Label itemLabel = new Label(productName + " (" + productPrice + ")", skin);
-            itemLabel.setFontScale(1.1f);
+            itemLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
             Table itemRow = new Table();
             itemRow.add(itemLabel).left().expandX().padRight(smallerPadding);
 
@@ -91,6 +93,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
             if (isPurchased) {
                 Label purchasedLabel = new Label("Purchased", skin);
                 purchasedLabel.setColor(Assets.POSITIVE_GREEN);
+                purchasedLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
                 itemRow.add(purchasedLabel).padLeft(smallerPadding);
             } else if (canAfford) {
                 TextButton buyButton = ButtonFactory.createTextButton("BUY",
@@ -105,7 +108,8 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
             } else {
                 Label notEnoughMoneyLabel = new Label("Not enough money", skin);
                 notEnoughMoneyLabel.setColor(Assets.NEGATIVE_RED);
-                itemRow.add(notEnoughMoneyLabel).padLeft(15);
+                itemRow.add(notEnoughMoneyLabel).padLeft(smallerPadding);
+                notEnoughMoneyLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
             }
 
             productTable.add(itemRow)

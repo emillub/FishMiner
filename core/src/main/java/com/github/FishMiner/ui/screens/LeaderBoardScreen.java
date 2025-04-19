@@ -46,7 +46,6 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
 
         Label titleLabel = new Label("Leaderboard", skin);
         titleLabel.setFontScale(Configuration.getInstance().getLargeFontScale());
-        titleLabel.setColor(Assets.DARK_BROWN);
         rootTable.add(titleLabel).expandX().top().padTop(Configuration.getInstance().getLargePadding())
                 .padBottom(Configuration.getInstance().getLargePadding()).row();
 
