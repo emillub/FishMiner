@@ -35,7 +35,7 @@ public class Configuration {
     private float titleScale;
 
     // User settings
-    public final static float DEFAULT_MUSIC_VOLUME = 0f;
+    public final static float DEFAULT_MUSIC_VOLUME = 0.5f;
     private boolean isSoundEnabled = true;
     private float musicVolume = DEFAULT_MUSIC_VOLUME;
 
