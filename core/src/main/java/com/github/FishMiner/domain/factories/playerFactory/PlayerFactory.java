@@ -74,33 +74,6 @@ public class PlayerFactory {
         return player;
     }
 
-    public static Entity createHookEntity(PooledEngine engine, Entity player) {
-        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
-        TransformComponent playerPos = player.getComponent(TransformComponent.class);
-        InventoryComponent inventory = player.getComponent(InventoryComponent.class);
-
-        HookTypes equippedType = HookTypes.valueOf(inventory.getEquippedHookName().toUpperCase());
-        Entity hook = HookFactory.createEntity(engine, equippedType, (int) playerPos.pos.z, playerComponent.hookAnchorPoint, player);
-
-        AttachmentComponent hookAttachment = hook.getComponent(AttachmentComponent.class);
-        hookAttachment.setParentEntity(player);
-
-        return hook;
-    }
-
-    public static Entity createSinkerEntity(PooledEngine engine, Entity player) {
-        SinkerTypes sinkerType = SinkerTypes
-                .valueOf(formatEnumName(player.getComponent(InventoryComponent.class).getEquippedSinkerName()));
-        Entity sinker = SinkerFactory.createEntity(engine, sinkerType);
-        AttachmentComponent sinkerAttachment = engine.createComponent(AttachmentComponent.class);
-        Entity hook = player.getComponent(PlayerComponent.class).getHook();
-        System.out.println("Hook: " + hook);
-        sinkerAttachment.setParentEntity(hook);
-        sinkerAttachment.offset.y = -25f;
-        sinker.add(sinkerAttachment);
-        return sinker;
-    }
-
     public static void updateReel(Entity newReel, Entity player, PooledEngine engine) {
         PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
         if (playerComponent == null) {
@@ -113,10 +86,11 @@ public class PlayerFactory {
 
         if (currentReel == null) {
             reelType = ReelTypes.BASIC_REEL;
+
         } else {
             reelType = ReelTypes
                     .valueOf(DomainUtils
-                            .formatEnumName(currentReel.getComponent(ReelComponent.class).name));
+                            .formatEnumName(newReel.getComponent(ReelComponent.class).name));
             currentReel.removeAll();
             engine.removeEntity(currentReel);
         }
@@ -124,12 +98,8 @@ public class PlayerFactory {
         float anchorY = playerComponent.hookAnchorPoint.y;
 
         ReelComponent reelComponent = newReel.getComponent(ReelComponent.class);
-
         int[] interval = DomainUtils.getDepthIntervalFor(reelType.getLengthLevel());
         reelComponent.lineLength = anchorY - interval[1];
-
-        Logger.getInstance().log("PlayerFactory", "Reel lineLength set to: " + reelComponent.lineLength
-                + "Reel length is at depth: " + reelType.getLengthLevel());
 
         AttachmentComponent reelAttachment = newReel.getComponent(AttachmentComponent.class);
         reelAttachment.offset.x = -0.9f;
