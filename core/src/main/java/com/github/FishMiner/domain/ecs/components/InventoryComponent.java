@@ -2,13 +2,9 @@ package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.github.FishMiner.common.Logger;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class InventoryComponent implements Component {
     private static final String TAG = "InventoryComponent";
@@ -16,6 +12,8 @@ public class InventoryComponent implements Component {
     HashMap<String, Entity> sinkers = new HashMap<>();
     HashMap<String, Entity> hooks = new HashMap<>();
     private String equippedHookName = "BASIC_HOOK";
+    private String equippedReelName = "BASIC_REEL";
+    private String equippedSinkerName = "HEAVY_SINKER";
 
 
     public void addSinkerToInventory(String name, Entity sinker) {
@@ -48,6 +46,18 @@ public class InventoryComponent implements Component {
         }
     }
 
+    public void equipReel(String reelName) {
+        if (reels.containsKey(reelName)) {
+            equippedReelName = reelName;
+        }
+    }
+
+    public void equipSinker(String sinkerName) {
+        if (sinkers.containsKey(sinkerName)) {
+            equippedSinkerName = sinkerName;
+        }
+    }
+
     public String getEquippedHookName() {
         return equippedHookName;
     }
@@ -58,6 +68,30 @@ public class InventoryComponent implements Component {
 
     public boolean ownsHook(String name) {
         return hooks.containsKey(name);
+    }
+
+    public String getEquippedReelName() {
+        return equippedReelName;
+    }
+
+    public Entity getEquippedReel() {
+        return reels.get(equippedReelName);
+    }
+
+    public boolean ownsReel(String name) {
+        return reels.containsKey(name);
+    }
+
+    public String getEquippedSinkerName() {
+        return equippedSinkerName;
+    }
+
+    public Entity getEquippedSinker() {
+        return sinkers.get(equippedSinkerName);
+    }
+
+    public boolean ownsSinker(String name) {
+        return sinkers.containsKey(name);
     }
 
 }

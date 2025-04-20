@@ -14,6 +14,7 @@ import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.ecsEvents.TransactionEvent;
 import com.github.FishMiner.domain.ecs.components.SinkerComponent;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UpgradeScreen extends AbstractScreen implements IGameScreen {
+    private static final String TAG = "UpgradeScreen";
     private final List<Entity> upgradeProducts;
     private final IPlayer player;
     private final UpgradeStore upgradeStore;
@@ -64,6 +66,10 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
         hookProduct = null;
         sinkerProduct = null;
         for (Entity product : upgradeProducts) {
+            if (product.getComponent(UpgradeComponent.class) == null) {
+                Logger.getInstance().error(TAG, "Product " + product + " does not have an UpgradeComponent. Skipping.");
+                continue;
+            }
             if (product.getComponent(UpgradeComponent.class).isUpgraded()) {
                 continue;
             }

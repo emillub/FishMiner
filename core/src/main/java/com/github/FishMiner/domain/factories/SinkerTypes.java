@@ -1,8 +1,9 @@
 package com.github.FishMiner.domain.factories;
 
 public enum SinkerTypes {
-    HEAVY_SINKER("HEAVY_SINKER.png", "Heavy Sinker", 15f, 0, 0.5f),
-    HEAVIER_SINKER("HEAVIER_SINKER.png", "Heavier Sinker", 40f, 200, 0.5f);
+    BASIC_SINKER("BASIC_SINKER.png", "Basic Sinker", 5f, 0, 0.5f),
+    HEAVY_SINKER("HEAVY_SINKER.png", "Heavy Sinker", 15f, 100, 0.1f),
+    HEAVIER_SINKER("HEAVIER_SINKER.png", "Heavier Sinker", 30f, 200, 0.5f);
 
     private final String texturePath;
     private final String name;

@@ -5,12 +5,14 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.common.ValidateUtil;
+import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.domain.ecs.components.PlayerComponent;
@@ -21,7 +23,11 @@ import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TraderComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
+import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 import com.github.FishMiner.domain.events.ecsEvents.TransactionEvent;
+import com.github.FishMiner.domain.factories.ReelTypes;
+import com.github.FishMiner.domain.factories.playerFactory.PlayerFactory;
+import com.github.FishMiner.domain.factories.playerFactory.ReelFactory;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.states.TraderStates;
 
@@ -87,16 +93,21 @@ public class TransactionSystem extends EntitySystem implements IGameEventListene
         PlayerComponent playerComp = player.getComponent(PlayerComponent.class);
         ValidateUtil.validateMultipleNotNull(playerInventory, playerComp);
         upgradePrice.setUpgraded(true);
+
         if (selectedUpgrade.getComponent(ReelComponent.class) != null) {
-            playerComp.setReel(selectedUpgrade);
+            PlayerFactory.updateReel(selectedUpgrade, player, (PooledEngine) engine);
         } else if (selectedUpgrade.getComponent(SinkerComponent.class) != null) {
-            playerComp.setSinker(selectedUpgrade);
+            PlayerFactory.updateSinker(selectedUpgrade, player, (PooledEngine) engine);
         } else if (selectedUpgrade.getComponent(HookComponent.class) != null) {
-            playerComp.setHook(selectedUpgrade);
+            PlayerFactory.updateHook(selectedUpgrade, player, (PooledEngine) engine);
+        } else {
+            Logger.getInstance().log(TAG, "Selected upgrade is not a valid upgrade");
+            event.setApproved(false);
+            event.setHandled();
+            return;
         }
 
     }
-
     @Override
     public Class<TransactionEvent> getEventType() {
         return TransactionEvent.class;
