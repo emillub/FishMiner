@@ -23,6 +23,7 @@ public class PlayerFactory {
     }
 
     public static Entity addNewPlayerCharacterTo(PooledEngine engine, int posX, int posY) {
+        System.out.println("CREATING PLAYER");
         Entity playerEntity = createPlayerEntity(engine, posX, posY);
         PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
 
@@ -135,7 +136,7 @@ public class PlayerFactory {
 
         AttachmentComponent hookAttachment = newHook.getComponent(AttachmentComponent.class);
 
-        if (playerComponent.getReel() != null) {
+        if (playerComponent.getSinker() != null) {
             AttachmentComponent sinkerAttachement = playerComponent.getSinker()
                     .getComponent(AttachmentComponent.class);
             sinkerAttachement.setParentEntity(newHook);

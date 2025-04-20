@@ -134,6 +134,9 @@ public class GameContext implements IGameContext {
             safelyRemove(player.getSinker());
             safelyRemove(player.getHook());
             safelyRemove(player.getReel());
+            player.getPlayerEntity().getComponent(PlayerComponent.class).setHook(null);
+            player.getPlayerEntity().getComponent(PlayerComponent.class).setReel(null);
+            player.getPlayerEntity().getComponent(PlayerComponent.class).setSinker(null);
             safelyRemove(player.getPlayerEntity());
         }
 
