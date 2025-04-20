@@ -1,16 +1,23 @@
 package com.github.FishMiner.ui.screens;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.ecsEvents.TransactionEvent;
 import com.github.FishMiner.domain.ecs.components.SinkerComponent;
+import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.ReelComponent;
 import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
 import com.github.FishMiner.domain.UpgradeStore;
@@ -21,12 +28,24 @@ import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
 import java.io.ObjectInputFilter.Config;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     private final List<Entity> upgradeProducts;
     private final IPlayer player;
     private final UpgradeStore upgradeStore;
+    private float smallerPadding = Configuration.getInstance().getSmallPadding() / 2;
+
+    private List<Table> itemRows = new ArrayList<>();
+    Entity reelProduct = null;
+    Entity hookProduct = null;
+    Entity sinkerProduct = null;
+
+    private Label scoreLabel;
+    private Table productTable;
 
     public UpgradeScreen(IGameContext gameContext) {
         super(gameContext);
@@ -41,6 +60,21 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     public void show() {
         super.show();
         Gdx.input.setInputProcessor(stage);
+        reelProduct = null;
+        hookProduct = null;
+        sinkerProduct = null;
+        for (Entity product : upgradeProducts) {
+            if (product.getComponent(UpgradeComponent.class).isUpgraded()) {
+                continue;
+            }
+            if (product.getComponent(SinkerComponent.class) != null && sinkerProduct == null) {
+                sinkerProduct = product;
+            } else if (product.getComponent(ReelComponent.class) != null && reelProduct == null) {
+                reelProduct = product;
+            } else if (product.getComponent(HookComponent.class) != null && hookProduct == null) {
+                hookProduct = product;
+            }
+        }
 
         Table rootTable = new Table();
         rootTable.setFillParent(true);
@@ -51,7 +85,12 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
         rootTable.add(titleLabel).expandX().top().padTop(Configuration.getInstance().getLargePadding())
                 .padBottom(Configuration.getInstance().getLargePadding()).row();
 
-        Table productTable = new Table();
+        scoreLabel = new Label("Current Score: " + player.getScore(), skin);
+        scoreLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+        rootTable.add(scoreLabel).expandX().top().padTop(Configuration.getInstance().getSmallPadding())
+                .padBottom(Configuration.getInstance().getSmallPadding()).row();
+
+        productTable = new Table();
 
         ScrollPane scrollPane = new ScrollPane(productTable, skin);
         scrollPane.setFadeScrollBars(false);
@@ -63,64 +102,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
                 .fillY()
                 .row();
 
-        for (Entity product : upgradeProducts) {
-            String productName = "";
-            int productPrice = 0;
-
-            if (product.getComponent(SinkerComponent.class) != null) {
-                productName = product.getComponent(SinkerComponent.class).name;
-            } else if (product.getComponent(ReelComponent.class) != null) {
-                productName = product.getComponent(ReelComponent.class).getName();
-            } else if (product.getComponent(HookComponent.class) != null) {
-                productName = product.getComponent(HookComponent.class).getName();
-            }
-
-            float smallerPadding = Configuration.getInstance().getSmallPadding() / 2;
-
-            productPrice = product.getComponent(UpgradeComponent.class).getPrice();
-
-            Label itemLabel = new Label(productName + " (" + productPrice + ")", skin);
-            itemLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
-            Table itemRow = new Table();
-            itemRow.add(itemLabel).left().expandX().pad(smallerPadding);
-
-            boolean canAfford = gameContext.getWorld().getScore() >= productPrice;
-            boolean isPurchased = false;
-            if (product.getComponent(UpgradeComponent.class) != null) {
-                isPurchased = product.getComponent(UpgradeComponent.class).isUpgraded();
-            }
-
-            if (isPurchased) {
-                Label purchasedLabel = new Label("Purchased", skin);
-                purchasedLabel.setColor(Assets.POSITIVE_GREEN);
-                purchasedLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
-                itemRow.add(purchasedLabel).padLeft(smallerPadding);
-            } else if (canAfford) {
-                TextButton buyButton = ButtonFactory.createTextButton("BUY",
-                        ButtonFactory.ButtonSize.SMALL, () -> {
-                            TransactionEvent txEvent = new TransactionEvent(player.getPlayerEntity(), product);
-                            GameEventBus.getInstance().post(txEvent);
-                        });
-                buyButton.setColor(Assets.POSITIVE_GREEN);
-                buyButton.getStyle().fontColor = Color.WHITE;
-                itemRow.add(buyButton).size(buyButton.getWidth() + Configuration.getInstance().getMediumPadding(),
-                        Configuration.getInstance().getMediumPadding()).padLeft(smallerPadding);
-            } else {
-                Label notEnoughMoneyLabel = new Label("Not enough money", skin);
-                notEnoughMoneyLabel.setColor(Assets.NEGATIVE_RED);
-                itemRow.add(notEnoughMoneyLabel).padLeft(smallerPadding);
-                notEnoughMoneyLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
-            }
-
-            productTable.add(itemRow)
-                    .expandX()
-                    .fillX()
-                    .top()
-                    .padTop(smallerPadding)
-                    .padLeft(Configuration.getInstance().getSmallPadding())
-                    .padRight(Configuration.getInstance().getSmallPadding())
-                    .row();
-        }
+        updateProductTable();
 
         TextButton continueButton = ButtonFactory.createTextButton("Continue",
                 ButtonFactory.ButtonSize.MEDIUM, () -> {
@@ -134,7 +116,94 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
                 .padTop(Configuration.getInstance().getLargePadding())
                 .padBottom(Configuration.getInstance().getLargePadding())
                 .width(continueButton.getWidth())
-                .height(continueButton.getHeight());
+                .height(continueButton.getHeight()).row();
+    }
+
+    private void addProductToTable(Table productTable, Entity product, String productType) {
+        String productName = productType;
+        Table itemRow = new Table();
+        addRowContent(itemRow, product, productName);
+
+        productTable.add(itemRow)
+                .expandX()
+                .fillX()
+                .top()
+                .padTop(smallerPadding)
+                .padLeft(Configuration.getInstance().getSmallPadding())
+                .padRight(Configuration.getInstance().getSmallPadding())
+                .row();
+    }
+
+    private void updateScoreLabel() {
+        if (scoreLabel != null) {
+            scoreLabel.setText("Current Score: " + (int) player.getScore());
+        }
+    }
+
+    private void addRowContent(Table itemRow, Entity product, String productName) {
+        int productPrice = product.getComponent(UpgradeComponent.class).getPrice();
+        boolean canAfford = player.getScore() >= productPrice;
+
+        Label itemLabel = createItemLabel(productName + " (" + productPrice + ")");
+        itemRow.add(itemLabel).left().expandX().pad(smallerPadding);
+
+        if (product.getComponent(UpgradeComponent.class).isUpgraded()) {
+            itemRow.add(createPurchasedLabel()).padLeft(smallerPadding);
+        } else if (canAfford) {
+            itemRow.add(createBuyButton(product, productName, itemRow)).size(
+                    Configuration.getInstance().getMediumPadding() * 2,
+                    Configuration.getInstance().getMediumPadding()).padLeft(smallerPadding);
+        } else {
+            itemRow.add(createNotEnoughMoneyLabel()).padLeft(smallerPadding);
+        }
+    }
+
+    private Label createItemLabel(String productName) {
+        Label itemLabel = new Label(productName, skin);
+        itemLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+        return itemLabel;
+    }
+
+    private Label createPurchasedLabel() {
+        Label purchasedLabel = new Label("Purchased", skin);
+        purchasedLabel.setColor(Assets.POSITIVE_GREEN);
+        purchasedLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+        return purchasedLabel;
+    }
+
+    private TextButton createBuyButton(Entity product, String productName, Table itemRow) {
+        TextButton buyButton = ButtonFactory.createTextButton("BUY", ButtonFactory.ButtonSize.SMALL, () -> {
+            TransactionEvent transactionEvent = new TransactionEvent(player.getPlayerEntity(), product);
+            GameEventBus.getInstance().post(transactionEvent);
+            updateScoreLabel();
+            updateProductTable();
+        });
+        buyButton.setColor(Assets.POSITIVE_GREEN);
+        buyButton.getStyle().fontColor = Color.WHITE;
+        return buyButton;
+    }
+
+    private Label createNotEnoughMoneyLabel() {
+        Label notEnoughMoneyLabel = new Label("Not enough money", skin);
+        notEnoughMoneyLabel.setColor(Assets.NEGATIVE_RED);
+        notEnoughMoneyLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+        return notEnoughMoneyLabel;
+    }
+
+    private void updateProductTable() {
+        productTable.clearChildren();
+        if (hookProduct == null) {
+            hookProduct = player.getHook();
+        }
+        if (reelProduct == null) {
+            reelProduct = player.getReel();
+        }
+        if (sinkerProduct == null) {
+            sinkerProduct = player.getSinker();
+        }
+        addProductToTable(productTable, hookProduct, hookProduct.getComponent(HookComponent.class).name);
+        addProductToTable(productTable, reelProduct, reelProduct.getComponent(ReelComponent.class).name);
+        addProductToTable(productTable, sinkerProduct, sinkerProduct.getComponent(SinkerComponent.class).name);
     }
 
     @Override
