@@ -23,7 +23,6 @@ public class PlayerFactory {
     }
 
     public static Entity addNewPlayerCharacterTo(PooledEngine engine, int posX, int posY) {
-        System.out.println("CREATING PLAYER");
         Entity playerEntity = createPlayerEntity(engine, posX, posY);
         PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
 

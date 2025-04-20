@@ -36,12 +36,11 @@ import java.util.Map;
 
 public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     private static final String TAG = "UpgradeScreen";
-    private final List<Entity> upgradeProducts;
+    private List<Entity> upgradeProducts;
     private final IPlayer player;
-    private final UpgradeStore upgradeStore;
+    private UpgradeStore upgradeStore;
     private float smallerPadding = Configuration.getInstance().getSmallPadding() / 2;
 
-    private List<Table> itemRows = new ArrayList<>();
     Entity reelProduct = null;
     Entity hookProduct = null;
     Entity sinkerProduct = null;
@@ -62,6 +61,8 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     public void show() {
         super.show();
         Gdx.input.setInputProcessor(stage);
+        this.upgradeStore = gameContext.getUpgradeStore();
+        this.upgradeProducts = gameContext.getUpgradeStore().getUpgradeProducts();
         reelProduct = null;
         hookProduct = null;
         sinkerProduct = null;

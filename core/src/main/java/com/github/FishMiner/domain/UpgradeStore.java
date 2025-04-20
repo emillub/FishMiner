@@ -3,7 +3,11 @@ package com.github.FishMiner.domain;
 import com.badlogic.ashley.core.PooledEngine;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.ValidateUtil;
+import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.ReelComponent;
+import com.github.FishMiner.domain.ecs.components.SinkerComponent;
 import com.github.FishMiner.domain.ecs.components.TraderComponent;
+import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
 import com.github.FishMiner.domain.factories.playerFactory.TraderFactory;
 import java.util.List;
 import com.badlogic.ashley.core.Entity;
@@ -30,6 +34,16 @@ public class UpgradeStore {
         ValidateUtil.validateNotNull(trader, "Trader must not be null");
         TraderComponent traderComponent = trader.getComponent(TraderComponent.class);
         products = traderComponent.getProducts();
+    }
+
+    public void resetStore() {
+        // Reset the store to its initial state.
+        Entity[] entities = TraderFactory.createNewUpgrader(engine, 0, 0);
+        products.clear();
+        for (Entity entity : entities) {
+            trader.getComponent(TraderComponent.class).addProduct(entity);
+        }
+
     }
 
     public static UpgradeStore getInstance(PooledEngine engine) {

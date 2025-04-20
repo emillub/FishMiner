@@ -30,15 +30,33 @@ public class TraderFactory {
         Entity heavierSinker = SinkerFactory.createEntity(engine, SinkerTypes.HEAVIER_SINKER);
 
         TraderComponent traderComponent = traderEntity.getComponent(TraderComponent.class);
-        traderComponent.addProduct(heavySinker);
         traderComponent.addProduct(sharpHook);
         traderComponent.addProduct(longReel);
         traderComponent.addProduct(fastReel);
         traderComponent.addProduct(legendaryReel);
+        traderComponent.addProduct(heavySinker);
         traderComponent.addProduct(heavierSinker);
 
         engine.addEntity(traderEntity);
         //engine.addEntity(sharpHook);
+    }
+
+    public static Entity[] createNewUpgrader(PooledEngine engine, int posX, int posY) {
+        Entity sharpHook = HookFactory.createEntity(engine, HookTypes.SHARP_HOOK, posY, new Vector3(posX, posY, 0),
+                traderEntity); // dummy values
+        Entity longReel = ReelFactory.createEntity(engine, ReelTypes.LONG_REEL);
+        Entity fastReel = ReelFactory.createEntity(engine, ReelTypes.FAST_REEL);
+        Entity legendaryReel = ReelFactory.createEntity(engine, ReelTypes.LEGENDARY_REEL);
+        Entity heavySinker = SinkerFactory.createEntity(engine, SinkerTypes.HEAVY_SINKER);
+        Entity heavierSinker = SinkerFactory.createEntity(engine, SinkerTypes.HEAVIER_SINKER);
+        return new Entity[] {
+                sharpHook,
+                longReel,
+                fastReel,
+                legendaryReel,
+                heavySinker,
+                heavierSinker
+        };
     }
 
     @SuppressWarnings("unchecked")

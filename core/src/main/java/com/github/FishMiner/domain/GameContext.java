@@ -44,7 +44,7 @@ import com.github.FishMiner.ui.ports.in.IPlayer;
 
 public class GameContext implements IGameContext {
     private final PooledEngine engine;
-    private UpgradeStore store;
+    private final UpgradeStore store;
     private PlayerCharacter player;
     private final World world;
     private final SpriteBatch batch;
@@ -137,6 +137,13 @@ public class GameContext implements IGameContext {
             player.getPlayerEntity().getComponent(PlayerComponent.class).setHook(null);
             player.getPlayerEntity().getComponent(PlayerComponent.class).setReel(null);
             player.getPlayerEntity().getComponent(PlayerComponent.class).setSinker(null);
+            EntitySystem storeSystem = engine.getSystem(StoreSystem.class);
+            if (storeSystem != null) {
+                engine.removeSystem(storeSystem);
+            }
+            store.resetStore();
+            engine.addSystem(new StoreSystem(store.getTraderEntity()));
+
             safelyRemove(player.getPlayerEntity());
         }
 
@@ -160,13 +167,12 @@ public class GameContext implements IGameContext {
 
         HookComponent hookComponent = player.getHook().getComponent(HookComponent.class);
         if (hookComponent.hasAttachedEntity()) {
-            System.out.println("Removing attached fishable entity");
             engine.removeEntity(hookComponent.attachedFishableEntity);
             hookComponent.detachEntity();
         }
 
         AnimationComponent animationComponent = player.getReel().getComponent(AnimationComponent.class);
-        animationComponent.setCurrentAnimation(HookStates.SWINGING.getAnimationKey());
+        animationComponent.setCurrentAnimation(HookStates.RETURNED.getAnimationKey());
 
         TransformComponent transformComponent = player.getHook().getComponent(TransformComponent.class);
 
