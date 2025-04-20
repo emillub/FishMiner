@@ -1,8 +1,8 @@
 package com.github.FishMiner.domain.factories;
 
 public enum HookTypes {
-    BASIC_HOOK("hook_1cols_1rows.png", "BasicHook", 1, 1, 0, 1.0f, 1.0f),
-    SHARP_HOOK("sharp_hook.png", "SharpHook", 1, 1, 200, 1.0f, 1.5f);
+    BASIC_HOOK("hook_1cols_1rows.png", "Basic Hook", 1, 1, 0, 1.0f, 1.0f),
+    SHARP_HOOK("hook_1cols_1rows.png", "Sharp Hook", 1, 1, 200, 1.0f, 1.5f);
 
     private final String texturePath;
     private final String name;
