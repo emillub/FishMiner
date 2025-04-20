@@ -9,7 +9,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.domain.ecs.components.AnimationComponent;
+import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.PlayerComponent;
 import com.github.FishMiner.domain.ecs.components.ScoreComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.systems.AnimationSystem;
 import com.github.FishMiner.domain.ecs.systems.AttachmentSystem;
 import com.github.FishMiner.domain.ecs.systems.BackgroundRenderSystem;
@@ -32,6 +36,7 @@ import com.github.FishMiner.domain.level.LevelConfig;
 import com.github.FishMiner.domain.level.LevelConfigFactory;
 import com.github.FishMiner.domain.ports.in.IGameEvent;
 import com.github.FishMiner.domain.ports.in.IGameEventListener;
+import com.github.FishMiner.domain.states.HookStates;
 import com.github.FishMiner.domain.states.WorldState;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
@@ -115,6 +120,7 @@ public class GameContext implements IGameContext {
     }
 
     public void createNextLevel() {
+        prepareForeNextLevel();
         world.nextLevel(player.getScore());
     }
 
@@ -147,6 +153,26 @@ public class GameContext implements IGameContext {
         engine.update(0f); // make sure ECS is in sync
     }
 
+    private void prepareForeNextLevel() {
+
+        HookComponent hookComponent = player.getHook().getComponent(HookComponent.class);
+        if (hookComponent.hasAttachedEntity()) {
+            System.out.println("Removing attached fishable entity");
+            engine.removeEntity(hookComponent.attachedFishableEntity);
+            hookComponent.detachEntity();
+        }
+
+        AnimationComponent animationComponent = player.getReel().getComponent(AnimationComponent.class);
+        animationComponent.setCurrentAnimation(HookStates.SWINGING.getAnimationKey());
+
+        TransformComponent transformComponent = player.getHook().getComponent(TransformComponent.class);
+
+        PlayerComponent playerComponent = player.getPlayerEntity().getComponent(PlayerComponent.class);
+
+        transformComponent.pos.x = playerComponent.hookAnchorPoint.x;
+        transformComponent.pos.y = playerComponent.hookAnchorPoint.y;
+        transformComponent.pos.z = player.getPlayerEntity().getComponent(TransformComponent.class).pos.z + 1;
+    }
 
     private void safelyRemove(Entity entity) {
         if (entity != null) {
