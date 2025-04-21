@@ -105,7 +105,7 @@ public class Configuration {
     }
 
     public float getBaseSpeed() {
-        float baseSpeed = 1f;
+        float baseSpeed = 10f;
         return baseSpeed * scaleX;
     }
 

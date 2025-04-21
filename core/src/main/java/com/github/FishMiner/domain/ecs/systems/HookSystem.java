@@ -124,7 +124,7 @@ public class HookSystem extends IteratingSystem {
                 updateReelState(reelEntity, HookStates.REELING);
             } else {
                 hookVel.velocity.set(sinkerWeight, sinkerWeight).setAngleDeg(hookRot.angle - 90);
-                hookVel.velocity.scl(returnSpeed * Configuration.getInstance().getScaleY() * 2);
+                hookVel.velocity.scl(returnSpeed * Configuration.getInstance().getScaleY() * 4);
                 hookBounds.bounds.setPosition(hookPos.pos.x, hookPos.pos.y);
 
                 updateReelState(reelEntity, HookStates.FIRE); // 🔁 animate while firing down

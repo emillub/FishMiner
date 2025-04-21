@@ -68,6 +68,10 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
     @Override
     @SuppressWarnings("unchecked")
     public void update(float deltaTime) {
+        if (capturedQueue.size <= 0) {
+            setProcessing(false);
+            return;
+        }
         for (int i = 0; i < capturedQueue.size; i++) {
             FishScoreData entry = capturedQueue.get(i);
             Entity fishedEntity = entry.fishableObject;
@@ -128,9 +132,6 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
                 }
                 capturedQueue.removeIndex(i--); // Maintain index after removal
             }
-        }
-        if (capturedQueue.size <= 0) {
-            setProcessing(false);
         }
     }
 

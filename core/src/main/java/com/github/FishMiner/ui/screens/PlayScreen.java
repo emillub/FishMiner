@@ -234,12 +234,6 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         };
 
 
-
-    /**
-     * Updates the display for score and time remaining. Must be rendered after everything else.
-     * If not rendered last, it will be rendered behind the background
-     * @param batch spritebatch for this screen
-     */
     private void updateScoreTimeOverlay() {
         levelLabel.setText("Level: " + world.getLevel());
         timeLabel.setText("Time Left: " + Math.max(0, (int) world.getTimer()) + "s");
@@ -264,7 +258,10 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
     @Override
     public void dispose() {
         GameEventBus.getInstance().unregister(displayScoreListener);
+        GameEventBus.getInstance().unregister(world);
         super.dispose();
+        stage.clear();
+        stage.dispose();
         batch.dispose();
         font.dispose();
         Assets.getInstance().dispose();
