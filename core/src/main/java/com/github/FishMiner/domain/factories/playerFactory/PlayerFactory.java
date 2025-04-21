@@ -91,7 +91,6 @@ public class PlayerFactory {
             reelType = ReelTypes
                     .valueOf(DomainUtils
                             .formatEnumName(newReel.getComponent(ReelComponent.class).name));
-            currentReel.removeAll();
             engine.removeEntity(currentReel);
         }
 
@@ -124,7 +123,6 @@ public class PlayerFactory {
             hookType = HookTypes
                     .valueOf(DomainUtils
                             .formatEnumName(currentHook.getComponent(HookComponent.class).name));
-            currentHook.removeAll();
             engine.removeEntity(currentHook);
         }
 
@@ -168,7 +166,6 @@ public class PlayerFactory {
             sinkerType = SinkerTypes
                     .valueOf(DomainUtils
                             .formatEnumName(currentSinker.getComponent(SinkerComponent.class).name));
-            currentSinker.removeAll();
             engine.removeEntity(currentSinker);
         }
         AttachmentComponent sinkerAttachment = newSinker.getComponent(AttachmentComponent.class);

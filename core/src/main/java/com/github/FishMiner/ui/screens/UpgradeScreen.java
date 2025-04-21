@@ -1,16 +1,10 @@
 package com.github.FishMiner.ui.screens;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
-import com.github.FishMiner.domain.ecs.components.InventoryComponent;
 import com.github.FishMiner.domain.ports.in.IGameScreen;
 import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
@@ -18,21 +12,15 @@ import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.ecsEvents.TransactionEvent;
 import com.github.FishMiner.domain.ecs.components.SinkerComponent;
-import com.github.FishMiner.domain.ecs.components.TextureComponent;
 import com.github.FishMiner.domain.ecs.components.ReelComponent;
 import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
-import com.github.FishMiner.domain.UpgradeStore;
 import com.github.FishMiner.domain.managers.ScreenManager;
 import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.ports.in.IPlayer;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
-import java.io.ObjectInputFilter.Config;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     private static final String TAG = "UpgradeScreen";
@@ -57,7 +45,6 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
         super.show();
         Gdx.input.setInputProcessor(stage);
         List<Entity> upgradeProducts = gameContext.getUpgradeStore().getUpgradeProducts();
-        System.out.println("Upgrade products: " + upgradeProducts.size());
         reelProduct = null;
         hookProduct = null;
         sinkerProduct = null;
@@ -69,17 +56,8 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
                 continue;
             }
             if (product.getComponent(UpgradeComponent.class).isUpgraded()) {
-                Logger.getInstance().error(TAG, "Product " + upgradeComponent.getType().getClass()
+                Logger.getInstance().log(TAG, "Product " + upgradeComponent.getType().getClass()
                         + " is already upgraded. Skipping.");
-                if (product.getComponent(SinkerComponent.class) != null) {
-                    System.out.println("SinkerComponent: " + product.getComponent(SinkerComponent.class).name);
-                } else if (product.getComponent(ReelComponent.class) != null) {
-                    System.out.println("ReelComponent: " + product.getComponent(ReelComponent.class).name);
-                } else if (product.getComponent(HookComponent.class) != null) {
-                    System.out.println("HookComponent: " + product.getComponent(HookComponent.class).name);
-                } else {
-                    System.out.println("Unknown component type");
-                }
                 continue;
             }
             if (product.getComponent(SinkerComponent.class) != null && sinkerProduct == null) {
