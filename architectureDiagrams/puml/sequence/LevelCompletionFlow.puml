@@ -1,0 +1,15 @@
+@startuml
+actor Player
+participant PlayScreen
+participant GameContext
+participant World
+participant GameEventBus
+participant ScreenManager
+
+Player -> PlayScreen : completes level
+PlayScreen -> GameContext : update(delta)
+GameContext -> World : update(delta)
+World -> GameEventBus : post(ChangeScreenEvent)
+GameEventBus -> ScreenManager : onEvent(ChangeScreenEvent)
+ScreenManager -> ScreenManager : switchScreenTo(LEVEL_COMPLETE)
+@enduml

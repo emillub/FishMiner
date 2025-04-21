@@ -1,0 +1,30 @@
+@startuml ecs_with_engine_final_spacing
+skinparam linetype ortho
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+title ECS Architecture with PooledEngine
+
+' Define visible nodes
+rectangle "PooledEngine" as Engine
+rectangle "Entities" as Entities
+rectangle "Components" as Components
+rectangle "Systems" as Systems
+rectangle "Ashley ECS Runtime" as ECS
+
+' Trick: layout spacing by forcing distance with relative node placement
+' and using empty direction hints
+
+' Vertical connections from engine
+Engine -down-> Entities : creates
+Engine -down-> Components : pooled
+Engine -down-> Systems : manages
+
+' Now manually space the main ECS flow
+Entities -right- Components : \n\n\ncontains
+Components -right- Systems : \n\n\nprocessed by
+
+' ECS execution line
+Systems -down-> ECS : executes on
+ECS -left-> Entities : updates
+
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+actor Player
+participant PlayScreen
+participant GameEventBus
+participant HookInputSystem
+participant Hook
+
+Player -> PlayScreen : tap screen
+PlayScreen -> GameEventBus : post(HookInputEvent)
+GameEventBus -> HookInputSystem : onEvent(HookInputEvent)
+HookInputSystem -> Hook : change state to FIRE
+@enduml
