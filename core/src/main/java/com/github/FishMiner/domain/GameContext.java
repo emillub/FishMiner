@@ -130,6 +130,8 @@ public class GameContext implements IGameContext {
      * Then a new the World creates reuses the PlayScreen with Level 1
      */
     public void resetGame() {
+        store.resetStore();
+
         if (player != null) {
             safelyRemove(player.getSinker());
             safelyRemove(player.getHook());
@@ -137,13 +139,6 @@ public class GameContext implements IGameContext {
             player.getPlayerEntity().getComponent(PlayerComponent.class).setHook(null);
             player.getPlayerEntity().getComponent(PlayerComponent.class).setReel(null);
             player.getPlayerEntity().getComponent(PlayerComponent.class).setSinker(null);
-            EntitySystem storeSystem = engine.getSystem(StoreSystem.class);
-            if (storeSystem != null) {
-                engine.removeSystem(storeSystem);
-            }
-            store.resetStore();
-            engine.addSystem(new StoreSystem(store.getTraderEntity()));
-
             safelyRemove(player.getPlayerEntity());
         }
 

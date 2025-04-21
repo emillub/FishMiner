@@ -86,6 +86,10 @@ public class ScreenManager {
                     && currentScreen.getScreenType() == LEVEL_LOST) {
                 resetGame();
             }
+            if ((screenType == MENU || screenType == LEADERBOARD) && currentScreen != null
+                    && currentScreen.getScreenType() == PLAY) {
+                resetGame();
+            }
 
             if (cachedScreens.containsKey(screenType)) {
                 newScreen = (IGameScreen) cachedScreens.get(screenType);

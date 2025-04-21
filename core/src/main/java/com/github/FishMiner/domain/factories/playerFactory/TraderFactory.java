@@ -41,7 +41,7 @@ public class TraderFactory {
         //engine.addEntity(sharpHook);
     }
 
-    public static Entity[] createNewUpgrader(PooledEngine engine, int posX, int posY) {
+    public static Entity[] createNewUpgrades(PooledEngine engine, int posX, int posY) {
         Entity sharpHook = HookFactory.createEntity(engine, HookTypes.SHARP_HOOK, posY, new Vector3(posX, posY, 0),
                 traderEntity); // dummy values
         Entity longReel = ReelFactory.createEntity(engine, ReelTypes.LONG_REEL);

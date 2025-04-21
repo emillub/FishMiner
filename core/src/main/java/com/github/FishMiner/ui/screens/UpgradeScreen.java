@@ -36,9 +36,7 @@ import java.util.Map;
 
 public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     private static final String TAG = "UpgradeScreen";
-    private List<Entity> upgradeProducts;
     private final IPlayer player;
-    private UpgradeStore upgradeStore;
     private float smallerPadding = Configuration.getInstance().getSmallPadding() / 2;
 
     Entity reelProduct = null;
@@ -52,26 +50,36 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
         super(gameContext);
         screenType = ScreenType.UPGRADE;
         player = gameContext.getPlayer();
-        // Retrieve the upgrade store from GameContext (which now holds an instance of UpgradeStore)
-        this.upgradeStore = gameContext.getUpgradeStore();
-        this.upgradeProducts = upgradeStore.getUpgradeProducts();
     }
 
     @Override
     public void show() {
         super.show();
         Gdx.input.setInputProcessor(stage);
-        this.upgradeStore = gameContext.getUpgradeStore();
-        this.upgradeProducts = gameContext.getUpgradeStore().getUpgradeProducts();
+        List<Entity> upgradeProducts = gameContext.getUpgradeStore().getUpgradeProducts();
+        System.out.println("Upgrade products: " + upgradeProducts.size());
         reelProduct = null;
         hookProduct = null;
         sinkerProduct = null;
         for (Entity product : upgradeProducts) {
-            if (product.getComponent(UpgradeComponent.class) == null) {
-                Logger.getInstance().error(TAG, "Product " + product + " does not have an UpgradeComponent. Skipping.");
+            UpgradeComponent upgradeComponent = product.getComponent(UpgradeComponent.class);
+            if (upgradeComponent == null) {
+                Logger.getInstance().error(TAG, "Product " + product.getClass()
+                        + " does not have an UpgradeComponent. Skipping.");
                 continue;
             }
             if (product.getComponent(UpgradeComponent.class).isUpgraded()) {
+                Logger.getInstance().error(TAG, "Product " + upgradeComponent.getType().getClass()
+                        + " is already upgraded. Skipping.");
+                if (product.getComponent(SinkerComponent.class) != null) {
+                    System.out.println("SinkerComponent: " + product.getComponent(SinkerComponent.class).name);
+                } else if (product.getComponent(ReelComponent.class) != null) {
+                    System.out.println("ReelComponent: " + product.getComponent(ReelComponent.class).name);
+                } else if (product.getComponent(HookComponent.class) != null) {
+                    System.out.println("HookComponent: " + product.getComponent(HookComponent.class).name);
+                } else {
+                    System.out.println("Unknown component type");
+                }
                 continue;
             }
             if (product.getComponent(SinkerComponent.class) != null && sinkerProduct == null) {
@@ -113,7 +121,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
 
         TextButton continueButton = ButtonFactory.createTextButton("Continue",
                 ButtonFactory.ButtonSize.MEDIUM, () -> {
-                    upgradeStore.setRenderTrader(false);
+                    // upgradeStore.setRenderTrader(false);
                     ScreenManager.getInstance().startNextLevel();
                 });
 
