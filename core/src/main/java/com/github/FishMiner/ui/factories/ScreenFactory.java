@@ -12,6 +12,7 @@ import com.github.FishMiner.ui.screens.LoginScreen;
 import com.github.FishMiner.ui.screens.MenuScreen;
 import com.github.FishMiner.ui.screens.PlayScreen;
 import com.github.FishMiner.ui.screens.SettingScreen;
+import com.github.FishMiner.ui.screens.TutorialScreen;
 import com.github.FishMiner.ui.screens.UpgradeScreen;
 
 public class ScreenFactory implements IScreenFactory {
@@ -32,6 +33,7 @@ public class ScreenFactory implements IScreenFactory {
             case LEVEL_LOST -> newScreen = new LevelLostScreen(gameContext);
             case SETTINGS -> newScreen = new SettingScreen(gameContext);
             case UPGRADE -> newScreen = new UpgradeScreen(gameContext);
+            case TUTORIAL -> newScreen = new TutorialScreen(gameContext);
             default ->
                 throw new IllegalArgumentException(TAG + "No screen exists for type: " + type);
         };

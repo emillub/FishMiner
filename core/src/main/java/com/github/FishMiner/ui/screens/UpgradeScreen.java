@@ -158,7 +158,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     }
 
     private Label createPurchasedLabel() {
-        Label purchasedLabel = new Label("Purchased", skin);
+        Label purchasedLabel = new Label("EQUIPPED", skin);
         purchasedLabel.setColor(Assets.POSITIVE_GREEN);
         purchasedLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
         return purchasedLabel;
@@ -177,7 +177,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     }
 
     private Label createNotEnoughMoneyLabel() {
-        Label notEnoughMoneyLabel = new Label("Not enough money", skin);
+        Label notEnoughMoneyLabel = new Label("TOO EXPENSIVE", skin);
         notEnoughMoneyLabel.setColor(Assets.NEGATIVE_RED);
         notEnoughMoneyLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
         return notEnoughMoneyLabel;

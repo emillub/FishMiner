@@ -7,6 +7,7 @@ import static com.github.FishMiner.ui.ports.out.ScreenType.PLAY;
 
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.GameContext;
 
@@ -82,6 +83,9 @@ public class ScreenManager {
             // Always create a new instance for gameplay, as each level needs a new PlayScreen.
             newScreen = (IGameScreen) screenFactory.getScreen(screenType, gameContext);
         } else {
+            if (screenType == MENU) {
+                Assets.getInstance().loadTutorialAssets();
+            }
             if ((screenType == MENU || screenType == LEADERBOARD) && currentScreen != null
                     && currentScreen.getScreenType() == LEVEL_LOST) {
                 resetGame();
