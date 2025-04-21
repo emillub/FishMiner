@@ -38,24 +38,47 @@ public class Assets {
     public static String BACKGROUND_MUSIC_PATH = "music/StartMusic.ogg";
     public static String PLAY_MUSIC_PATH = "music/TownTheme.ogg";
 
-    public static String TUTORIAL_FOLDER_PATH = "assets/tutorial/";
+    // Automatically detect assets folder path
+    public static String assetsFolderPath;
+
+    public static String TUTORIAL_FOLDER_PATH = assetsFolderPath + "tutorial/";
     public static HashMap<String, String> tutorialImagePaths = new HashMap<>();
 
-    public static final String FISH_TEXTURE_FOLDER_PATH = "assets/fish/";
+    public static String FISH_TEXTURE_FOLDER_PATH = assetsFolderPath + "fish/";
     public static final HashMap<String, String> fishTexturePaths = new HashMap<>();
 
-    public static final String HOOK_TEXTURE_FOLDER_PATH = "assets/hooks/";
+    public static String HOOK_TEXTURE_FOLDER_PATH = assetsFolderPath + "hooks/";
     public static final HashMap<String, String> hookTexturePaths = new HashMap<>();
 
-    public static final String REEL_TEXTURE_PATH = "assets/reels/";
+    public static String REEL_TEXTURE_PATH = assetsFolderPath + "reels/";
     public static final HashMap<String, String> reelTexturePaths = new HashMap<>();
 
-    public static final String SINKER_TEXTURE_PATH = "assets/sinkers/";
+    public static String SINKER_TEXTURE_PATH = assetsFolderPath + "sinkers/";
     public static final HashMap<String, String> sinkerTexturePaths = new HashMap<>();
 
     private Assets() {
         // Private constructor to prevent instantiation
         assetManager = new AssetManager();
+
+        // Automatically detect assets folder path
+        // This is a workaround for the issue with Gdx.files.getLocalStoragePath()
+        // returning "assets/"
+        if (!Gdx.files.internal("assets/").exists()) {
+            assetsFolderPath = "";
+        } else {
+            assetsFolderPath = "assets/";
+        }
+
+        PLAYER_TEXTURE = assetsFolderPath + "fisherman.png";
+        TITLE_PATH = assetsFolderPath + "ui/title.png";
+        BACKGROUND_MUSIC_PATH = assetsFolderPath + "music/StartMusic.ogg";
+        PLAY_MUSIC_PATH = assetsFolderPath + "music/TownTheme.ogg";
+        TUTORIAL_FOLDER_PATH = assetsFolderPath + "tutorial/";
+        FISH_TEXTURE_FOLDER_PATH = assetsFolderPath + "fish/";
+        HOOK_TEXTURE_FOLDER_PATH = assetsFolderPath + "hooks/";
+        REEL_TEXTURE_PATH = assetsFolderPath + "reels/";
+        SINKER_TEXTURE_PATH = assetsFolderPath + "sinkers/";
+        System.out.println("Assets folder path: " + assetsFolderPath);
         getTutorialPaths();
         getFishTexturePaths();
         getReelTexturePaths();
@@ -123,54 +146,45 @@ public class Assets {
     }
 
     private void getTutorialPaths() {
-        FileHandle tutorialFolder = Gdx.files.internal(TUTORIAL_FOLDER_PATH);
-        if (!tutorialFolder.exists() || !tutorialFolder.isDirectory()) {
-            TUTORIAL_FOLDER_PATH = ensureCorrectFolderPath(TUTORIAL_FOLDER_PATH);
-            tutorialFolder = Gdx.files.internal(TUTORIAL_FOLDER_PATH);
+        try {
+            FileHandle tutorialFolder = Gdx.files.internal(TUTORIAL_FOLDER_PATH);
+            populateTexturePaths(tutorialFolder, tutorialImagePaths);
+        } catch (Exception e) {
+            Logger.getInstance().error(TAG,
+                    "Tutorial folder not found. Try setting or removing the assets folder path.");
         }
-
-        populateTexturePaths(tutorialFolder, tutorialImagePaths);
-    }
-
-    private String ensureCorrectFolderPath(String folderPath) {
-
-        if (!folderPath.startsWith("assets/")) {
-            folderPath.replace("assets/", "");
-        } else {
-            folderPath = "assets/" + folderPath;
-        }
-        return folderPath;
     }
 
     private void getFishTexturePaths() {
-        FileHandle fishFolder = Gdx.files.internal(FISH_TEXTURE_FOLDER_PATH);
-        if (!fishFolder.exists() || !fishFolder.isDirectory()) {
-            fishFolder = Gdx.files.internal(ensureCorrectFolderPath(FISH_TEXTURE_FOLDER_PATH));
+        try {
+            FileHandle fishFolder = Gdx.files.internal(FISH_TEXTURE_FOLDER_PATH);
+            populateTexturePaths(fishFolder, fishTexturePaths);
+        } catch (Exception e) {
+            Logger.getInstance().error(TAG, "Fish folder not found. Try setting or removing the assets folder path.");
         }
-        populateTexturePaths(fishFolder, fishTexturePaths);
-
     }
 
     private void getReelTexturePaths() {
-        FileHandle reelFolder = Gdx.files.internal(REEL_TEXTURE_PATH);
-        if (!reelFolder.exists() || !reelFolder.isDirectory()) {
-            reelFolder = Gdx.files.internal(ensureCorrectFolderPath(REEL_TEXTURE_PATH));
+        try {
+            FileHandle reelFolder = Gdx.files.internal(REEL_TEXTURE_PATH);
+            populateTexturePaths(reelFolder, reelTexturePaths);
+        } catch (Exception e) {
+            Logger.getInstance().error(TAG, "Reel folder not found. Try setting or removing the assets folder path.");
         }
-        populateTexturePaths(reelFolder, reelTexturePaths);
     }
 
     private void getHookTexturePaths() {
-        FileHandle hookFolder = Gdx.files.internal(HOOK_TEXTURE_FOLDER_PATH);
-        if (!hookFolder.exists() || !hookFolder.isDirectory()) {
-            hookFolder = Gdx.files.internal(ensureCorrectFolderPath(HOOK_TEXTURE_FOLDER_PATH));
+        try {
+            FileHandle hookFolder = Gdx.files.internal(HOOK_TEXTURE_FOLDER_PATH);
+            populateTexturePaths(hookFolder, hookTexturePaths);
+        } catch (Exception e) {
+            Logger.getInstance().error(TAG, "Hook folder not found. Try setting or removing the assets folder path.");
         }
-        populateTexturePaths(hookFolder, hookTexturePaths);
     }
 
     private void getSinkerTexturePaths() {
         FileHandle sinkerFolder = Gdx.files.internal(SINKER_TEXTURE_PATH);
         if (!sinkerFolder.exists() || !sinkerFolder.isDirectory()) {
-            sinkerFolder = Gdx.files.internal(ensureCorrectFolderPath(SINKER_TEXTURE_PATH));
         }
         populateTexturePaths(sinkerFolder, sinkerTexturePaths);
     }
