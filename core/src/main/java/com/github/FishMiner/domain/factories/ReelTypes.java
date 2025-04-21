@@ -1,11 +1,10 @@
 package com.github.FishMiner.domain.factories;
 
 public enum ReelTypes {
-    BASIC_REEL("BASIC_REEL.png", "BasicReel", 8, 1, 80.0f, 5, 0),
-
-    LONG_REEL("Long_Reel.png", "LongReel", 1, 1, 4.5f, 6, 250),
-    FAST_REEL("FAST_REEL.png", "FastReel", 1, 1, 7.5f, 4, 15),
-    LEGENDARY_REEL("LEGENDARY_REEL.png", "LengendaryReel", 1, 1, 10.0f, 6, 20);
+    BASIC_REEL("BASIC_REEL.png", "Basic Reel", 8, 1, 15.0f, 4, 0),
+    LONG_REEL("LONG_REEL.png", "Long Reel", 8, 1, 15.0f, 6, 100),
+            FAST_REEL("FAST_REEL.png", "Fast Reel", 8, 1, 20.0f, 6, 200),
+    LEGENDARY_REEL("LEGENDARY_REEL.png", "Legendary Reel", 8, 1, 40.0f, 8, 400);
 
     private final String texturePath;
     private final String name;

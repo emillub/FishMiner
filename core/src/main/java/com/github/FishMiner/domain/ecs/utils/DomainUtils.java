@@ -87,4 +87,7 @@ public class DomainUtils {
         return oceanHeight - ((depthLevel - 1) * segmentHeight) - entityHeight;
     }
 
+    public static String formatEnumName(String name) {
+        return name.replaceAll(" ", "_").toUpperCase();
+    }
 }

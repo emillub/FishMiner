@@ -3,7 +3,11 @@ package com.github.FishMiner.domain;
 import com.badlogic.ashley.core.PooledEngine;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.ValidateUtil;
+import com.github.FishMiner.domain.ecs.components.HookComponent;
+import com.github.FishMiner.domain.ecs.components.ReelComponent;
+import com.github.FishMiner.domain.ecs.components.SinkerComponent;
 import com.github.FishMiner.domain.ecs.components.TraderComponent;
+import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
 import com.github.FishMiner.domain.factories.playerFactory.TraderFactory;
 import java.util.List;
 import com.badlogic.ashley.core.Entity;
@@ -17,7 +21,6 @@ public class UpgradeStore {
     private static UpgradeStore instance;
     private final PooledEngine engine;
     private final Entity trader;
-    private final List<Entity> products;
 
     public UpgradeStore(PooledEngine engine) {
         this.engine = engine;
@@ -29,7 +32,31 @@ public class UpgradeStore {
         trader = TraderFactory.getTraderEntity();
         ValidateUtil.validateNotNull(trader, "Trader must not be null");
         TraderComponent traderComponent = trader.getComponent(TraderComponent.class);
-        products = traderComponent.getProducts();
+        traderComponent.setRenderTrader(false);
+    }
+
+    public void resetStore() {
+        Entity[] entities = TraderFactory.createNewUpgrades(engine, 0, 0);
+        TraderComponent traderComponent = trader.getComponent(TraderComponent.class);
+        traderComponent.getProducts().forEach(product -> {
+            product.removeAll();
+            engine.removeEntity(product);
+        });
+        traderComponent.getProducts().clear();
+
+        for (Entity entity : entities) {
+            trader.getComponent(TraderComponent.class).addProduct(entity);
+            if (entity.getComponent(HookComponent.class) != null) {
+                System.out.println(entity.getComponent(HookComponent.class).name);
+            }
+            if (entity.getComponent(ReelComponent.class) != null) {
+                System.out.println(entity.getComponent(ReelComponent.class).name);
+            }
+            if (entity.getComponent(SinkerComponent.class) != null) {
+                System.out.println(entity.getComponent(SinkerComponent.class).name);
+            }
+        }
+
     }
 
     public static UpgradeStore getInstance(PooledEngine engine) {
@@ -41,7 +68,7 @@ public class UpgradeStore {
 
     // Exposes the list of upgrade (product) entities.
     public List<Entity> getUpgradeProducts() {
-        return products;
+        return trader.getComponent(TraderComponent.class).getProducts();
     }
 
     // Controls whether the trader is rendered onscreen.

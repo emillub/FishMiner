@@ -121,7 +121,6 @@ public class LeaderBoardScreen extends AbstractScreen implements IGameScreen {
 
     @Override
     public void render(float delta) {
-        System.out.println("[DEBUG] LeaderboardScreen render() called");
         ScreenUtils.clear(0f, 0f, 0f, 1f);
         super.drawBackground();
         stage.act(delta);

@@ -128,7 +128,6 @@ public class LoginScreen extends AbstractScreen implements IGameScreen {
         toggleLink.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Toggle link clicked");
                 isLoginMode = !isLoginMode;
                 renderLoginLayout();
             }

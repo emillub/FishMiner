@@ -73,7 +73,12 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
             Entity fishedEntity = entry.fishableObject;
 
             TransformComponent fishPos = transformCompMapper.get(fishedEntity);
-            ValidateUtil.validateNotNull(fishPos, "ScoreSystem/update: fishPos was null.");
+            if (fishPos == null) {
+                Logger.getInstance().error(TAG, "Fish position component is null.");
+                continue;
+            }
+            // ValidateUtil.validateNotNull(fishPos, "ScoreSystem/update: fishPos was
+            // null.");
 
             // Send fish flying into the boat
             Entity player = entry.player;

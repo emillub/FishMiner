@@ -86,12 +86,10 @@ public class FishFactory {
 
         // Start X: just offscreen left or right
         float startX = movesRight ? -fishComponent.width : screenWidth + fishComponent.width;
-        System.out.println("Fish moves " + (movesRight ? "right" : "left") + " from x=" + startX);
 
         // Start Y: based on depth
         float startY = DomainUtils.getRandomDepthFor(depthLevel, fishComponent.height);
         transformComponent.pos.set(startX, startY, 0);
-        System.out.println("[DEBUG] Fish spawned at: " + transformComponent.pos);
         transformComponent.scale.set(scale, scale);
         velocityComponent.velocity.x = DomainUtils.getFishDirectionX(movesRight, speed);
 

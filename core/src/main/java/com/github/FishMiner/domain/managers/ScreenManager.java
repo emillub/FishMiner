@@ -1,5 +1,6 @@
 package com.github.FishMiner.domain.managers;
 
+import static com.github.FishMiner.ui.ports.out.ScreenType.LEADERBOARD;
 import static com.github.FishMiner.ui.ports.out.ScreenType.LEVEL_LOST;
 import static com.github.FishMiner.ui.ports.out.ScreenType.MENU;
 import static com.github.FishMiner.ui.ports.out.ScreenType.PLAY;
@@ -81,7 +82,12 @@ public class ScreenManager {
             // Always create a new instance for gameplay, as each level needs a new PlayScreen.
             newScreen = (IGameScreen) screenFactory.getScreen(screenType, gameContext);
         } else {
-            if (screenType == MENU && currentScreen != null && currentScreen.getScreenType() == LEVEL_LOST) {
+            if ((screenType == MENU || screenType == LEADERBOARD) && currentScreen != null
+                    && currentScreen.getScreenType() == LEVEL_LOST) {
+                resetGame();
+            }
+            if ((screenType == MENU || screenType == LEADERBOARD) && currentScreen != null
+                    && currentScreen.getScreenType() == PLAY) {
                 resetGame();
             }
 

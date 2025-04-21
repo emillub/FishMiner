@@ -107,7 +107,6 @@ public class RequestManager implements IRequestManager {
     }
 
     private void handleLeaderboardPostRequest(ScoreEntry entry) {
-        System.out.println("[DEBUG] handleLeaderboardPostRequest: username=" + entry.username() + ", score=" + entry.score());
         leaderboardPoster.postScore(entry, new LeaderboardCallback() {
             @Override
             public void onSuccess(List<ScoreEntry> updatedScores) {
