@@ -96,6 +96,7 @@ public class PlayerFactory {
                     .valueOf(DomainUtils
                             .formatEnumName(newReel.getComponent(ReelComponent.class).name));
             engine.removeEntity(currentReel);
+            currentReel.removeAll();
         }
 
         float anchorY = playerComponent.hookAnchorPoint.y;
@@ -128,6 +129,7 @@ public class PlayerFactory {
                     .valueOf(DomainUtils
                             .formatEnumName(currentHook.getComponent(HookComponent.class).name));
             engine.removeEntity(currentHook);
+            currentHook.removeAll();
         }
 
         TransformComponent transformComponent = newHook.getComponent(TransformComponent.class);
@@ -171,6 +173,7 @@ public class PlayerFactory {
                     .valueOf(DomainUtils
                             .formatEnumName(currentSinker.getComponent(SinkerComponent.class).name));
             engine.removeEntity(currentSinker);
+            currentSinker.removeAll();
         }
         AttachmentComponent sinkerAttachment = newSinker.getComponent(AttachmentComponent.class);
         sinkerAttachment.setParentEntity(hook);

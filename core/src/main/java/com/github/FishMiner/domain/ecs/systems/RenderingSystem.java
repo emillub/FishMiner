@@ -40,7 +40,12 @@ public class RenderingSystem extends SortedIteratingSystem {
         batch.begin();
 
         for (Entity entity : getEntities()) {
-            drawEntity(entity, deltaTime);
+            TransformComponent pos = transMapper.get(entity);
+            if (pos == null || pos.pos == null)
+                continue;
+            if (cam.frustum.boundsInFrustum(pos.pos.x, pos.pos.y, pos.pos.z, 0.5f, 0.5f, 0.5f)) {
+                drawEntity(entity, deltaTime);
+            }
         }
 
         batch.end();

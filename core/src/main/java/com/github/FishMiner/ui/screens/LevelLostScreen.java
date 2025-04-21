@@ -45,10 +45,6 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
     @Override
     public void show() {
         super.show();
-        shapeRenderer = new ShapeRenderer();
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);

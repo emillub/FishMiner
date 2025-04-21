@@ -1,9 +1,7 @@
 package com.github.FishMiner.common;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Configuration {
     private static Configuration instance;

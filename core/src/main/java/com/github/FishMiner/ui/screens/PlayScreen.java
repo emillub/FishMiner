@@ -7,22 +7,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
@@ -41,6 +33,8 @@ import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
 
+import net.dermetfan.gdx.assets.AnnotationAssetManager.Asset;
+
 /**
  * PlayScreen handles gameplay, including ECS initialization, rendering, and input.
  * It also provides a full-width control window with a Menu button to open an overlay.
@@ -51,6 +45,10 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
     private World world;
     private Table pauseOverlay;
     private boolean scoreSubmitted = false;
+    private Table overlayTable;
+    private Label levelLabel;
+    private Label timeLabel;
+    private Label scoreLabel;
 
     public PlayScreen(IGameContext gameContext) {
         super(gameContext);
@@ -67,6 +65,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         }
         setupInput();
         setupPauseUI();
+        setupScoreTimeOverlay();
         GameEventBus.getInstance().register(displayScoreListener);
         GameEventBus.getInstance().post(new MusicEvent(PLAY_GAME));
     }
@@ -83,13 +82,33 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         }
 
         super.stage.act(delta);
-
-        gameContext.update(delta);
-        updateScoreTimeOverlay(batch);
+        updateScoreTimeOverlay();
 
         super.stage.draw();
     }
 
+    private void setupScoreTimeOverlay() {
+        overlayTable = new Table();
+        overlayTable.top().left();
+        overlayTable.setFillParent(true);
+
+        levelLabel = new Label("", skin);
+        timeLabel = new Label("", skin);
+        scoreLabel = new Label("", skin);
+
+        levelLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+        timeLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+        scoreLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+        levelLabel.setColor(Assets.DARK_BROWN);
+        timeLabel.setColor(Assets.DARK_BROWN);
+        scoreLabel.setColor(Assets.DARK_BROWN);
+
+        overlayTable.add(levelLabel).pad(Configuration.getInstance().getSmallPadding()).left().row();
+        overlayTable.add(timeLabel).pad(Configuration.getInstance().getSmallPadding()).left().row();
+        overlayTable.add(scoreLabel).pad(Configuration.getInstance().getSmallPadding()).left();
+
+        stage.addActor(overlayTable);
+    }
 
     private void setupInput() {
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -153,6 +172,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         // Quit button
         TextButton continueButton = ButtonFactory.createTextButton("Continue", ButtonFactory.ButtonSize.MEDIUM, () -> {
             world.togglePause();
+            pauseButton.setChecked(world.isPaused());
             pauseOverlay.setVisible(world.isPaused());
         });
 
@@ -190,7 +210,7 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
                 String displayValue = prefix + Math.abs((int) value);
 
                 Label scoreLabel = new Label(displayValue, style);
-                scoreLabel.setFontScale(1.5f);
+                    scoreLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
                 Vector2 screenCoords = stage.getViewport().project(new Vector2(event.x, event.y));
                 Vector2 stageCoords = stage.screenToStageCoordinates(screenCoords);
                 scoreLabel.setPosition(stageCoords.x + 100, stageCoords.y + 450);
@@ -220,12 +240,10 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
      * If not rendered last, it will be rendered behind the background
      * @param batch spritebatch for this screen
      */
-    private void updateScoreTimeOverlay(SpriteBatch batch) {
-        batch.begin();
-        font.draw(batch, "Level: " + world.getLevel(), 10, Gdx.graphics.getHeight() * 0.92f);
-        font.draw(batch, "Time Left: " + Math.max(0, (int) world.getTimer()) + "s", 10, Gdx.graphics.getHeight() * 0.95f);
-        font.draw(batch, "Score: " + (int) world.getScore() + "/" + world.getTargetScore(), 10, Gdx.graphics.getHeight() * 0.98f);
-        batch.end();
+    private void updateScoreTimeOverlay() {
+        levelLabel.setText("Level: " + world.getLevel());
+        timeLabel.setText("Time Left: " + Math.max(0, (int) world.getTimer()) + "s");
+        scoreLabel.setText("Score: " + (int) world.getScore() + "/" + world.getTargetScore());
     }
 
     private void submitFinalScoreAndGoToLeaderboard() {
@@ -249,5 +267,6 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         super.dispose();
         batch.dispose();
         font.dispose();
+        Assets.getInstance().dispose();
     }
 }

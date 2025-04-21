@@ -11,16 +11,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.github.FishMiner.domain.factories.FishTypes;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Assets {
     private static final String TAG = Assets.class.getSimpleName();
     private static Assets instance;
     private final AssetManager assetManager;
 
+    // Frequently used assets
+
     private final static Skin uiSkin = new Skin(Gdx.files.internal("ui/skin/fishminerSkin.json"));
+
     private final static String BUTTONS_PATH = "ui/icons/";
     public final static BitmapFont DEFAULT_FONT = uiSkin.getFont("default");
     public final static BitmapFont TITLE_FONT = uiSkin.getFont("title");
@@ -42,8 +43,7 @@ public class Assets {
     public static String PLAY_MUSIC_PATH = "music/TownTheme.ogg";
 
     public static String TUTORIAL_FOLDER_PATH = "assets/tutorial/";
-    public static List<String> tutorialImagePaths;
-    private List<Texture> tutorialTextures = new java.util.ArrayList<>();
+    public static HashMap<String, String> tutorialImagePaths = new HashMap<>();
 
     public static final String FISH_TEXTURE_FOLDER_PATH = "assets/fish/";
     public static final HashMap<String, String> fishTexturePaths = new HashMap<>();
@@ -92,6 +92,7 @@ public class Assets {
         }
     }
 
+
     public enum ButtonStateEnum {
         UP, DOWN
     }
@@ -100,16 +101,19 @@ public class Assets {
         PLAY, PAUSE, SETTINGS, LEADERBOARD, SOUND, MUTED, TEXT_BUTTON, TUTORIAL, ARROW
     }
 
-    public String getButtonPath (ButtonEnum button, ButtonStateEnum state) {
+    public static String getButtonPath(ButtonEnum button, ButtonStateEnum state) {
+        BYTTON_PATHS.computeIfAbsent(button, b -> new HashMap<>());
+        BYTTON_PATHS.get(button).computeIfAbsent(state,
+                s -> BUTTONS_PATH + button.name().toLowerCase() + "-" + state.name().toLowerCase() + ".png");
         return BYTTON_PATHS.get(button).get(state);
     }
 
     public void loadAsset(String path, Class<?> type) {
-        Logger.getInstance().debug(TAG,"Loading asset: " + path);
         if (assetManager.isLoaded(path, type)) {
             Logger.getInstance().debug(TAG, "Asset already loaded: " + path);
             return;
         }
+        Logger.getInstance().debug(TAG, "Loading asset: " + path);
         assetManager.load(path, type);
     }
 
@@ -118,7 +122,7 @@ public class Assets {
         if (!assetManager.isLoaded(path, type)) {
             Logger.getInstance().debug(TAG, "Asset not loaded: " + path);
             loadAsset(path, type);
-            finishLoading();
+            return null;
         }
         return assetManager.get(path, type);
     }
@@ -132,14 +136,8 @@ public class Assets {
             TUTORIAL_FOLDER_PATH = ensureCorrectFolderPath(TUTORIAL_FOLDER_PATH);
             tutorialFolder = Gdx.files.internal(TUTORIAL_FOLDER_PATH);
         }
-        FileHandle[] files = tutorialFolder.list();
 
-        List<String> list = new ArrayList<>();
-        for (FileHandle fileHandle : List.of(files)) {
-            String path = fileHandle.path();
-            list.add(path);
-        }
-        tutorialImagePaths = list;
+        populateTexturePaths(tutorialFolder, tutorialImagePaths);
     }
 
     private String ensureCorrectFolderPath(String folderPath) {
@@ -186,8 +184,7 @@ public class Assets {
     }
 
     private void populateTexturePaths(FileHandle folder, HashMap<String, String> texturePaths) {
-        FileHandle[] files = folder.list();
-        for (FileHandle fileHandle : List.of(files)) {
+        for (FileHandle fileHandle : folder.list()) {
             String fileName = fileHandle.name().replace(".png", "");
             String path = fileHandle.path();
             texturePaths.put(fileName, path);
@@ -209,27 +206,21 @@ public class Assets {
     }
 
     public static String getFishTexturePath(String fishType) {
-        String texturePath = fishTexturePaths.get(fishType);
-        if (texturePath == null) {
-            throw new IllegalArgumentException("Texture path not found for fish type: " + fishType);
-        }
-        return texturePath;
+        return fishTexturePaths.computeIfAbsent(fishType, key -> {
+            throw new IllegalArgumentException("Texture path not found for fish type: " + key);
+        });
     }
 
     public static String getHookTexturePath(String hookType) {
-        String texturePath = hookTexturePaths.get(hookType);
-        if (texturePath == null) {
-            throw new IllegalArgumentException("Texture path not found for hook type: " + hookType);
-        }
-        return texturePath;
+        return hookTexturePaths.computeIfAbsent(hookType, key -> {
+            throw new IllegalArgumentException("Texture path not found for hook type: " + key);
+        });
     }
 
     public static String getReelTexturePath(String reelType) {
-        String texturePath = reelTexturePaths.get(reelType);
-        if (texturePath == null) {
-            throw new IllegalArgumentException("Texture path not found for reel type: " + reelType);
-        }
-        return texturePath;
+        return reelTexturePaths.computeIfAbsent(reelType, key -> {
+            throw new IllegalArgumentException("Texture path not found for reel type: " + key);
+        });
     }
 
     public static String getSinkerTexturePath(String sinkerType) {
@@ -247,16 +238,16 @@ public class Assets {
     }
 
     public void loadTutorialAssets() {
-        for (String path : tutorialImagePaths) {
+        for (String path : tutorialImagePaths.values()) {
             loadAsset(path, Texture.class);
         }
     }
 
     public List<Texture> getTutorialTextures() {
-        if (tutorialTextures.isEmpty()) {
-            for (String path : tutorialImagePaths) {
-                Texture texture = getAsset(path, Texture.class);
-                tutorialTextures.add(texture);
+        List<Texture> tutorialTextures = new ArrayList<>(tutorialImagePaths.size());
+        for (String path : tutorialImagePaths.values()) {
+            if (assetManager.isLoaded(path, Texture.class)) {
+                tutorialTextures.add(assetManager.get(path, Texture.class));
             }
         }
         return tutorialTextures;
@@ -264,5 +255,9 @@ public class Assets {
 
     public static Skin getUiskin() {
         return uiSkin;
+    }
+
+    public void dispose() {
+        assetManager.dispose();
     }
 }

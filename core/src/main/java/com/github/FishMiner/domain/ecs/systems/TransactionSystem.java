@@ -89,9 +89,6 @@ public class TransactionSystem extends EntitySystem implements IGameEventListene
             return;
         }
         playerScore.setScore(playerScore.getScore() - upgradePrice.getPrice());
-        InventoryComponent playerInventory = player.getComponent(InventoryComponent.class);
-        PlayerComponent playerComp = player.getComponent(PlayerComponent.class);
-        ValidateUtil.validateMultipleNotNull(playerInventory, playerComp);
         upgradePrice.setUpgraded(true);
 
         if (selectedUpgrade.getComponent(ReelComponent.class) != null) {

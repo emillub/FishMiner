@@ -59,7 +59,7 @@ public class GameContext implements IGameContext {
         int worldWidth = Configuration.getInstance().getScreenWidth();
         int worldHeight = Configuration.getInstance().getScreenHeight();
         this.cam = new OrthographicCamera(worldWidth, worldHeight);
-        cam.position.set(worldWidth / 2f, worldHeight / 2f, 0);
+        cam.position.set(worldWidth / 2f, worldHeight / 2f, 2);
 
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();

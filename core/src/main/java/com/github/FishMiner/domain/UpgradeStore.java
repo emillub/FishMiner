@@ -39,23 +39,11 @@ public class UpgradeStore {
         Entity[] entities = TraderFactory.createNewUpgrades(engine, 0, 0);
         TraderComponent traderComponent = trader.getComponent(TraderComponent.class);
         traderComponent.getProducts().forEach(product -> {
-            product.removeAll();
+
             engine.removeEntity(product);
         });
         traderComponent.getProducts().clear();
 
-        for (Entity entity : entities) {
-            trader.getComponent(TraderComponent.class).addProduct(entity);
-            if (entity.getComponent(HookComponent.class) != null) {
-                System.out.println(entity.getComponent(HookComponent.class).name);
-            }
-            if (entity.getComponent(ReelComponent.class) != null) {
-                System.out.println(entity.getComponent(ReelComponent.class).name);
-            }
-            if (entity.getComponent(SinkerComponent.class) != null) {
-                System.out.println(entity.getComponent(SinkerComponent.class).name);
-            }
-        }
 
     }
 
