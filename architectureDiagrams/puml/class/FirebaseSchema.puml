@@ -1,0 +1,21 @@
+@startuml firebase_schema
+skinparam rectangle {
+  BackgroundColor #FDF6E3
+  BorderColor #657b83
+}
+title Firebase Firestore – Scores Collection
+
+package "scores (collection)" {
+    class "user123 (document)" as D1 {
+        username: String
+        score: Integer
+    }
+    class "user456 (document)" as D2 {
+        username: String
+        score: Integer
+    }
+}
+
+D1 --> "scores"
+D2 --> "scores"
+@enduml
