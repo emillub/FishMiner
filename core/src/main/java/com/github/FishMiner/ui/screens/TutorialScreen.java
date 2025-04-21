@@ -30,7 +30,6 @@ public class TutorialScreen extends AbstractScreen implements IGameScreen, Gestu
     public TutorialScreen(IGameContext gameContext) {
         super(gameContext);
         tutorialTextures = Assets.getInstance().getTutorialTextures();
-
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.github.FishMiner.domain.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.common.ValidateUtil;
@@ -18,8 +19,8 @@ public class MusicManager implements IGameEventListener<MusicEvent> {
     private static MusicManager instance;
 
     private MusicManager() {
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("StartMusic.ogg"));
-        playMusic = Gdx.audio.newMusic(Gdx.files.internal("TownTheme.ogg"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal(Assets.BACKGROUND_MUSIC_PATH));
+        playMusic = Gdx.audio.newMusic(Gdx.files.internal(Assets.PLAY_MUSIC_PATH));
         ValidateUtil.validateMultipleNotNull(
             playMusic, "playMusic",
             backgroundMusic, "backgroundMusic"

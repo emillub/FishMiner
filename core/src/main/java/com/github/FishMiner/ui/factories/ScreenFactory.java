@@ -5,6 +5,7 @@ import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.domain.ports.in.IScreenFactory;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.ui.screens.AbstractScreen;
 import com.github.FishMiner.ui.screens.LeaderBoardScreen;
 import com.github.FishMiner.ui.screens.LevelCompleteScreen;
 import com.github.FishMiner.ui.screens.LevelLostScreen;
@@ -22,8 +23,8 @@ public class ScreenFactory implements IScreenFactory {
     }
 
     @Override
-    public Screen getScreen(ScreenType type, IGameContext gameContext) {
-        Screen newScreen;
+    public AbstractScreen getScreen(ScreenType type, IGameContext gameContext) {
+        AbstractScreen newScreen;
         switch (type) {
             case PLAY -> newScreen = new PlayScreen(gameContext);
             case MENU -> newScreen = new MenuScreen(gameContext);

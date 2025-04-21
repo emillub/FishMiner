@@ -39,7 +39,7 @@ public class ReelFactory {
 
         textureComponent.setRegion(texturePath, frameCols, frameRows);
         transformComponent.pos.set(360f, 630f, 1f);
-        transformComponent.scale.set(1f, 1f);
+        transformComponent.scale.set(scale, scale);
 
         reelComponent.name = name;
         reelComponent.returnSpeed = returnSpeed;

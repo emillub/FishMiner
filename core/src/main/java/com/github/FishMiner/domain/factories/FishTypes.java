@@ -1,12 +1,19 @@
 package com.github.FishMiner.domain.factories;
 
+import com.github.FishMiner.common.Assets;
+import com.github.FishMiner.common.Configuration;
+
 public enum FishTypes implements IEntityType {
-    PINK_FISH("PINK_FISH.png", 9, 2, new int[]{5, 6}, 8, 10),
-    BLUE_SHARK("shark_9cols_3rows.png", 9, 3, new int[]{4, 5}, 7, 9),
-    YELLOW_BLUE_FISH("YELLOW_BLUE_FISH_NEW.png", 9, 2, new int[]{3, 4}, 6, 8, 0.6f),
-    GREEN_FISH("green_fish.png", 9, 2, new int[]{2, 3}, 5, 6),
-    CLOWN_FISH("clownfish_9cols_3rows.png", 9, 3, new int[]{1, 2, 3}, 4, 5),
-    GRAY_ORANGE_FISH("GRAY_ORANGE_FISH.png", 9, 2, new int[]{1, 2}, 3, 4);
+        PINK_FISH(Assets.getFishTexturePath("PINK_FISH"), 9, 2, new int[] { 5, 6 }, 8, 10,
+                        Configuration.getInstance().getEntityScale()),
+        YELLOW_BLUE_FISH(Assets.getFishTexturePath("YELLOW_BLUE_FISH"), 9, 2, new int[] { 3, 4 }, 6, 8,
+                        Configuration.getInstance().getEntityScale()),
+        GREEN_FISH(Assets.getFishTexturePath("GREEN_FISH"), 9, 2, new int[] { 2, 3 }, 5, 6,
+                        Configuration.getInstance().getEntityScale()),
+        CLOWN_FISH(Assets.getFishTexturePath("CLOWN_FISH"), 9, 3, new int[] { 1, 2, 3 }, 4, 5,
+                        Configuration.getInstance().getEntityScale()),
+        GRAY_ORANGE_FISH(Assets.getFishTexturePath("GRAY_ORANGE_FISH"), 9, 2, new int[] { 1, 2 }, 3, 4,
+                        Configuration.getInstance().getEntityScale());
 
     private final String texturePath;
     private final int cols;
@@ -15,11 +22,6 @@ public enum FishTypes implements IEntityType {
     private final int speed;
     private final int weight;
     private final float scale;
-
-    // Overloaded constructor (with default scale = 1.0f)
-    FishTypes(String texturePath, int cols, int rows, int[] allowedDepthLevels, int speed, int weight) {
-        this(texturePath, cols, rows, allowedDepthLevels, speed, weight, 1.0f);
-    }
 
     // Main constructor with scale
     FishTypes(String texturePath, int cols, int rows, int[] allowedDepthLevels, int speed, int weight, float scale) {

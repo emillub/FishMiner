@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.github.FishMiner.domain.factories.FishTypes;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -37,15 +38,33 @@ public class Assets {
     public static String PLAYER_TEXTURE = "fisherman.png";
     public static String TITLE_PATH = "ui/title.png";
 
-    public static String TUTORIAL_FOLDER_PATH = "tutorial/";
+    public static String BACKGROUND_MUSIC_PATH = "music/StartMusic.ogg";
+    public static String PLAY_MUSIC_PATH = "music/TownTheme.ogg";
 
+    public static String TUTORIAL_FOLDER_PATH = "assets/tutorial/";
     public static List<String> tutorialImagePaths;
     private List<Texture> tutorialTextures = new java.util.ArrayList<>();
+
+    public static final String FISH_TEXTURE_FOLDER_PATH = "assets/fish/";
+    public static final HashMap<String, String> fishTexturePaths = new HashMap<>();
+
+    public static final String HOOK_TEXTURE_FOLDER_PATH = "assets/hooks/";
+    public static final HashMap<String, String> hookTexturePaths = new HashMap<>();
+
+    public static final String REEL_TEXTURE_PATH = "assets/reels/";
+    public static final HashMap<String, String> reelTexturePaths = new HashMap<>();
+
+    public static final String SINKER_TEXTURE_PATH = "assets/sinkers/";
+    public static final HashMap<String, String> sinkerTexturePaths = new HashMap<>();
 
     private Assets() {
         // Private constructor to prevent instantiation
         assetManager = new AssetManager();
         getTutorialPaths();
+        getFishTexturePaths();
+        getReelTexturePaths();
+        getHookTexturePaths();
+        getSinkerTexturePaths();
     }
 
     public static Assets getInstance() {
@@ -87,11 +106,20 @@ public class Assets {
 
     public void loadAsset(String path, Class<?> type) {
         Logger.getInstance().debug(TAG,"Loading asset: " + path);
+        if (assetManager.isLoaded(path, type)) {
+            Logger.getInstance().debug(TAG, "Asset already loaded: " + path);
+            return;
+        }
         assetManager.load(path, type);
     }
 
 
     public <T> T getAsset(String path, Class<T> type) {
+        if (!assetManager.isLoaded(path, type)) {
+            Logger.getInstance().debug(TAG, "Asset not loaded: " + path);
+            loadAsset(path, type);
+            finishLoading();
+        }
         return assetManager.get(path, type);
     }
     public void finishLoading() {
@@ -101,26 +129,127 @@ public class Assets {
     private void getTutorialPaths() {
         FileHandle tutorialFolder = Gdx.files.internal(TUTORIAL_FOLDER_PATH);
         if (!tutorialFolder.exists() || !tutorialFolder.isDirectory()) {
-            throw new IllegalStateException("Tutorial folder not found or is not a directory: " + TUTORIAL_FOLDER_PATH);
+            TUTORIAL_FOLDER_PATH = ensureCorrectFolderPath(TUTORIAL_FOLDER_PATH);
+            tutorialFolder = Gdx.files.internal(TUTORIAL_FOLDER_PATH);
         }
         FileHandle[] files = tutorialFolder.list();
 
-        // Print each name
         List<String> list = new ArrayList<>();
         for (FileHandle fileHandle : List.of(files)) {
             String path = fileHandle.path();
-            System.out.println(path);
             list.add(path);
         }
         tutorialImagePaths = list;
+    }
+
+    private String ensureCorrectFolderPath(String folderPath) {
+
+        if (!folderPath.startsWith("assets/")) {
+            folderPath.replace("assets/", "");
+        } else {
+            folderPath = "assets/" + folderPath;
+        }
+        return folderPath;
+    }
+
+    private void getFishTexturePaths() {
+        FileHandle fishFolder = Gdx.files.internal(FISH_TEXTURE_FOLDER_PATH);
+        if (!fishFolder.exists() || !fishFolder.isDirectory()) {
+            fishFolder = Gdx.files.internal(ensureCorrectFolderPath(FISH_TEXTURE_FOLDER_PATH));
+        }
+        populateTexturePaths(fishFolder, fishTexturePaths);
+
+    }
+
+    private void getReelTexturePaths() {
+        FileHandle reelFolder = Gdx.files.internal(REEL_TEXTURE_PATH);
+        if (!reelFolder.exists() || !reelFolder.isDirectory()) {
+            reelFolder = Gdx.files.internal(ensureCorrectFolderPath(REEL_TEXTURE_PATH));
+        }
+        populateTexturePaths(reelFolder, reelTexturePaths);
+    }
+
+    private void getHookTexturePaths() {
+        FileHandle hookFolder = Gdx.files.internal(HOOK_TEXTURE_FOLDER_PATH);
+        if (!hookFolder.exists() || !hookFolder.isDirectory()) {
+            hookFolder = Gdx.files.internal(ensureCorrectFolderPath(HOOK_TEXTURE_FOLDER_PATH));
+        }
+        populateTexturePaths(hookFolder, hookTexturePaths);
+    }
+
+    private void getSinkerTexturePaths() {
+        FileHandle sinkerFolder = Gdx.files.internal(SINKER_TEXTURE_PATH);
+        if (!sinkerFolder.exists() || !sinkerFolder.isDirectory()) {
+            sinkerFolder = Gdx.files.internal(ensureCorrectFolderPath(SINKER_TEXTURE_PATH));
+        }
+        populateTexturePaths(sinkerFolder, sinkerTexturePaths);
+    }
+
+    private void populateTexturePaths(FileHandle folder, HashMap<String, String> texturePaths) {
+        FileHandle[] files = folder.list();
+        for (FileHandle fileHandle : List.of(files)) {
+            String fileName = fileHandle.name().replace(".png", "");
+            String path = fileHandle.path();
+            texturePaths.put(fileName, path);
+        }
+    }
+
+    public void loadGameTextures() {
+        for (String path : fishTexturePaths.values()) {
+            if (!assetManager.isLoaded(path, Texture.class)) {
+                loadAsset(path, Texture.class);
+            }
+        }
+        if (!assetManager.isLoaded(PLAYER_TEXTURE, Texture.class)) {
+            loadAsset(PLAYER_TEXTURE, Texture.class);
+        }
+        if (!assetManager.isLoaded(TITLE_PATH, Texture.class)) {
+            loadAsset(TITLE_PATH, Texture.class);
+        }
+    }
+
+    public static String getFishTexturePath(String fishType) {
+        String texturePath = fishTexturePaths.get(fishType);
+        if (texturePath == null) {
+            throw new IllegalArgumentException("Texture path not found for fish type: " + fishType);
+        }
+        return texturePath;
+    }
+
+    public static String getHookTexturePath(String hookType) {
+        String texturePath = hookTexturePaths.get(hookType);
+        if (texturePath == null) {
+            throw new IllegalArgumentException("Texture path not found for hook type: " + hookType);
+        }
+        return texturePath;
+    }
+
+    public static String getReelTexturePath(String reelType) {
+        String texturePath = reelTexturePaths.get(reelType);
+        if (texturePath == null) {
+            throw new IllegalArgumentException("Texture path not found for reel type: " + reelType);
+        }
+        return texturePath;
+    }
+
+    public static String getSinkerTexturePath(String sinkerType) {
+        String texturePath = sinkerTexturePaths.get(sinkerType);
+        if (texturePath == null) {
+            throw new IllegalArgumentException("Texture path not found for sinker type: " + sinkerType);
+        }
+        return texturePath;
+    }
+
+    public void loadFishTextures() {
+        for (String path : fishTexturePaths.values()) {
+            loadAsset(path, Texture.class);
+        }
     }
 
     public void loadTutorialAssets() {
         for (String path : tutorialImagePaths) {
             loadAsset(path, Texture.class);
         }
-        finishLoading();
-        Logger.getInstance().debug(TAG, "Loaded tutorial assets: " + tutorialTextures.size());
     }
 
     public List<Texture> getTutorialTextures() {

@@ -34,6 +34,8 @@ public class Configuration {
 
     private float titleScale;
 
+    private float entityScale = 1f;
+
     // User settings
     public final static float DEFAULT_MUSIC_VOLUME = 0.5f;
     private boolean isSoundEnabled = true;
@@ -67,25 +69,24 @@ public class Configuration {
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
         scaleX = SCREEN_WIDTH / RESOLUTION_X;
         scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
-        scaleX = SCREEN_WIDTH / RESOLUTION_X;
-        scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
 
         quarterScreenWidth = SCREEN_WIDTH / 4f;
         quarterScreenHeight = SCREEN_HEIGHT / 4f;
 
-        bigIconWidth = RESOLUTION_X / 10 * scaleX;
-        mediumIconWidth = RESOLUTION_X / 12 * scaleX;
-        smallIconWidth = RESOLUTION_X / 15 * scaleX;
+        bigIconWidth = SCREEN_WIDTH / 8f;
+        mediumIconWidth = SCREEN_WIDTH / 12f;
+        smallIconWidth = SCREEN_WIDTH / 16f;
 
-        smallPadding = RESOLUTION_X / 40 * scaleX;
-        mediumPadding = RESOLUTION_X / 25 * scaleX;
-        largePadding = RESOLUTION_X / 5 * scaleX;
+        smallPadding = SCREEN_WIDTH / 50f;
+        mediumPadding = SCREEN_WIDTH / 20f;
+        largePadding = SCREEN_WIDTH / 10f;
 
-        largeFontScale = RESOLUTION_X / 300 * scaleX;
-        mediumFontScale = RESOLUTION_X / 400 * scaleX;
-        smallFontScale = RESOLUTION_X / 500 * scaleX;
+        largeFontScale = SCREEN_WIDTH / 200;
+        mediumFontScale = SCREEN_WIDTH / 250;
+        smallFontScale = SCREEN_WIDTH / 300;
 
-        titleScale = RESOLUTION_X / 800 * scaleX;
+        titleScale = SCREEN_WIDTH / 800f;
+        entityScale = SCREEN_WIDTH / 600f;
     }
 
 
@@ -99,6 +100,10 @@ public class Configuration {
 
     public float getScaleY() {
         return scaleY;
+    }
+
+    public float getEntityScale() {
+        return entityScale;
     }
 
     public float getBaseSpeed() {

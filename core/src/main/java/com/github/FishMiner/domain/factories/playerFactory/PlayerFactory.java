@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.github.FishMiner.common.Assets;
+import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.*;
 import com.github.FishMiner.common.ValidateUtil;
@@ -56,7 +57,10 @@ public class PlayerFactory {
         ScoreComponent scoreComponent = engine.createComponent(ScoreComponent.class);
         InventoryComponent inventoryComponent = engine.createComponent(InventoryComponent.class);
 
+
         textureComponent.setRegion(Assets.PLAYER_TEXTURE);
+        transformComponent.scale = new Vector2(Configuration.getInstance().getEntityScale(),
+                Configuration.getInstance().getEntityScale());
         transformComponent.pos.x = posX;
         transformComponent.pos.y = posY + textureComponent.getFrameHeight() * 0.3f;
         transformComponent.pos.z = 1;

@@ -1,8 +1,13 @@
 package com.github.FishMiner.domain.factories;
 
+import com.github.FishMiner.common.Assets;
+import com.github.FishMiner.common.Configuration;
+
 public enum HookTypes {
-    BASIC_HOOK("hook_1cols_1rows.png", "Basic Hook", 1, 1, 0, 1.0f, 1.0f),
-    SHARP_HOOK("hook_1cols_1rows.png", "Sharp Hook", 1, 1, 200, 1.0f, 1.5f);
+    BASIC_HOOK(Assets.getHookTexturePath("BASIC_HOOK"), "Basic Hook", 1, 1, 0,
+            Configuration.getInstance().getEntityScale(), 1.0f),
+    SHARP_HOOK(Assets.getHookTexturePath("BASIC_HOOK"), "Sharp Hook", 1, 1, 200,
+            Configuration.getInstance().getEntityScale(), 1.5f);
 
     private final String texturePath;
     private final String name;
