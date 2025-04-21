@@ -22,6 +22,8 @@ import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
 import com.github.FishMiner.domain.World;
+import com.github.FishMiner.domain.ecs.components.PlayerComponent;
+import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.GameEventBus;
 import com.github.FishMiner.domain.events.ecsEvents.HookInputEvent;
 import com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent;
@@ -210,26 +212,29 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
             public void onEvent(DisplayScoreValueEvent event) {
                 float value = event.value;
 
-                // Create the label style
-                Label.LabelStyle style = new Label.LabelStyle();
-                style.font = skin.getFont("default");
-                style.fontColor = value >= 0 ? new Color(0f, 0.6f, 0f, 1f) : new Color(0.7f, 0f, 0f, 1f);
+                    // Create the label style
+                    Label.LabelStyle style = new Label.LabelStyle();
+                    style.font = skin.getFont("default");
+                    style.fontColor = value >= 0 ? new Color(0f, 0.6f, 0f, 1f) : new Color(0.7f, 0f, 0f, 1f);
 
-                String prefix = value >= 0 ? "+" : "-";
-                String displayValue = prefix + Math.abs((int) value);
+                    String prefix = value >= 0 ? "+" : "-";
+                    String displayValue = prefix + Math.abs((int) value);
 
-                Label scoreLabel = new Label(displayValue, style);
+                    Label scoreLabel = new Label(displayValue, style);
                     scoreLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
-                Vector2 screenCoords = stage.getViewport().project(new Vector2(event.x, event.y));
-                Vector2 stageCoords = stage.screenToStageCoordinates(screenCoords);
-                scoreLabel.setPosition(stageCoords.x + 100, stageCoords.y + 450);
-                scoreLabel.addAction(Actions.sequence(
-                    Actions.parallel(
-                        Actions.moveBy(0, 50, 1f),
-                        Actions.fadeOut(1f)
-                    ),
-                    Actions.removeActor()
-                ));
+                    TransformComponent playerPosition = gameContext.getPlayer().getPlayerEntity()
+                                    .getComponent(TransformComponent.class);
+
+                    Vector2 stageCoords = stage.getViewport()
+                            .project(new Vector2(playerPosition.pos.x, playerPosition.pos.y));
+                    scoreLabel.setPosition(
+                            stageCoords.x + Configuration.getInstance().getSmallPadding() + scoreLabel.getWidth(),
+                            stageCoords.y - scoreLabel.getHeight());
+                    scoreLabel.addAction(Actions.sequence(
+                            Actions.parallel(
+                                    Actions.moveBy(0, 50, 1f),
+                                    Actions.fadeOut(1f)),
+                            Actions.removeActor()));
 
                 stage.addActor(scoreLabel);
                 event.setHandled();
