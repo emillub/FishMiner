@@ -23,8 +23,7 @@ public class TextureComponent implements Component {
         try {
             Assets.getInstance().getAsset(texturePath, Texture.class);
             Assets.getInstance().finishLoading();
-            Texture texture = new Texture(texturePath);
-            this.region = new TextureRegion(texture);
+            this.region = new TextureRegion(Assets.getInstance().getAsset(texturePath, Texture.class));
             setAndValidateFrameCols(frame_cols);
             setAndValidateFrameRows(frame_rows);
         } catch (GdxRuntimeException e) {

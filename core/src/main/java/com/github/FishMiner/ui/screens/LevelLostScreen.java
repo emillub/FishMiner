@@ -45,8 +45,6 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
     @Override
     public void show() {
         super.show();
-
-        stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         skin = Assets.getUiskin();

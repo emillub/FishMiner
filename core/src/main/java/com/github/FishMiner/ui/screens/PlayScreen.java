@@ -166,8 +166,17 @@ public class PlayScreen extends AbstractScreen implements IGameScreen {
         soundButton.setSize(buttonWidth, buttonWidth);
 
         stage.addActor(pauseOverlay); // Add the pause overlay after the background
-        stage.addActor(pauseButton);
-        stage.addActor(soundButton);
+
+        Table pauseButtonTable = new Table();
+        pauseButtonTable.top().right();
+        pauseButtonTable.setFillParent(true);
+        pauseButtonTable.add(pauseButton).size(buttonWidth, buttonWidth)
+                .padTop(Configuration.getInstance().getSmallPadding())
+                .padRight(Configuration.getInstance().getSmallPadding());
+        pauseButtonTable.add(soundButton).size(buttonWidth, buttonWidth)
+                .padTop(Configuration.getInstance().getSmallPadding())
+                .padRight(Configuration.getInstance().getSmallPadding());
+        stage.addActor(pauseButtonTable);
 
         // Quit button
         TextButton continueButton = ButtonFactory.createTextButton("Continue", ButtonFactory.ButtonSize.MEDIUM, () -> {
