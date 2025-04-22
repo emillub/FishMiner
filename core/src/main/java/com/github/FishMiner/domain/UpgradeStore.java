@@ -43,7 +43,9 @@ public class UpgradeStore {
             engine.removeEntity(product);
         });
         traderComponent.getProducts().clear();
-
+        for (Entity entity : entities) {
+            traderComponent.addProduct(entity);
+        }
 
     }
 
