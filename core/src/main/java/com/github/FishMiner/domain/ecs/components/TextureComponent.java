@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException; // Correct exception type
+import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.ValidateUtil;
 
 public class TextureComponent implements Component {
@@ -20,8 +21,9 @@ public class TextureComponent implements Component {
      */
     public void setRegion(String texturePath, int frame_cols, int frame_rows) {
         try {
-            Texture texture = new Texture(texturePath);
-            this.region = new TextureRegion(texture);
+            Assets.getInstance().getAsset(texturePath, Texture.class);
+            Assets.getInstance().finishLoading();
+            this.region = new TextureRegion(Assets.getInstance().getAsset(texturePath, Texture.class));
             setAndValidateFrameCols(frame_cols);
             setAndValidateFrameRows(frame_rows);
         } catch (GdxRuntimeException e) {

@@ -36,7 +36,9 @@ public abstract class AbstractScreen implements Screen {
         this.shapeRenderer = gameContext.getRenderer();
         this.cam = gameContext.getCam();
         this.font = new BitmapFont();
-        font.setColor(Color.BLACK);
+        this.font = Assets.DEFAULT_FONT;
+        this.font.getData().setScale(Configuration.getInstance().getSmallFontScale());
+        font.setColor(Color.DARK_GRAY);
     }
 
     protected void initializeStageIfNeeded() {
@@ -60,10 +62,7 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        Configuration.getInstance().updateConfiguration();
-        if (stage != null) {
-            stage.getViewport().update(width, height);
-        }
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

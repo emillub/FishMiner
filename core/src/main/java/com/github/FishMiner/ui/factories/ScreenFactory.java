@@ -5,6 +5,7 @@ import com.github.FishMiner.domain.GameContext;
 import com.github.FishMiner.domain.ports.in.IScreenFactory;
 import com.github.FishMiner.ui.ports.out.IGameContext;
 import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.ui.screens.AbstractScreen;
 import com.github.FishMiner.ui.screens.LeaderBoardScreen;
 import com.github.FishMiner.ui.screens.LevelCompleteScreen;
 import com.github.FishMiner.ui.screens.LevelLostScreen;
@@ -12,6 +13,7 @@ import com.github.FishMiner.ui.screens.LoginScreen;
 import com.github.FishMiner.ui.screens.MenuScreen;
 import com.github.FishMiner.ui.screens.PlayScreen;
 import com.github.FishMiner.ui.screens.SettingScreen;
+import com.github.FishMiner.ui.screens.TutorialScreen;
 import com.github.FishMiner.ui.screens.UpgradeScreen;
 
 public class ScreenFactory implements IScreenFactory {
@@ -21,8 +23,8 @@ public class ScreenFactory implements IScreenFactory {
     }
 
     @Override
-    public Screen getScreen(ScreenType type, IGameContext gameContext) {
-        Screen newScreen;
+    public AbstractScreen getScreen(ScreenType type, IGameContext gameContext) {
+        AbstractScreen newScreen;
         switch (type) {
             case PLAY -> newScreen = new PlayScreen(gameContext);
             case MENU -> newScreen = new MenuScreen(gameContext);
@@ -32,6 +34,7 @@ public class ScreenFactory implements IScreenFactory {
             case LEVEL_LOST -> newScreen = new LevelLostScreen(gameContext);
             case SETTINGS -> newScreen = new SettingScreen(gameContext);
             case UPGRADE -> newScreen = new UpgradeScreen(gameContext);
+            case TUTORIAL -> newScreen = new TutorialScreen(gameContext);
             default ->
                 throw new IllegalArgumentException(TAG + "No screen exists for type: " + type);
         };

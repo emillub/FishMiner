@@ -1,7 +1,11 @@
 package com.github.FishMiner.domain.factories;
 
+import com.github.FishMiner.common.Assets;
+import com.github.FishMiner.common.Configuration;
+
 public enum SharkTypes implements IEntityType {
-    BLUE_SHARK("shark_9cols_3rows.png", 9, 3, new int[]{4, 5}, 7, 9);
+    BLUE_SHARK(Assets.getFishTexturePath("BLUE_SARK"), 9, 3, new int[] { 4, 5 }, 7, 9,
+            Configuration.getInstance().getEntityScale()),;
     private final String texturePath;
     private final int cols;
     private final int rows;

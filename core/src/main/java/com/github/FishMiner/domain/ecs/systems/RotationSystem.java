@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
@@ -18,8 +17,6 @@ public class RotationSystem extends IteratingSystem {
     private ComponentMapper<TransformComponent> pm = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<HookComponent> hm = ComponentMapper.getFor(HookComponent.class);
     private ComponentMapper<StateComponent> sm = ComponentMapper.getFor(StateComponent.class);
-
-    private Vector2 hookPosition = new Vector2();
 
     public RotationSystem() {
         super(Family.all(TransformComponent.class, HookComponent.class, StateComponent.class).get());

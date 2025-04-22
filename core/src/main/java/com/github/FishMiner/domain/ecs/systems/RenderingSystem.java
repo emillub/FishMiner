@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.ReelComponent;
@@ -40,7 +41,12 @@ public class RenderingSystem extends SortedIteratingSystem {
         batch.begin();
 
         for (Entity entity : getEntities()) {
-            drawEntity(entity, deltaTime);
+            TransformComponent pos = transMapper.get(entity);
+            if (pos == null || pos.pos == null)
+                continue;
+            if (cam.frustum.boundsInFrustum(pos.pos.x, pos.pos.y, pos.pos.z, 1, 1, 1)) {
+                drawEntity(entity, deltaTime);
+            }
         }
 
         batch.end();

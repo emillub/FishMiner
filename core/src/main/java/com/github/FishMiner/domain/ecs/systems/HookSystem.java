@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
+import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.common.ValidateUtil;
 import com.github.FishMiner.domain.ecs.components.AttachmentComponent;
@@ -123,7 +124,7 @@ public class HookSystem extends IteratingSystem {
                 updateReelState(reelEntity, HookStates.REELING);
             } else {
                 hookVel.velocity.set(sinkerWeight, sinkerWeight).setAngleDeg(hookRot.angle - 90);
-                hookVel.velocity.scl(returnSpeed);
+                hookVel.velocity.scl(returnSpeed * Configuration.getInstance().getScaleY() * 4);
                 hookBounds.bounds.setPosition(hookPos.pos.x, hookPos.pos.y);
 
                 updateReelState(reelEntity, HookStates.FIRE); // 🔁 animate while firing down
@@ -134,7 +135,7 @@ public class HookSystem extends IteratingSystem {
             if (hookPos.pos.y < initialPosition) {
                 hookVel.velocity.set(sinkerWeight, sinkerWeight)
                     .setAngleDeg(hookRot.angle - 90)
-                    .scl(-returnSpeed);
+                        .scl(-returnSpeed * Configuration.getInstance().getScaleY() * 2);
 
                 updateReelState(reelEntity, HookStates.REELING);
             } else {

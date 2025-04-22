@@ -60,6 +60,8 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
                                 GameEventBus.getInstance().post(new MusicEvent(MusicEvent.MusicCommand.TOGGLE_MUTE));
                 });
 
+        ImageButton tutorialButton = ButtonFactory.createImageButton(Assets.ButtonEnum.TUTORIAL,
+                () -> GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.TUTORIAL)));
 
         settingsButton.addListener(new ChangeListener() {
             @Override
@@ -109,6 +111,8 @@ public class MenuScreen extends AbstractScreen implements IGameScreen {
         bottomSectionTable.add(soundButton).size(Configuration.getInstance().getBigIconWidth()).center()
                 .padRight(Configuration.getInstance().getSmallPadding());
         bottomSectionTable.add(settingsButton).size(Configuration.getInstance().getBigIconWidth()).center()
+                .padRight(Configuration.getInstance().getSmallPadding());
+        bottomSectionTable.add(tutorialButton).size(Configuration.getInstance().getBigIconWidth()).center()
                 .padRight(Configuration.getInstance().getSmallPadding());
         bottomSectionTable.add(leaderboardButton).size(Configuration.getInstance().getBigIconWidth()).center();
         stage.addActor(bottomSectionTable);

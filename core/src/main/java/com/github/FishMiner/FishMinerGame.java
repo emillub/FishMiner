@@ -52,7 +52,7 @@ public class FishMinerGame extends Game {
     @Override
     public void create() {
         System.out.println("[DEBUG] FishMinerGame create() started");
-        Configuration.getInstance().updateConfiguration();
+        Configuration.getInstance().updateConfiguration(null);
         // Load all buttons
         for (ButtonEnum Button : Assets.ButtonEnum.values()) {
             for (ButtonStateEnum buttonState : Assets.ButtonStateEnum.values()) {
@@ -60,7 +60,6 @@ public class FishMinerGame extends Game {
             }
         }
 
-        Assets.getInstance().loadAsset(Assets.PLAYER_TEXTURE, Texture.class);
         Assets.getInstance().loadAsset(Assets.TITLE_PATH, Texture.class);
 
         RequestManager managerToUse = (requestManager != null)

@@ -37,13 +37,13 @@ public class SettingScreen extends AbstractScreen implements IGameScreen {
 
         // Title Label
         Label titleLabel = new Label("Settings", skin);
-        titleLabel.setFontScale(3.5f);
-        rootTable.add(titleLabel).pad(30);
+        titleLabel.setFontScale(Configuration.getInstance().getLargeFontScale());
+        rootTable.add(titleLabel).pad(Configuration.getInstance().getLargePadding());
         rootTable.row();
 
         Label volumeLabel = new Label("Music Volume", skin);
-        volumeLabel.setFontScale(2f);
-        rootTable.add(volumeLabel).pad(10);
+        volumeLabel.setFontScale(Configuration.getInstance().getMediumFontScale());
+        rootTable.add(volumeLabel).pad(Configuration.getInstance().getSmallPadding());
         rootTable.row();
 
         Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, skin);
@@ -56,7 +56,7 @@ public class SettingScreen extends AbstractScreen implements IGameScreen {
                 GameEventBus.getInstance().post(musicEvent);
             }
         });
-        rootTable.add(volumeSlider).width(menuWidth);
+        rootTable.add(volumeSlider).width(menuWidth).padBottom(Configuration.getInstance().getSmallPadding());
         rootTable.row();
 
         TextButton backButton = ButtonFactory.createTextButton("Back to Menu",

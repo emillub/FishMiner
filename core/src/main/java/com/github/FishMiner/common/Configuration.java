@@ -1,9 +1,10 @@
 package com.github.FishMiner.common;
 
+import javax.swing.text.View;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Configuration {
     private static Configuration instance;
@@ -34,13 +35,15 @@ public class Configuration {
 
     private float titleScale;
 
+    private float entityScale = 1f;
+
     // User settings
     public final static float DEFAULT_MUSIC_VOLUME = 0.5f;
     private boolean isSoundEnabled = true;
     private float musicVolume = DEFAULT_MUSIC_VOLUME;
 
     private Configuration() {
-        updateConfiguration();
+        updateConfiguration(null);
     }
 
     public static Configuration getInstance() {
@@ -62,30 +65,39 @@ public class Configuration {
         return scaleY;
     }
 
-    public void updateConfiguration() {
-        SCREEN_WIDTH = Gdx.graphics.getWidth();
-        SCREEN_HEIGHT = Gdx.graphics.getHeight();
-        scaleX = SCREEN_WIDTH / RESOLUTION_X;
-        scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
+    public void updateConfiguration(Viewport viewport) {
+        if (viewport != null) {
+            SCREEN_WIDTH = (int) viewport.getWorldWidth();
+            SCREEN_HEIGHT = (int) viewport.getWorldHeight();
+        } else {
+            SCREEN_WIDTH = Gdx.graphics.getWidth();
+            SCREEN_HEIGHT = Gdx.graphics.getHeight();
+        }
+
+        // Calculate scaling factors based on a reference resolution
         scaleX = SCREEN_WIDTH / RESOLUTION_X;
         scaleY = SCREEN_HEIGHT / RESOLUTION_Y;
 
+        // UI scaling
         quarterScreenWidth = SCREEN_WIDTH / 4f;
         quarterScreenHeight = SCREEN_HEIGHT / 4f;
 
-        bigIconWidth = RESOLUTION_X / 10 * scaleX;
-        mediumIconWidth = RESOLUTION_X / 12 * scaleX;
-        smallIconWidth = RESOLUTION_X / 15 * scaleX;
+        bigIconWidth = SCREEN_WIDTH / 8f;
+        mediumIconWidth = SCREEN_WIDTH / 12f;
+        smallIconWidth = SCREEN_WIDTH / 16f;
 
-        smallPadding = RESOLUTION_X / 40 * scaleX;
-        mediumPadding = RESOLUTION_X / 25 * scaleX;
-        largePadding = RESOLUTION_X / 5 * scaleX;
+        smallPadding = SCREEN_WIDTH / 50f;
+        mediumPadding = SCREEN_WIDTH / 20f;
+        largePadding = SCREEN_WIDTH / 10f;
 
-        largeFontScale = RESOLUTION_X / 300 * scaleX;
-        mediumFontScale = RESOLUTION_X / 400 * scaleX;
-        smallFontScale = RESOLUTION_X / 500 * scaleX;
+        // Font scaling
+        largeFontScale = scaleX * 4f; // Adjusted for better scaling
+        mediumFontScale = scaleX * 3.2f;
+        smallFontScale = scaleX * 2f;
 
-        titleScale = RESOLUTION_X / 800 * scaleX;
+        // Title and entity scaling
+        titleScale = scaleX * 1.2f;
+        entityScale = scaleX * 1.8f;
     }
 
 
@@ -101,8 +113,12 @@ public class Configuration {
         return scaleY;
     }
 
+    public float getEntityScale() {
+        return entityScale;
+    }
+
     public float getBaseSpeed() {
-        float baseSpeed = 1f;
+        float baseSpeed = 10f;
         return baseSpeed * scaleX;
     }
 

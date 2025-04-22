@@ -19,6 +19,7 @@ import com.github.FishMiner.domain.states.HookStates;
 
 public class FishingSystem extends EntitySystem implements IGameEventListener<FishHitEvent> {
     public static final String TAG = "FishingSystem";
+    private final Vector3 rotatedOffset = new Vector3();
 
     private final ComponentMapper<HookComponent> hookMapper = ComponentMapper.getFor(HookComponent.class);
     private final ComponentMapper<TransformComponent> posMapper = ComponentMapper.getFor(TransformComponent.class);
@@ -60,8 +61,9 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
         fishState.changeState(FishableObjectStates.HOOKED);
 
         if (hookState.state == HookStates.REELING) {
-            Vector3 rotatedOffset = new Vector3(hook.offset)
-                .rotate(new Vector3(0, 0, 1), hook.swingAngle * MathUtils.radiansToDegrees);
+            rotatedOffset.set(hook.offset)
+                    .rotate(new Vector3(0, 0, 1), hook.swingAngle * MathUtils.radiansToDegrees);
+            fishPos.pos.set(hookPos.pos).add(rotatedOffset);
 
             fishPos.pos.set(hookPos.pos).add(rotatedOffset);
 

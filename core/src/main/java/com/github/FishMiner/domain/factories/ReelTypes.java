@@ -1,10 +1,17 @@
 package com.github.FishMiner.domain.factories;
 
+import com.github.FishMiner.common.Assets;
+import com.github.FishMiner.common.Configuration;
+
 public enum ReelTypes {
-    BASIC_REEL("BASIC_REEL.png", "Basic Reel", 8, 1, 15.0f, 4, 0),
-    LONG_REEL("LONG_REEL.png", "Long Reel", 8, 1, 15.0f, 6, 100),
-            FAST_REEL("FAST_REEL.png", "Fast Reel", 8, 1, 20.0f, 6, 200),
-    LEGENDARY_REEL("LEGENDARY_REEL.png", "Legendary Reel", 8, 1, 40.0f, 8, 400);
+    BASIC_REEL(Assets.getReelTexturePath("BASIC_REEL"), "Basic Reel", 8, 1, 15.0f, 4, 0,
+            Configuration.getInstance().getEntityScale()),
+    LONG_REEL(Assets.getReelTexturePath("LONG_REEL"), "Long Reel", 8, 1, 15.0f, 6, 100,
+            Configuration.getInstance().getEntityScale()),
+    FAST_REEL(Assets.getReelTexturePath("FAST_REEL"), "Fast Reel", 8, 1, 20.0f, 6, 200,
+            Configuration.getInstance().getEntityScale()),
+    LEGENDARY_REEL(Assets.getReelTexturePath("LEGENDARY_REEL"), "Legendary Reel", 8, 1, 40.0f, 8, 400,
+            Configuration.getInstance().getEntityScale());
 
     private final String texturePath;
     private final String name;
@@ -18,9 +25,12 @@ public enum ReelTypes {
     // Note that if the price=0 the entity will not have the upgrade component
     // Thus, the basic Reel (starting reel) should have the price as 0 and all other reels should have a price
     ReelTypes(String texturePath, String name, int frameCols, int frameRows, float returnSpeed, int depthLevel, int price) {
-        this(texturePath, name, frameCols, frameRows, returnSpeed, depthLevel, price, 1.0f);
+        this(texturePath, name, frameCols, frameRows, returnSpeed, depthLevel, price,
+                Configuration.getInstance().getEntityScale());
     }
-    ReelTypes(String texturePath, String name, int frameCols, int frameRows, float returnSpeed, int depthLevel, int price,  float scale) {
+
+    ReelTypes(String texturePath, String name, int frameCols, int frameRows, float returnSpeed, int depthLevel,
+            int price, float scale) {
         this.texturePath = texturePath;
         this.name = name;
         this.frameCols = frameCols;
