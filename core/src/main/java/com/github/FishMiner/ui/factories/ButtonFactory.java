@@ -18,6 +18,7 @@ import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
 
 public class ButtonFactory {
+    private static com.badlogic.gdx.graphics.g2d.GlyphLayout layout = new com.badlogic.gdx.graphics.g2d.GlyphLayout();
     public static enum ButtonSize {
         SMALL,
         MEDIUM,
@@ -134,8 +135,11 @@ public class ButtonFactory {
         TextButton button = new TextButton(text, Assets.getUiskin());
         button.getLabel().setFontScale(fontScale);
 
-        float scaledWidth = button.getLabel().getPrefWidth() * button.getStyle().font.getScaleX();
-        float scaledHeight = button.getLabel().getPrefHeight() * button.getStyle().font.getScaleY()
+        layout.setText(button.getStyle().font, "A");
+        float firstLetterWidth = layout.width * fontScale;
+        float firstLetterHeight = layout.height * fontScale;
+        float scaledWidth = firstLetterWidth * text.length() + Configuration.getInstance().getSmallPadding() * 2;
+        float scaledHeight = firstLetterHeight
                 + Configuration.getInstance().getSmallPadding() * 2;
 
         button.setSize(scaledWidth, scaledHeight);

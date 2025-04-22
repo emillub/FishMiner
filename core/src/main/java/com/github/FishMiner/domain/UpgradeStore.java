@@ -35,7 +35,7 @@ public class UpgradeStore {
         traderComponent.setRenderTrader(false);
     }
 
-    public void resetStore() {
+    public UpgradeStore resetStore() {
         Entity[] entities = TraderFactory.createNewUpgrades(engine, 0, 0);
         TraderComponent traderComponent = trader.getComponent(TraderComponent.class);
         traderComponent.getProducts().forEach(product -> {
@@ -46,7 +46,7 @@ public class UpgradeStore {
         for (Entity entity : entities) {
             traderComponent.addProduct(entity);
         }
-
+        return this;
     }
 
     public static UpgradeStore getInstance(PooledEngine engine) {
