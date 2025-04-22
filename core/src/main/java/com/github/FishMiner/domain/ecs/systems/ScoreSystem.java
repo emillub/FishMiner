@@ -1,11 +1,14 @@
 package com.github.FishMiner.domain.ecs.systems;
 
+import java.io.ObjectInputFilter.Config;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.common.Logger;
 import com.github.FishMiner.domain.ecs.components.FishableComponent;
 import com.github.FishMiner.domain.ecs.components.ScoreComponent;
@@ -21,7 +24,7 @@ import com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent;
 
 public class ScoreSystem extends EntitySystem implements IGameEventListener<FishCapturedEvent> {
     private final static String TAG = "ScoreSystem";
-    private static final float FLY_DURATION = 1.0f;
+    private static final float FLY_DURATION = 0.5f;
     private static final float ARC_HEIGHT = 50f;
 
     private final ComponentMapper<ScoreComponent> scoreCompMapper = ComponentMapper.getFor(ScoreComponent.class);
@@ -66,7 +69,6 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void update(float deltaTime) {
         if (capturedQueue.size <= 0) {
             setProcessing(false);
@@ -81,8 +83,6 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
                 Logger.getInstance().error(TAG, "Fish position component is null.");
                 continue;
             }
-            // ValidateUtil.validateNotNull(fishPos, "ScoreSystem/update: fishPos was
-            // null.");
 
             // Send fish flying into the boat
             Entity player = entry.player;

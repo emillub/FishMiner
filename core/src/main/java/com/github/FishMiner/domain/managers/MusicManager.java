@@ -1,7 +1,5 @@
 package com.github.FishMiner.domain.managers;
 
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
@@ -19,7 +17,7 @@ public class MusicManager implements IGameEventListener<MusicEvent> {
     private float previousVolume = configuration.getMusicVolume();
     private Music currentlyPlaying;
 
-    private static volatile MusicManager instance;
+    private static MusicManager instance;
 
     private MusicManager() {
         assets.loadAsset(Assets.BACKGROUND_MUSIC_PATH, Music.class);
@@ -28,11 +26,7 @@ public class MusicManager implements IGameEventListener<MusicEvent> {
 
     public static MusicManager getInstance() {
         if (instance == null) {
-            synchronized (MusicManager.class) {
-                if (instance == null) {
-                    instance = new MusicManager();
-                }
-            }
+            instance = new MusicManager();
         }
         return instance;
     }

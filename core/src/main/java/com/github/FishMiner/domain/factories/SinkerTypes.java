@@ -4,12 +4,12 @@ import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
 
 public enum SinkerTypes {
-    BASIC_SINKER(Assets.getSinkerTexturePath("BASIC_SINKER"), "Basic Sinker", 5f, 0,
-            Configuration.getInstance().getEntityScale() / 2),
-    HEAVY_SINKER(Assets.getSinkerTexturePath("HEAVY_SINKER"), "Heavy Sinker", 15f, 100,
-            Configuration.getInstance().getEntityScale() / 2),
-    HEAVIER_SINKER(Assets.getSinkerTexturePath("HEAVIER_SINKER"), "Heavier Sinker", 30f, 200,
-            Configuration.getInstance().getEntityScale() / 2);
+    BASIC_SINKER(Assets.getSinkerTexturePath("BASIC_SINKER"), "Basic Sinker", 1.5f, 0,
+                    Configuration.getInstance().getEntityScale() / 2),
+    HEAVY_SINKER(Assets.getSinkerTexturePath("HEAVY_SINKER"), "Heavy Sinker", 2f, 100,
+                    Configuration.getInstance().getEntityScale() / 2),
+    HEAVIER_SINKER(Assets.getSinkerTexturePath("HEAVIER_SINKER"), "Heavier Sinker", 3f, 200,
+                    Configuration.getInstance().getEntityScale() / 2);
 
     private final String texturePath;
     private final String name;

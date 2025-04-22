@@ -8,12 +8,12 @@ import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 
 public class HookComponent implements Component {
     public float swingAngle = 0.5f;
-    public float swingAmplitude = 1.0f;
+    public float swingAmplitude = 1.1f;
     public Entity attachedFishableEntity;
     public Vector3 offset = new Vector3(0, -2, 1);
     public String name;
 
-    public final int sinkerWeight = 2;
+    public final int sinkerWeight = 1;
 
     public final float swingOffset = 1;
 

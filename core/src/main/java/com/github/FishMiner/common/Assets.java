@@ -14,7 +14,7 @@ import com.badlogic.gdx.files.FileHandle;
 
 public class Assets {
     private static final String TAG = Assets.class.getSimpleName();
-    private static volatile Assets instance;
+    private static Assets instance;
     private final AssetManager assetManager;
 
     // Frequently used assets
@@ -88,11 +88,7 @@ public class Assets {
 
     public static Assets getInstance() {
         if (instance == null) {
-            synchronized (Assets.class) {
-                if (instance == null) {
-                    instance = new Assets();
-                }
-            }
+            instance = new Assets();
         }
         return instance;
     }
@@ -280,27 +276,5 @@ public class Assets {
 
     public static Skin getUiskin() {
         return uiSkin;
-    }
-
-    public void dispose() {
-        assetManager.clear();
-        assetManager.dispose();
-    }
-
-    public void unloadAsset(String path) {
-        if (assetManager.isLoaded(path)) {
-            assetManager.unload(path);
-            Logger.getInstance().debug(TAG, "Unloading asset: " + path);
-        } else {
-            Logger.getInstance().debug(TAG, "Asset not loaded: " + path);
-        }
-    }
-
-    public void update() {
-        if (assetManager.update()) {
-            Logger.getInstance().debug(TAG, "Assets loaded: " + assetManager.getLoadedAssets());
-        } else {
-            Logger.getInstance().debug(TAG, "Assets not loaded yet.");
-        }
     }
 }
