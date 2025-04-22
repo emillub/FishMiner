@@ -25,7 +25,7 @@ import java.util.List;
 public class UpgradeScreen extends AbstractScreen implements IGameScreen {
     private static final String TAG = "UpgradeScreen";
     private final IPlayer player;
-    private float smallerPadding = Configuration.getInstance().getSmallPadding() / 2;
+    private float smallerPadding = Configuration.getInstance().getSmallPadding();
 
     Entity reelProduct = null;
     Entity hookProduct = null;
@@ -91,8 +91,6 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
         rootTable.setBackground(skin.newDrawable("white", new Color(0, 0, 0, 0.2f))); // Transparent white background
 
         rootTable.add(scrollPane)
-                .expandY()
-                .fillY()
                 .row();
 
         updateProductTable();
@@ -124,6 +122,7 @@ public class UpgradeScreen extends AbstractScreen implements IGameScreen {
                 .padTop(smallerPadding)
                 .padLeft(Configuration.getInstance().getSmallPadding())
                 .padRight(Configuration.getInstance().getSmallPadding())
+                .padBottom(smallerPadding)
                 .row();
     }
 

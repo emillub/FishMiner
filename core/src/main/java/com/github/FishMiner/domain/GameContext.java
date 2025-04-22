@@ -44,7 +44,7 @@ import com.github.FishMiner.ui.ports.in.IPlayer;
 
 public class GameContext implements IGameContext {
     private final PooledEngine engine;
-    private final UpgradeStore store;
+    private UpgradeStore store;
     private PlayerCharacter player;
     private final World world;
     private final SpriteBatch batch;
@@ -130,8 +130,7 @@ public class GameContext implements IGameContext {
      * Then a new the World creates reuses the PlayScreen with Level 1
      */
     public void resetGame() {
-        store.resetStore();
-
+        this.store = store.resetStore();
         if (player != null) {
             safelyRemove(player.getSinker());
             safelyRemove(player.getHook());

@@ -90,7 +90,6 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
         middleSection.add(messageLabel)
                 .padBottom(Configuration.getInstance().getMediumPadding());
         middleSection.row();
-        middleSection.row();
         middleSection.add(scoreLabel)
                 .padBottom(Configuration.getInstance().getSmallPadding());
         middleSection.row().expandX().expandY();
