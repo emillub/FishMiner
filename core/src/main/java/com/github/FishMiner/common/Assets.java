@@ -250,8 +250,23 @@ public class Assets {
     }
 
     public List<Texture> getTutorialTextures() {
-        List<Texture> tutorialTextures = new ArrayList<>(tutorialImagePaths.size());
-        for (String path : tutorialImagePaths.values()) {
+        List<Map.Entry<String, String>> sortedEntries = new ArrayList<>(tutorialImagePaths.entrySet());
+        // Sort the entries based on the numeric part of the file name
+        sortedEntries.sort((entry1, entry2) -> {
+            String fileName1 = entry1.getKey();
+            String fileName2 = entry2.getKey();
+            try {
+                int num1 = Integer.parseInt(fileName1.replaceAll("\\D", ""));
+                int num2 = Integer.parseInt(fileName2.replaceAll("\\D", ""));
+                return Integer.compare(num1, num2);
+            } catch (NumberFormatException e) {
+                return fileName1.compareTo(fileName2);
+            }
+        });
+
+        List<Texture> tutorialTextures = new ArrayList<>(sortedEntries.size());
+        for (Map.Entry<String, String> entry : sortedEntries) {
+            String path = entry.getValue();
             if (assetManager.isLoaded(path, Texture.class)) {
                 tutorialTextures.add(assetManager.get(path, Texture.class));
             }
