@@ -62,8 +62,9 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
         Label messageLabel = new Label("Game over!", skin);
         messageLabel.setFontScale(Configuration.getInstance().getMediumFontScale());
 
+
         Label scoreLabel = new Label("Your Score: " + (int) score, skin);
-        scoreLabel.setFontScale(Configuration.getInstance().getSmallFontScale());
+        scoreLabel.setFontScale(Configuration.getInstance().getMediumFontScale());
 
         TextButton seeLeaderboardButton = ButtonFactory.createTextButton("See Leaderboard", ButtonSize.MEDIUM, () -> {
             GameEventBus.getInstance().post(new ChangeScreenEvent(ScreenType.LEADERBOARD));
@@ -79,17 +80,28 @@ public class LevelLostScreen extends AbstractScreen implements IGameScreen {
         Image titleImage = super.getTitleImage();
         stage.addActor(titleImage);
 
+        // Calculate padding based on the position and height of the title image
+        float padAboveMiddleSection = stage.getActors().first().getY();
+
         Table middleSection = new Table();
         middleSection.setFillParent(true);
-        middleSection.center().padTop(Configuration.getInstance().getLargePadding());
+        middleSection.top().padTop(padAboveMiddleSection);
 
-        middleSection.add(messageLabel).padBottom(Configuration.getInstance().getMediumPadding()).row();
-        middleSection.add(scoreLabel).padBottom(Configuration.getInstance().getMediumPadding()).row();
+        middleSection.add(messageLabel)
+                .padBottom(Configuration.getInstance().getMediumPadding());
+        middleSection.row();
+        middleSection.row();
+        middleSection.add(scoreLabel)
+                .padBottom(Configuration.getInstance().getSmallPadding());
+        middleSection.row().expandX().expandY();
         middleSection.add(seeLeaderboardButton).size(seeLeaderboardButton.getWidth(), seeLeaderboardButton.getHeight())
                 .padBottom(Configuration.getInstance().getSmallPadding())
-                .padTop(Configuration.getInstance().getMediumPadding()).top();
+                .padTop(Configuration.getInstance().getMediumPadding()).bottom();
         middleSection.row().expandX();
-        middleSection.add(backToMenuButton).size(backToMenuButton.getWidth(), backToMenuButton.getHeight());
+        middleSection.add(backToMenuButton).size(backToMenuButton.getWidth(), backToMenuButton.getHeight())
+                .padTop(Configuration.getInstance().getSmallPadding())
+                .padBottom(Configuration.getInstance().getLargePadding())
+                .bottom();
 
         stage.addActor(middleSection);
     }

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.github.FishMiner.common.Assets;
 import com.github.FishMiner.common.Configuration;
 
@@ -133,9 +134,9 @@ public class ButtonFactory {
         TextButton button = new TextButton(text, Assets.getUiskin());
         button.getLabel().setFontScale(fontScale);
 
-        float scaledWidth = button.getLabel().getPrefWidth() * fontScale;
-        float scaledHeight = button.getLabel().getPrefHeight() * fontScale
-                + Configuration.getInstance().getSmallPadding();
+        float scaledWidth = button.getLabel().getPrefWidth() * button.getStyle().font.getScaleX();
+        float scaledHeight = button.getLabel().getPrefHeight() * button.getStyle().font.getScaleY()
+                + Configuration.getInstance().getSmallPadding() * 2;
 
         button.setSize(scaledWidth, scaledHeight);
 

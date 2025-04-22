@@ -1,7 +1,9 @@
 package com.github.FishMiner.domain.factories;
 
+import com.github.FishMiner.common.Assets;
+
 public enum GarbageTypes implements IEntityType {
-    GARBAGE("GARBAGE.png", 6, 1, new int[]{2,3, 4, 5, 6}, 2);
+    GARBAGE(Assets.getFishTexturePath("GARBAGE"), 6, 1, new int[] { 2, 3, 4, 5, 6 }, 2);
 
     private final String texturePath;
     private final int cols;
