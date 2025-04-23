@@ -3,8 +3,8 @@ package com.github.FishMiner.data.handlers;
 import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.data.ports.out.ILeaderBoardService;
 import com.github.FishMiner.domain.managers.ScreenManager;
-import com.github.FishMiner.domain.ports.out.ILeaderboardFetcher;
-import com.github.FishMiner.domain.ports.in.data.LeaderboardCallback;
+import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.ILeaderboardFetcher;
+import com.github.FishMiner.domain.ports.out.data.callbacks.callbacks.LeaderboardCallback;
 
 import java.util.List;
 

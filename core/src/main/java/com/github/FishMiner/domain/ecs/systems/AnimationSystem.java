@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.states.IState;
+import com.github.FishMiner.domain.ecs.states.IState;
 
 @SuppressWarnings("unchecked")
 public class AnimationSystem extends IteratingSystem {
@@ -29,11 +29,9 @@ public class AnimationSystem extends IteratingSystem {
         if (currentState == null) return;
 
         String newAnimKey = currentState.getAnimationKey();
-        animationComponent.timer += deltaTime;
+        animationComponent.increaseTimer(deltaTime);
 
         if (!newAnimKey.equals(animationComponent.getCurrentAnimationKey())) {
-            if (!animationComponent.animations.containsKey(newAnimKey)) return;
-
             animationComponent.setCurrentAnimation(newAnimKey);
         }
     }

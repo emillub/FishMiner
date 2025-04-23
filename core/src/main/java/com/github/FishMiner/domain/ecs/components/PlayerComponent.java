@@ -3,7 +3,7 @@ package com.github.FishMiner.domain.ecs.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector3;
-import com.github.FishMiner.common.Logger;
+import com.github.FishMiner.infrastructure.Logger;
 
 public class PlayerComponent implements Component {
     private static final String TAG = "PlayerComponent";

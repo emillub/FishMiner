@@ -1,10 +1,8 @@
 package com.github.FishMiner.ui.factories;
 
-import com.badlogic.gdx.Screen;
-import com.github.FishMiner.domain.GameContext;
-import com.github.FishMiner.domain.ports.in.IScreenFactory;
-import com.github.FishMiner.ui.ports.out.IGameContext;
-import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IScreenFactory;
+import com.github.FishMiner.ui.ports.out.domain.interfaces.IGameContext;
+import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;
 import com.github.FishMiner.ui.screens.AbstractScreen;
 import com.github.FishMiner.ui.screens.LeaderBoardScreen;
 import com.github.FishMiner.ui.screens.LevelCompleteScreen;

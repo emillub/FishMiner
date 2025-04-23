@@ -2,37 +2,24 @@ package com.github.FishMiner.ui.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.FishMiner.common.Assets;
-import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.infrastructure.Assets;
+import com.github.FishMiner.infrastructure.Configuration;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.github.FishMiner.data.ScoreEntry;
-import com.github.FishMiner.domain.GameEventBus;
-import com.github.FishMiner.domain.events.data.LeaderboardResponseEvent;
-import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
+import com.github.FishMiner.infrastructure.GameEventBus;
+import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
-import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.domain.ports.in.IGameScreen;
-import com.github.FishMiner.domain.session.UserSession;
-import com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
+import com.github.FishMiner.domain.ports.in.data.events.LeaderboardPostRequestEvent;
 import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.factories.ButtonFactory.ButtonSize;
-import com.github.FishMiner.ui.ports.out.IGameContext;
-import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.ui.ports.out.domain.interfaces.IGameContext;
+import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;
 import com.github.FishMiner.FishMinerGame;
-import com.github.FishMiner.domain.GameContext;
 
 public class LevelLostScreen extends AbstractScreen implements IGameScreen {
 

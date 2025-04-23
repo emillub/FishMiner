@@ -5,14 +5,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
-import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.domain.GameEventBus;
-import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
-import com.github.FishMiner.domain.events.ScoreEvent;
-import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.domain.ports.in.IGameScreen;
-import com.github.FishMiner.ui.ports.out.IGameContext;
-import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.infrastructure.Configuration;
+import com.github.FishMiner.infrastructure.GameEventBus;
+import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.ChangeScreenEvent;
+import com.github.FishMiner.domain.ports.out.ui.events.ScoreEvent;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
+import com.github.FishMiner.ui.ports.out.domain.interfaces.IGameContext;
+import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;
 
 
 import java.util.Locale;

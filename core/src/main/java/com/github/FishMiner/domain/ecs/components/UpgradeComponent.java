@@ -2,8 +2,8 @@ package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.github.FishMiner.common.Logger;
-import com.github.FishMiner.common.ValidateUtil;
+import com.github.FishMiner.infrastructure.Logger;
+import com.github.FishMiner.infrastructure.ValidateUtil;
 
 public class UpgradeComponent implements Component {
     private final static String TAG = "UpgradeComponent";

@@ -1,0 +1,63 @@
+@startuml LayeredClientServer CCView
+!pragma layout smetana
+skinparam packagePadding 20
+
+package "FishMiner" {
+  package "android" <<module>> {
+    package "Infrastructure" {
+      [AndroidAuthService]
+      [AndroidLeaderboardService]
+    }
+  }
+
+  package "core" <<module>> {
+    package "UI Layer" {
+      [User Input] <<client>>
+    }
+
+    package "Domain Layer" {
+      [GameEventBus]
+      [RequestHandler]
+    }
+
+    package "Data Layer" {
+      [LoginHandler]
+      [UserRegistrationHandler]
+      [LeaderboardFetcher]
+      [LeaderboardPoster]
+
+     package "ports.out" {
+             [IAuthService] <<interface>>
+             [ILeaderBoardService] <<interface>>
+             note left of IAuthService
+               Outgoing interfaces are defined by the data layer
+               and implemented by the Android module.
+             end note
+           }
+    }
+  }
+}
+
+' Use database symbol for Firebase
+database Firebase as "Firebase Auth & DB" <<server>>
+
+' Connectors
+[User Input] --> [GameEventBus] : dispatch events
+[GameEventBus] --> [RequestHandler] : handle events
+[RequestHandler] --> [LoginHandler] : triggers login
+[RequestHandler] --> [UserRegistrationHandler] : triggers registration
+[RequestHandler] --> [LeaderboardFetcher] : triggers fetch
+[RequestHandler] --> [LeaderboardPoster] : triggers post
+
+[LoginHandler] --> IAuthService
+[UserRegistrationHandler] --> IAuthService
+[LeaderboardFetcher] --> ILeaderBoardService
+[LeaderboardPoster] --> ILeaderBoardService
+
+[AndroidAuthService] ..|> IAuthService
+[AndroidLeaderboardService] ..|> ILeaderBoardService
+
+[AndroidAuthService] --> Firebase : auth calls
+[AndroidLeaderboardService] --> Firebase : leaderboard calls
+
+@enduml

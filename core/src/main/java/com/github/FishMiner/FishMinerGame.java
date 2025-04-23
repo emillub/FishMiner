@@ -1,22 +1,21 @@
 package com.github.FishMiner;
 
-import static com.github.FishMiner.ui.ports.out.ScreenType.MENU;
+import static com.github.FishMiner.ui.ports.out.domain.enums.ScreenType.MENU;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
-import com.github.FishMiner.common.Assets;
-import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.common.Assets.ButtonEnum;
-import com.github.FishMiner.common.Assets.ButtonStateEnum;
+import com.github.FishMiner.infrastructure.Assets;
+import com.github.FishMiner.infrastructure.Configuration;
+import com.github.FishMiner.infrastructure.Assets.ButtonEnum;
+import com.github.FishMiner.infrastructure.Assets.ButtonStateEnum;
 import com.github.FishMiner.data.handlers.LeaderboardFetcher;
 import com.github.FishMiner.data.handlers.LeaderboardPoster;
 import com.github.FishMiner.data.handlers.LoginHandler;
 import com.github.FishMiner.data.handlers.UserRegistrationHandler;
 import com.github.FishMiner.data.ports.out.IAuthService;
 import com.github.FishMiner.data.ports.out.ILeaderBoardService;
-import com.github.FishMiner.domain.GameEventBus;
-import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
+import com.github.FishMiner.infrastructure.GameEventBus;
+import com.github.FishMiner.ui.ports.out.domain.events.MusicEvent;
 import com.github.FishMiner.domain.managers.MusicManager;
 import com.github.FishMiner.domain.managers.RequestManager;
 import com.github.FishMiner.domain.managers.ScreenManager;
@@ -51,7 +50,6 @@ public class FishMinerGame extends Game {
 
     @Override
     public void create() {
-        System.out.println("[DEBUG] FishMinerGame create() started");
         Configuration.getInstance().updateConfiguration(null);
         // Load all buttons
         for (ButtonEnum Button : Assets.ButtonEnum.values()) {

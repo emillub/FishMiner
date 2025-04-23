@@ -11,16 +11,16 @@ import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.events.ecsEvents.FishHitEvent;
-import com.github.FishMiner.domain.GameEventBus;
+import com.github.FishMiner.domain.ecs.events.FishHitEvent;
+import com.github.FishMiner.infrastructure.GameEventBus;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
-import com.github.FishMiner.domain.states.FishableObjectStates;
-import com.github.FishMiner.domain.states.HookStates;
+import com.github.FishMiner.domain.ecs.states.FishableObjectStates;
+import com.github.FishMiner.domain.ecs.states.HookStates;
 
 public class CollisionSystem extends EntitySystem {
 

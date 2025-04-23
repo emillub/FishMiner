@@ -7,10 +7,7 @@ import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
-import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.ecs.components.AnimationComponent;
-import com.github.FishMiner.domain.ecs.components.ReelComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.RotationComponent;
 import com.github.FishMiner.domain.ecs.components.TextureComponent;
@@ -62,7 +59,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         if (pos == null || tex == null) return;
 
         TextureRegion frame = (anim != null)
-            ? anim.currentAnimation.getKeyFrame(anim.timer, true)
+            ? anim.getCurrentFrame()
             : tex.getRegion();
 
         if (frame == null) return;

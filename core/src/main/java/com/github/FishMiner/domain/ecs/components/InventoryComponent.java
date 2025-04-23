@@ -2,8 +2,7 @@ package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
-import com.github.FishMiner.common.Logger;
+import com.github.FishMiner.infrastructure.Logger;
 import java.util.HashMap;
 
 public class InventoryComponent implements Component {

@@ -1,6 +1,6 @@
 package com.github.FishMiner.ui.screens;
 
-import static com.github.FishMiner.domain.events.soundEvents.MusicEvent.MusicCommand.ADJUST_VOLUME;
+import static com.github.FishMiner.ui.ports.out.domain.events.MusicEvent.MusicCommand.ADJUST_VOLUME;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -9,15 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.github.FishMiner.common.Assets;
-import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.domain.GameEventBus;
-import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
-import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
-import com.github.FishMiner.domain.ports.in.IGameScreen;
+import com.github.FishMiner.infrastructure.Assets;
+import com.github.FishMiner.infrastructure.Configuration;
+import com.github.FishMiner.infrastructure.GameEventBus;
+import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.ChangeScreenEvent;
+import com.github.FishMiner.ui.ports.out.domain.events.MusicEvent;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
 import com.github.FishMiner.ui.factories.ButtonFactory;
-import com.github.FishMiner.ui.ports.out.IGameContext;
-import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.ui.ports.out.domain.interfaces.IGameContext;
+import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;
 
 public class SettingScreen extends AbstractScreen implements IGameScreen {
 
