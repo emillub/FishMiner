@@ -1,13 +1,12 @@
 package com.github.FishMiner.ui.screens;
 
-import static com.github.FishMiner.domain.events.soundEvents.MusicEvent.MusicCommand.PLAY_GAME;
+import static com.github.FishMiner.ui.ports.out.domain.events.MusicEvent.MusicCommand.PLAY_GAME;
 
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -16,26 +15,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Scaling;
-import com.github.FishMiner.common.Assets;
-import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.infrastructure.Assets;
+import com.github.FishMiner.infrastructure.Configuration;
 import com.github.FishMiner.data.ScoreEntry;
-import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
-import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
-import com.github.FishMiner.domain.World;
-import com.github.FishMiner.domain.ecs.components.PlayerComponent;
+import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.ChangeScreenEvent;
+import com.github.FishMiner.ui.ports.out.domain.events.MusicEvent;
+import com.github.FishMiner.domain.model.World;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
-import com.github.FishMiner.domain.GameEventBus;
-import com.github.FishMiner.domain.events.ecsEvents.HookInputEvent;
-import com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent;
-import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.domain.ports.in.IGameScreen;
-import com.github.FishMiner.domain.session.UserSession;
-import com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent;
+import com.github.FishMiner.infrastructure.GameEventBus;
+import com.github.FishMiner.ui.ports.out.domain.events.HookInputEvent;
+import com.github.FishMiner.ui.ports.in.domain.events.DisplayScoreValueEvent;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
+import com.github.FishMiner.domain.model.session.UserSession;
+import com.github.FishMiner.domain.ports.in.data.events.LeaderboardPostRequestEvent;
 import com.github.FishMiner.ui.factories.ButtonFactory;
-import com.github.FishMiner.ui.ports.out.IGameContext;
-import com.github.FishMiner.ui.ports.out.ScreenType;
-
-import net.dermetfan.gdx.assets.AnnotationAssetManager.Asset;
+import com.github.FishMiner.ui.ports.out.domain.interfaces.IGameContext;
+import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;
 
 /**
  * PlayScreen handles gameplay, including ECS initialization, rendering, and input.

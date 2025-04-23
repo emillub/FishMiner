@@ -1,0 +1,30 @@
+@startuml ScreenManagement
+
+class ScreenManager {
+    - static ScreenManager instance
+    - HashMap<ScreenType, Screen> cachedScreens
+    - IGameScreen currentScreen
+    + switchScreenTo(ScreenType)
+    + prepareNewScreen(ScreenType)
+    + startNextLevel()
+}
+
+interface IScreenFactory {
+    + getScreen(ScreenType, GameContext)
+}
+
+abstract class AbstractScreen
+AbstractScreen <|-- PlayScreen
+AbstractScreen <|-- MenuScreen
+AbstractScreen <|-- SettingScreen
+AbstractScreen <|-- LoginScreen
+AbstractScreen <|-- LevelCompleteScreen
+AbstractScreen <|-- LevelLostScreen
+AbstractScreen <|-- TutorialScreen
+AbstractScreen <|-- UpgradeScreen
+
+ScreenManager o-- IScreenFactory : uses for creation
+ScreenManager *-- AbstractScreen : manages
+ScreenManager --> IGameScreen : switchScreenTo()
+
+@enduml

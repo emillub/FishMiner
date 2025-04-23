@@ -6,12 +6,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.Vector3;
-import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.infrastructure.Configuration;
 import com.github.FishMiner.domain.ecs.components.StoreUIComponent;
 import com.github.FishMiner.domain.ecs.components.TraderComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
-import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
 
 public class StoreSystem extends EntitySystem {
     private final ComponentMapper<TraderComponent> traderMapper = ComponentMapper.getFor(TraderComponent.class);

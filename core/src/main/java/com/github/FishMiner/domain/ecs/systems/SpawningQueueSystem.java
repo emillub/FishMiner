@@ -5,18 +5,17 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.MathUtils;
-import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.common.Logger;
+import com.github.FishMiner.infrastructure.Configuration;
+import com.github.FishMiner.infrastructure.Logger;
 import com.github.FishMiner.domain.ecs.components.FishableComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.factories.IEntityType;
-import com.github.FishMiner.domain.factories.IOceanEntityFactory;
-import com.github.FishMiner.domain.factories.oceanFactory.OceanEntityFactory;
-import com.github.FishMiner.domain.level.LevelConfig;
-import com.github.FishMiner.domain.World;
-import com.github.FishMiner.domain.states.WorldState;
-import com.github.FishMiner.domain.factories.GarbageTypes;
+import com.github.FishMiner.domain.ecs.entities.IEntityType;
+import com.github.FishMiner.domain.ecs.entities.oceanFactory.OceanEntityFactory;
+import com.github.FishMiner.domain.model.level.LevelConfig;
+import com.github.FishMiner.domain.model.World;
+import com.github.FishMiner.domain.ecs.states.WorldState;
+import com.github.FishMiner.domain.ecs.entities.GarbageTypes;
 
 
 import java.util.ArrayList;
@@ -110,7 +109,7 @@ public class SpawningQueueSystem extends EntitySystem {
 
         // Spawn garbage
         for (int i = 0; i < numGarbage; i++) {
-            Entity garbage = ((IOceanEntityFactory) factory).createGarbage(GarbageTypes.GARBAGE, 1).get(0);
+            Entity garbage = factory.createGarbage(GarbageTypes.GARBAGE, 1).get(0);
 
             TransformComponent transform = garbage.getComponent(TransformComponent.class);
             VelocityComponent velocity = garbage.getComponent(VelocityComponent.class);

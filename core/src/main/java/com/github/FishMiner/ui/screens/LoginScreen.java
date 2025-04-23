@@ -1,32 +1,29 @@
 package com.github.FishMiner.ui.screens;
 
-import static com.github.FishMiner.ui.ports.out.ScreenType.LOGIN;
+import static com.github.FishMiner.ui.ports.out.domain.enums.ScreenType.LOGIN;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.github.FishMiner.common.Assets;
-import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.common.Logger;
-import com.github.FishMiner.domain.GameEventBus;
-import com.github.FishMiner.domain.events.data.AuthResponseEvent;
-import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
+import com.github.FishMiner.infrastructure.Configuration;
+import com.github.FishMiner.infrastructure.Logger;
+import com.github.FishMiner.infrastructure.GameEventBus;
+import com.github.FishMiner.domain.ports.in.data.events.AuthResponseEvent;
+import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
-import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.domain.ports.in.IGameScreen;
-import com.github.FishMiner.domain.session.UserSession;
-import com.github.FishMiner.ui.events.data.LoginRequestEvent;
-import com.github.FishMiner.ui.events.data.RegisterUserRequest;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
+import com.github.FishMiner.domain.model.session.UserSession;
+import com.github.FishMiner.domain.ports.in.data.events.LoginRequestEvent;
+import com.github.FishMiner.domain.ports.in.data.events.RegisterUserRequest;
 import com.github.FishMiner.ui.factories.ButtonFactory;
 import com.github.FishMiner.ui.factories.ButtonFactory.ButtonSize;
-import com.github.FishMiner.ui.ports.out.IGameContext;
-import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.ui.ports.out.domain.interfaces.IGameContext;
+import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;
 
 public class LoginScreen extends AbstractScreen implements IGameScreen {
     private static final String TAG = "LoginScreen";

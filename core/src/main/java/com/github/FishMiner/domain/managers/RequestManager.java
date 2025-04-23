@@ -1,21 +1,21 @@
 package com.github.FishMiner.domain.managers;
 
 import com.github.FishMiner.data.ScoreEntry;
-import com.github.FishMiner.domain.events.data.LeaderboardResponseEvent;
-import com.github.FishMiner.domain.ports.in.data.FirebaseAuthCallback;
-import com.github.FishMiner.domain.GameEventBus;
-import com.github.FishMiner.domain.events.data.AuthResponseEvent;
-import com.github.FishMiner.domain.ports.in.data.LeaderboardCallback;
-import com.github.FishMiner.domain.ports.out.ILeaderboardFetcher;
-import com.github.FishMiner.domain.ports.out.ILeaderboardPoster;
-import com.github.FishMiner.domain.ports.out.ILoginHandler;
-import com.github.FishMiner.domain.ports.out.IUserRegistrationHandler;
-import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.ui.events.data.LeaderboardFetchRequestEvent;
-import com.github.FishMiner.ui.events.data.LeaderboardPostRequestEvent;
-import com.github.FishMiner.ui.events.data.LoginRequestEvent;
-import com.github.FishMiner.ui.events.data.RegisterUserRequest;
-import com.github.FishMiner.ui.ports.in.IRequestManager;
+import com.github.FishMiner.domain.ports.in.data.events.LeaderboardResponseEvent;
+import com.github.FishMiner.domain.ports.out.data.callbacks.callbacks.FirebaseAuthCallback;
+import com.github.FishMiner.infrastructure.GameEventBus;
+import com.github.FishMiner.domain.ports.in.data.events.AuthResponseEvent;
+import com.github.FishMiner.domain.ports.out.data.callbacks.callbacks.LeaderboardCallback;
+import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.ILeaderboardFetcher;
+import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.ILeaderboardPoster;
+import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.ILoginHandler;
+import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.IUserRegistrationHandler;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.domain.ports.in.data.events.LeaderboardFetchRequestEvent;
+import com.github.FishMiner.domain.ports.in.data.events.LeaderboardPostRequestEvent;
+import com.github.FishMiner.domain.ports.in.data.events.LoginRequestEvent;
+import com.github.FishMiner.domain.ports.in.data.events.RegisterUserRequest;
+import com.github.FishMiner.ui.ports.in.domain.interfaces.IRequestManager;
 
 import java.util.List;
 
@@ -25,11 +25,6 @@ public class RequestManager implements IRequestManager {
 
     private final ILeaderboardFetcher leaderboardFetcher;
     private final ILeaderboardPoster leaderboardPoster;
-
-
-    // TODO:  add other handlers here
-    //private final ILeaderboardFetcher fetchLeaderboardHandler;
-    //private final ILeaderboardPoster fetchLeaderboardPoster;
 
     public RequestManager(
         ILoginHandler loginHandler,

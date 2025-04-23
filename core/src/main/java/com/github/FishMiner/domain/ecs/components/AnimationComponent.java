@@ -20,18 +20,18 @@ public class AnimationComponent implements Component {
     /**
      * A map of animations associated with their corresponding state keys.
      */
-    public HashMap<String, Animation<TextureRegion>> animations = new HashMap<>();
+    private HashMap<String, Animation<TextureRegion>> animations = new HashMap<>();
 
     /**
      * The current active animation for the entity.
      */
-    public Animation<TextureRegion> currentAnimation;
-    public String currentAnimationKey;
+    private Animation<TextureRegion> currentAnimation;
+    private String currentAnimationKey;
 
     /**
      * Timer to track the elapsed time used for animation frame selection.
      */
-    public float timer = 0f;
+    private float timer = 0f;
 
     /**
      * Adds an animation to the component using a specific key. This method splits the provided
@@ -140,5 +140,9 @@ public class AnimationComponent implements Component {
 
     public TextureRegion getCurrentFrame() {
         return currentAnimation.getKeyFrame(timer, true);
+    }
+
+    public void increaseTimer(float deltaTime) {
+        timer += deltaTime;
     }
 }
