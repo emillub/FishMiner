@@ -1,0 +1,37 @@
+@startuml PlayButtonProcessView
+
+actor User
+participant MenuScreen
+participant GameEventBus
+participant ScreenManager
+participant ScreenFactory
+participant FishMinerGame
+participant PlayScreen
+participant GameContext
+
+User -> MenuScreen : clicks "Play" button
+MenuScreen -> GameEventBus : post(ChangeScreenEvent[PLAY])
+
+GameEventBus -> ScreenManager : onEvent(ChangeScreenEvent)
+ScreenManager -> ScreenManager : switchScreenTo(PLAY)
+
+alt if new PlayScreen required
+    ScreenManager -> GameContext : getContext()
+    ScreenManager -> ScreenFactory : getScreen(PLAY, GameContext)
+    ScreenFactory -> PlayScreen : new PlayScreen(GameContext)
+else reuse from cache
+    ScreenManager -> PlayScreen : retrieve cached instance
+end
+
+ScreenManager -> FishMinerGame : setScreen(PlayScreen)
+note right of FishMinerGame
+    LibGDX takes over rendering
+    and lifecycle of PlayScreen
+end note
+
+PlayScreen -> GameEventBus : post(MusicEvent(PLAY_GAME))
+note over PlayScreen
+    PlayScreen is now visible and actively updated/rendered
+end note
+
+@enduml

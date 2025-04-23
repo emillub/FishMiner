@@ -1,0 +1,26 @@
+@startuml ClientServerView
+!pragma layout smetana
+skinparam packagePadding 20
+skinparam packageMargin 40
+
+' Simplified Client/Server view for FishMiner platform clients
+
+package "FishMiner Clients" <<node>> {
+  package "Android Module" <<component>> {
+    [AndroidClient] <<client>>
+  }
+
+  package "Desktop Module" <<component>> {
+    [DesktopClient] <<client>>
+  }
+}
+
+package "Firebase Backend" <<node>> {
+  database "Firebase Auth & DB" as Firebase
+}
+
+[AndroidClient] --> Firebase : HTTPS requests
+[DesktopClient] --> Firebase : HTTPS requests
+
+@enduml
+

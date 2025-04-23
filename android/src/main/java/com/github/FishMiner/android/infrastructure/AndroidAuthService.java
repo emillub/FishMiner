@@ -1,7 +1,7 @@
-package com.github.FishMiner.android;
+package com.github.FishMiner.android.infrastructure;
 
 import com.github.FishMiner.data.ports.out.IAuthService;
-import com.github.FishMiner.domain.ports.in.data.callbacks.FirebaseAuthCallback;
+import com.github.FishMiner.domain.ports.out.data.callbacks.callbacks.FirebaseAuthCallback;
 import com.google.firebase.auth.FirebaseAuth;
 public class AndroidAuthService implements IAuthService {
     private FirebaseAuth auth;
