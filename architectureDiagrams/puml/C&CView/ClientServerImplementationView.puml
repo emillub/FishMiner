@@ -2,9 +2,21 @@
 !pragma layout smetana
 skinparam packagePadding 20
 
-package "FishMiner" {
+package "FishMiner" <<Client>> {
+
+  ' LWJGL3 module retained for documentation, but without connectors
+  package "lwjgl3" <<module>> {
+      package "Desktop Infrastructure" {
+      note right of "Desktop Infrastructure"
+        This module performs the same responsibilities
+        as the Android infrastructure, but for Desktop (LWJGL3)
+        and is used for testing purposes
+      end note
+      }
+  }
+
   package "android" <<module>> {
-    package "Infrastructure" {
+    package "Android Infrastructure" {
       [AndroidAuthService]
       [AndroidLeaderboardService]
     }
@@ -15,8 +27,11 @@ package "FishMiner" {
       [User Input] <<client>>
     }
 
-    package "Domain Layer" {
+    package "Infrastructure" {
       [GameEventBus]
+    }
+
+    package "Domain Layer" {
       [RequestHandler]
     }
 
@@ -26,14 +41,15 @@ package "FishMiner" {
       [LeaderboardFetcher]
       [LeaderboardPoster]
 
-     package "ports.out" {
-             [IAuthService] <<interface>>
-             [ILeaderBoardService] <<interface>>
-             note left of IAuthService
-               Outgoing interfaces are defined by the data layer
-               and implemented by the Android module.
-             end note
-           }
+      package "ports.out" {
+        [IAuthService] <<interface>>
+        [ILeaderBoardService] <<interface>>
+        note left of IAuthService
+          Outgoing interfaces are defined by the data layer
+          and implemented by platform-specific modules
+          (Android, LWJGL3).
+        end note
+      }
     }
   }
 }

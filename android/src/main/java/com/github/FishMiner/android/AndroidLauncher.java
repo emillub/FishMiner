@@ -5,6 +5,8 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.github.FishMiner.FishMinerGame;
+import com.github.FishMiner.android.infrastructure.AndroidAuthService;
+import com.github.FishMiner.android.infrastructure.AndroidLeaderboardService;
 import com.google.firebase.FirebaseApp;
 
 /** Launches the Android application. */

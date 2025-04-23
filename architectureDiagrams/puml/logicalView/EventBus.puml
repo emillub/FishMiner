@@ -1,0 +1,29 @@
+@startuml ObserverEventBus
+
+interface IGameEventListener<T> {
+    + onEvent(T event)
+    + getEventType()
+}
+
+class GameEventBus {
+    + register(IGameEventListener)
+    + unregister(IGameEventListener)
+    + post(event)
+}
+
+GameEventBus o-- "1..*" IGameEventListener : registers
+
+class ScoreListener implements IGameEventListener
+class MusicManager implements IGameEventListener
+class ScoreSystem implements IGameEventListener
+class ScreenManager
+
+IGameEventListener <|.. ScoreListener
+IGameEventListener <|.. MusicManager
+IGameEventListener <|.. ScoreSystem
+
+GameEventBus --> ScoreListener : notifies
+GameEventBus --> MusicManager : notifies
+GameEventBus --> ScoreSystem : notifies
+
+@enduml

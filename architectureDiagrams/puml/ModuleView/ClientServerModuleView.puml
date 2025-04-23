@@ -1,0 +1,29 @@
+' Module View of FishMiner
+@startuml ModuleView
+!pragma layout smetana
+
+package "FishMiner" {
+  package "android" {
+    [AndroidLauncher]
+    package "Infrastructure" {
+      [AndroidAuthService]
+      [AndroidLeaderboardService]
+    }
+  }
+
+  package "core" {
+    [FishMinerGame]
+    package "Domain Layer" {
+      [RequestManager]
+    }
+    package "Data Layer" {
+      [LoginHandler]
+      [UserRegistrationHandler]
+      [LeaderboardFetcher]
+      [LeaderboardPoster]
+    }
+  }
+}
+
+' Module View shows module decomposition and nesting only
+@enduml
