@@ -1,4 +1,4 @@
-package com.github.FishMiner.ui.screens;
+package com.github.FishMiner.ui.views;
 
 import static com.github.FishMiner.ui.ports.out.domain.events.MusicEvent.MusicCommand.ADJUST_VOLUME;
 

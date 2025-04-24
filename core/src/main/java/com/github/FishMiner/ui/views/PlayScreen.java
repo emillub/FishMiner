@@ -1,4 +1,4 @@
-package com.github.FishMiner.ui.screens;
+package com.github.FishMiner.ui.views;
 
 import static com.github.FishMiner.ui.ports.out.domain.events.MusicEvent.MusicCommand.PLAY_GAME;
 
@@ -25,7 +25,7 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.infrastructure.GameEventBus;
 import com.github.FishMiner.ui.ports.out.domain.events.HookInputEvent;
 import com.github.FishMiner.ui.ports.in.domain.events.DisplayScoreValueEvent;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
 import com.github.FishMiner.domain.model.session.UserSession;
 import com.github.FishMiner.domain.ports.in.data.events.LeaderboardPostRequestEvent;

@@ -1,7 +1,7 @@
 package com.github.FishMiner.domain.ecs.events;
 
 import com.badlogic.ashley.core.Entity;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEvent;
+import com.github.FishMiner.infrastructure.ports.in.IGameEvent;
 
 
 public class FishHitEvent extends AbstractEntityEvent implements IGameEvent {

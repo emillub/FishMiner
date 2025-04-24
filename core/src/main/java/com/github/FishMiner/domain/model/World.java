@@ -7,7 +7,7 @@ import com.github.FishMiner.domain.ecs.systems.SpawningQueueSystem;
 import com.github.FishMiner.domain.ports.out.ui.events.ScoreEvent;
 import com.github.FishMiner.domain.model.level.LevelConfig;
 import com.github.FishMiner.domain.model.level.LevelConfigFactory;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ecs.states.WorldState;
 
 public class World implements IGameEventListener<ScoreEvent> {

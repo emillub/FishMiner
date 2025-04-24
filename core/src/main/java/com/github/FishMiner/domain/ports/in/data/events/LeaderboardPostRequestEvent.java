@@ -1,6 +1,6 @@
 package com.github.FishMiner.domain.ports.in.data.events;
 
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEvent;
+import com.github.FishMiner.infrastructure.ports.in.IGameEvent;
 import com.github.FishMiner.data.ScoreEntry;
 
 public class LeaderboardPostRequestEvent implements IGameEvent {

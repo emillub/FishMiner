@@ -1,6 +1,6 @@
 package com.github.FishMiner.ui.ports.out.domain.events.screenEvents;
 
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEvent;
+import com.github.FishMiner.infrastructure.ports.in.IGameEvent;
 import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;
 
 public abstract class AbstractScreenEvent implements IGameEvent {

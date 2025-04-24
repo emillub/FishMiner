@@ -8,7 +8,7 @@ import com.github.FishMiner.infrastructure.Configuration;
 import com.github.FishMiner.infrastructure.Logger;
 import com.github.FishMiner.infrastructure.ValidateUtil;
 import com.github.FishMiner.ui.ports.out.domain.events.MusicEvent;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 
 public class MusicManager implements IGameEventListener<MusicEvent> {
     private final Music backgroundMusic;

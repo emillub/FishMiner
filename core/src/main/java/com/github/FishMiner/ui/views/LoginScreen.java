@@ -1,4 +1,4 @@
-package com.github.FishMiner.ui.screens;
+package com.github.FishMiner.ui.views;
 
 import static com.github.FishMiner.ui.ports.out.domain.enums.ScreenType.LOGIN;
 
@@ -15,7 +15,7 @@ import com.github.FishMiner.infrastructure.GameEventBus;
 import com.github.FishMiner.domain.ports.in.data.events.AuthResponseEvent;
 import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.managers.ScreenManager;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
 import com.github.FishMiner.domain.model.session.UserSession;
 import com.github.FishMiner.domain.ports.in.data.events.LoginRequestEvent;

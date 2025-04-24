@@ -12,7 +12,7 @@ import com.github.FishMiner.infrastructure.GameEventBus;
 import com.github.FishMiner.domain.ecs.components.*;
 import com.github.FishMiner.domain.ecs.events.FishCapturedEvent;
 import com.github.FishMiner.domain.ecs.events.FishHitEvent;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ecs.states.FishableObjectStates;
 import com.github.FishMiner.domain.ecs.states.HookStates;
 

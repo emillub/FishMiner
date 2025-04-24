@@ -1,6 +1,6 @@
 package com.github.FishMiner.domain.ports.in.data.events;
 
-import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.IDataRequestEvent;
+import com.github.FishMiner.domain.ports.out.data.interfaces.IDataRequestEvent;
 
 public abstract class DataRequestEvent implements IDataRequestEvent {
 

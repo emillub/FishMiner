@@ -1,4 +1,4 @@
-package com.github.FishMiner.ui.screens;
+package com.github.FishMiner.ui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -12,7 +12,7 @@ import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.infrastructure.GameEventBus;
 import com.github.FishMiner.domain.ports.in.data.events.LeaderboardResponseEvent;
 import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.ChangeScreenEvent;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
 import com.github.FishMiner.domain.ports.in.data.events.LeaderboardFetchRequestEvent;
 import com.github.FishMiner.ui.factories.ButtonFactory;
