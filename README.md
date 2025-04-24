@@ -1,12 +1,17 @@
 # FishMiner
 
-Fishminer is a game development project conducted as part of the TDT4240 Software Architecture course at NTNU. The goal of this project is to develop a functional multiplayer game for Android, designed based on software architecture principles covered in the course. The game must include a multiplayer feature, an online component, and server-based functionality. Additionally, the architecture will prioritize modifiability as the primary quality attribute and usability as a secondary quality attribute.
+**FishMiner** is a game development project conducted as part of the *TDT4240 Software Architecture* course at NTNU. The goal of this project is to develop a functional multiplayer game for Android, designed using software architecture principles covered in the course. The game includes multiplayer support, online components, and server-based functionality. The architecture prioritizes **modifiability** as the primary quality attribute and **usability** as the secondary.
 
 FishMiner is a 2D arcade-style fishing game where players control a hook to catch fish, earn points, and progress through increasingly difficult levels. As players advance, they can unlock and purchase upgrades to improve their gear, such as stronger reels, faster sinkers, and more precise hooks. The game features a level-based structure, smooth real-time gameplay, and an online leaderboard where players can compete for high scores.
 
-The Requirements documentation is to be found here (link)
-The Architecture documentation is to be found here (link)
-The Implementation documentation is to be found here (link)
+---
+
+## Documentation
+
+- 📄 [Requirements Documentation](#)  
+- 🧱 [Architecture Documentation](#)  
+- 💻 [Implementation Documentation](#)
+
 
 # LibGDX
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
