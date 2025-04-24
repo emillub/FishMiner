@@ -1,4 +1,4 @@
-package com.github.FishMiner.domain.ports.out.data.callbacks.callbacks;
+package com.github.FishMiner.domain.ports.out.data.callbacks;
 
 import com.github.FishMiner.data.ScoreEntry;
 

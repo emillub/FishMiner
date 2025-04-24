@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.infrastructure.ValidateUtil;
 import com.github.FishMiner.ui.ports.out.domain.events.HookInputEvent;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ecs.states.HookStates;
 
 public class HookInputSystem extends EntitySystem implements IGameEventListener<HookInputEvent> {

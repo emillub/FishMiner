@@ -16,7 +16,7 @@ import com.github.FishMiner.infrastructure.ValidateUtil;
 import com.github.FishMiner.infrastructure.GameEventBus;
 import com.github.FishMiner.domain.ports.out.ui.events.ScoreEvent;
 import com.github.FishMiner.domain.ecs.events.FishCapturedEvent;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.ui.ports.in.domain.events.DisplayScoreValueEvent;
 
 public class ScoreSystem extends EntitySystem implements IGameEventListener<FishCapturedEvent> {

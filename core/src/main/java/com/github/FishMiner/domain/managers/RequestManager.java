@@ -2,27 +2,26 @@ package com.github.FishMiner.domain.managers;
 
 import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.domain.ports.in.data.events.LeaderboardResponseEvent;
-import com.github.FishMiner.domain.ports.out.data.callbacks.callbacks.FirebaseAuthCallback;
+import com.github.FishMiner.domain.ports.out.data.callbacks.FirebaseAuthCallback;
 import com.github.FishMiner.infrastructure.GameEventBus;
 import com.github.FishMiner.domain.ports.in.data.events.AuthResponseEvent;
-import com.github.FishMiner.domain.ports.out.data.callbacks.callbacks.LeaderboardCallback;
-import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.ILeaderboardFetcher;
-import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.ILeaderboardPoster;
-import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.ILoginHandler;
-import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.IUserRegistrationHandler;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.domain.ports.out.data.callbacks.LeaderboardCallback;
+import com.github.FishMiner.domain.ports.out.data.interfaces.ILeaderboardFetcher;
+import com.github.FishMiner.domain.ports.out.data.interfaces.ILeaderboardPoster;
+import com.github.FishMiner.domain.ports.out.data.interfaces.ILoginHandler;
+import com.github.FishMiner.domain.ports.out.data.interfaces.IUserRegistrationHandler;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.data.events.LeaderboardFetchRequestEvent;
 import com.github.FishMiner.domain.ports.in.data.events.LeaderboardPostRequestEvent;
 import com.github.FishMiner.domain.ports.in.data.events.LoginRequestEvent;
 import com.github.FishMiner.domain.ports.in.data.events.RegisterUserRequest;
-import com.github.FishMiner.ui.ports.in.domain.interfaces.IRequestManager;
+
 
 import java.util.List;
 
-public class RequestManager implements IRequestManager {
+public class RequestManager {
     private final ILoginHandler loginHandler;
     private final IUserRegistrationHandler registerHandler;
-
     private final ILeaderboardFetcher leaderboardFetcher;
     private final ILeaderboardPoster leaderboardPoster;
 

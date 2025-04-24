@@ -24,7 +24,7 @@ import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.UpgradeComponent;
 import com.github.FishMiner.ui.ports.out.domain.events.TransactionEvent;
 import com.github.FishMiner.domain.ecs.entities.playerFactory.PlayerFactory;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ecs.states.TraderStates;
 
 

@@ -1,7 +1,7 @@
 package com.github.FishMiner.domain.ports.out.ui.events;
 
 import com.github.FishMiner.infrastructure.Logger;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEvent;
+import com.github.FishMiner.infrastructure.ports.in.IGameEvent;
 
 public class ScoreEvent implements IGameEvent {
     private final static String TAG = "ScoreEvent";

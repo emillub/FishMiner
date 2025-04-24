@@ -1,4 +1,4 @@
-package com.github.FishMiner.ui.screens;
+package com.github.FishMiner.ui.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,7 +9,7 @@ import com.github.FishMiner.infrastructure.Configuration;
 import com.github.FishMiner.infrastructure.GameEventBus;
 import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.domain.ports.out.ui.events.ScoreEvent;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
 import com.github.FishMiner.ui.ports.out.domain.interfaces.IGameContext;
 import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;

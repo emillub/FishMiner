@@ -1,6 +1,6 @@
 package com.github.FishMiner.ui.ports.out.domain.events;
 
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEvent;
+import com.github.FishMiner.infrastructure.ports.in.IGameEvent;
 
 public class MusicEvent implements IGameEvent {
 

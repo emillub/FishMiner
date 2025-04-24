@@ -1,4 +1,4 @@
-package com.github.FishMiner.domain.ports.in.ui.interfaces;
+package com.github.FishMiner.infrastructure.ports.in;
 
 
 public interface IGameEvent {

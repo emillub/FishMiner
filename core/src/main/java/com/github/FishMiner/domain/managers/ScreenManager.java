@@ -15,7 +15,7 @@ import com.github.FishMiner.domain.model.GameContext;
 import com.github.FishMiner.infrastructure.ValidateUtil;
 import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.ChangeScreenEvent;
 import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.PrepareScreenEvent;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEventListener;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
 import com.github.FishMiner.domain.ports.in.ui.interfaces.IScreenFactory;
 import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;

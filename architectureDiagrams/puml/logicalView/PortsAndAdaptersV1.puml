@@ -1,0 +1,82 @@
+@startuml
+' Skin and style settings
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam ArrowColor Black
+
+' Layers
+package "UI Layer" {
+    [MenuScreen] <<component>>
+    [PlayScreen] <<component>>
+    [UpgradeScreen] <<component>>
+    [LoginScreen] <<component>>
+    [IGameContext] <<interface>>
+    [IPlayer] <<interface>>
+    [IRequestManager] <<interface>>
+    [UI Out Events] as UIOut
+    [UI In Events] as UIIn
+}
+
+package "Domain Layer" {
+    [GameEventBus] <<singleton>>
+    [RequestManager] <<component>>
+    [ScoreSystem] <<component>>
+    [TransactionSystem] <<component>>
+    [HookInputSystem] <<component>>
+    [FishingSystem] <<component>>
+    [ScreenManager] <<component>>
+
+    [IGameEventListener] <<interface>>
+    [ILoginHandler] <<interface>>
+    [ILeaderboardPoster] <<interface>>
+    [IDataRequestEvent] <<interface>>
+
+    [Domain In Ports] as DomainIn
+    [Domain Out Ports] as DomainOut
+}
+
+package "Data Layer" {
+    [FirebaseAuthService] <<component>>
+    [LeaderboardService] <<component>>
+    [Data Out Events] as DataOut
+}
+
+' Event Bus
+[GameEventBus] -[#black]> [IGameEventListener] : dispatch()
+
+' UI -> Domain communication
+[UIOut] --> [GameEventBus] : post(HookInputEvent, LoginRequestEvent)
+[MenuScreen] --> [UIOut]
+[PlayScreen] --> [UIOut]
+[UpgradeScreen] --> [UIOut]
+
+' Domain -> UI communication
+[GameEventBus] --> [UIIn] : post(DisplayScoreValueEvent)
+[ScoreSystem] --> [GameEventBus] : post(ScoreEvent)
+[TransactionSystem] --> [GameEventBus] : post(TransactionEvent)
+
+' UI uses input ports
+[LoginScreen] --> [IRequestManager]
+[PlayScreen] --> [IPlayer]
+[UpgradeScreen] --> [IPlayer]
+[UIIn] --> [PlayScreen]
+
+' Domain implements in ports
+[RequestManager] ..> [DomainIn]
+[ScreenManager] ..> [DomainIn]
+
+' Domain uses output ports
+[RequestManager] --> [ILoginHandler]
+[RequestManager] --> [ILeaderboardPoster]
+[TransactionSystem] --> [IDataRequestEvent]
+
+' Domain posts events to bus
+[RequestManager] --> [GameEventBus]
+[HookInputSystem] --> [GameEventBus]
+[FishingSystem] --> [GameEventBus]
+
+' Data implements out ports
+[FirebaseAuthService] ..> [ILoginHandler]
+[LeaderboardService] ..> [ILeaderboardPoster]
+
+@enduml

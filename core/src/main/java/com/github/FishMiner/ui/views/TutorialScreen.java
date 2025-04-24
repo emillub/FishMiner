@@ -1,4 +1,4 @@
-package com.github.FishMiner.ui.screens;
+package com.github.FishMiner.ui.views;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;

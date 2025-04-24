@@ -1,4 +1,4 @@
-package com.github.FishMiner.ui.screens;
+package com.github.FishMiner.ui.views;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;

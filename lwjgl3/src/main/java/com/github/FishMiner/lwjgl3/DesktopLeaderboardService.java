@@ -3,10 +3,10 @@ package com.github.FishMiner.lwjgl3;
 import com.badlogic.gdx.Gdx;
 import com.github.FishMiner.data.ScoreEntry;
 import com.github.FishMiner.data.ports.out.ILeaderBoardService;
-import com.github.FishMiner.domain.ports.out.data.callbacks.callbacks.LeaderboardCallback;
+import com.github.FishMiner.domain.ports.out.data.callbacks.LeaderboardCallback;
 import com.github.FishMiner.domain.managers.ScreenManager;
-import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.ILeaderboardFetcher;
-import com.github.FishMiner.domain.ports.out.data.interfaces.interfaces.ILeaderboardPoster;
+import com.github.FishMiner.domain.ports.out.data.interfaces.ILeaderboardFetcher;
+import com.github.FishMiner.domain.ports.out.data.interfaces.ILeaderboardPoster;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

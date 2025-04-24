@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.github.FishMiner.infrastructure.Logger;
 import com.github.FishMiner.domain.ecs.components.FishableComponent;
 import com.github.FishMiner.infrastructure.ValidateUtil;
-import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameEvent;
+import com.github.FishMiner.infrastructure.ports.in.IGameEvent;
 
 public class FishCapturedEvent extends AbstractEntityEvent implements IGameEvent {
     private static final String TAG = "FishCapturedEvent";
