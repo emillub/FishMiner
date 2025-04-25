@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.github.FishMiner.domain.ecs.components.BoundsComponent;
+import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
@@ -27,8 +27,9 @@ public class MovementSystem extends IteratingSystem {
         VelocityComponent velocity = vm.get(entity);
 
         if (position != null && velocity != null) {
-            position.pos.x += velocity.velocity.x * deltaTime;
-            position.pos.y += velocity.velocity.y * deltaTime;
+            position.pos.x += velocity.velocity.x * deltaTime * Configuration.getInstance().getBaseMovementSpeed();
+            position.pos.y += velocity.velocity.y * deltaTime * Configuration.getInstance().getBaseMovementSpeed();
+            ;
         }
 
         StateComponent fishState = sm.get(entity);

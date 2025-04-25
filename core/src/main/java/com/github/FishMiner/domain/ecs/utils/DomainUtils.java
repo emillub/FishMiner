@@ -34,7 +34,6 @@ public class DomainUtils {
      * @return The X velocity of the fish.
      */
     public static float getFishDirectionX(boolean movesRight, float speed) {
-        // TODO: adjust for basespeed later: float baseSpeed = Configuration.getInstance().getBaseSpeed();
         return (movesRight ? speed : -speed);
     }
 
