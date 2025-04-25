@@ -13,8 +13,8 @@ FishMiner is a 2D arcade-style fishing game where players control a hook to catc
 
 ## Documentation
 
-- 📄 [Requirements Documentation](documents/Architecture.pdf)  
-- 🧱 [Architecture Documentation](documents/Requirements.pdf)  
+- 📄 [Requirements Documentation](documents/Requirements.pdf)  
+- 🧱 [Architecture Documentation](documents/Architecture.pdf)  
 - 💻 [Implementation Documentation](documents/Implementation.pdf)
 
 ## Installation
