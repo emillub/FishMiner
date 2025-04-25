@@ -21,7 +21,7 @@ import com.github.FishMiner.ui.ports.in.domain.events.DisplayScoreValueEvent;
 
 public class ScoreSystem extends EntitySystem implements IGameEventListener<FishCapturedEvent> {
     private final static String TAG = "ScoreSystem";
-    private static final float FLY_DURATION = 1.0f;
+    private static final float FLY_DURATION = 0.5f;
     private static final float ARC_HEIGHT = 50f;
 
     private final ComponentMapper<ScoreComponent> scoreCompMapper = ComponentMapper.getFor(ScoreComponent.class);
@@ -66,7 +66,6 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void update(float deltaTime) {
         if (capturedQueue.size <= 0) {
             setProcessing(false);
@@ -81,8 +80,6 @@ public class ScoreSystem extends EntitySystem implements IGameEventListener<Fish
                 Logger.getInstance().error(TAG, "Fish position component is null.");
                 continue;
             }
-            // ValidateUtil.validateNotNull(fishPos, "ScoreSystem/update: fishPos was
-            // null.");
 
             // Send fish flying into the boat
             Entity player = entry.player;

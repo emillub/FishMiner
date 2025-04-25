@@ -115,9 +115,17 @@ public class Configuration {
         return entityScale;
     }
 
-    public float getBaseSpeed() {
-        float baseSpeed = 10f;
-        return baseSpeed * scaleX;
+    // Tweak these values to adjust the speed of the game
+    public float getBaseMovementSpeed() {
+        return 5f;
+    }
+
+    public float getBaseReelSpeed() {
+        return 1f;
+    }
+
+    public float getBaseHookSpeed() {
+        return 2f;
     }
 
     public float getOceanHeightPercentage() {

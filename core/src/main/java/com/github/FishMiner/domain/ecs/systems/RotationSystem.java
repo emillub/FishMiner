@@ -42,7 +42,7 @@ public class RotationSystem extends IteratingSystem {
                     attachEntityPos.rotation = MathUtils.lerpAngleDeg(
                         attachEntityPos.rotation,
                         targetAngle,
-                        3f * deltaTime
+                            2f * deltaTime
                     );
 
                 }

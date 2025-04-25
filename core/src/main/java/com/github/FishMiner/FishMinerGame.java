@@ -28,16 +28,6 @@ public class FishMinerGame extends Game {
     private final IAuthService authService;
     private final ILeaderBoardService leaderBoardService;
 
-    /*
-
-    public FishMinerGame(IAuthService authService, ILeaderBoardService leaderboard) {
-        this.authService = authService;
-        this.leaderBoardService = leaderboard;
-
-    }
-
-     */
-
     public FishMinerGame(IAuthService authService, ILeaderBoardService leaderboard) {
         this(authService, leaderboard, null); // fallback
     }
@@ -51,7 +41,7 @@ public class FishMinerGame extends Game {
     @Override
     public void create() {
         Configuration.getInstance().updateConfiguration(null);
-        // Load all buttons
+        // Load all icon textures
         for (ButtonEnum Button : Assets.ButtonEnum.values()) {
             for (ButtonStateEnum buttonState : Assets.ButtonStateEnum.values()) {
                 Assets.getInstance().loadAsset(Assets.BYTTON_PATHS.get(Button).get(buttonState), Texture.class);
@@ -68,16 +58,6 @@ public class FishMinerGame extends Game {
             new LeaderboardFetcher(leaderBoardService),
             new LeaderboardPoster(leaderBoardService)
         );
-
-        /*
-         requestManager = new RequestManager(
-            new LoginHandler(authService),
-            new UserRegistrationHandler(authService),
-            new LeaderboardFetcher(leaderBoardService), // we’ll make this class next
-            new LeaderboardPoster(leaderBoardService)   // and this one too
-        );
-
-         */
 
 
         MusicManager musicManager = MusicManager.getInstance();

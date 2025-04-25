@@ -94,7 +94,6 @@ public class TransactionSystem extends EntitySystem implements IGameEventListene
             ValidateUtil.validateNotNull(upgradePos, "upgradePos");
 
             // Define target position for thrown upgrade (off the left side).
-            Configuration config = Configuration.getInstance();
             Vector3 target = new Vector3(-50, upgradePos.pos.y, upgradePos.pos.z);
             Vector3 start = new Vector3(upgradePos.pos);
             float t = entry.flyTime / FLY_DURATION;

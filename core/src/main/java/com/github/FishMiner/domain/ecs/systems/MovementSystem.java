@@ -8,6 +8,7 @@ import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
 import com.github.FishMiner.domain.ecs.states.FishableObjectStates;
+import com.github.FishMiner.infrastructure.Configuration;
 
 
 public class MovementSystem extends IteratingSystem {
@@ -26,8 +27,9 @@ public class MovementSystem extends IteratingSystem {
         VelocityComponent velocity = vm.get(entity);
 
         if (position != null && velocity != null) {
-            position.pos.x += velocity.velocity.x * deltaTime;
-            position.pos.y += velocity.velocity.y * deltaTime;
+            position.pos.x += velocity.velocity.x * deltaTime * Configuration.getInstance().getBaseMovementSpeed();
+            position.pos.y += velocity.velocity.y * deltaTime * Configuration.getInstance().getBaseMovementSpeed();
+            ;
         }
 
         StateComponent fishState = sm.get(entity);

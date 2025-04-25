@@ -175,16 +175,4 @@ public class RequestManager {
             }
         };
     }
-
-    public void setupListeners() {
-        GameEventBus bus = GameEventBus.getInstance();
-        bus.register(getLoginRequestListener());
-        bus.register(getRegistrationRequestListener());
-        bus.register(getLeaderboardFetchRequestListener());
-        bus.register(getLeaderboardPostRequestListener());
-    }
-
-
-
-
 }

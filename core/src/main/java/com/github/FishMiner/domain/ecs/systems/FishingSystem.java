@@ -57,12 +57,15 @@ public class FishingSystem extends EntitySystem implements IGameEventListener<Fi
         RotationComponent fishRot = rotMapper.get(fishEntity);
         FishableComponent fishComp = fishMapper.get(fishEntity);
 
+        if (fishPos == null || fishState == null) {
+            return;
+        }
+
         fishState.changeState(FishableObjectStates.HOOKED);
 
         if (hookState.state == HookStates.REELING) {
             rotatedOffset.set(hook.offset)
                     .rotate(new Vector3(0, 0, 1), hook.swingAngle * MathUtils.radiansToDegrees);
-            fishPos.pos.set(hookPos.pos).add(rotatedOffset);
 
             fishPos.pos.set(hookPos.pos).add(rotatedOffset);
 

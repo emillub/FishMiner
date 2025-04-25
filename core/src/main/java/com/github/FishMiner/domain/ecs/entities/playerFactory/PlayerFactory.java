@@ -35,9 +35,10 @@ public class PlayerFactory {
         Entity reelEntity = ReelFactory.createEntity(engine, BASIC_REEL);
         updateReel(reelEntity, playerEntity, engine);
 
-        playerComponent.setSinker(null);
-        Entity sinkerEntity = SinkerFactory.createEntity(engine, SinkerTypes.BASIC_SINKER);
-        updateSinker(sinkerEntity, playerEntity, engine);
+        // playerComponent.setSinker(null);
+        // Entity sinkerEntity = SinkerFactory.createEntity(engine,
+        // SinkerTypes.BASIC_SINKER);
+        // updateSinker(sinkerEntity, playerEntity, engine);
 
         engine.addEntity(playerEntity);
 
