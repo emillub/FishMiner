@@ -14,6 +14,17 @@ FishMiner is a 2D arcade-style fishing game where players control a hook to catc
 
 ## Installation
 
+### Compiled version (Android/Desktop)
+
+**1. Download apk**
+
+- Download the apk <a href="https://github.com/emillub/FishMiner/releases/tag/v1.0">here </a>
+
+**2. Running the game**
+- *On android*: Open the downloaded file
+- *On desktop*: Open android studio. Click *Profile or Debug apk* and select the apk. (Requires android studio, latest android sdk and selecting a device to run on)
+
+### Or entire codebase (Desktop)
 **1. Download and setup:**
 
 - Clone the repository from GitHub or download the source files.
