@@ -1,5 +1,10 @@
 # FishMiner
 
+<p align="center">
+  <img width="300" src= "https://github.com/user-attachments/assets/bbbc8ba5-9460-4648-a166-843a010c8c75">
+</p>
+
+
 **FishMiner** is a game development project conducted as part of the *TDT4240 Software Architecture* course at NTNU. The goal of this project is to develop a functional multiplayer game for Android, designed using software architecture principles covered in the course. The game includes multiplayer support, online components, and server-based functionality. The architecture prioritizes **modifiability** as the primary quality attribute and **usability** and **performance** as the secondary.
 
 FishMiner is a 2D arcade-style fishing game where players control a hook to catch fish, earn points, and progress through increasingly difficult levels. As players advance, they can unlock and purchase upgrades to improve their gear, such as stronger reels, faster sinkers, and more precise hooks. The game features a level-based structure, smooth real-time gameplay, and an online leaderboard where players can compete for high scores.
@@ -43,9 +48,6 @@ FishMiner is a 2D arcade-style fishing game where players control a hook to catc
 - The game can also be ran on desktop by selecting `Lwjgl3Launcher.java` file as the main class and running it.
 
 ## How to play
-<p align="center">
-  <img width="300" src= "https://github.com/user-attachments/assets/bbbc8ba5-9460-4648-a166-843a010c8c75">
-</p>
 
 ### Objective:
 
