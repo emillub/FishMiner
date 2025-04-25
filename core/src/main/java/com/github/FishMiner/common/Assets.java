@@ -277,4 +277,18 @@ public class Assets {
     public static Skin getUiskin() {
         return uiSkin;
     }
+
+    public void dispose() {
+        assetManager.clear();
+        assetManager.dispose();
+    }
+
+    public void unloadAsset(String path) {
+        if (assetManager.isLoaded(path)) {
+            assetManager.unload(path);
+            Logger.getInstance().debug(TAG, "Unloading asset: " + path);
+        } else {
+            Logger.getInstance().debug(TAG, "Asset not loaded: " + path);
+        }
+    }
 }
