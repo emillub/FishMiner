@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.github.FishMiner.domain.ecs.components.HookComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
-import com.github.FishMiner.domain.states.FishableObjectStates;
+import com.github.FishMiner.domain.ecs.states.FishableObjectStates;
 
 
 public class RotationSystem extends IteratingSystem {

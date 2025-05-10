@@ -2,9 +2,9 @@ package com.github.FishMiner.lwjgl3;
 
 import com.badlogic.gdx.Gdx;
 import com.github.FishMiner.data.ports.out.IAuthService;
-import com.github.FishMiner.domain.ports.in.data.FirebaseAuthCallback;
-import com.github.FishMiner.domain.ports.out.ILoginHandler;
-import com.github.FishMiner.domain.ports.out.IUserRegistrationHandler;
+import com.github.FishMiner.domain.ports.out.data.callbacks.FirebaseAuthCallback;
+import com.github.FishMiner.domain.ports.out.data.interfaces.ILoginHandler;
+import com.github.FishMiner.domain.ports.out.data.interfaces.IUserRegistrationHandler;
 
 import org.json.JSONObject;
 

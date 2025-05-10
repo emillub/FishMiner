@@ -1,0 +1,121 @@
+@startuml ScreenManagement_MVC_LogicalView
+
+' ====================
+'  COMMON BUS PACKAGE
+' ====================
+package "common" {
+    class GameEventBus {
+        + post(IGameEvent)
+        + register(IGameEventListener)
+        + unregister(IGameEventListener)
+        + getInstance()
+    }
+}
+
+' ========================
+'  CONTROLLER
+' ========================
+package "domain.managers" {
+    class ScreenManager {
+        - static instance
+        - IGameScreen currentScreen
+        + switchScreenTo(ScreenType)
+        + getChangeScreenEvent()
+    }
+
+    note right of ScreenManager
+      Effectively the Controller in MVC.
+      Listens to ChangeScreenEvents
+      and switches views.
+    end note
+}
+
+' ====================
+'  DOMAIN INTERFACES
+' ====================
+package "domain.ports.in.ui" {
+    interface IGameEvent
+    interface IGameEventListener {
+        + onEvent(E)
+        + getEventType()
+    }
+}
+
+GameEventBus --> IGameEventListener : dispatches events
+IGameEventListener <|.. ScreenManager
+
+ScreenManager --> IGameScreen : manages
+ScreenManager --> ScreenType : selects
+
+' ========================
+'  VIEW (Screens as Views)
+' ========================
+package "ui.screens" {
+    abstract class AbstractScreen
+    class MenuScreen
+    class PlayScreen
+    class LoginScreen
+    class SettingScreen
+    class TutorialScreen
+    class LevelLostScreen
+    class LevelCompleteScreen
+    class UpgradeScreen
+
+    AbstractScreen <|-- MenuScreen
+    AbstractScreen <|-- PlayScreen
+    AbstractScreen <|-- LoginScreen
+    AbstractScreen <|-- SettingScreen
+    AbstractScreen <|-- TutorialScreen
+    AbstractScreen <|-- LevelLostScreen
+    AbstractScreen <|-- LevelCompleteScreen
+    AbstractScreen <|-- UpgradeScreen
+
+    "ui.ports.out.IGameScreen" <|.. MenuScreen
+    "ui.ports.out.IGameScreen" <|.. PlayScreen
+    "ui.ports.out.IGameScreen" <|.. LoginScreen
+    "ui.ports.out.IGameScreen" <|.. SettingScreen
+    "ui.ports.out.IGameScreen" <|.. TutorialScreen
+    "ui.ports.out.IGameScreen" <|.. LevelLostScreen
+    "ui.ports.out.IGameScreen" <|.. LevelCompleteScreen
+    "ui.ports.out.IGameScreen" <|.. UpgradeScreen
+}
+
+MenuScreen ..> GameEventBus : post(ChangeScreenEvent)
+PlayScreen ..> GameEventBus : post(ChangeScreenEvent)
+LoginScreen ..> GameEventBus : post(ChangeScreenEvent)
+SettingScreen ..> GameEventBus : post(ChangeScreenEvent)
+TutorialScreen ..> GameEventBus : post(ChangeScreenEvent)
+LevelLostScreen ..> GameEventBus : post(ChangeScreenEvent)
+LevelCompleteScreen ..> GameEventBus : post(ChangeScreenEvent)
+UpgradeScreen ..> GameEventBus : post(ChangeScreenEvent)
+
+' ========================
+'  MODEL (GameContext + Domain)
+' ========================
+package "domain.model" {
+    class GameContext
+    class World
+    class UpgradeStore
+    class PlayerCharacter
+}
+
+GameContext --> World
+GameContext --> UpgradeStore
+GameContext --> PlayerCharacter
+
+package "ui.ports.out" {
+    interface IGameContext {
+        + getWorld()
+        + getPlayer()
+        + getCam()
+        + getRenderer()
+        + getBatch()
+        + getUpgradeStore()
+        + update(delta)
+    }
+}
+
+IGameContext <.. AbstractScreen : injected context
+IGameContext --> GameContext : implemented by
+
+@enduml

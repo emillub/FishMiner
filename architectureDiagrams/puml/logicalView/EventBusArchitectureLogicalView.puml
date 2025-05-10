@@ -1,0 +1,41 @@
+@startuml
+' Skin params
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam ArrowColor Black
+
+package "Event Bus" {
+    [GameEventBus] <<singleton>>
+}
+
+package "UI Producers" {
+    [MenuScreen] --> [GameEventBus] : post(ChangeScreenEvent)
+    [LoginScreen] --> [GameEventBus] : post(LoginRequestEvent)
+    [SettingScreen] --> [GameEventBus] : post(MusicEvent)
+    [PlayScreen] --> [GameEventBus] : post(HookInputEvent, ScoreEvent)
+    [UpgradeScreen] --> [GameEventBus] : post(TransactionEvent)
+    [LevelLostScreen] --> [GameEventBus] : post(LeaderboardPostRequestEvent)
+}
+
+package "Domain Managers" {
+    [RequestManager] ..> [GameEventBus] : post(AuthResponseEvent, LeaderboardResponseEvent)
+    [MusicManager] --> [GameEventBus] : listens to MusicEvent
+    [ScreenManager] --> [GameEventBus] : listens to ChangeScreenEvent
+}
+
+package "ECS Systems" {
+    [HookInputSystem] --> [GameEventBus] : listens to HookInputEvent
+    [FishingSystem] --> [GameEventBus] : listens to FishHitEvent, posts FishCapturedEvent
+    [ScoreSystem] --> [GameEventBus] : listens to FishCapturedEvent, posts ScoreEvent
+    [TransactionSystem] --> [GameEventBus] : listens to TransactionEvent
+}
+
+' Listeners registration
+[GameEventBus] --> [HookInputSystem] : register(HookInputEvent)
+[GameEventBus] --> [FishingSystem] : register(FishHitEvent)
+[GameEventBus] --> [ScoreSystem] : register(FishCapturedEvent)
+[GameEventBus] --> [TransactionSystem] : register(TransactionEvent)
+[GameEventBus] --> [ScreenManager] : register(ChangeScreenEvent)
+[GameEventBus] --> [MusicManager] : register(MusicEvent)
+
+@enduml

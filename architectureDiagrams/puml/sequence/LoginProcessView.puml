@@ -1,0 +1,29 @@
+@startuml ProcessView_AndroidClient
+!pragma layout smetana
+skinparam sequenceParticipant underline
+
+actor User
+participant "Android UI" as UI
+participant "GameEventBus" as Bus
+participant "RequestHandler" as Handler
+participant "LoginHandler" as Login
+participant "IAuthService" as AuthPort
+participant "AndroidAuthService" as AndroidAuth
+participant "Firebase" as FirebaseDB <<database>>
+
+== Login Process ==
+
+User -> UI : triggers login action
+UI -> Bus : dispatch LoginEvent
+Bus -> Handler : handle LoginEvent
+Handler -> Login : call login()
+Login -> AuthPort : login(email, password)
+AuthPort -> AndroidAuth : implemented by
+AndroidAuth -> FirebaseDB : HTTPS signInWithEmailAndPassword
+FirebaseDB --> AndroidAuth : success/failure
+AndroidAuth --> Login : callback
+Login --> Handler : result
+Handler --> Bus : publish domain result (optional)
+Bus --> UI : update view (if observing)
+
+@enduml

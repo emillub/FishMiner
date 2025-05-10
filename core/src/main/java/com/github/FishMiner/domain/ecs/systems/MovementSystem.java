@@ -4,11 +4,11 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.github.FishMiner.common.Configuration;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
 import com.github.FishMiner.domain.ecs.components.VelocityComponent;
-import com.github.FishMiner.domain.states.FishableObjectStates;
+import com.github.FishMiner.domain.ecs.states.FishableObjectStates;
+import com.github.FishMiner.infrastructure.Configuration;
 
 
 public class MovementSystem extends IteratingSystem {

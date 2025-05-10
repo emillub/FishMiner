@@ -1,24 +1,24 @@
 package com.github.FishMiner.domain.managers;
 
-import static com.github.FishMiner.ui.ports.out.ScreenType.LEADERBOARD;
-import static com.github.FishMiner.ui.ports.out.ScreenType.LEVEL_LOST;
-import static com.github.FishMiner.ui.ports.out.ScreenType.MENU;
-import static com.github.FishMiner.ui.ports.out.ScreenType.PLAY;
-import static com.github.FishMiner.ui.ports.out.ScreenType.TUTORIAL;
+import static com.github.FishMiner.ui.ports.out.domain.enums.ScreenType.LEADERBOARD;
+import static com.github.FishMiner.ui.ports.out.domain.enums.ScreenType.LEVEL_LOST;
+import static com.github.FishMiner.ui.ports.out.domain.enums.ScreenType.MENU;
+import static com.github.FishMiner.ui.ports.out.domain.enums.ScreenType.PLAY;
+import static com.github.FishMiner.ui.ports.out.domain.enums.ScreenType.TUTORIAL;
 
 import com.badlogic.gdx.Screen;
 import com.github.FishMiner.FishMinerGame;
-import com.github.FishMiner.common.Assets;
-import com.github.FishMiner.common.Logger;
-import com.github.FishMiner.domain.GameContext;
+import com.github.FishMiner.infrastructure.Assets;
+import com.github.FishMiner.infrastructure.Logger;
+import com.github.FishMiner.domain.model.GameContext;
 
-import com.github.FishMiner.common.ValidateUtil;
-import com.github.FishMiner.domain.events.screenEvents.ChangeScreenEvent;
-import com.github.FishMiner.domain.events.screenEvents.PrepareScreenEvent;
-import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.domain.ports.in.IGameScreen;
-import com.github.FishMiner.domain.ports.in.IScreenFactory;
-import com.github.FishMiner.ui.ports.out.ScreenType;
+import com.github.FishMiner.infrastructure.ValidateUtil;
+import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.ChangeScreenEvent;
+import com.github.FishMiner.ui.ports.out.domain.events.screenEvents.PrepareScreenEvent;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IGameScreen;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IScreenFactory;
+import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;
 
 import java.util.HashMap;
 

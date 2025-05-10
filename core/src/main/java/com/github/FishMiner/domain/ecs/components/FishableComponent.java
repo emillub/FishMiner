@@ -1,9 +1,9 @@
 package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
-import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.common.ValidateUtil;
-import com.github.FishMiner.domain.factories.FishTypes;
+import com.github.FishMiner.infrastructure.Configuration;
+import com.github.FishMiner.infrastructure.ValidateUtil;
+import com.github.FishMiner.domain.ecs.entities.FishTypes;
 
 public class FishableComponent implements Component {
 

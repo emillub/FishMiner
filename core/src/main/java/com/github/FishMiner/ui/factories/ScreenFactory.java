@@ -1,20 +1,18 @@
 package com.github.FishMiner.ui.factories;
 
-import com.badlogic.gdx.Screen;
-import com.github.FishMiner.domain.GameContext;
-import com.github.FishMiner.domain.ports.in.IScreenFactory;
-import com.github.FishMiner.ui.ports.out.IGameContext;
-import com.github.FishMiner.ui.ports.out.ScreenType;
-import com.github.FishMiner.ui.screens.AbstractScreen;
-import com.github.FishMiner.ui.screens.LeaderBoardScreen;
-import com.github.FishMiner.ui.screens.LevelCompleteScreen;
-import com.github.FishMiner.ui.screens.LevelLostScreen;
-import com.github.FishMiner.ui.screens.LoginScreen;
-import com.github.FishMiner.ui.screens.MenuScreen;
-import com.github.FishMiner.ui.screens.PlayScreen;
-import com.github.FishMiner.ui.screens.SettingScreen;
-import com.github.FishMiner.ui.screens.TutorialScreen;
-import com.github.FishMiner.ui.screens.UpgradeScreen;
+import com.github.FishMiner.domain.ports.in.ui.interfaces.IScreenFactory;
+import com.github.FishMiner.ui.ports.out.domain.interfaces.IGameContext;
+import com.github.FishMiner.ui.ports.out.domain.enums.ScreenType;
+import com.github.FishMiner.ui.views.AbstractScreen;
+import com.github.FishMiner.ui.views.LeaderBoardScreen;
+import com.github.FishMiner.ui.views.LevelCompleteScreen;
+import com.github.FishMiner.ui.views.LevelLostScreen;
+import com.github.FishMiner.ui.views.LoginScreen;
+import com.github.FishMiner.ui.views.MenuScreen;
+import com.github.FishMiner.ui.views.PlayScreen;
+import com.github.FishMiner.ui.views.SettingScreen;
+import com.github.FishMiner.ui.views.TutorialScreen;
+import com.github.FishMiner.ui.views.UpgradeScreen;
 
 public class ScreenFactory implements IScreenFactory {
     private static final String TAG = "ScreenFactory";

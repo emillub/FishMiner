@@ -1,0 +1,79 @@
+@startuml LayeredClientServer CCView
+!pragma layout smetana
+skinparam packagePadding 20
+
+package "FishMiner" <<Client>> {
+
+  ' LWJGL3 module retained for documentation, but without connectors
+  package "lwjgl3" <<module>> {
+      package "Desktop Infrastructure" {
+      note right of "Desktop Infrastructure"
+        This module performs the same responsibilities
+        as the Android infrastructure, but for Desktop (LWJGL3)
+        and is used for testing purposes
+      end note
+      }
+  }
+
+  package "android" <<module>> {
+    package "Android Infrastructure" {
+      [AndroidAuthService]
+      [AndroidLeaderboardService]
+    }
+  }
+
+  package "core" <<module>> {
+    package "UI Layer" {
+      [User Input] <<client>>
+    }
+
+    package "Infrastructure" {
+      [GameEventBus]
+    }
+
+    package "Domain Layer" {
+      [RequestHandler]
+    }
+
+    package "Data Layer" {
+      [LoginHandler]
+      [UserRegistrationHandler]
+      [LeaderboardFetcher]
+      [LeaderboardPoster]
+
+      package "ports.out" {
+        [IAuthService] <<interface>>
+        [ILeaderBoardService] <<interface>>
+        note left of IAuthService
+          Outgoing interfaces are defined by the data layer
+          and implemented by platform-specific modules
+          (Android, LWJGL3).
+        end note
+      }
+    }
+  }
+}
+
+' Use database symbol for Firebase
+database Firebase as "Firebase Auth & DB" <<server>>
+
+' Connectors
+[User Input] --> [GameEventBus] : dispatch events
+[GameEventBus] --> [RequestHandler] : handle events
+[RequestHandler] --> [LoginHandler] : triggers login
+[RequestHandler] --> [UserRegistrationHandler] : triggers registration
+[RequestHandler] --> [LeaderboardFetcher] : triggers fetch
+[RequestHandler] --> [LeaderboardPoster] : triggers post
+
+[LoginHandler] --> IAuthService
+[UserRegistrationHandler] --> IAuthService
+[LeaderboardFetcher] --> ILeaderBoardService
+[LeaderboardPoster] --> ILeaderBoardService
+
+[AndroidAuthService] ..|> IAuthService
+[AndroidLeaderboardService] ..|> ILeaderBoardService
+
+[AndroidAuthService] --> Firebase : auth calls
+[AndroidLeaderboardService] --> Firebase : leaderboard calls
+
+@enduml

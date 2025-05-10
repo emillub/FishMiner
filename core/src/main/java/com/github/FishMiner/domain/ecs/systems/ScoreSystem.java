@@ -1,26 +1,23 @@
 package com.github.FishMiner.domain.ecs.systems;
 
-import java.io.ObjectInputFilter.Config;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.common.Logger;
+import com.github.FishMiner.infrastructure.Logger;
 import com.github.FishMiner.domain.ecs.components.FishableComponent;
 import com.github.FishMiner.domain.ecs.components.ScoreComponent;
 import com.github.FishMiner.domain.ecs.components.SharkComponent;
 import com.github.FishMiner.domain.ecs.components.StateComponent;
 import com.github.FishMiner.domain.ecs.components.TransformComponent;
-import com.github.FishMiner.common.ValidateUtil;
-import com.github.FishMiner.domain.GameEventBus;
-import com.github.FishMiner.domain.events.ScoreEvent;
-import com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent;
-import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.domain.events.uiEvents.DisplayScoreValueEvent;
+import com.github.FishMiner.infrastructure.ValidateUtil;
+import com.github.FishMiner.infrastructure.GameEventBus;
+import com.github.FishMiner.domain.ports.out.ui.events.ScoreEvent;
+import com.github.FishMiner.domain.ecs.events.FishCapturedEvent;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
+import com.github.FishMiner.ui.ports.in.domain.events.DisplayScoreValueEvent;
 
 public class ScoreSystem extends EntitySystem implements IGameEventListener<FishCapturedEvent> {
     private final static String TAG = "ScoreSystem";

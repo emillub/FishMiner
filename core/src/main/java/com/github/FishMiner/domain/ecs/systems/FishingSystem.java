@@ -1,21 +1,20 @@
 package com.github.FishMiner.domain.ecs.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.github.FishMiner.common.Logger;
-import com.github.FishMiner.domain.GameEventBus;
+import com.github.FishMiner.infrastructure.Logger;
+import com.github.FishMiner.infrastructure.GameEventBus;
 import com.github.FishMiner.domain.ecs.components.*;
-import com.github.FishMiner.domain.events.ecsEvents.FishCapturedEvent;
-import com.github.FishMiner.domain.events.ecsEvents.FishHitEvent;
-import com.github.FishMiner.domain.ports.in.IGameEventListener;
-import com.github.FishMiner.domain.states.FishableObjectStates;
-import com.github.FishMiner.domain.states.HookStates;
+import com.github.FishMiner.domain.ecs.events.FishCapturedEvent;
+import com.github.FishMiner.domain.ecs.events.FishHitEvent;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
+import com.github.FishMiner.domain.ecs.states.FishableObjectStates;
+import com.github.FishMiner.domain.ecs.states.HookStates;
 
 public class FishingSystem extends EntitySystem implements IGameEventListener<FishHitEvent> {
     public static final String TAG = "FishingSystem";

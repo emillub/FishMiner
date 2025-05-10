@@ -2,8 +2,8 @@ package com.github.FishMiner.data.handlers;
 
 import com.github.FishMiner.data.ports.out.ILeaderBoardService;
 import com.github.FishMiner.data.ScoreEntry;
-import com.github.FishMiner.domain.ports.out.ILeaderboardPoster;
-import com.github.FishMiner.domain.ports.in.data.LeaderboardCallback;
+import com.github.FishMiner.domain.ports.out.data.interfaces.ILeaderboardPoster;
+import com.github.FishMiner.domain.ports.out.data.callbacks.LeaderboardCallback;
 
 public class LeaderboardPoster implements ILeaderboardPoster {
 

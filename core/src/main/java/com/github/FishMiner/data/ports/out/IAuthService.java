@@ -1,6 +1,6 @@
 package com.github.FishMiner.data.ports.out;
 
-import com.github.FishMiner.domain.ports.in.data.FirebaseAuthCallback;
+import com.github.FishMiner.domain.ports.out.data.callbacks.FirebaseAuthCallback;
 
 public interface IAuthService {
     void login(String email, String password, FirebaseAuthCallback callback);

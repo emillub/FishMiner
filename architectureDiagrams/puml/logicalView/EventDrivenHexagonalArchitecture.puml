@@ -1,0 +1,128 @@
+@startuml
+' Skin and style settings
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam ArrowColor Black
+
+' Layers
+package "UI Layer" {
+    package "UI Incoming Ports" {
+        [DisplayScoreValueEvent] <<event>>
+        [IPlayer] <<interface>>
+        [IRequestManager] <<interface>>
+    }
+    package "UI Outgoing Ports" {
+        [HookInputEvent] <<event>>
+        [MusicEvent] <<event>>
+        [TransactionEvent] <<event>>
+        [ChangeScreenEvent] <<event>>
+        [PrepareScreenEvent] <<event>>
+        [ScreenType] <<enum>>
+        [IGameContext] <<interface>>
+    }
+    package "UI Components" {
+        [AbstractScreen] <<component>>
+        [MenuScreen] <<component>>
+        [PlayScreen] <<component>>
+        [UpgradeScreen] <<component>>
+        [LoginScreen] <<component>>
+    }
+}
+
+package "Infrastructure Layer" {
+    [GameEventBus] <<singleton>>
+
+    package "Infrastructure Incoming Ports" {
+        [IGameEvent] <<interface>>
+        [IGameEventListener] <<interface>>
+    }
+}
+
+package "Domain Layer" {
+    package "Domain Incoming Ports" {
+        [LoginRequestEvent] <<event>>
+        [RegisterUserRequest] <<event>>
+        [AuthResponseEvent] <<event>>
+        [LeaderboardFetchRequestEvent] <<event>>
+        [LeaderboardPostRequestEvent] <<event>>
+        [DataRequestEvent] <<abstract>>
+        [IGameScreen] <<interface>>
+        [IScreenFactory] <<interface>>
+    }
+
+    package "Domain Outgoing Ports" {
+        [ILoginHandler] <<interface>>
+        [IUserRegistration] <<interface>>
+        [ILeaderboardFetcher] <<interface>>
+        [ILeaderboardPoster] <<interface>>
+        [IDataRequestEvent] <<interface>>
+        [FirebaseAuthCallback] <<callback>>
+        [LeaderboardCallback] <<callback>>
+        [ScoreEvent] <<event>>
+    }
+
+    [RequestManager] <<component>>
+    [ScoreSystem] <<component>>
+    [TransactionSystem] <<component>>
+    [HookInputSystem] <<component>>
+    [FishingSystem] <<component>>
+    [ScreenManager] <<component>>
+    [GameContext] <<component>>
+}
+
+package "Data Layer" {
+    [FirebaseAuthService] <<component>>
+    [LeaderboardService] <<component>>
+
+    package "Data Outgoing Ports" {
+        [IAuthService] <<interface>>
+        [ILeaderboardService] <<interface>>
+        [ScoreEntry] <<record>>
+    }
+}
+
+' Event routing
+[GameEventBus] --> [IGameEventListener] : dispatch(event)
+[GameEventBus] --> [IGameEvent] : transport
+
+' UI -> Domain (through event bus)
+[MenuScreen] --> [ChangeScreenEvent]
+[PlayScreen] --> [HookInputEvent]
+[UpgradeScreen] --> [TransactionEvent]
+[LoginScreen] --> [LoginRequestEvent]
+[LoginScreen] --> [RegisterUserRequest]
+[GameEventBus] <-- [ChangeScreenEvent]
+[GameEventBus] <-- [HookInputEvent]
+[GameEventBus] <-- [TransactionEvent]
+[GameEventBus] <-- [LoginRequestEvent]
+[GameEventBus] <-- [RegisterUserRequest]
+
+' Domain posts to event bus
+[RequestManager] --> [GameEventBus] : post(AuthResponseEvent)
+[ScoreSystem] --> [GameEventBus] : post(ScoreEvent)
+[TransactionSystem] --> [GameEventBus] : post(DisplayScoreValueEvent)
+
+' Domain uses outbound interfaces
+[RequestManager] --> [ILoginHandler]
+[RequestManager] --> [ILeaderboardPoster]
+[RequestManager] --> [ILeaderboardFetcher]
+[RequestManager] --> [IUserRegistration]
+[TransactionSystem] --> [IDataRequestEvent]
+
+' UI consumes events from domain
+[GameEventBus] --> [DisplayScoreValueEvent]
+[PlayScreen] --> [DisplayScoreValueEvent]
+
+' Domain implements incoming ports
+[RequestManager] ..> [LoginRequestEvent]
+[RequestManager] ..> [LeaderboardFetchRequestEvent]
+[RequestManager] ..> [LeaderboardPostRequestEvent]
+[RequestManager] ..> [RegisterUserRequest]
+[ScreenManager] ..> [ChangeScreenEvent]
+
+' Data implements domain ports
+[FirebaseAuthService] ..> [ILoginHandler]
+[LeaderboardService] ..> [ILeaderboardPoster]
+[LeaderboardService] ..> [ILeaderboardFetcher]
+
+@enduml

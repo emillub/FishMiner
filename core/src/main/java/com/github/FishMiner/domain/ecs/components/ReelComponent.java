@@ -1,7 +1,7 @@
 package com.github.FishMiner.domain.ecs.components;
 
 import com.badlogic.ashley.core.Component;
-import com.github.FishMiner.common.Logger;
+import com.github.FishMiner.infrastructure.Logger;
 import com.github.FishMiner.domain.ecs.utils.DomainUtils;
 
 public class ReelComponent implements Component {

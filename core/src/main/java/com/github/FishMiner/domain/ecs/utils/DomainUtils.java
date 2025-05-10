@@ -1,6 +1,6 @@
 package com.github.FishMiner.domain.ecs.utils;
 
-import com.github.FishMiner.common.Configuration;
+import com.github.FishMiner.infrastructure.Configuration;
 
 public class DomainUtils {
 

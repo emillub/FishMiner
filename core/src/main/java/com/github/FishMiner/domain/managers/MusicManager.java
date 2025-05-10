@@ -1,12 +1,12 @@
 package com.github.FishMiner.domain.managers;
 
 import com.badlogic.gdx.audio.Music;
-import com.github.FishMiner.common.Assets;
-import com.github.FishMiner.common.Configuration;
-import com.github.FishMiner.common.Logger;
-import com.github.FishMiner.common.ValidateUtil;
-import com.github.FishMiner.domain.events.soundEvents.MusicEvent;
-import com.github.FishMiner.domain.ports.in.IGameEventListener;
+import com.github.FishMiner.infrastructure.Assets;
+import com.github.FishMiner.infrastructure.Configuration;
+import com.github.FishMiner.infrastructure.Logger;
+import com.github.FishMiner.infrastructure.ValidateUtil;
+import com.github.FishMiner.ui.ports.out.domain.events.MusicEvent;
+import com.github.FishMiner.infrastructure.ports.in.IGameEventListener;
 
 public class MusicManager implements IGameEventListener<MusicEvent> {
     private static final String TAG = MusicManager.class.getSimpleName();

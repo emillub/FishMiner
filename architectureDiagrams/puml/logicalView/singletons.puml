@@ -1,0 +1,27 @@
+@startuml SingletonPattern
+
+class Logger {
+    - static Logger instance
+    - Logger()
+    + static Logger getInstance()
+}
+
+class ScreenManager {
+    - static ScreenManager instance
+    - ScreenManager()
+    + static ScreenManager getInstance()
+}
+
+class MusicManager {
+    - static MusicManager instance
+    - MusicManager()
+    + static MusicManager getInstance()
+}
+
+Logger -> Logger : <<static>> getInstance()
+ScreenManager -> ScreenManager : <<static>> getInstance()
+MusicManager -> MusicManager : <<static>> getInstance()
+
+note right: Each class has a private static instance and provides a static\ngetInstance() method.
+
+@enduml
